@@ -15,8 +15,9 @@ def create_app(test_config=None):
     # db.init_app(app)
 
     with app.app_context():
-        from nebula.views.main import main
-        app.register_blueprint(main)
+        from nebula.views import main, level
+        app.register_blueprint(main.bp)
+        app.register_blueprint(level.bp)
 
         # db.create_all()
 

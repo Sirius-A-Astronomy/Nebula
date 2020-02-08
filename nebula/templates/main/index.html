@@ -1,5 +1,41 @@
-{% extends "main/base.html" %}
+<!-- NOT FINISHED -->
+{% extends "layouts/base.html" %}
+{% block title %}Index - Nebula{% endblock %}
+
+{% macro level_list_item(level) -%}
+<p>
+    <a href="{{url_for('level.level', level=level.id)}}">{{level.name}}</a>
+</p>
+{%- endmacro %}
 
 {% block body %}
-The homepage of this template application.
+<div class="back-arrow">
+    <a href="https://www.astro.rug.nl/intranet/siriusa/"><i class="material-icons">arrow_back</i></a>
+</div>
+<main id="Main" class="question">
+    <section>
+        <p>
+            This is the Nebula Database by the Kapteyn Learning Community.
+        </p>
+        <p>
+            It is a repository of user-submitted practice questions.
+        </p>
+    </section>
+    <div class="divider"></div>
+    <section>
+        <h2>Browse the Nebula</h2>
+
+        <h3>Bachelor</h3>
+        {% for level in levels %}
+        {{ level_list_item(level) }}
+        {% endfor %}
+
+        <h3>Master</h3>
+
+    </section>
+    <div class="divider"></div>
+    <section>
+        <p><a href="submit.php">Add a question</a></p>
+    </section>
+</main>
 {% endblock %}
