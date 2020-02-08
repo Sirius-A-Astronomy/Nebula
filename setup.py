@@ -11,7 +11,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        'flask',
-    ],
+    install_requires=['flask', 'Flask-SQLAlchemy', 'Flask-WTF'],
 )
