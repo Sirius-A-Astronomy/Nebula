@@ -4,14 +4,18 @@ from config import configs
 
 # db = SQLAlchemy()
 
-def create_app():
+
+def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.from_object(configs['default'])
+    if test_config is None:
+        app.config.from_object(configs['default'])
+    else:
+        app.config.from_mapping(test_config)
 
     # db.init_app(app)
 
     with app.app_context():
-        from app.views.main import main
+        from nebula.views.main import main
         app.register_blueprint(main)
 
         # db.create_all()
