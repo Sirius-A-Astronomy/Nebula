@@ -26,11 +26,14 @@
         <h2>Browse the Nebula</h2>
 
         <h3>Bachelor</h3>
-        {% for level in levels %}
+        {% for level in bsc_levels %}
         {{ level_list_item(level) }}
         {% endfor %}
 
         <h3>Master</h3>
+        {% for level in msc_levels %}
+        {{ level_list_item(level) }}
+        {% endfor %}
 
     </section>
     <div class="divider"></div>

@@ -1,22 +1,13 @@
 from flask import Blueprint, render_template
+from nebula.models import CourseLevel
 bp = Blueprint('main', __name__)
-
-_levels = [  # temp for some testing
-    {
-        'id': 1,
-        'name': '1st Year'
-    },
-    {
-        'id': 2,
-        'name': '2nd Year'
-    },
-    {
-        'id': 3,
-        'name': '3rd Year'
-    },
-]
 
 
 @bp.route('/')
 def index():
-    return render_template('main/index.html', levels=_levels)
+    bsc = CourseLevel.query.filter_by(study_type='Bachelor').all()
+    msc = CourseLevel.query.filter_by(study_type='Master').all()
+    print(bsc)
+    print(msc)
+
+    return render_template('main/index.html', bsc_levels=bsc, msc_levels=msc)
