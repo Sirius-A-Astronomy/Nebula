@@ -1,5 +1,5 @@
 from nebula import db, create_app
-from testdata import course_levels, courses, questions, users, comments
+from data import course_levels, courses, questions, users, comments
 
 from nebula.models import User, Question, Comment, Course, CourseLevel
 
