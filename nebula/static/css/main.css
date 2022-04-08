@@ -204,6 +204,10 @@ header {
         text-decoration: underline;
         transform: rotate(0);
     }
+    .dropdown-menu .dropdown-submenu {
+        margin-left:0.5em;
+        border: 0;
+    }
 }
 
 .navbar-brand div {
