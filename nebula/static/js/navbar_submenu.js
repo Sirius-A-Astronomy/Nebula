@@ -8,12 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.innerWidth < 992) {
 
         // close all inner dropdowns when parent is closed
-        document.querySelectorAll('.navbar .dropdown').forEach(function (everydropdown) {
-            everydropdown.addEventListener('hidden.bs.dropdown', function () {
+        document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
+            dropdown.addEventListener('hidden.bs.dropdown', function () {
                 // after dropdown is hidden, then find all submenus
-                this.querySelectorAll('.dropdown-submenu').forEach(function (everysubmenu) {
+                this.querySelectorAll('.dropdown-submenu').forEach(function (submenu) {
                     // hide every submenu as well
-                    everysubmenu.style.display = 'none';
+                    submenu.style.display = 'none';
                 });
             })
         });

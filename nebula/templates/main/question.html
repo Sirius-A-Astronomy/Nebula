@@ -6,8 +6,8 @@
 {% block body %}
 <main>
         <div class="container">
-            <h4>{{question.title}}</h4>
-            <div class="d-flex justify-content-end">
+            <div class="question-title">
+                <h4>{{question.title}}</h4>
                 {% if question.difficulty != None %}
                 <div class="px-2">{{question.difficulty}}</div>
                 {% endif %}
@@ -18,10 +18,12 @@
                 <div class="px-2">{{question.user.firstname}} {{question.user.lastname}}</div>
                 {% endif %}
             </div>
-            <div class="container">
+            <div>
+                <p class="light">Question content:</p>
                 <p>
                     {{question.content}}
                 </p>
+                <p class="light">Answer:</p>
                 <p>
                     {{question.answer}}
                 </p>
