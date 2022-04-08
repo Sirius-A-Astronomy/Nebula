@@ -19,7 +19,7 @@ html {
 }
 
 body {
-    margin: 0 0 15rem 0;
+    margin: 0 0 0 0;
     /* background: transparent; */
 }
 
@@ -132,6 +132,10 @@ p a:focus,
     Main 
 */
 
+main {
+    min-height: 85vh;
+}
+
 /*
     Header 
 */
@@ -149,13 +153,14 @@ header {
     Navigation
 */
 
+
 .navbar-brand img,
 .navbar-brand div {
     display: inline-block;
     /* margin-left: 10px; */
 }
 
-@media all and (min-width: 992px) {
+@media (hover: hover) and (min-width: 992px) {
     .navbar .nav-item .dropdown-menu {
         display: none;
         margin-top: 0;
@@ -263,6 +268,32 @@ header {
     margin-left: 0.5em;
 }
 
+/* check if a device supports :hover */
+@media (hover: hover) {
+    :root {
+        --has-hover: true;
+    }
+}
+@media (hover: none) and (min-width: 992px) {
+    :root {
+        --has-hover: false;
+    }
+    .dropdown-menu .dropdown-submenu {
+        display: none;
+        position: absolute;
+        right: 100%;
+        top: 0px;
+    }
+    .dropdown-menu li {
+        position: relative;
+    }
+    /* rotate caret on hover */
+    .dropdown-menu>li>a:hover:after,
+    .dropdown-menu>li>a:focus:after {
+        text-decoration: underline;
+        transform: rotate(90deg);
+    }
+}
 
 
 /*
@@ -277,11 +308,12 @@ footer {
     background-color: var(--grey, #666666) !important;
     font-size: 90%;
     color: #fff !important;
-    position: absolute;
     text-align: center;
-    left: 0;
-    bottom: 0;
     width: 100%;
+}
+
+footer p {
+    margin-bottom: 0;
 }
 
 /*

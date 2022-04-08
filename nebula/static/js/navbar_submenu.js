@@ -5,7 +5,7 @@ window.addEventListener("resize", function () {
 document.addEventListener("DOMContentLoaded", function () {
 
     // make it as accordion for smaller screens
-    if (window.innerWidth < 992) {
+    if (window.innerWidth < 992 || getComputedStyle(document.documentElement).getPropertyValue('has-hover') == false) {
 
         // close all inner dropdowns when parent is closed
         document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
@@ -30,6 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (nextEl.style.display == 'block') {
                         nextEl.style.display = 'none';
                     } else {
+                        // hide all other menus
+                        document.querySelectorAll('.dropdown-submenu').forEach(function (submenu) {
+                            submenu.style.display = 'none';
+                        });
+                        // remove focus from all items
+                        document.querySelectorAll('.dropdown-menu a').forEach(function (dropdownMenu) {
+                            dropdownMenu.blur();
+                        });
+                        // show the clicked menu and focus on the expanded menu
+                        element.focus();
                         nextEl.style.display = 'block';
                     }
 
