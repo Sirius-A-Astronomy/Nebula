@@ -193,7 +193,17 @@ header {
         text-decoration: underline;
         transform: rotate(90deg);
     }
-
+}
+@media (max-width: 991px) {
+    /* .navbar-nav>li>a:after, */
+    .dropdown-menu>li>a:after {
+        transform: rotate(-90deg);
+    }
+    /* .navbar-nav>li>a:focus:after, */
+    .dropdown-menu>li>a:focus:after {
+        text-decoration: underline;
+        transform: rotate(0);
+    }
 }
 
 .navbar-brand div {
@@ -287,6 +297,7 @@ header {
     .dropdown-menu li {
         position: relative;
     }
+
     /* rotate caret on hover */
     .dropdown-menu>li>a:hover:after,
     .dropdown-menu>li>a:focus:after {

@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         // hide all other menus
                         document.querySelectorAll('.dropdown-submenu').forEach(function (submenu) {
                             submenu.style.display = 'none';
+                            element.blur();
                         });
                         // remove focus from all items
                         document.querySelectorAll('.dropdown-menu a').forEach(function (dropdownMenu) {
