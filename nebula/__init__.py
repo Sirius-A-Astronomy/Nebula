@@ -1,4 +1,3 @@
-from multiprocessing.connection import wait
 from flask import Flask
 from config import configs
 from flask_sqlalchemy import SQLAlchemy
