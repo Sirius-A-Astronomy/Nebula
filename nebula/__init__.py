@@ -1,3 +1,4 @@
+from multiprocessing.connection import wait
 from flask import Flask
 from config import configs
 from flask_sqlalchemy import SQLAlchemy
@@ -20,8 +21,19 @@ def create_app(config_environment='default'):
 
     # Register all the views within an app context
     with app.app_context():
-        from nebula.views import main, level
+        from nebula.views import main, level, course, all_courses, question
         app.register_blueprint(main.bp)
         app.register_blueprint(level.bp)
+        app.register_blueprint(course.bp)
+        app.register_blueprint(all_courses.bp)
+        app.register_blueprint(question.bp)
+
+    from nebula.context_functions import context_processor
+
+    app.context_processor(context_processor)
 
     return app
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run()

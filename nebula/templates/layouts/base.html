@@ -3,42 +3,133 @@
 <!--  UNFINISHED -->
 
 <html>
-    <head>
-        <title>{% block title %} NO TITLE {% endblock %}</title>
 
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/cropped-siriuskleintransparant-32x32.png') }}">
+<head>
+    <title>{% block title %} NO TITLE {% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png"
+        href="{{ url_for('static', filename='images/cropped-siriuskleintransparant-32x32.png') }}">
 
-        <!-- Google Fonts Includes -->
-        <link href="//fonts.googleapis.com/css?family=Roboto+Mono:300,400,500|Roboto:300,400,500" rel="stylesheet">
-        <!-- Google Material Icon Font-->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <!-- GSAP ANIMATIONS-->
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
-        <!-- Stylesheets -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <!-- Bootstrap -->
+    <!-- {% if config.LOCAL_PACKAGES %}
+    <link rel="stylesheet"
+        href="{{ url_for(static_target, filename='node_modules/bootstrap/dist/css/bootstrap.min.css')}}">
+    {% else %} -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- {% endif %} -->
 
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <!-- Google Fonts Includes -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/lato.css') }}" />
+    <!-- <link href="//fonts.googleapis.com/css?family=Roboto+Mono:300,400,500|Roboto:300,400,500" rel="stylesheet"> -->
+    <!-- Google Material Icon Font-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- GSAP ANIMATIONS-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
 
-        {% block include_head %}
-        {% endblock %}
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/queries.css') }}">
 
-    </head>
-    <body>
-        <header>
-            <h1>Nebula</h1>
-        </header>
+    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script> -->
 
-        {% block body %}
-        {% endblock %}
+    {% block include_head %}
+    {% endblock %}
 
-        <footer class="footer">
-            <p>
-                &copy; 2020 - Sirius A <!-- Add some kind of dynamic year ? -->
-            </p>
-        </footer>
+    {% macro nav_course_list_item(course) -%}
+    <li><a {% if course.code in request.path %} class="dropdown-item active" {% else %} class="dropdown-item" {% endif %} href="{{url_for('course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{course.name}}</a></li>
+    {%- endmacro %}
 
-        {% block include_js %}
-        {% endblock %}
+    {% macro nav_course_level_list_item(course_level) -%}
+    <li class="">
+        <a {% if course_level.code in request.path %} class="dropdown-item dropdown-toggle active" {% else %} class="dropdown-item dropdown-toggle" {% endif %} href="{{url_for('level.level', course_level_code=course_level.code)}}">{{course_level.name}}</a>
+        <ul class="dropdown-submenu">
+            {% for course in course_level.courses %}
+            {{nav_course_list_item(course)}}
+            {% endfor %}
+        </ul>
+    </li>
+    {%- endmacro %}
 
-    </body>
+</head>
+
+<body>
+    <header>
+        <div class="nebula-nav">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-blue">
+                <div class="container">
+                    {% if config['ENV'] == "production" %}
+                    <a class="navbar-brand" href="https://sirius.astro.rug.nl">
+                        {% else %}
+                        <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                            {% endif %}
+                            <div>
+                                <span class="site-name">Nebula</span>
+                            </div>
+                        </a>
+                        {% if intranet is not defined %}
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-end" id="navbarText">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a {% if request.path==url_for('main.index') %} class="nav-link active" {% else %}
+                                        class="nav-link" {% endif %} href="{{ url_for('main.index') }}">Home</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a {% if '/course' in request.path or '/level' in request.path %}
+                                        class="nav-link dropdown-toggle active" {% else %}
+                                        class="nav-link dropdown-toggle" {% endif %} href="#"
+                                        id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Courses
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <li class="nav-header">
+                                            Bachelor
+                                        </li>
+                                        {% for bachelor_level in nav['CourseLevels']['Bachelor'] %}
+                                        {{ nav_course_level_list_item(bachelor_level) }}
+                                        {% endfor %}
+                                        <li class="nav-header">
+                                            Master
+                                        </li>
+                                        {% for master_level in nav['CourseLevels']['Master'] %}
+                                        {{ nav_course_level_list_item(master_level) }}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="https://sirius.astro.rug.nl/">Back to Sirius A website</a>
+                            </ul>
+                        </div>
+                        {% endif %}
+                </div>
+            </nav>
+        </div>
+
+    </header>
+
+    {% block body %}
+    {% endblock %}
+
+    <footer class="footer">
+        <p>
+            &copy; {{current_year}} - Sirius A
+            <!-- Add some kind of dynamic year ? -->
+        </p>
+    </footer>
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+        </script>
+    {% block include_js %}
+    {% endblock %}
+<script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
+
+</body>
+
 </html>

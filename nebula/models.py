@@ -18,6 +18,7 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     code = db.Column(db.String(16), nullable=False, unique=True)
+    semester = db.Column(db.String(16), nullable=False)
     description = db.Column(db.Text)
 
     # relation one-to-many: one course_level, many courses
@@ -38,6 +39,7 @@ class CourseLevel(db.Model):
     name = db.Column(db.String(128), nullable=False)
     # maybe there is some kind of enumerate option for this:
     study_type = db.Column(db.String(64), nullable=False)
+    code = db.Column(db.String(16), nullable=False, unique=True)
 
     def __repr__(self):
         return f"CourseLevel(\"{self.study_type}\", \"{self.name}\")"
