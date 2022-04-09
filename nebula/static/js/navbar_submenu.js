@@ -47,6 +47,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
+    } else { // add proper focus for larger screens
+        document.querySelector('.dropdown-menu > li > a, .dropdown-submenu').forEach(function (element) {
+            element.addEventListener('mouseover', function (e) {
+                e.stopPropagation();
+                element.focus();
+            });
+        });
     }
     // end if innerWidth
 

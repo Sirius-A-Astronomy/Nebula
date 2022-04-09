@@ -44,7 +44,7 @@
     {%- endmacro %}
 
     {% macro nav_course_level_list_item(course_level) -%}
-    <li class="">
+    <li class="caret-hover">
         <a {% if course_level.code in request.path %} class="dropdown-item dropdown-toggle active" {% else %} class="dropdown-item dropdown-toggle" {% endif %} href="{{url_for('level.level', course_level_code=course_level.code)}}">{{course_level.name}}</a>
         <ul class="dropdown-submenu">
             {% for course in course_level.courses %}

@@ -127,6 +127,12 @@ p a:focus,
     Layout
 */
 
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0px 16px;
+    box-sizing: border-box;
+}
 
 /*
     Main 
@@ -188,7 +194,6 @@ header {
     }
 
     /* rotate caret on hover */
-    .dropdown-menu>li>a:hover:after,
     .dropdown-menu>li>a:focus:after {
         text-decoration: underline;
         transform: rotate(90deg);
