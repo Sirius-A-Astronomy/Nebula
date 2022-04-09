@@ -21,25 +21,30 @@
         </p>
     </section>
     <div class="divider"></div>
-    <section class="container">
-        <h2>Browse the Nebula</h2>
+    <section class="container-index-browse">
+        <div class="container">
 
-        <p><a href="{{url_for('courses.all_courses')}}">All Courses</a></p>
-
-        <h3>Bachelor</h3>
-        {% for course_level in bsc_levels %}
-        {{ level_list_item(course_level) }}
-        {% endfor %}
-
-        <h3>Master</h3>
-        {% for course_level in msc_levels %}
-        {{ level_list_item(course_level) }}
-        {% endfor %}
-
+            <h2>Browse the Nebula</h2>
+            
+            <p><a href="{{url_for('courses.all_courses')}}">All Courses</a></p>
+            
+            <h3>Bachelor</h3>
+            {% for course_level in bsc_levels %}
+            {{ level_list_item(course_level) }}
+            {% endfor %}
+            
+            <h3>Master</h3>
+            {% for course_level in msc_levels %}
+            {{ level_list_item(course_level) }}
+            {% endfor %}
+            
+        </div>
 
     </section>
     <div class="divider"></div>
-    <section class="container">
+    <section class="container container-add-question">
+        <h2>Have a question?</h2>
+        <p>Submit a question below:</p>
         <p><a href="submit.php">Add a question</a></p>
     </section>
 </main>

@@ -4,7 +4,7 @@
 
 {% macro course_list_item(course) -%}
 <a class="inline-link"
-  href="{{url_for('course.course', course_level_code=course.course_level.code, course_code=course.code)}}"></a>
+  href="{{url_for('course.course', course_level_code=course.course_level.code, course_code=course.code)}}">
   <div class="row">
     <div class="col-sm-1">{{course.semester}}</div>
     <div class="col-sm">{{course.name}}</div>

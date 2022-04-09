@@ -104,6 +104,12 @@ questions = [
              then divide by 2 to get the answer: x = -1/2""",
              user=users[0],
              course=Course.query.filter_by(code="WBPH054-05").first()),
+    Question(title="This is another question",
+                content="It has different content",
+                answer="This is the answer",
+                user=users[1],
+                course=Course.query.filter_by(name = "Linear Algebra (for Physics)").first(),
+                difficulty = "Hard"),
     Question(title="Is it possible to create a question with a date",
              content="I guess we see what happens",
              answer="""If implemented correctly, it is possible to specify

@@ -5,29 +5,37 @@
 
 {% block body %}
 <main>
-        <div class="container">
-            <div class="question-title">
-                <h4>{{question.title}}</h4>
+    <div class="container container-question-info">
+        <div class="question-title">
+            <h4>{{question.title}}</h4>
+        </div>
+        <div class="question-info">
+
+            <p>
                 {% if question.difficulty != None %}
-                <div class="px-2">{{question.difficulty}}</div>
+                {{question.difficulty}} -
                 {% endif %}
                 {% if question.creation_datetime.strftime('%Y-%m-%d') != '1970-01-01' %}
-                <div class="px-2">{{question.creation_datetime.strftime('%Y-%m-%d')}}</div>
+                {{question.creation_datetime.strftime('%Y-%m-%d')}} -
                 {% endif %}
                 {% if question.user.firstname != None or question.user.lastname != None %}
-                <div class="px-2">{{question.user.firstname}} {{question.user.lastname}}</div>
+                {{question.user.firstname}} {{question.user.lastname}}
                 {% endif %}
-            </div>
-            <div>
-                <p class="light">Question content:</p>
-                <p>
-                    {{question.content}}
-                </p>
-                <p class="light">Answer:</p>
-                <p>
-                    {{question.answer}}
-                </p>
-            </div>
+            </p>
         </div>
+    </div>
+    <div class="container container-question-content">
+
+        <div>
+            <p class="light">Question content:</p>
+            <p>
+                {{question.content}}
+            </p>
+            <p class="light">Answer:</p>
+            <p>
+                {{question.answer}}
+            </p>
+        </div>
+    </div>
 </main>
 {% endblock %}
