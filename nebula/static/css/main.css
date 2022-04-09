@@ -8,7 +8,7 @@
     */
 
     --color-background-dark: #121212;
-    --color-background-secondary-dark: #1d1d1d;
+    --color-background-secondary-dark: #080808;
     --color-text-primary-dark: #f8f8f8;
     --color-text-secondary-dark: #b3b3b3;
     --color-text-tertiary-dark: #8c8c8c;
@@ -23,7 +23,7 @@
     */
 
     --color-background-light: #d3d3d3;
-    --color-background-secondary-light: #f8f8f8;
+    --color-background-secondary-light: #cccccc;
     --color-text-primary-light: #3e3e3e;
     --color-text-secondary-light: #787878;
     --color-text-tertiary-light: #b3b3b3;
@@ -396,7 +396,7 @@ footer p {
 }
 
 .container-index-browse {
-    background-color: var(--color-background);
+    background-color: var(--color-background-secondary);
     padding: 0.5rem 0;
 }
 
