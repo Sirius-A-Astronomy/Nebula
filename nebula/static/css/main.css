@@ -169,7 +169,7 @@ p a:focus,
 */
 
 main {
-    /* min-height: calc(100vh - 11.95rem); */
+    min-height: calc(100vh - 11.95rem);
 }
 
 /*
@@ -371,8 +371,6 @@ footer {
     color: #fff !important;
     text-align: center;
     width: 100%;
-    position: absolute;
-    bottom: 0;
 }
 
 footer p {
