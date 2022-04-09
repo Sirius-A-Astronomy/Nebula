@@ -7,7 +7,4 @@ bp = Blueprint('main', __name__)
 def index():
     bsc = CourseLevel.query.filter_by(study_type='Bachelor').all()
     msc = CourseLevel.query.filter_by(study_type='Master').all()
-    print(bsc)
-    print(msc)
-
     return render_template('main/index.html', bsc_levels=bsc, msc_levels=msc)
