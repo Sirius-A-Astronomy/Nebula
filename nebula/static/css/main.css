@@ -47,7 +47,7 @@ h3 {
 h1 {
     margin-top: 0px;
     font-size: 2.7rem;
-    margin: 16px 0px 16px 0px;
+    margin: 1rem 0px 1rem 0px;
     opacity: .87;
     font-family: 'Roboto Mono', sans-serif;
     -moz-osx-font-smoothing: grayscale;
@@ -58,7 +58,7 @@ h1 {
 
 h2 {
     font-size: 1.5rem;
-    margin: 0px 0px 16px 0px;
+    margin: 0px 0px 1rem 0px;
     opacity: .87;
     font-family: 'Roboto', sans-serif;
     -moz-osx-font-smoothing: grayscale;
@@ -69,24 +69,24 @@ h2 {
 
 h3 {
     /* Tertiary titles */
-    margin: 16px 0px 8px 0px;
+    margin: 1rem 0px 0.5rem 0px;
     opacity: .67;
     font-family: 'Roboto', sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
     letter-spacing: 0.04rem;
 }
 
 p {
     /* General Text */
-    margin: 0 0 8px 0;
+    margin: 0 0 0.5rem 0;
     opacity: .87;
     font-family: 'Roboto', sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.04rem;
     line-height: 1.25rem;
@@ -106,7 +106,7 @@ p a,
     font-family: 'Roboto', sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: 0.04rem;
     line-height: 1.25rem;
@@ -127,19 +127,13 @@ p a:focus,
     Layout
 */
 
-.container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0px 16px;
-    box-sizing: border-box;
-}
 
 /*
     Main 
 */
 
 main {
-    min-height: 85vh;
+    min-height: calc(100vh - 11.5rem);
 }
 
 /*
@@ -147,7 +141,7 @@ main {
 */
 
 header {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .main-title {
@@ -194,23 +188,27 @@ header {
     }
 
     /* rotate caret on hover */
+    .carot-left:after,
+    .dropdown-menu>li>a:hover:after,
     .dropdown-menu>li>a:focus:after {
-        text-decoration: underline;
         transform: rotate(90deg);
     }
 }
+
 @media (max-width: 991px) {
+
     /* .navbar-nav>li>a:after, */
     .dropdown-menu>li>a:after {
         transform: rotate(-90deg);
     }
+
     /* .navbar-nav>li>a:focus:after, */
     .dropdown-menu>li>a:focus:after {
-        text-decoration: underline;
         transform: rotate(0);
     }
+
     .dropdown-menu .dropdown-submenu {
-        margin-left:0.5em;
+        margin-left: 0.5em;
         border: 0;
     }
 }
@@ -225,7 +223,7 @@ header {
 }
 
 .navbar-brand img {
-    max-height: 50px;
+    max-height: 3.125rem;
 }
 
 .dropdown-menu {
@@ -247,7 +245,7 @@ header {
     border: 0 solid transparent;
     border-bottom: 2px solid #2872c2;
     padding: 0;
-   background-color: #fff; 
+    background-color: #fff;
 }
 
 .dropdown-submenu li {
@@ -290,27 +288,28 @@ header {
 /* check if a device supports :hover */
 @media (hover: hover) {
     :root {
-        --has-hover: true;
+        --has-hover: 1;
     }
 }
+
 @media (hover: none) and (min-width: 992px) {
     :root {
-        --has-hover: false;
+        --has-hover: 0;
     }
+
     .dropdown-menu .dropdown-submenu {
         display: none;
         position: absolute;
         right: 100%;
         top: 0px;
     }
+
     .dropdown-menu li {
         position: relative;
     }
 
     /* rotate caret on hover */
-    .dropdown-menu>li>a:hover:after,
     .dropdown-menu>li>a:focus:after {
-        text-decoration: underline;
         transform: rotate(90deg);
     }
 }
@@ -342,4 +341,48 @@ footer p {
 
 .row {
     margin-top: 30px;
+}
+
+/*
+    Index Page
+*/
+
+.container-introduction {
+    margin-bottom: 1rem;
+}
+
+.container-index-browse {
+    background-color: #d3d3d3;
+    padding: 0.5rem 0;
+}
+
+.container-add-question {
+    margin-top: 1rem;
+}
+
+.container-add-question h2 {
+    margin-bottom: 0.5rem;
+}
+
+/*
+    Question Page
+*/
+
+.container-question-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.question-info {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 991px) {
+    .container-question-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

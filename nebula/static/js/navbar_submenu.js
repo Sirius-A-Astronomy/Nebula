@@ -3,9 +3,10 @@ window.addEventListener("resize", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+    let hasHover = getComputedStyle(document.documentElement).getPropertyValue('--has-hover');
+    // make dropdowns open onclick instead of onhover for accordion on smaller screens or touch devices
+    if (window.innerWidth < 992 || hasHover.includes('0')) {
 
-    // make it as accordion for smaller screens
-    if (window.innerWidth < 992 || getComputedStyle(document.documentElement).getPropertyValue('has-hover') == false) {
 
         // close all inner dropdowns when parent is closed
         document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
@@ -26,8 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (nextEl && nextEl.classList.contains('dropdown-submenu')) {
                     // prevent opening link if link needs to open dropdown
                     e.preventDefault();
-
+                    // close submenu if it is already open and unfocus the link
                     if (nextEl.style.display == 'block') {
+                        element.blur();
                         nextEl.style.display = 'none';
                     } else {
                         // hide all other menus
@@ -47,14 +49,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
-    } else { // add proper focus for larger screens
-        document.querySelector('.dropdown-menu > li > a, .dropdown-submenu').forEach(function (element) {
-            element.addEventListener('mouseover', function (e) {
-                e.stopPropagation();
-                element.focus();
+    }
+    if (window.innerWidth >= 992) {
+        // make caret in navbar point to the left when a dropdown is open
+        document.querySelectorAll('.caret-hover').forEach(function (element) {
+            let caret = element.querySelector('.caret-hover a');
+            element.addEventListener('mouseenter', function (e) {
+                caret.classList.add('carot-left')
+            });
+            element.addEventListener('mouseleave', function (e) {
+                caret.classList.remove('carot-left')
             });
         });
     }
+
     // end if innerWidth
 
 });
