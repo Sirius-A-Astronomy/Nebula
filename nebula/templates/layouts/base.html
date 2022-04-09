@@ -8,7 +8,7 @@
     <title>{% block title %} NO TITLE {% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png"
-        href="{{ url_for('static', filename='images/cropped-siriuskleintransparant-32x32.png') }}">
+        href="{{ url_for('static', filename='images/siriuswebheader.png') }}">
 
     <!-- Bootstrap -->
     <!-- {% if config.LOCAL_PACKAGES %}
@@ -131,7 +131,10 @@
         </script>
     {% block include_js %}
     {% endblock %}
+
+    <!--- Scripts -->
 <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
 
 </body>
 

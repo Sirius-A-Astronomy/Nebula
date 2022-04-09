@@ -4,15 +4,14 @@
 {% block title %}{{course.name}}- Nebula{% endblock %}
 
 {% macro question_list_item(question) -%}
-<a class="inline-link"
-href="{{url_for('question.question', course_code = course.code, question_id=question.id)}}">
-<div class="row">
-    <div class="col-sm">{{question.title}}</div>
-    {% if question.creation_datetime.strftime('%Y-%m-%d') != '1970-01-01' %}
-    <div class="col-sm-auto">{{question.creation_datetime.strftime('%Y-%m-%d')}} </div>
-    {% endif %}
-    <div class="col-sm-auto">{{question.user.firstname}} {{question.user.lastname}}</div>
-</div>
+<a class="inline-link" href="{{url_for('question.question', course_code = course.code, question_id=question.id)}}">
+    <div class="question-list-item">
+        <div class="question-list-item-title">{{question.title}}</div>
+        {% if question.creation_datetime.strftime('%Y-%m-%d') != '1970-01-01' %}
+        <div class="question-list-item-info">{{question.creation_datetime.strftime('%Y-%m-%d')}}
+        {% endif %}
+         - {{question.user.firstname}} {{question.user.lastname}}</div>
+    </div>
 </a>
 {%- endmacro %}
 <!-- <a href="{{url_for('question.question', question=question.id)}}">{{question.title}}</a> -->

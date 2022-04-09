@@ -2,8 +2,55 @@
     Color Palette
 */
 
+:root {
+    /*
+    Dark Theme color-scheme (Change colors for the dark theme here)
+    */
+
+    --color-background-dark: #121212;
+    --color-background-secondary-dark: #1d1d1d;
+    --color-text-primary-dark: #f8f8f8;
+    --color-text-secondary-dark: #b3b3b3;
+    --color-text-tertiary-dark: #8c8c8c;
+    --color-text-accent-dark: #009cef;
+    --color-primary-dark: #2872c2;
+    --color-secondary-dark: #004791;
+    --color-tertiary-dark: #67a0f5;
+    --color-accent-dark: #ff934f;
+
+    /*
+    Light Theme color-scheme (Change colors for the light theme here)
+    */
+
+    --color-background-light: #d3d3d3;
+    --color-background-secondary-light: #f8f8f8;
+    --color-text-primary-light: #3e3e3e;
+    --color-text-secondary-light: #787878;
+    --color-text-tertiary-light: #b3b3b3;
+    --color-text-accent-light: #009cef;
+    --color-primary-light: #2872c2;
+    --color-secondary-light: #67a0f5;
+    --color-tertiary-light: #004791;
+    --color-accent-light: #db504a;
+
+    /*
+    Applied color-scheme (Use these variables to set colors)
+    */
+
+    --color-background: var(--color-background-light);
+    --color-background-secondary: var(--color-background-secondary-light);
+    --color-text-primary: var(--color-text-primary-light);
+    --color-text-secondary: var(--color-text-secondary-light);
+    --color-text-tertiary: var(--color-text-tertiary-light);
+    --color-text-accent: var(--color-text-accent-light);
+    --color-primary: var(--color-primary-light);
+    --color-secondary: var(--color-secondary-light);
+    --color-tertiary: var(--color-tertiary-light);
+    --color-accent: var(--color-accent-light);
+}
+
 .bg-blue {
-    background-color: #2872c2 !important;
+    background-color: var(--color-primary) !important;
 }
 
 
@@ -13,13 +60,14 @@
 */
 
 html {
-    color: #3e3e3e;
+    color: var(--color-text-primary);
     font-size: 100%;
     text-rendering: optimizeLegibility;
 }
 
 body {
     margin: 0 0 0 0;
+    background-color: var(--color-background);
     /* background: transparent; */
 }
 
@@ -30,62 +78,43 @@ body {
 body {
     font-family: 'Lato', 'Roboto', 'Arial', sans-serif;
     font-weight: 300;
+    color: var(--color-text-primary);
 }
 
 h1,
 h2,
 h3 {
-    font-weight: 300;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
 }
 
-.light {
-    font-family: 'PT Sans', sans-serif;
-    font-weight: 400;
-    font-size: 0.875rem;
-}
 
 h1 {
     margin-top: 0px;
     font-size: 2.7rem;
     margin: 1rem 0px 1rem 0px;
-    opacity: .87;
-    font-family: 'Roboto Mono', sans-serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-weight: 400;
     letter-spacing: -0.04rem;
 }
 
 h2 {
     font-size: 1.5rem;
     margin: 0px 0px 1rem 0px;
-    opacity: .87;
-    font-family: 'Roboto', sans-serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-weight: 400;
     letter-spacing: -0.04rem;
 }
 
 h3 {
     /* Tertiary titles */
     margin: 1rem 0px 0.5rem 0px;
-    opacity: .67;
-    font-family: 'Roboto', sans-serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+    color: var(--color-text-secondary);
     font-size: 1rem;
-    font-weight: 400;
     letter-spacing: 0.04rem;
 }
 
 p {
     /* General Text */
     margin: 0 0 0.5rem 0;
-    opacity: .87;
-    font-family: 'Roboto', sans-serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
     font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.04rem;
@@ -96,10 +125,17 @@ p:last-child {
     margin-bottom: 0 !important
 }
 
+.small-accent {
+    font-family: 'PT Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--color-accent);
+}
+
 p a,
 .inline-link {
     /* inline links */
-    color: rgb(0, 156, 239);
+    color: var(--color-text-accent);
 
     opacity: .87;
     text-decoration: none;
@@ -133,7 +169,7 @@ p a:focus,
 */
 
 main {
-    min-height: calc(100vh - 11.5rem);
+    /* min-height: calc(100vh - 11.95rem); */
 }
 
 /*
@@ -229,23 +265,27 @@ header {
 .dropdown-menu {
     border-radius: 0;
     border: 0 solid transparent;
-    border-bottom: 2px solid #2872c2;
+    border-bottom: 2px solid var(--color-secondary);
     padding: 0;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
 }
 
 .dropdown-menu .active,
 .dropdown-item:active {
-    background-color: #d3d3d3;
     text-decoration: underline;
     color: inherit;
+    background-color: var(--color-background);
+    color: var(--color-text-secondary);
 }
 
 .dropdown-submenu {
     border-radius: 0;
     border: 0 solid transparent;
-    border-bottom: 2px solid #2872c2;
+    color: var(--color-text-primary);
+    border-bottom: 2px solid var(--color-primary);
     padding: 0;
-    background-color: #fff;
+    background-color: var(--color-background);
 }
 
 .dropdown-submenu li {
@@ -256,12 +296,14 @@ header {
     padding-top: 10px;
     padding-bottom: 10px;
     transition: background-color 0.15s;
+    color: var(--color-text-primary);
 }
+
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-    background-color: #dfdfdf;
-    color: #3e3e3e;
+    background-color: var(--color-background-secondary);
+    color: var(--color-text-primary);
 }
 
 .site-name {
@@ -329,6 +371,8 @@ footer {
     color: #fff !important;
     text-align: center;
     width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 footer p {
@@ -352,7 +396,7 @@ footer p {
 }
 
 .container-index-browse {
-    background-color: #d3d3d3;
+    background-color: var(--color-background);
     padding: 0.5rem 0;
 }
 
@@ -364,6 +408,26 @@ footer p {
     margin-bottom: 0.5rem;
 }
 
+/*
+    Course Page
+*/
+
+.question-list-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.question-list-item-title {
+    min-width: 50%;
+    flex-grow: 4;
+}
+
+@media (max-width: 440px) {
+    .question-list-item {
+        flex-direction: column;
+    }
+
+}
 /*
     Question Page
 */
@@ -378,6 +442,7 @@ footer p {
 .question-info {
     display: flex;
     flex-direction: row;
+    color: var(--color-text-secondary);
 }
 
 @media (max-width: 991px) {
