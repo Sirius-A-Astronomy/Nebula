@@ -140,7 +140,7 @@ courses = [
            description="",
            course_level=course_levels[2],
            semester="2a"),
-    Course(name="Interstellae medium",
+    Course(name="Interstellar medium",
            code="WBAS012-05",
            description="",
            course_level=course_levels[2],
@@ -191,7 +191,7 @@ users = [
     User(username="nathan", firstname="Nathan", lastname="Baker"),
     User(username="jeff", firstname="Jeff", lastname="Baker"),
     User(username="joseph", firstname="Joseph", lastname="Baker"),
-    User(username="julian", firstname="Julian", lastname="Baker")
+    User(username="julian", firstname="Julian", lastname="Baker"),
 ]
 
 questions = [
@@ -287,7 +287,12 @@ comments = [
     Comment(content="""This is an awful question, as it is not related to
     Linear Algebra at all!""",
             user=users[2],
-            question=questions[1])
+            question=questions[1]),
+    Comment(content="""This is a good question, as it is related to
+       Linear Algebra.""",
+            user=users[3],
+            question=questions[1]),
+
 ]
 db.session.add_all(questions)
 db.session.commit()
