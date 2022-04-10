@@ -36,6 +36,35 @@
                 {{question.answer}}
             </p>
         </div>
+        <div class="divider"></div>
+    </div>
+    <div class="container container-question-comments">
+        <div class="question-comments-title">
+            <h4>Comments</h4>
+        </div>
+        <div class="question-comments-content">
+            {% for comment in question.comments %}
+            <div class="question-comment">
+                <div class="question-comment-info">
+                    <p>
+                        {% if comment.user.firstname != None or comment.user.lastname != None %}
+                        {{comment.user.firstname}} {{comment.user.lastname}}
+                        {% endif %}
+
+                        {% if comment.is_suggestion %}
+                        - Suggestion
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="question-comment-content">
+                    <p>
+                        {{comment.content}}
+                    </p>
+                </div>
+            </div>
+            <div class="divider"></div>
+            {% endfor %}
+        </div>
     </div>
 </main>
 {% endblock %}
