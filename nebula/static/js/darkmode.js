@@ -4,7 +4,8 @@ const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
 let colorsSource = getComputedStyle(document.documentElement);
 
 let colorScheme = ['--color-background', '--color-background-secondary', '--color-text-primary', '--color-text-secondary', 
-    '--color-text-tertiary', '--color-text-accent', '--color-primary', '--color-secondary','--color-accent']
+    '--color-text-tertiary', '--color-text-accent', '--color-text-on-accent', 
+    '--color-text-accent-focus', '--color-primary', '--color-secondary','--color-accent'];
 
 const setColorScheme = e => {
   if (e.matches) {

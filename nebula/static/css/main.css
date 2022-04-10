@@ -7,27 +7,31 @@
     Dark Theme color-scheme (Change colors for the dark theme here)
     */
 
-    --color-background-dark: #121212;
-    --color-background-secondary-dark: #080808;
-    --color-text-primary-dark: #f8f8f8;
-    --color-text-secondary-dark: #b3b3b3;
-    --color-text-tertiary-dark: #8c8c8c;
-    --color-text-accent-dark: #009cef;
+    --color-background-dark: #3e4c59;
+    --color-background-secondary-dark: #1f2933;
+    --color-text-primary-dark: #f5f7fa;
+    --color-text-secondary-dark: #e4e7eb;
+    --color-text-tertiary-dark: #9aa5b1;
+    --color-text-accent-dark: #adee98;
+    --color-text-accent-focus-dark: #85bd72;
+    --color-text-on-accent-dark: #ffffff;
     --color-primary-dark: #2872c2;
-    --color-secondary-dark: #004791;
+    --color-secondary-dark: #102a43;
     --color-tertiary-dark: #67a0f5;
-    --color-accent-dark: #ff934f;
+    --color-accent-dark: #adee98;
 
     /*
     Light Theme color-scheme (Change colors for the light theme here)
     */
 
-    --color-background-light: #d3d3d3;
-    --color-background-secondary-light: #cccccc;
+    --color-background-light: #f0f4f8;
+    --color-background-secondary-light: #d9e2ec;
     --color-text-primary-light: #3e3e3e;
     --color-text-secondary-light: #787878;
     --color-text-tertiary-light: #b3b3b3;
     --color-text-accent-light: #009cef;
+    --color-text-accent-focus-light: #006eaa;
+    --color-text-on-accent-light: #000000;
     --color-primary-light: #2872c2;
     --color-secondary-light: #67a0f5;
     --color-tertiary-light: #004791;
@@ -43,6 +47,8 @@
     --color-text-secondary: var(--color-text-secondary-light);
     --color-text-tertiary: var(--color-text-tertiary-light);
     --color-text-accent: var(--color-text-accent-light);
+    --color-text-accent-focus: var(--color-text-accent-focus-light);
+    --color-text-on-accent: var(--color-text-on-accent-light);
     --color-primary: var(--color-primary-light);
     --color-secondary: var(--color-secondary-light);
     --color-tertiary: var(--color-tertiary-light);
@@ -156,12 +162,18 @@ p a:hover,
 p a:focus,
 .inline-link:hover,
 .inline-link:focus {
-    opacity: .67;
+    color: var(--color-text-accent-focus);
 }
 
 /* 
     Layout
 */
+
+.divider {
+    /* Divider */
+    border-bottom: 1px solid var(--color-text-tertiary);
+    margin: 0.25rem 0;
+}
 
 
 /*
