@@ -15,7 +15,15 @@ git clone https://gitlab.astro.rug.nl/sirius-a/nebula.git
 ```
 
 </details>
-<details><summary>2. Create a virtual environment for the project inside the project directory. </summary>
+<details><summary>2. Git checkout to the correct branch</summary>
+
+_Note: in this guide the branch 'flask-redevelopment' was used as it was the most recently used._
+
+```bash
+git checkout flask-redevelopment
+```
+</details>
+<details><summary>3. Create a virtual environment for the project inside the project directory. </summary>
 This makes sure you do not 'contaminate' your global Python dependencies with the dependencies for Nebula and vice versa.
 
 * Go to the nebula directory
@@ -37,14 +45,14 @@ python3 -m venv venv
 ```
 
 </details>
-<details><summary>3. Activate your virtual environment</summary>
+<details><summary>4. Activate your virtual environment</summary>
 
 ```bash
 . venv/bin/activate
 ```
 </details>
 
-<details><summary>4. Install dependencies</summary>
+<details><summary>5. Install dependencies</summary>
 
 * While in the virtual environment run:
 
@@ -54,16 +62,16 @@ python3 -m pip install -r requirements.txt
 </details>
 
 
-5. It should be possible to run Nebula via the following command:
+6. It should be possible to run Nebula via the following command:
 
 ```bash
 env FLASK_APP=nebula FLASK_ENV=development flask run
 ```
 _Note: to close the flask local webserver: ctrl+c_
 
-6. It should be available at [localhost:5000](localhost:5000/) in your browser, or via the command line.
+7. It should be available at [localhost:5000](localhost:5000/) in your browser, or via the command line.
 
-<details><summary>7. Most likely you'll not be able to access the website just yet as the database needs to be created locally as well.</summary>
+<details><summary>8. Most likely you'll not be able to access the website just yet as the database needs to be created locally as well.</summary>
 
 1. To create the database you'll first need to install nebula as a package. (still within the virtual environment)
 
