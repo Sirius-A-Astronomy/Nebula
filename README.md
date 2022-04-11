@@ -3,8 +3,14 @@ This is the Nebula Database by the Kapteyn Learning Community.
 It is a repository of user-submitted practice questions.
 
 ## Installation & Setup
-Setting up the project should be possible via the following: (all from the project root directory)
-1. Clone or pull the project
+Setting up the project should be possible via the following: (all from the project root directory).
+<details> 
+<summary>1. Clone or pull the project (expand for more info)</summary>
+```bash
+git clone https://gitlab.astro.rug.nl/sirius-a/nebula.git
+```
+
+</details>
 2. Create a virtual environment for the project. This makes sure you do not 'contaminate' your global Python dependencies with the dependencies for Nebula and vice versa.
 3. Activate your virtual environment
 4. It should be possible to run Nebula via the following command:
