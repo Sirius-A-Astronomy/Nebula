@@ -35,7 +35,7 @@ describe("index", () => {
         cy.url().should("contain", "/levels/bsc-yr1/courses/WBMA003-05");
     });
 
-    it("Should habe navigation back to the main sirius a website", () => {
+    it("Should have navigation back to the main sirius a website", () => {
         cy.get("a").contains("Sirius").should("have.attr", "href", "https://sirius.astro.rug.nl/");
     });
 
