@@ -50,6 +50,8 @@ python3 -m venv venv
 ```bash
 . venv/bin/activate
 ```
+
+_Note: to deactivate the virtual environment symply run ```deactivate```_
 </details>
 
 <details><summary>5. Install dependencies</summary>
@@ -119,6 +121,30 @@ or for coverage:
 coverage run -m pytest
 ```
 
+### Testing with cypress
+1. install cypress in venv
+* prerequisites:
+
+    ```bash
+    apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb 
+    ```
+
+    ```bash
+    apt-get install cypress --save-dev
+    ```
+
+2. install cypress real events
+   
+    ```bash
+    npm install cypress-real-events
+    yard add cypress-real-events
+    ```
+
+3. With the webserver running start cypress
+   
+   ```bash
+   ./node_modules/.bin/cypress open
+   ```
 
 ## To-do
 
