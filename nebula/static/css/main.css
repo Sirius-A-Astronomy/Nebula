@@ -4,6 +4,18 @@
 
 :root {
     /*
+    Nebula uses a dark and light color palette. The pallete is automatically set to the user's personal preference via javascript.
+    When setting a color use var(--color-name) to set the color.
+
+    To change the color palette, change the '--color-name-[dark or light]' color variables below.
+
+    To add a color variable:
+    1. Add the color to the '--color-name-dark' and '--color-name-light' variables in the Dark and Light theme color-scheme sections below.
+    2. Set '--color-name' to var(--color-name-light) in the Applied color-scheme section below.
+    3. Add the variable name '--color-name' to the colorScheme array in darkmode.js.
+    */
+
+    /*
     Dark Theme color-scheme (Change colors for the dark theme here)
     */
 
