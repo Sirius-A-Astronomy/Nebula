@@ -2,10 +2,10 @@ import datetime
 from nebula.models import CourseLevel, Course, Question, User, Comment
 
 course_levels = [
-    CourseLevel(name="First Year", study_type="Bachelor"),
-    CourseLevel(name="Second Year", study_type="Bachelor"),
-    CourseLevel(name="Third Year", study_type="Bachelor"),
-    CourseLevel(name="General", study_type="Master"),
+    CourseLevel(name="First Year", study_type="Bachelor", code = "bsc-yr1"),
+    CourseLevel(name="Second Year", study_type="Bachelor", code = "bsc-yr2"),
+    CourseLevel(name="Third Year", study_type="Bachelor", code = "bsc-yr3"),
+    CourseLevel(name="General", study_type="Master", code = "msc"),
 ]
 
 courses = [

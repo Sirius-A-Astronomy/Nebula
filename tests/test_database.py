@@ -46,4 +46,13 @@ def test_data():
         assert len(Question.query.all()) == len(questions)
         assert len(Comment.query.all()) == len(comments)
 
+        # Check if valuse are correct
+        assert CourseLevel.query.filter_by(id=1).first().name == "First Year"
+        assert CourseLevel.query.filter_by(id=2).first().name == "Second Year"
+        assert CourseLevel.query.filter_by(id=3).first().name == "Third Year"
+        assert CourseLevel.query.filter_by(id=4).first().name == "General"
+
+        assert Course.query.filter_by(
+            code="WILA1-06").first().name == "Linear Algebra"
+
         db.drop_all()
