@@ -130,7 +130,7 @@ coverage run -m pytest
     ```
 
     ```bash
-    apt-get install cypress --save-dev
+    npm install cypress --save-dev
     ```
 
 2. install cypress real events
