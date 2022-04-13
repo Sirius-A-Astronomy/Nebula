@@ -8,6 +8,7 @@ instance/
 .pytest_cache/
 .coverage
 node_modules/
+cypress/videos/
 htmlcov/
 package.json
 yarn.lock
@@ -18,3 +19,4 @@ build/
 *.egg-info/
 
 *.db
+*.mp4
