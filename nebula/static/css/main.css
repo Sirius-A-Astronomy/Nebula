@@ -22,7 +22,7 @@
     --color-background-dark: #3e4c59;
     --color-background-secondary-dark: #1f2933;
     --color-text-primary-dark: #f5f7fa;
-    --color-text-secondary-dark: #e4e7eb;
+    --color-text-secondary-dark: #cbd2d9;
     --color-text-tertiary-dark: #9aa5b1;
     --color-text-accent-dark: #adee98;
     --color-text-accent-focus-dark: #85bd72;
@@ -415,6 +415,18 @@ footer p {
 /*
     Reusables
 */
+
+.text-primary {
+    color: var(--color-text-primary);
+}
+
+.text-secondary {
+    color: var(--color-text-secondary)!important;
+}
+
+.text-tertiary {
+    color: var(--color-text-tertiary);
+}
 
 .row {
     margin-top: 30px;
