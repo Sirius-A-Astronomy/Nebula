@@ -1,4 +1,3 @@
-</html>
 {% extends "layouts/base.html" %}
 
 {% block title %}{{question.title}} - {{course.name}}- Nebula{% endblock %}
@@ -40,7 +39,7 @@
     </div>
     <div class="container container-question-comments">
         <div class="question-comments-title">
-            <h4>Comments</h4>
+             <h4>{{question.comments|length}} Comments</h4>
         </div>
         <div class="question-comments-content">
             {% for comment in question.comments %}
@@ -54,15 +53,16 @@
                         {% if comment.is_suggestion %}
                         - Suggestion
                         {% endif %}
+
+                        <span class="text-tertiary">{{ pretty_date(time = comment.creation_datetime)}}</span>
                     </p>
                 </div>
                 <div class="question-comment-content">
-                    <p>
+                    <p class="text-secondary">
                         {{comment.content}}
                     </p>
                 </div>
             </div>
-            <div class="divider"></div>
             {% endfor %}
         </div>
     </div>

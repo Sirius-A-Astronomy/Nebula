@@ -1,5 +1,7 @@
 from nebula import db, create_app
 import datetime
+from random import randrange
+from datetime import timedelta
 from nebula.models import User, Course, CourseLevel, Question, Comment
 
 app = create_app()
@@ -10,6 +12,15 @@ for column in [User, Course, CourseLevel, Question, Comment]:
     column.query.delete()
 db.session.commit()
 
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime 
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
 
 course_levels = [
     CourseLevel(name="First Year", study_type="Bachelor", code="bsc-yr1"),
@@ -287,12 +298,30 @@ comments = [
     Comment(content="""This is an awful question, as it is not related to
     Linear Algebra at all!""",
             user=users[2],
-            question=questions[1]),
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
     Comment(content="""This is a good question, as it is related to
        Linear Algebra.""",
             user=users[3],
-            question=questions[1]),
-
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
+    Comment(content="""This is a third comment, which is testing the datetime property.""",
+            user=users[4],
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(2016, 1, 1), datetime.datetime.now())),
+    Comment(content="""This is a fourth comment, which is testing the datetime property.""",
+            user=users[5],
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(1980, 1, 1), datetime.datetime.now())),
+    Comment(content="""This is a fifth comment, which is testing the datetime property.
+    It is also a comment to test how the website deals with long comments. So it is a long comment. Lorem ipsum dolor sit amet
+    consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+    culpa qui officia deserunt mollit anim id est laborum.""",
+            user=users[6],
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
 ]
 db.session.add_all(questions)
 db.session.commit()
