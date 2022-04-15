@@ -39,7 +39,7 @@
     </div>
     <div class="container container-question-comments">
         <div class="question-comments-title">
-             <h4>{{question.comments|length}} Comments</h4>
+            <h4>{{question.comments|length}} Comments</h4>
         </div>
         <div class="question-comments-content">
             {% for comment in question.comments %}
@@ -57,14 +57,83 @@
                         <span class="text-tertiary">{{ pretty_date(time = comment.creation_datetime)}}</span>
                     </p>
                 </div>
-                <div class="question-comment-content">
-                    <p class="text-secondary">
-                        {{comment.content}}
-                    </p>
+                <div class="question-comment-content text-secondary" id="comment{{comment.id}}">
+
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 </main>
+{% endblock %}
+
+{% block include_js %}
+
+<script language="javascript">
+
+const toggle = (targetId) => {
+    const dots = document.getElementById(`dots-${targetId}`);
+    const toggle = document.getElementById(`myBtn-${targetId}`);
+    const more = document.getElementById(`more-${targetId}`);
+    const y = dots.style.display === "none";
+    dots.style.display = y ? "inline" : "none";
+    toggle.innerHTML = y ? "Read more" : "Read less";
+    more.style.display = y ? "none" : "inline";
+};
+const showParagraph = (targetId, paragraphText, displayLimit) => {
+    const pTagElem = document.createElement("p");
+    pTagElem.setAttribute("style", "word-break: break-word;");
+
+    if (paragraphText.length > displayLimit) {
+        const uniqueId = targetId || "body";
+        const dotsSpanElem = document.createElement("span");
+        dotsSpanElem.id = `dots-${uniqueId}`;
+        dotsSpanElem.textContent = " ";
+        dotsSpanElem.setAttribute("style", "display: inline");
+
+        const moreTextSpanElem = document.createElement("span");
+        moreTextSpanElem.id = `more-${uniqueId}`;
+        moreTextSpanElem.setAttribute("style", "display: none");
+
+        const toggleButtonElem = document.createElement("a");
+        toggleButtonElem.id = `myBtn-${targetId}`;
+        toggleButtonElem.onclick = () => toggle(targetId);
+        toggleButtonElem.innerHTML = "Read more";
+        toggleButtonElem.classList.add("inline-link");
+        toggleButtonElem.setAttribute(
+            "style",
+            "font-size: 0.8125"
+            
+);
+
+if (paragraphText.includes(".") && paragraphText.indexOf(".") < displayLimit) {
+    displayLimit = paragraphText.indexOf(".") + 1;
+} else {
+    indexes = [...paragraphText.matchAll(new RegExp("( )", 'gi'))].map(a => Math.abs(a.index - displayLimit));
+    bestIndex = Math.min(...indexes) + displayLimit;
+    displayLimit = bestIndex;
+}
+
+const firstText = paragraphText.slice(0, displayLimit);
+const secondText = paragraphText.slice(displayLimit);
+moreTextSpanElem.appendChild(document.createTextNode(secondText + " "));
+
+pTagElem.appendChild(document.createTextNode(firstText));
+pTagElem.appendChild(dotsSpanElem);
+pTagElem.appendChild(moreTextSpanElem);
+pTagElem.appendChild(toggleButtonElem);
+} else {
+    pTagElem.appendChild(document.createTextNode(paragraphText));
+}
+document.getElementById(targetId) ?
+    document.getElementById(targetId).appendChild(pTagElem) :
+    document.body.appendChild(pTagElem);
+};
+
+const displayLimit = 200;
+{% for comment in question.comments %}
+showParagraph("comment{{comment.id}}", "{{remove_newline(comment.content)}}", displayLimit);
+{% endfor %}
+</script>
+
 {% endblock %}

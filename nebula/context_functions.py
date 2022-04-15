@@ -69,8 +69,12 @@ def context_processor():
         if day_diff < (365 * 20):
             return "a decade ago"
         return str(day_diff // 3650) + " decades ago"
+    
+    def remove_newline(string):
+        return " ".join(string.splitlines())
 
     return dict(
         current_year=get_current_year(),
         nav=nav,
+        remove_newline=remove_newline,
         pretty_date=pretty_date)
