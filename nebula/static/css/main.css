@@ -41,8 +41,8 @@
     --color-text-primary-light: #3e3e3e;
     --color-text-secondary-light: #787878;
     --color-text-tertiary-light: #b3b3b3;
-    --color-text-accent-light: #009cef;
-    --color-text-accent-focus-light: #006eaa;
+    --color-text-accent-light: #db504a;
+    --color-text-accent-focus-light: #b83e3a;
     --color-text-on-accent-light: #000000;
     --color-primary-light: #2872c2;
     --color-secondary-light: #67a0f5;
@@ -147,7 +147,7 @@ p:last-child {
     font-family: 'PT Sans', sans-serif;
     font-weight: 400;
     font-size: 0.875rem;
-    color: var(--color-accent);
+    color: var(--color-text-accent);
 }
 
 p a,
