@@ -27,7 +27,7 @@ cache:
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   image: python:3.6
-  before-script:
+  before_script:
     - python -v
     - echo "Creating virtual environment..."
     - python -m pip install virtualenv
