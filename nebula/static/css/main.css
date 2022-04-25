@@ -65,6 +65,9 @@
     --color-secondary: var(--color-secondary-light);
     --color-tertiary: var(--color-tertiary-light);
     --color-accent: var(--color-accent-light);
+    --color-scheme: light;
+
+    color-scheme: var(--color-scheme);
 }
 
 .bg-blue {
@@ -214,9 +217,60 @@ header {
     margin-bottom: 1rem;
 }
 
+.dark-mode-toggle-container {
+    vertical-align: middle;
+    margin-right: 1rem;
+    margin-left: auto;
+    color: #fff;
+}
+
+@media all and (min-width: 992px) {
+    .dark-mode-toggle-container {
+        order: 2;
+        margin-right: 0;
+    }
+}
+
+.dark-mode-icon,
+.light-mode-icon {
+    display: none;
+    color: #fff;
+}
+.animate-rotation .dark-mode-icon,
+.animate-rotation .light-mode-icon {
+    animation: rotation 0.2s ease-out;
+}
+.dark-mode-toggle-container .dark-mode-enabled .dark-mode-icon {
+    display: none;
+}
+
+.dark-mode-toggle-container .dark-mode-enabled .light-mode-icon {
+    display: block;
+}
+
+.dark-mode-toggle-container .light-mode-enabled .dark-mode-icon {
+    display: block;
+}
+
+.dark-mode-toggle-container .light-mode-enabled .light-mode-icon {
+    display: none;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 /* 
     Navigation
 */
+
+.navbar {
+    display: flex;
+}
 
 
 .navbar-brand img,

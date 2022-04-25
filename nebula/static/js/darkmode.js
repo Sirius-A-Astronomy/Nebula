@@ -1,34 +1,73 @@
-
 // set colorsCourse as the :root css variable
-let colorsSource = getComputedStyle(document.documentElement);
+const colorsSource = getComputedStyle(document.documentElement);
 
 // Add colors that should respond to the prefers-color-scheme media query here:
-let colorScheme = ['--color-background', '--color-background-secondary', '--color-text-primary', '--color-text-secondary',
-  '--color-text-tertiary', '--color-text-accent', '--color-text-on-accent',
-  '--color-text-accent-focus', '--color-primary', '--color-secondary', '--color-accent'];
+const colorScheme = [
+	"--color-background",
+	"--color-background-secondary",
+	"--color-text-primary",
+	"--color-text-secondary",
+	"--color-text-tertiary",
+	"--color-text-accent",
+	"--color-text-on-accent",
+	"--color-text-accent-focus",
+	"--color-primary",
+	"--color-secondary",
+	"--color-accent",
+];
 
-const setColorScheme = e => {
-  if (e.matches) {
-    // Set each color variable to it's respective color in the dark color scheme
-    colorScheme.forEach(function (color) {
-      document.documentElement.style.setProperty(color, colorsSource.getPropertyValue(color + "-dark"));
-    });
-  } else {
-    // Set each color variable to it's respective color in the light color scheme
-    colorScheme.forEach(function (color) {
-      document.documentElement.style.setProperty(color, colorsSource.getPropertyValue(color + "-light"));
-    });
-  }
+const darkModeToggle = document.getElementById("dark-mode-toggler");
+
+const initialPrefersDarkMode = () => {
+	if (window.matchMedia) {
+		const darkModePreference = window.matchMedia(
+			"(prefers-color-scheme: dark)"
+		);
+		if (darkModePreference.matches) {
+			darkModeToggle.checked = true;
+		}
+		return darkModePreference.matches ? "dark" : "light";
+	}
+	return "light";
+};
+
+function setDarkModeonLoad() {
+	let prefersDarkMode = localStorage.getItem("prefersDarkMode");
+	if (prefersDarkMode === null) {
+		prefersDarkMode = initialPrefersDarkMode();
+		localStorage.setItem("prefersDarkMode", prefersDarkMode);
+	}
+	setDarkMode(prefersDarkMode);
 }
+setDarkModeonLoad();
 
+darkModeToggle.addEventListener("click", function () {
+	let currentDarkModePreference = localStorage.getItem("prefersDarkMode");
+	if (currentDarkModePreference != "light") {
+		localStorage.setItem("prefersDarkMode", "light");
+		setDarkMode("light");
+	} else {
+		localStorage.setItem("prefersDarkMode", "dark");
+		setDarkMode("dark");
+	}
+	darkModeToggle.classList.add("animate-rotation");
+});
 
-if (window.matchMedia) {
+function setDarkMode(mode) {
+	colorScheme.forEach(function (color) {
+		document.documentElement.style.setProperty(
+			color,
+			colorsSource.getPropertyValue(color + "-" + mode)
+		);
+	});
+	document.documentElement.style.setProperty("color-scheme", mode);
 
-  const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
-  setColorScheme(prefersDarkMode);
-  if (prefersDarkMode?.addEventListener) {
-    prefersDarkMode.addEventListener('change', setColorScheme);
-  } else {
-    prefersDarkMode.addListener(setColorScheme);
-  }
+	darkModeToggle.checked = mode == "dark";
+	if (mode == "dark") {
+		darkModeToggle.classList.add("dark-mode-enabled");
+		darkModeToggle.classList.remove("light-mode-enabled");
+	} else {
+		darkModeToggle.classList.remove("dark-mode-enabled");
+		darkModeToggle.classList.add("light-mode-enabled");
+	}
 }
