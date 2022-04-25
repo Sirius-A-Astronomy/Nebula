@@ -14,6 +14,7 @@ htmlcov/
 package.json
 yarn.lock
 package-lock.json
+settings.json
 
 dist/
 build/
