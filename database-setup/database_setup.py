@@ -12,15 +12,17 @@ for column in [User, Course, CourseLevel, Question, Comment]:
     column.query.delete()
 db.session.commit()
 
+
 def random_date(start, end):
     """
-    This function will return a random datetime between two datetime 
+    This function will return a random datetime between two datetime
     objects.
     """
     delta = end - start
     int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
     random_second = randrange(int_delta)
     return start + timedelta(seconds=random_second)
+
 
 course_levels = [
     CourseLevel(name="First Year", study_type="Bachelor", code="bsc-yr1"),
@@ -320,10 +322,22 @@ comments = [
             user=users[6],
             question=questions[1],
             creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
-    Comment(content="""This is a sixth comment, will javascript break if I dont have any periods in my comment? How do I test this? I am testing this comment to see if it will break the website if I dont have any periods in my comment // that does mean I need to make the comment quite long""",
+    Comment(content="""This is a sixth comment, will the expandable-text break if I don't have any periods in my comment? How do I test this? I am testing this comment to see if it will break the website if I dont have any periods in my comment // that does mean I need to make the comment quite long""",
             user=users[7],
             question=questions[1],
             creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
+    Comment(content="""This is a seventh comment, which will test non-ASCII characters. áéíóúñ
+    §¡¿?¿¡!@#$%^&*()_+{}|[]\:";'<>?,./«
+    ±¶
+    ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώ""",
+            user=users[8],
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
+    Comment(content="""This is a comment to test the comment_count property.""",
+            user=users[3],
+            question=questions[1],
+            creation_datetime=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.now())),
+
 ]
 db.session.add_all(questions)
 db.session.commit()
