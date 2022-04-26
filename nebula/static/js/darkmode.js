@@ -5,9 +5,11 @@ const colorsSource = getComputedStyle(document.documentElement);
 const colorScheme = [
 	"--color-background",
 	"--color-background-secondary",
+	"--color-background-tertiary",
 	"--color-text-primary",
 	"--color-text-secondary",
 	"--color-text-tertiary",
+	"--color-text-on-primary",
 	"--color-text-accent",
 	"--color-text-on-accent",
 	"--color-text-accent-focus",

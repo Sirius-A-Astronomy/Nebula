@@ -21,9 +21,11 @@
 
     --color-background-dark: #3e4c59;
     --color-background-secondary-dark: #1f2933;
+    --color-background-tertiary-dark: #52606d;
     --color-text-primary-dark: #f5f7fa;
     --color-text-secondary-dark: #cbd2d9;
     --color-text-tertiary-dark: #9aa5b1;
+    --color-text-on-primary-dark: #f5f7fa;
     --color-text-accent-dark: #adee98;
     --color-text-accent-focus-dark: #85bd72;
     --color-text-on-accent-dark: #3e3e3e;
@@ -38,16 +40,18 @@
 
     --color-background-light: #f0f4f8;
     --color-background-secondary-light: #d9e2ec;
+    --color-background-tertiary-light: #cbd2d9;
     --color-text-primary-light: #3e3e3e;
     --color-text-secondary-light: #787878;
     --color-text-tertiary-light: #b3b3b3;
-    --color-text-accent-light: #db504a;
-    --color-text-accent-focus-light: #b83e3a;
+    --color-text-on-primary-light: #f0f4f8;
+    --color-text-accent-light: #FF9B42;
+    --color-text-accent-focus-light: #cc7c35;
     --color-text-on-accent-light: #000000;
     --color-primary-light: #2872c2;
     --color-secondary-light: #67a0f5;
     --color-tertiary-light: #004791;
-    --color-accent-light: #db504a;
+    --color-accent-light: #FF9B42;
 
     /*
     Applied color-scheme (Use these variables to set colors)
@@ -55,9 +59,11 @@
 
     --color-background: var(--color-background-light);
     --color-background-secondary: var(--color-background-secondary-light);
+    --color-background-tertiary: var(--color-background-tertiary-light);
     --color-text-primary: var(--color-text-primary-light);
     --color-text-secondary: var(--color-text-secondary-light);
     --color-text-tertiary: var(--color-text-tertiary-light);
+    --color-text-on-primary: var(--color-text-on-primary-light);
     --color-text-accent: var(--color-text-accent-light);
     --color-text-accent-focus: var(--color-text-accent-focus-light);
     --color-text-on-accent: var(--color-text-on-accent-light);
@@ -79,6 +85,7 @@
 /* 
     General Settings 
 */
+
 
 html {
     color: var(--color-text-primary);
@@ -491,6 +498,41 @@ footer p {
     margin-top: 30px;
 }
 
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    border-color: var(--color-primary);
+}
+.btn-primary:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-text-on-primary);
+    border-color: var(--color-secondary);
+}
+
+* + .btn {
+    margin-top: 1rem;
+}
+
+
+
+/*
+    Forms
+*/
+
+.form-control,
+.form-select {
+    background-color: var(--color-background-secondary);
+    color: var(--color-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: var(--color-text-primary);
+    background-color: var(--color-background-tertiary);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.1rem var(--color-accent);
+}
+
 /*
     Index Page
 */
@@ -511,6 +553,12 @@ footer p {
 .container-add-question h2 {
     margin-bottom: 0.5rem;
 }
+
+/*
+    Add Question Page
+*/
+
+
 
 /*
     Course Page
