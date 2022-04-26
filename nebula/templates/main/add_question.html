@@ -9,17 +9,17 @@
         <form method='POST' action="/add_question">
             {{ question_form.csrf_token }}
             {{ question_form.hidden_tag }}
-            {{ question_form.course.label }}
-            {{ question_form.course }}
-            {{ question_form.title.label }}
-            {{ question_form.title }}
-            {{ question_form.content.label }}
-            {{ question_form.content }}
-            {{ question_form.answer.label }}
-            {{ question_form.answer }}
-            {{ question_form.difficulty.label }}
-            {{ question_form.difficulty }}
-            {{ question_form.submit }}
+            {{ question_form.course.label(class="form-label") }}
+            {{ question_form.course(class="form-select") }}
+            {{ question_form.title.label(class="form-label") }}
+            {{ question_form.title(class="form-control") }}
+            {{ question_form.content.label(class="form-label") }}
+            {{ question_form.content(class="form-control") }}
+            {{ question_form.answer.label(class="form-label") }}
+            {{ question_form.answer(class="form-control") }}
+            {{ question_form.difficulty.label(class="form-label") }}
+            {{ question_form.difficulty(class="form-select") }}
+            {{ question_form.submit(class="btn btn-primary") }}
         </form>
     </div>
 </main>

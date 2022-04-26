@@ -37,7 +37,7 @@ def add_question():
         course = Course.query.filter_by(id=course_id).first()
 
         question = Question(title=title, content=content, answer=answer, user=user, course=course,
-                            difficulty=difficulty, creation_datetime=datetime.now())
+                            difficulty=difficulty, creation_datetime=datetime.now(), approved=False)
         user.questions.append(question)
         print(db)
         print(question)
