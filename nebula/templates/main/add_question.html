@@ -3,22 +3,24 @@
 
 {% block body %}
 <main>
-	<div class="container">
-		<h2>Add a question</h2>
-		<p>Submit a question below</p>
-		<form method="post">
-			{{ question_form.course.label }}
-			{{ question_form.course }}
-			{{ question_form.title.label }}
-			{{ question_form.title }}
-			{{ question_form.content.label }}
-			{{ question_form.content }}
-			{{ question_form.answer.label }}
-			{{ question_form.answer }}
-			{{ question_form.difficulty.label }}
-			{{ question_form.difficulty }}
-			{{ question_form.submit}}
-		</form>
-	</div>
+    <div class="container">
+        <h2>Add a question</h2>
+        <p>Submit a question below</p>
+        <form method='POST' action="/add_question">
+            {{ question_form.csrf_token }}
+            {{ question_form.hidden_tag }}
+            {{ question_form.course.label }}
+            {{ question_form.course }}
+            {{ question_form.title.label }}
+            {{ question_form.title }}
+            {{ question_form.content.label }}
+            {{ question_form.content }}
+            {{ question_form.answer.label }}
+            {{ question_form.answer }}
+            {{ question_form.difficulty.label }}
+            {{ question_form.difficulty }}
+            {{ question_form.submit }}
+        </form>
+    </div>
 </main>
 {% endblock %}
