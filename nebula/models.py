@@ -54,6 +54,7 @@ class Question(db.Model):
     difficulty = db.Column(db.Integer)
     content = db.Column(db.Text, nullable=False)
     answer = db.Column(db.Text, nullable=False)
+    approved = db.Column(db.Boolean, default=False)
     sources = db.Column(db.Text)
 
     # relation one-to-many: one course, many questions
@@ -80,7 +81,8 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     is_suggestion = db.Column(db.Boolean, nullable=False, default=False)
-    creation_datetime = db.Column(db.DateTime, nullable=True, default = datetime.now)
+    creation_datetime = db.Column(
+        db.DateTime, nullable=True, default=datetime.now)
 
     # relation one-to-many: one: user, many: comments
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
