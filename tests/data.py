@@ -2,10 +2,10 @@ import datetime
 from nebula.models import CourseLevel, Course, Question, User, Comment
 
 course_levels = [
-    CourseLevel(name="First Year", study_type="Bachelor", code = "bsc-yr1"),
-    CourseLevel(name="Second Year", study_type="Bachelor", code = "bsc-yr2"),
-    CourseLevel(name="Third Year", study_type="Bachelor", code = "bsc-yr3"),
-    CourseLevel(name="General", study_type="Master", code = "msc"),
+    CourseLevel(name="First Year", study_type="Bachelor", code="bsc-yr1"),
+    CourseLevel(name="Second Year", study_type="Bachelor", code="bsc-yr2"),
+    CourseLevel(name="Third Year", study_type="Bachelor", code="bsc-yr3"),
+    CourseLevel(name="General", study_type="Master", code="msc"),
 ]
 
 courses = [
@@ -42,7 +42,7 @@ questions = [
              answer="""If implemented correctly, it is possible to specify
              an arbitrary creation date, by passing it as an argument to the
              question.""",
-             creation_datetime=datetime.date(1970, 1, 1),
+             created_at=datetime.date(1970, 1, 1),
              user=users[1],
              course=courses[0])
 ]
