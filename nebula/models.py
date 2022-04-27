@@ -1,9 +1,57 @@
 from nebula import db
-from datetime import datetime
+from sqlalchemy.types import TypeDecorator, CHAR
+from sqlalchemy import DateTime, func
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 
-class User(db.Model):
+class GUID(TypeDecorator):
+    """Platform-independent GUID type.
+    Uses PostgreSQL's UUID type, otherwise uses
+    CHAR(32), storing as stringified hex values.
+    """
+    impl = CHAR
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(UUID())
+        else:
+            return dialect.type_descriptor(CHAR(32))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return "%.32x" % uuid.UUID(value).int
+            else:
+                # hexstring
+                return "%.32x" % value.int
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if not isinstance(value, uuid.UUID):
+                value = uuid.UUID(value)
+            return value
+
+
+class Base(db.Model):
+
+    __abstract__ = True
+
     id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(GUID(), primary_key=False,
+                     default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(DateTime(timezone=True),
+                           server_default=func.now())
+    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now())
+
+
+class User(Base):
     firstname = db.Column(db.String(128))
     lastname = db.Column(db.String(128))
     username = db.Column(db.String(128), nullable=False, unique=True)
@@ -14,8 +62,7 @@ class User(db.Model):
         return f"User(\"{self.username}\")"
 
 
-class Course(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class Course(Base):
     name = db.Column(db.String(128), nullable=False)
     code = db.Column(db.String(16), nullable=False, unique=True)
     semester = db.Column(db.String(16))
@@ -32,8 +79,7 @@ class Course(db.Model):
         return f"Course(\"{self.name}\")"
 
 
-class CourseLevel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class CourseLevel(Base):
     # maybe we need a better name for the CourseLevel.name, as it
     #  referres to the year in which the course if given.
     name = db.Column(db.String(128), nullable=False)
@@ -45,12 +91,8 @@ class CourseLevel(db.Model):
         return f"CourseLevel(\"{self.study_type}\", \"{self.name}\")"
 
 
-class Question(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class Question(Base):
     title = db.Column(db.String(256), nullable=False)
-    creation_datetime = db.Column(db.DateTime,
-                                  nullable=False,
-                                  default=datetime.now)
     difficulty = db.Column(db.Integer)
     content = db.Column(db.Text, nullable=False)
     answer = db.Column(db.Text, nullable=False)
@@ -77,12 +119,11 @@ class Question(db.Model):
         return f"Question(\"{self.title}\")"
 
 
-class Comment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class Comment(Base):
     content = db.Column(db.Text, nullable=False)
     is_suggestion = db.Column(db.Boolean, nullable=False, default=False)
-    creation_datetime = db.Column(
-        db.DateTime, nullable=True, default=datetime.now)
+    # creation_datetime = db.Column(
+    #     db.DateTime, nullable=True, default=datetime.now)
 
     # relation one-to-many: one: user, many: comments
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -97,3 +138,7 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f"Comment(\"{self.content}\")"
+
+
+def init_db():
+    db.create_all()
