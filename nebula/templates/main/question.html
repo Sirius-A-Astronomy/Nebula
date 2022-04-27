@@ -14,8 +14,8 @@
                     {% if question.difficulty != None %}
                     {{question.difficulty}} -
                     {% endif %}
-                    {% if question.creation_datetime.strftime('%Y-%m-%d') != '1970-01-01' %}
-                    {{question.creation_datetime.strftime('%Y-%m-%d')}} -
+                    {% if question.created_at.strftime('%Y-%m-%d') != '1970-01-01' %}
+                    {{question.created_at.strftime('%Y-%m-%d')}} -
                     {% endif %}
                     {% if question.user.firstname != None or question.user.lastname != None %}
                     {{question.user.firstname}} {{question.user.lastname}}
@@ -45,23 +45,47 @@
         <div class="question-comments-title">
             <h4>{{question.comments|length}} Comments</h4>
         </div>
+        <div class="add-comment-container">
+            <form method="POST"
+                action="{{url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
+                id="add-comment-form">
+
+                {{comment_form.csrf_token}}
+                {{comment_form.hidden_tag}}
+                {{comment_form.content.label(class="form-label, visually-hidden")}}
+                {{comment_form.is_suggestion(class="form-checkbox hidden-form-field-element visually-hidden",
+                data_hidden_by="comment-content")}}
+                {{ comment_form.is_suggestion.label(class="form-label hidden-form-field-element
+                visually-hidden", data_hidden_by="comment-content") }}
+                <div class="d-flex">
+                    {{comment_form.content(class="form-control hidden-form-field-control",
+                    placeholder="Add a comment...", id="comment-content")}}
+                    {{comment_form.submit(class="btn btn-primary hidden-form-field-element visually-hidden",
+                    id="comment-submit-button")}}
+                </div>
+            </form>
+        </div>
         <div class="question-comments-content">
-            {% for comment in question.comments %}
-            <div class="question-comment">
+            {% for comment in question.comments|reverse %}
+
+            <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %}
+                class="question-comment" {% endif %}>
                 <div class="question-comment-info">
                     <p>
                         {% if comment.user.firstname != None or comment.user.lastname != None %}
-                        {{comment.user.firstname}} {{comment.user.lastname}}
+                        <span class="text-secondary">
+                            {{comment.user.firstname}} {{comment.user.lastname}}
+                        </span>
                         {% endif %}
-
                         {% if comment.is_suggestion %}
-                        - Suggestion
+                        <span class="text-tertiary">
+                            - Suggestion -
+                        </span>
                         {% endif %}
-
-                        <span class="text-tertiary">{{ pretty_date(time = comment.creation_datetime)}}</span>
+                        <span class="text-tertiary">{{ pretty_date(time = comment.created_at)}}</span>
                     </p>
                 </div>
-                <div class="question-comment-content text-secondary">
+                <div class="question-comment-content text-primary">
                     <p class="expandable-text">
                         {{comment.content}}
                     </p>
