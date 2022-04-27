@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def context_processor():
@@ -21,6 +21,9 @@ def context_processor():
 
     }
 
+    def utc_to_local(utc_dt):
+        return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
     def pretty_date(time=False):
         """
         Get a datetime object or a int() Epoch timestamp and return a
@@ -28,11 +31,11 @@ def context_processor():
         'just now', etc
         """
         from datetime import datetime
-        now = datetime.now()
+        now = datetime.now().astimezone(tz=None)
         if type(time) is int:
-            diff = now - datetime.fromtimestamp(time)
+            diff = now - datetime.fromtimestamp(utc_to_local(time))
         elif isinstance(time, datetime):
-            diff = now - time
+            diff = now - utc_to_local(time)
         elif not time:
             diff = 0
         second_diff = diff.seconds
@@ -69,7 +72,7 @@ def context_processor():
         if day_diff < (365 * 20):
             return "a decade ago"
         return str(day_diff // 3650) + " decades ago"
-    
+
     def remove_newline(string):
         return " ".join(string.splitlines())
 
@@ -77,4 +80,5 @@ def context_processor():
         current_year=get_current_year(),
         nav=nav,
         remove_newline=remove_newline,
+        utc_to_local=utc_to_local,
         pretty_date=pretty_date)
