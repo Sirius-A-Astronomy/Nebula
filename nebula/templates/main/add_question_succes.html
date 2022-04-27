@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Added your question! - Nebula{% endblock %}
+
+{% block body %}
+<main>
+    <div class="container">
+        <h2>Question added to {{course.name}}!</h2>
+        <p class="text-tertiary">Preview:</p>
+        <div class="question-preview">
+            <h3>{{question.title}}</h3>
+            <p>{{question.content}}</p>
+            <p>Difficulty: {{question.difficulty}}</p>
+            <p>Answer: {{question.answer}}</p>
+        </div>
+
+        <p>
+            <a href="{{url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
+                class="btn btn-primary">
+                Back to {{course.name}}
+            </a>
+            <a href="{{url_for('add_question.add_question')}}" class="btn btn-primary">
+                Add another question
+            </a>
+        </p>
+    </div>
+</main>
+{% endblock %}

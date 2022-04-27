@@ -6,7 +6,7 @@
     <div class="container">
         <h2>Add a question</h2>
         <p>Submit a question below</p>
-        <form method='POST' action="/add_question">
+        <form method='POST' action="{{url_for('add_question.add_question')}}" id="add-question-form">
             {{ question_form.csrf_token }}
             {{ question_form.hidden_tag }}
             {{ question_form.course.label(class="form-label") }}
@@ -19,8 +19,17 @@
             {{ question_form.answer(class="form-control") }}
             {{ question_form.difficulty.label(class="form-label") }}
             {{ question_form.difficulty(class="form-select") }}
-            {{ question_form.submit(class="btn btn-primary") }}
+            <div class="add-question-button-container">
+                {{ question_form.submit(class="btn btn-primary") }}
+                {% if course is not none %}
+                <a href="{{url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
+                    class="btn btn-primary">
+                    Back to {{course.name}}
+                </a>
+                {% endif %}
+            </div>
         </form>
+
     </div>
 </main>
 {% endblock %}

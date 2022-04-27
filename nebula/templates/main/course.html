@@ -3,13 +3,13 @@
 {% block title %}{{course.name}}- Nebula{% endblock %}
 
 {% macro question_list_item(question) -%}
-<a class="inline-link" href="{{url_for('question.question', course_code = course.code, question_id=question.id)}}">
+<a class="inline-link" href="{{url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}">
     <div class="question-list-item">
         <div class="question-list-item-title">{{question.title}}</div>
-        {% if question.creation_datetime.strftime('%Y-%m-%d') != '1970-01-01' %}
-        <div class="question-list-item-info">{{question.creation_datetime.strftime('%Y-%m-%d')}}
-        {% endif %}
-         - {{question.user.firstname}} {{question.user.lastname}}</div>
+        {% if question.created_at.strftime('%Y-%m-%d') != '1970-01-01' %}
+        <div class="question-list-item-info">{{question.created_at.strftime('%Y-%m-%d')}}
+            {% endif %}
+            - {{question.user.firstname}} {{question.user.lastname}}</div>
     </div>
 </a>
 {%- endmacro %}
@@ -19,6 +19,8 @@
     <section class="container">
         <h2>{{course.name}} {{course.code}}</h2>
         <h3>Questions</h3>
+        <a href="{{url_for('add_question.add_question', course_code=course.code)}}" class="btn btn-primary">Add a
+            question</a>
         <div>
             {% for question in questions %}
             {{ question_list_item(question) }}
