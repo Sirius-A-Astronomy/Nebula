@@ -16,6 +16,9 @@
 <main>
     <section class="container">
         <h2>{{course.name}} {{course.code}}</h2>
+        <p class="text-secondary">
+            {{course.description}}
+        </p>
         <h3>Questions</h3>
         <a href="{{url_for('add_question.add_question', course_code=course.code)}}" class="btn btn-primary">Add a
             question</a>
