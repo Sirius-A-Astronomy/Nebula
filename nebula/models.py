@@ -49,8 +49,8 @@ class Base(db.Model):
 
     # Database uses utc time
     created_at = db.Column(DateTime(timezone=True),
-                           server_default=func.utcnow())
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.utcnow())
+                           server_default=func.now())
+    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now())
 
 
 class User(Base):
