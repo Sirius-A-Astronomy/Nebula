@@ -29,7 +29,6 @@ def question(course_code, question_uuid, new_comment_uuid=None):
 
     # for now we'll hardcode the user as there is no login system
     user = User.query.filter_by(username="sipma").first()
-    print(type(Comment.query.first().uuid))
 
     if request.form and comment_form.validate():
         content = comment_form.content.data
