@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/queries.css') }}">
 
     <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script> -->
+    <!-- <script src="{{ url_for('static', filename='js/loadMathJax.js') }}" async></script> -->
 
     {% block include_head %}
     {% endblock %}
@@ -153,7 +154,7 @@
     <!--- Scripts -->
     <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
     <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
-
+    <script src="{{url_for('static', filename='js/views.js')}}"></script>
 </body>
 
 </html>

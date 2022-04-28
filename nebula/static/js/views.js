@@ -1,4 +1,25 @@
-// expandableText
+window.MathJax = {
+	tex: {
+		tags: "ams",
+	},
+	tex2jax: {
+		processEscapes: true,
+	},
+};
+
+(function () {
+	var script = document.createElement("script");
+	script.src =
+		// "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+		"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML";
+	script.async = true;
+	document.head.appendChild(script);
+})();
+
+/*
+    SECTION Expendable-Text
+*/
+
 document
 	.querySelectorAll(".expandable-text")
 	.forEach(function (expandableText) {
@@ -82,6 +103,11 @@ document
 		expandableText.innerHTML = expandableTextContentTruncated;
 		expandableText.appendChild(expandTextToggle);
 	});
+// END !SECTION Expendable-Text
+
+/*
+    SECTION Hidden-Form-Field
+*/
 
 // hide all hidden-form-field-elements
 document
@@ -99,11 +125,68 @@ document
 				.forEach((element) => {
 					element.classList.remove("visually-hidden");
 				});
-			// if the elements that need to be shown are not a sibling of the control form field, show them via the data-hidden-by attribute
+			// if the elements that need to be shown are not a sibling
+			//   of the control form field, show them via the data-hidden-by attribute
 			document
 				.querySelectorAll(`[data-hidden-by='${formField.id}']`)
 				.forEach((element) => {
 					element.classList.remove("visually-hidden");
 				});
+		});
+	});
+
+// !SECTION Hidden-Form-Field
+
+/*
+    SECTION Toggle latex instructions
+*/
+// first hide all latex instructions
+document
+	.querySelectorAll(".latex-instructions-container")
+	.forEach((element) => {
+		element.style.display = "none";
+	});
+
+document
+	.querySelectorAll("#toggle-latex-instructions-button")
+	.forEach((button) => {
+		button.addEventListener("click", function (e) {
+			if (instructionsContainer.style.display === "none") {
+				instructionsContainer.style.display = "block";
+			} else {
+				instructionsContainer.style.display = "none";
+			}
+			button.blur();
+		});
+	});
+
+// !SECTION Toggle latex instructions
+
+/*
+    SECTION Preview-Form-Input
+*/
+
+document
+	.querySelectorAll(".show-preview-button")
+	.forEach((showPreviewButton) => {
+		showPreviewButton.addEventListener("click", function (e) {
+			const previewContent = e.target.parentElement.querySelector(
+				".preview-form-container"
+			);
+			previewContent.style.display = "block";
+			document
+				.querySelectorAll(
+					`[data-preview-toggled-by=${showPreviewButton.id}]`
+				)
+				.forEach((element) => {
+					let inputForm = document.querySelector(
+						`#${element.attributes["data-preview-value-from"].value}`
+					);
+					element.innerHTML = inputForm.value;
+					showPreviewButton.disabled = true;
+					MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+					showPreviewButton.disabled = false;
+				});
+			e.target.blur();
 		});
 	});
