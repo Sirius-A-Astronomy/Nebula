@@ -1,61 +1,59 @@
 {% extends "layouts/base.html" %}
-
-{% block title %}{{question.title}} - {{course.name}}- Nebula{% endblock %}
-
+{% block title %}{{ question.title }} - {{ course.name }}- Nebula{% endblock %}
 {% block body %}
-<main>
-    <div class="container">
-        <div class="container-question-info">
-            <p class="text-tertiary">
-                Question in <a class="inline-link-secondary"
-                    href="{{url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">
-                    {{course.name}}
+    <main>
+        <div class="container">
+            <div class="container-question-info">
+                <p class="text-tertiary">
+                    Question in <a class="inline-link-secondary"
+    href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">
+                    {{ course.name }}
                 </a>
             </p>
             <div class="question-info">
                 <p class="text-tertiary">
-                    {% if question.difficulty != None %}
-                    {{question.difficulty}} -
-                    {% endif %}
+                    {% if question.difficulty != None %}{{ question.difficulty }} -{% endif %}
                     {% if question.created_at.strftime('%Y-%m-%d') != '1970-01-01' %}
-                    {{question.created_at.strftime('%Y-%m-%d')}} -
+                        {{ question.created_at.strftime('%Y-%m-%d')}} -
                     {% endif %}
                     {% if question.user.firstname != None or question.user.lastname != None %}
-                    {{question.user.firstname}} {{question.user.lastname}}
+                        {{ question.user.firstname }} {{ question.user.lastname }}
                     {% endif %}
                 </p>
             </div>
         </div>
         <div class="question-title">
-            <h4>{{question.title}}</h4>
+            <h4>{{ question.title }}</h4>
         </div>
     </div>
     <div class="container container-question-content">
-
         <div>
-            <p class="small-accent">Question content:</p>
-            <p>
-                {{question.content}}
+            <p class="small-accent">
+                Question content:
             </p>
-            <p class="small-accent">Answer:</p>
             <p>
-                {{question.answer}}
+                {{ question.content }}
+            </p>
+            <p class="small-accent">
+                Answer:
+            </p>
+            <p>
+                {{ question.answer }}
             </p>
         </div>
         <div class="divider"></div>
     </div>
     <div class="container container-question-comments">
         <div class="question-comments-title">
-            <h4>{{question.comments|length}} Comments</h4>
+            <h4>{{ question.comments|length }} Comments</h4>
         </div>
         <div class="add-comment-container">
             <form method="POST"
-                action="{{url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
-                id="add-comment-form">
-
-                {{comment_form.csrf_token}}
-                {{comment_form.hidden_tag}}
-                {{comment_form.content.label(class="form-label, visually-hidden")}}
+                  action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
+                  id="add-comment-form">
+                {{ comment_form.csrf_token }}
+                {{ comment_form.hidden_tag }}
+                {{ comment_form.content.label(class="form-label, visually-hidden")}}
                 {{comment_form.is_suggestion(class="form-checkbox hidden-form-field-element",
                 data_hidden_by="comment-content")}}
                 {{ comment_form.is_suggestion.label(class="form-label hidden-form-field-element",
@@ -70,31 +68,22 @@
         </div>
         <div class="question-comments-content">
             {% for comment in question.comments|sort(attribute='created_at', reverse=true) %}
-
-            <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %}
-                class="question-comment" {% endif %}>
-                <div class="question-comment-info">
-                    <p>
-                        {% if comment.user.firstname != None or comment.user.lastname != None %}
-                        <span class="text-secondary">
-                            {{comment.user.firstname}} {{comment.user.lastname}}
-                        </span>
-                        {% endif %}
-                        {% if comment.is_suggestion %}
-                        <span class="text-tertiary">
-                            - Suggestion -
-                        </span>
-                        {% endif %}
-                        <span class="text-tertiary">{{ pretty_date(time = comment.created_at)}}</span>
-                    </p>
+                <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %} class="question-comment" {% endif %}>
+                    <div class="question-comment-info">
+                        <p>
+                            {% if comment.user.firstname != None or comment.user.lastname != None %}
+                                <span class="text-secondary">{{ comment.user.firstname }} {{ comment.user.lastname }}</span>
+                            {% endif %}
+                            {% if comment.is_suggestion %}<span class="text-tertiary">- Suggestion -</span>{% endif %}
+                            <span class="text-tertiary">{{ pretty_date(time = comment.created_at)}}</span>
+                        </p>
+                    </div>
+                    <div class="question-comment-content text-primary">
+                        <p class="expandable-text">
+                            {{ comment.content }}
+                        </p>
+                    </div>
                 </div>
-                <div class="question-comment-content text-primary">
-                    <p class="expandable-text">
-                        {{comment.content}}
-                    </p>
-
-                </div>
-            </div>
             {% endfor %}
         </div>
     </div>
