@@ -53,14 +53,14 @@
                 {{comment_form.csrf_token}}
                 {{comment_form.hidden_tag}}
                 {{comment_form.content.label(class="form-label, visually-hidden")}}
-                {{comment_form.is_suggestion(class="form-checkbox hidden-form-field-element visually-hidden",
+                {{comment_form.is_suggestion(class="form-checkbox hidden-form-field-element",
                 data_hidden_by="comment-content")}}
-                {{ comment_form.is_suggestion.label(class="form-label hidden-form-field-element
-                visually-hidden", data_hidden_by="comment-content") }}
-                <div class="d-flex">
+                {{ comment_form.is_suggestion.label(class="form-label hidden-form-field-element",
+                data_hidden_by="comment-content") }}
+                <div class="d-flex flex-column flex-md-row">
                     {{comment_form.content(class="form-control hidden-form-field-control",
                     placeholder="Add a comment...", id="comment-content")}}
-                    {{comment_form.submit(class="btn btn-primary hidden-form-field-element visually-hidden",
+                    {{comment_form.submit(class="btn btn-primary hidden-form-field-element mt-2 mt-md-0",
                     id="comment-submit-button")}}
                 </div>
             </form>

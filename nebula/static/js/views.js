@@ -83,6 +83,12 @@ document
 		expandableText.appendChild(expandTextToggle);
 	});
 
+// hide all hidden-form-field-elements
+document
+	.querySelectorAll(".hidden-form-field-element")
+	.forEach(function (element) {
+		element.classList.add("visually-hidden");
+	});
 // Show submit button on form focus
 document
 	.querySelectorAll(".hidden-form-field-control")
