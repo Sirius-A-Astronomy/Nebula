@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
 from nebula.models import Course, CourseLevel, Question, User
 from nebula import db
-from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField
+from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Optional
 from datetime import datetime
 
@@ -15,6 +15,7 @@ class QuestionForm(Form):
     course = SelectField("Course", coerce=int)
     difficulty = SelectField("Difficulty", coerce=int, choices=[
                              (1, "Easy"), (2, "Medium"), (3, "Hard")], validators=[DataRequired()])
+    course_code = HiddenField("Course Code")
     submit = SubmitField("Submit")
 
 
@@ -48,8 +49,13 @@ def add_question(success=False, course_code=None):
         question = Question(title=title, content=content, answer=answer, user=user, course=course,
                             difficulty=difficulty, approved=False)
         user.questions.append(question)
+        # Pass along the course code to the succes page to have back navigation
+        if course.code == question_form.course_code.data:
+            course_code = question_form.course_code.data
+        else:
+            course_code = None
         db.session.add(question)
         db.session.commit()
 
-        return render_template("main/add_question_succes.html", question=question, course=course)
-    return render_template("main/add_question.html", question_form=question_form, success=success, course=course)
+        return render_template("main/add_question_succes.html", question=question, course=course, course_code=course_code)
+    return render_template("main/add_question.html", question_form=question_form, success=success, course=course, course_code=course_code)

@@ -19,6 +19,7 @@
             {{ question_form.answer(class="form-control") }}
             {{ question_form.difficulty.label(class="form-label") }}
             {{ question_form.difficulty(class="form-select") }}
+            {{ question_form.course_code(value=course_code) }}
             <div class="add-question-button-container">
                 {{ question_form.submit(class="btn btn-primary") }}
                 {% if course is not none %}

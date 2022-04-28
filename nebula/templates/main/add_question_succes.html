@@ -1,11 +1,11 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}Added your question! - Nebula{% endblock %}
+{% block title %}Added your question to {{course.name}} - Nebula{% endblock %}
 
 {% block body %}
 <main>
     <div class="container">
-        <h2>Question added to {{course.name}}!</h2>
+        <h2>Question added to {{course.name}}</h2>
         <p class="text-tertiary">Preview:</p>
         <div class="question-preview">
             <h3>Title: {{question.title}}</h3>
@@ -15,13 +15,12 @@
         </div>
         <div class="d-flex justify-content-between mt-3">
 
-            <a href="{{url_for('add_question.add_question')}}" class="inline-link">
+            <a href="{{url_for('add_question.add_question', course_code=question.course.code)}}" class="inline-link">
                 Add another question
             </a>
             <a href="{{url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
                 class="inline-link">
-                {% if course_code is defined %}Back{% else %}Go{% endif %} to {{course.name}}
-                {{course_code}}
+                {% if course_code is not none %}Back{% else %}Go{% endif %} to {{course.name}}
             </a>
         </div>
     </div>
