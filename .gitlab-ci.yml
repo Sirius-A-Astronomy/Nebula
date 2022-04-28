@@ -1,93 +1,92 @@
-stages:          # List of stages for jobs, and their order of execution
-  - build
-  - test
+stages: # List of stages for jobs, and their order of execution
+    - build
+    - test
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - .npm/
-    - .cache/
-    - .cache/Cypress
-    - venv/
-    - e2evenv/
-
-build-job:       # This job runs in the build stage, which runs first.
-  tags: 
-    - linux
-  stage: build
-  image: python:latest
-  script:
-    - python -v
-    - echo "Creating virtual environment..."
-    - python -m pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - echo "Created and activated virtual environment."
-    - echo "Installing dependencies"
-    - python -m pip install -r requirements.txt
-    - echo "Installing Nebula as a package..."
-    - python -m pip install -e .
-  artifacts:
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - venv/
+        - .npm/
+        - .cache/
+        - .cache/Cypress
+        - venv/
+        - e2evenv/
 
-unit-test-job:   # This job runs in the test stage.
-  image: python:latest
-  stage: test    # It only starts when the job in the build stage completes successfully.
-  needs: [ "build-job" ]
-  script:
-    - echo "activating virtual environment..."
-    - source venv/bin/activate
-    - echo "Starting unit tests..."
-    - pytest --junitxml=report.xml
+build-job: # This job runs in the build stage, which runs first.
+    tags:
+        - linux
+    stage: build
+    image: python:latest
+    script:
+        - python -v
+        - echo "Creating virtual environment..."
+        - python -m pip install virtualenv
+        - virtualenv venv
+        - source venv/bin/activate
+        - echo "Created and activated virtual environment."
+        - echo "Installing dependencies"
+        - python -m pip install -r requirements.txt
+        - echo "Installing Nebula as a package..."
+        - python -m pip install -e .
+    artifacts:
+        paths:
+            - venv/
 
-  artifacts:
-    when: always
-    reports:
-      junit: report.xml
+unit-test-job: # This job runs in the test stage.
+    image: python:latest
+    stage: test # It only starts when the job in the build stage completes successfully.
+    needs: ["build-job"]
+    script:
+        - echo "activating virtual environment..."
+        - source venv/bin/activate
+        - echo "Starting unit tests..."
+        - pytest --junitxml=report.xml
 
+    artifacts:
+        when: always
+        reports:
+            junit: report.xml
 
-e2e-test-job:   # This job also runs in the test stage.
-  image: ubuntu:18.04
-  stage: test
-  before_script:
-    - echo "Installing python3"
-    - apt-get update
-    - apt-get install -y python3
-    - apt-get install -y python3-pip
-    - python3 -m pip install virtualenv
-    - virtualenv e2evenv
-    - source e2evenv/bin/activate
-    - python3 -m pip install -r requirements.txt
-    - echo "Activated virtual environment"
-    - echo "installing nodejs"
-    - apt-get update; apt-get install -y curl
-    - curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
-    - apt-get install -y nodejs
-    - echo "installing cypress and it's dependencies"
-    - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-    - npm install cypress --save-dev
-    - npm install cypress-real-events
-    - echo "Setting up database"
-    - python3 -m pip install -e .
-    - python3 database-setup/init_db.py
-    - python3 database-setup/database_setup.py
+e2e-test-job: # This job also runs in the test stage.
+    image: ubuntu:18.04
+    stage: test
+    before_script:
+        - echo "Installing python3"
+        - apt-get update
+        - apt-get install -y python3
+        - apt-get install -y python3-pip
+        - python3 -m pip install virtualenv
+        - virtualenv e2evenv
+        - source e2evenv/bin/activate
+        - python3 -m pip install -r requirements.txt
+        - echo "Activated virtual environment"
+        - echo "installing nodejs"
+        - apt-get update; apt-get install -y curl
+        - curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+        - apt-get install -y nodejs
+        - echo "installing cypress and it's dependencies"
+        - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+        - npm install cypress --save-dev
+        - npm install cypress-real-events
+        - echo "Setting up database"
+        - python3 -m pip install -e .
+        - python3 database-setup/init_db.py
+        - python3 database-setup/database_setup.py
 
-  script:
-    - echo "Starting server..."
-    - export FLASK_APP=nebula
-    - export FLASK_ENV=development
-    - export LC_ALL=C.UTF-8
-    - export LANG=C.UTF-8
-    - nohup python3 -m flask run &
-    - echo "Starting tests..."
-    - npx cypress run --reporter junit \
-      --reporter-options "mochaFile=test-result[hash].xml,toConsole=true"
-  artifacts:
-    when: always
-    paths:
-      - cypress/videos/**/*.mp4
-      - cypress/screenshots/**/*.png
-    reports:
-      junit: test-result*.xml
-    expire_in: 1 day
+    script:
+        - echo "Starting server..."
+        - export FLASK_APP=nebula
+        - export FLASK_ENV=testing
+        - export LC_ALL=C.UTF-8
+        - export LANG=C.UTF-8
+        - nohup python3 -m flask run &
+        - echo "Starting tests..."
+        - npx cypress run --reporter junit \
+          --reporter-options "mochaFile=test-result[hash].xml,toConsole=true"
+    artifacts:
+        when: always
+        paths:
+            - cypress/videos/**/*.mp4
+            - cypress/screenshots/**/*.png
+        reports:
+            junit: test-result*.xml
+        expire_in: 1 day
