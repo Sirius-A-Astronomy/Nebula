@@ -4,10 +4,10 @@
 
 {% macro question_list_item(question) -%}
 <a class="inline-link" href="{{url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}">
-    <div class="question-list-item">
-        <div class="question-list-item-title">{{question.title}}</div>
-        <div class="question-list-item-info">{{pretty_date(question.created_at)}}
-            - {{question.user.firstname}} {{question.user.lastname}}</div>
+    <div class="question-list-item d-flex justify-content-space flex-column flex-md-row">
+        <span class="question-list-item-title">{{question.title}}</span>
+        <span class="question-list-item-info">{{pretty_date(question.created_at)}}
+            - {{question.user.firstname}} {{question.user.lastname}}</span>
     </div>
 </a>
 {%- endmacro %}
