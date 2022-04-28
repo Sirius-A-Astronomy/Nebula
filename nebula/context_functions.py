@@ -26,6 +26,7 @@ def context_processor():
 
     def pretty_date(time=False):
         """
+        Uses utc_to_local to convert the datetime object to local time
         Get a datetime object or a int() Epoch timestamp and return a
         pretty string like 'an hour ago', 'Yesterday', '3 months ago',
         'just now', etc
@@ -42,7 +43,7 @@ def context_processor():
         day_diff = diff.days
 
         if day_diff < 0:
-            return ''
+            return 'In the future?'
 
         if day_diff == 0:
             if second_diff < 10:

@@ -46,10 +46,8 @@ def add_question(success=False, course_code=None):
         course = Course.query.filter_by(id=course_id).first()
 
         question = Question(title=title, content=content, answer=answer, user=user, course=course,
-                            difficulty=difficulty, created_at=datetime.now(), approved=False)
+                            difficulty=difficulty, approved=False)
         user.questions.append(question)
-        print(db)
-        print(question)
         db.session.add(question)
         db.session.commit()
 

@@ -46,9 +46,11 @@ class Base(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(GUID(), primary_key=False,
                      default=lambda: str(uuid.uuid4()))
+
+    # Database uses utc time
     created_at = db.Column(DateTime(timezone=True),
-                           server_default=func.now())
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now())
+                           server_default=func.utcnow())
+    updated_at = db.Column(DateTime(timezone=True), onupdate=func.utcnow())
 
 
 class User(Base):
