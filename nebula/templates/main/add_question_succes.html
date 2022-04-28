@@ -20,7 +20,8 @@
             </a>
             <a href="{{url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
                 class="inline-link">
-                {% if course_code is not none %}Back{% else %}Go{% endif %} to {{course.name}}
+                {% if course_code is defined %}Back{% else %}Go{% endif %} to {{course.name}}
+                {{course_code}}
             </a>
         </div>
     </div>
