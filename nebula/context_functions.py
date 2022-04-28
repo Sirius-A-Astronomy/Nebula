@@ -62,8 +62,12 @@ def context_processor():
             return "Yesterday"
         if day_diff < 7:
             return str(day_diff) + " days ago"
+        if day_diff < 14:
+            return "a week ago"
         if day_diff < 31:
             return str(day_diff // 7) + " weeks ago"
+        if day_diff < 60:
+            return "a month ago"
         if day_diff < 365:
             return str(day_diff // 30) + " months ago"
         if day_diff < (365 * 2):
