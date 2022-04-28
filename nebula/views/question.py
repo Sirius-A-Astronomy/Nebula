@@ -40,5 +40,7 @@ def question(course_code, question_uuid, new_comment_uuid=None):
         db.session.add(comment)
         db.session.commit()
 
-        return redirect(url_for('question.question', course_code=course_code, question_uuid=question_uuid, new_comment_uuid=str(comment.uuid)))
-    return render_template('main/question.html', course=course, question=question, comment_form=comment_form, new_comment_uuid=new_comment_uuid)
+        return redirect(url_for('question.question', course_code=course_code,
+                                question_uuid=question_uuid, new_comment_uuid=str(comment.uuid)))
+    return render_template('main/question.html', course=course, question=question,
+                           comment_form=comment_form, new_comment_uuid=new_comment_uuid)

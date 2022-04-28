@@ -66,7 +66,7 @@
             </form>
         </div>
         <div class="question-comments-content">
-            {% for comment in question.comments|reverse %}
+            {% for comment in question.comments|sort(attribute='created_at', reverse=true) %}
 
             <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %}
                 class="question-comment" {% endif %}>
