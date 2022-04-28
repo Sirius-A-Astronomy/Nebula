@@ -141,21 +141,25 @@ document
     SECTION Toggle latex instructions
 */
 // first hide all latex instructions
-document
-	.querySelectorAll(".latex-instructions-container")
-	.forEach((element) => {
-		element.style.display = "none";
-	});
+instructionContainers = document.querySelectorAll(
+	".latex-instructions-container"
+);
+
+instructionContainers.forEach((element) => {
+	element.style.display = "none";
+});
 
 document
 	.querySelectorAll("#toggle-latex-instructions-button")
 	.forEach((button) => {
 		button.addEventListener("click", function (e) {
-			if (instructionsContainer.style.display === "none") {
-				instructionsContainer.style.display = "block";
-			} else {
-				instructionsContainer.style.display = "none";
-			}
+			instructionContainers.forEach((element) => {
+				if (element.style.display === "none") {
+					element.style.display = "block";
+				} else {
+					element.style.display = "none";
+				}
+			});
 			button.blur();
 		});
 	});
