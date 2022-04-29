@@ -5,6 +5,7 @@ class Config:
     # TODO: create proper key and place it somewhere else
     SECRET_KEY = 'VERY_SECRET_KEY_PLEASE_CHANGE_LATER_3e6fGh2'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'  # '///' means relative path
+    JWT_SECRET_KEY = 'VERY_SECRET_KEY_PLEASE_CHANGE_LATER_372899a'
 
 
 class DevelopmentConfig(Config):

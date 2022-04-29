@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request
-from nebula.models import Course, CourseLevel, Question, User
-from nebula import db
 from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Optional
-from datetime import datetime
+from flask_jwt_extended import jwt_required
+
+from nebula import db, jwt
+from nebula.models import Course, Question, User
 
 bp = Blueprint("add_question", __name__)
 
@@ -20,6 +21,7 @@ class QuestionForm(Form):
 
 
 @bp.route("/add_question", methods=['GET', 'POST'])
+# @jwt_required()
 def add_question(success=False, course_code=None):
     question_form = QuestionForm(request.form)
     question_form.course.choices = [

@@ -1,10 +1,9 @@
+from nebula import db
 import uuid
 
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy import DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
-
-from nebula import db
 
 
 class GUID(TypeDecorator):
@@ -56,11 +55,25 @@ class Base(db.Model):
 
 
 class User(Base):
-    firstname = db.Column(db.String(128))
-    lastname = db.Column(db.String(128))
+    ACCESS_LEVELS = {
+        "guest": 0,
+        "user": 1,
+        "moderator": 2,
+        "admin": 3
+    }
+
+    first_name = db.Column(db.String(128))
+    last_name = db.Column(db.String(128))
     username = db.Column(db.String(128), nullable=False, unique=True)
+    access_level = db.Column(db.Integer, nullable=False, default=0)
+    password = db.Column(db.String(300), nullable=False)
+    access_token = db.Column(db.String(300), nullable=True)
 
     # email should just be: username@astro.rug.nl, no need to store it ?
+
+    def has_access(self, required_access_level):
+        """Check if the user has the required access level."""
+        return self.access_level >= required_access_level
 
     def __repr__(self):
         return f"User(\"{self.username}\")"
@@ -73,9 +86,9 @@ class Course(Base):
     description = db.Column(db.Text)
 
     # relation one-to-many: one course_level, many courses
-    course_level_id = db.Column(db.Integer,
-                                db.ForeignKey('course_level.id'),
-                                nullable=False)
+    course_level_uuid = db.Column(GUID(),
+                                  db.ForeignKey('course_level.uuid'),
+                                  nullable=False)
     course_level = db.relationship('CourseLevel',
                                    backref=db.backref('courses', lazy=True))
 
@@ -104,14 +117,15 @@ class Question(Base):
     sources = db.Column(db.Text)
 
     # relation one-to-many: one course, many questions
-    course_id = db.Column(db.Integer,
-                          db.ForeignKey('course.id'),
-                          nullable=False)
+    course_uuid = db.Column(GUID(),
+                            db.ForeignKey('course.uuid'),
+                            nullable=False)
     course = db.relationship('Course',
                              backref=db.backref('questions', lazy=True))
 
     # relation one-to-many: one user, many questions
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_uuid = db.Column(GUID(), db.ForeignKey(
+        'user.uuid'), nullable=False)
     user = db.relationship('User', backref=db.backref('questions', lazy=True))
 
     # the many-to-many relations requires an extra table:
@@ -130,13 +144,14 @@ class Comment(Base):
     #     db.DateTime, nullable=True, default=datetime.now)
 
     # relation one-to-many: one: user, many: comments
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_uuid = db.Column(GUID(), db.ForeignKey(
+        'user.uuid'), nullable=False)
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
     # relation one-to-many: one: question, many: comments
-    question_id = db.Column(db.Integer,
-                            db.ForeignKey('question.id'),
-                            nullable=False)
+    question_uuid = db.Column(GUID(),
+                              db.ForeignKey('question.uuid'),
+                              nullable=False)
     question = db.relationship('Question',
                                backref=db.backref('comments', lazy=True))
 

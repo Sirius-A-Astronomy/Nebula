@@ -3,6 +3,7 @@ import datetime
 from random import randrange
 from datetime import timedelta
 from nebula.models import User, Course, CourseLevel, Question, Comment
+from nebula.account_manager import create_user
 
 app = create_app()
 
@@ -196,15 +197,24 @@ db.session.add_all(course_levels)
 db.session.commit()
 
 users = [
-    User(username="johndoe", firstname="John", lastname="Doe"),
-    User(username="sipma", firstname="Sten", lastname="Sipma"),
-    User(username="hans", firstname="Hans", lastname="Wurst"),
-    User(username="james", firstname="James", lastname="Bond"),
-    User(username="matt", firstname="Matt", lastname="Harrison"),
-    User(username="nathan", firstname="Nathan", lastname="Baker"),
-    User(username="jeff", firstname="Jeff", lastname="Baker"),
-    User(username="joseph", firstname="Joseph", lastname="Baker"),
-    User(username="julian", firstname="Julian", lastname="Baker"),
+    create_user(password="unsafe", username="johndoe",
+                first_name="John", last_name="Doe"),
+    create_user(password="unsafe", username="sipma",
+                first_name="Sten", last_name="Sipma"),
+    create_user(password="unsafe", username="hans",
+                first_name="Hans", last_name="Wurst"),
+    create_user(password="unsafe", username="james",
+                first_name="James", last_name="Bond"),
+    create_user(password="unsafe", username="matt",
+                first_name="Matt", last_name="Harrison"),
+    create_user(password="unsafe", username="nathan",
+                first_name="Nathan", last_name="Baker"),
+    create_user(password="unsafe", username="jeff",
+                first_name="Jeff", last_name="Baker"),
+    create_user(password="unsafe", username="joseph",
+                first_name="Joseph", last_name="Baker"),
+    create_user(password="unsafe", username="julian",
+                first_name="Julian", last_name="Baker"),
 ]
 
 questions = [
@@ -218,8 +228,7 @@ questions = [
              content="It has different content",
              answer="This is the answer",
              user=users[1],
-             course=Course.query.filter_by(
-                 name="Linear Algebra (for Physics)").first(),
+             course=Course.query.filter_by(code="WBPH054-05").first(),
              difficulty="Hard"),
     Question(title="Is it possible to create a question with a date",
              content="I guess we see what happens",
@@ -295,6 +304,7 @@ questions = [
              course=Course.query.filter_by(name="Linear Algebra (for Physics)").first())
 
 ]
+
 
 comments = [
     Comment(content="""This is an awful question, as it is not related to

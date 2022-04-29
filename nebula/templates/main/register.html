@@ -1,0 +1,40 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Register - Nebula{% endblock %}
+{% block body %}
+<main>
+    <div class="container">
+        <h2>Register</h2>
+        <form action="{{ url_for('register.register') }}" method="post">
+            {{ form.csrf_token }}
+            {{ form.hidden_tag }}
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control") }}
+
+            <div class="row mt-1">
+                <div class="col-md-6">
+                    {{ form.first_name.label(class="form-label") }}
+                    {{ form.first_name(class="form-control") }}
+
+                </div>
+                <div class="col-md-6">
+
+                    {{ form.last_name.label(class="form-label") }}
+                    {{ form.last_name(class="form-control") }}
+                </div>
+            </div>
+
+
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+
+            {{ form.password_confirm.label(class="form-label") }}
+            {{ form.password_confirm(class="form-control") }}
+
+            {{ form.access_level.label(class="form-label") }}
+            {{ form.access_level(class="form-select") }}
+
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+</main>
+{% endblock body %}

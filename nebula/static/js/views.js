@@ -86,13 +86,13 @@ document
 
 		expandTextToggle.addEventListener("click", function () {
 			if (isTextExpanded) {
-				expandableText.innerHTML = expandableTextContentTruncated;
+				expandableText.innerHTML = Server.HTMLEncode(expandableTextContentTruncated);
 				expandableText.blur();
 				expandableText.appendChild(expandTextToggle);
 				isTextExpanded = false;
 				expandTextToggle.innerHTML = "Read more";
 			} else {
-				expandableText.innerHTML = expandableTextContent + " ";
+				expandableText.innerHTML = Server.HTMLEncode(expandableTextContent + " ");
 				expandableText.appendChild(expandTextToggle);
 				expandableText.blur();
 				isTextExpanded = true;
@@ -100,7 +100,7 @@ document
 			}
 		});
 
-		expandableText.innerHTML = expandableTextContentTruncated;
+		expandableText.innerHTML = Server.HTMLEncode(expandableTextContentTruncated);
 		expandableText.appendChild(expandTextToggle);
 	});
 // END !SECTION Expendable-Text
@@ -186,7 +186,7 @@ document
 					let inputForm = document.querySelector(
 						`#${element.attributes["data-preview-value-from"].value}`
 					);
-					element.innerHTML = inputForm.value;
+					element.innerHTML = Server.HTMLEncode(inputForm.value);
 					showPreviewButton.disabled = true;
 					MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
 					showPreviewButton.disabled = false;
