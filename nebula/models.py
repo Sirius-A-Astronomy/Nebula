@@ -1,8 +1,10 @@
-from nebula import db
+import uuid
+
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy import DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
-import uuid
+
+from nebula import db
 
 
 class GUID(TypeDecorator):
