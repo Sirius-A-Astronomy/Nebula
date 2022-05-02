@@ -25,8 +25,8 @@ course_levels[2].courses.extend(courses[4:6])
 course_levels[3].courses.extend(courses[6:8])
 
 users = [
-    User(username="johndoe", firstname="John", lastname="Doe"),
-    User(username="sipma", firstname="Sten", lastname="Sipma"),
+    User(username="johndoe", first_name="John", last_name="Doe"),
+    User(username="sipma", first_name="Sten", last_name="Sipma"),
     User(username="nameless"),
 ]
 

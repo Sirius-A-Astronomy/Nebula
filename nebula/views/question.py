@@ -1,4 +1,8 @@
+"""
+    Creates the question view.
+"""
 from flask import Blueprint, render_template, url_for, request, redirect
+from flask_login import current_user
 from wtforms import Form, SubmitField, TextAreaField, BooleanField
 from wtforms.validators import DataRequired
 from nebula import db
@@ -20,16 +24,12 @@ class CommentForm(Form):
 @bp.route('/<question_uuid>', methods=['GET', 'POST'])
 def question(course_code, question_uuid, new_comment_uuid=None):
     new_comment_uuid = (request.args.get('new_comment_uuid'))
-    # if new_comment_uuid:
-    #     new_comment_uuid = int(new_comment_uuid)
 
     comment_form = CommentForm(request.form)
     question = Question.query.filter_by(uuid=question_uuid).first()
     course = Course.query.filter_by(code=course_code).first()
 
-    # for now we'll hardcode the user as there is no login system
-    user = User.query.filter_by(username="sipma").first()
-
+    user = User.query.filter_by(uuid=current_user.uuid).first()
     if request.form and comment_form.validate():
         content = comment_form.content.data
         is_suggestion = comment_form.is_suggestion.data

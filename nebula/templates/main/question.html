@@ -1,12 +1,12 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ question.title }} - {{ course.name }}- Nebula{% endblock %}
 {% block body %}
-    <main>
-        <div class="container">
-            <div class="container-question-info">
-                <p class="text-tertiary">
-                    Question in <a class="inline-link-secondary"
-    href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">
+<main>
+    <div class="container">
+        <div class="container-question-info">
+            <p class="text-tertiary">
+                Question in <a class="inline-link-secondary"
+                    href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">
                     {{ course.name }}
                 </a>
             </p>
@@ -14,10 +14,10 @@
                 <p class="text-tertiary">
                     {% if question.difficulty != None %}{{ question.difficulty }} -{% endif %}
                     {% if question.created_at.strftime('%Y-%m-%d') != '1970-01-01' %}
-                        {{ question.created_at.strftime('%Y-%m-%d')}} -
+                    {{ question.created_at.strftime('%Y-%m-%d')}} -
                     {% endif %}
-                    {% if question.user.firstname != None or question.user.lastname != None %}
-                        {{ question.user.firstname }} {{ question.user.lastname }}
+                    {% if question.user.first_name != None or question.user.last_name != None %}
+                    {{ question.user.first_name }} {{ question.user.last_name }}
                     {% endif %}
                 </p>
             </div>
@@ -49,8 +49,8 @@
         </div>
         <div class="add-comment-container">
             <form method="POST"
-                  action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
-                  id="add-comment-form">
+                action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
+                id="add-comment-form">
                 {{ comment_form.csrf_token }}
                 {{ comment_form.hidden_tag }}
                 {{ comment_form.content.label(class="form-label, visually-hidden")}}
@@ -68,22 +68,23 @@
         </div>
         <div class="question-comments-content">
             {% for comment in question.comments|sort(attribute='created_at', reverse=true) %}
-                <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %} class="question-comment" {% endif %}>
-                    <div class="question-comment-info">
-                        <p>
-                            {% if comment.user.firstname != None or comment.user.lastname != None %}
-                                <span class="text-secondary">{{ comment.user.firstname }} {{ comment.user.lastname }}</span>
-                            {% endif %}
-                            {% if comment.is_suggestion %}<span class="text-tertiary">- Suggestion -</span>{% endif %}
-                            <span class="text-tertiary">{{ pretty_date(time = comment.created_at)}}</span>
-                        </p>
-                    </div>
-                    <div class="question-comment-content text-primary">
-                        <p class="expandable-text">
-                            {{ comment.content }}
-                        </p>
-                    </div>
+            <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %}
+                class="question-comment" {% endif %}>
+                <div class="question-comment-info">
+                    <p>
+                        {% if comment.user.first_name != None or comment.user.last_name != None %}
+                        <span class="text-secondary">{{ comment.user.first_name }} {{ comment.user.last_name }}</span>
+                        {% endif %}
+                        {% if comment.is_suggestion %}<span class="text-tertiary">- Suggestion -</span>{% endif %}
+                        <span class="text-tertiary">{{ pretty_date(time = comment.created_at)}}</span>
+                    </p>
                 </div>
+                <div class="question-comment-content text-primary">
+                    <p class="expandable-text">
+                        {{ comment.content }}
+                    </p>
+                </div>
+            </div>
             {% endfor %}
         </div>
     </div>

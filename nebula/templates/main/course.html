@@ -1,31 +1,29 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ course.name }}- Nebula{% endblock %}
 {% macro question_list_item(question) -%}
-    <a class="inline-link"
-       href="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}">
-        <div class="question-list-item d-flex justify-content-space flex-column flex-md-row">
-            <span class="question-list-item-title">{{ question.title }}</span>
-            <span class="question-list-item-info">{{ pretty_date(question.created_at)}}
-            - {{ question.user.firstname }} {{ question.user.lastname }}</span>
-        </div>
-    </a>
+<a class="inline-link" href="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}">
+    <div class="question-list-item d-flex justify-content-space flex-column flex-md-row">
+        <span class="question-list-item-title">{{ question.title }}</span>
+        <span class="question-list-item-info">{{ pretty_date(question.created_at)}}
+            - {{ question.user.first_name }} {{ question.user.last_name }}</span>
+    </div>
+</a>
 {%- endmacro %}
 {% block body %}
-    <main>
-        <section class="container">
-            <h2>{{ course.name }} {{ course.code }}</h2>
-            <p class="text-secondary">
-                {{ course.description }}
-            </p>
-            <h3>Questions</h3>
-            <a href="{{ url_for('add_question.add_question', course_code=course.code)}}"
-               class="btn btn-primary">Add a
+<main>
+    <section class="container">
+        <h2>{{ course.name }} {{ course.code }}</h2>
+        <p class="text-secondary">
+            {{ course.description }}
+        </p>
+        <h3>Questions</h3>
+        <a href="{{ url_for('add_question.add_question', course_code=course.code)}}" class="btn btn-primary">Add a
             question</a>
-            <div>
-                {% for question in questions|sort(attribute='created_at', reverse=true) %}
-                    {{ question_list_item(question) }}
-                {% endfor %}
-            </div>
-        </section>
-    </main>
+        <div>
+            {% for question in questions|sort(attribute='created_at', reverse=true) %}
+            {{ question_list_item(question) }}
+            {% endfor %}
+        </div>
+    </section>
+</main>
 {% endblock %}

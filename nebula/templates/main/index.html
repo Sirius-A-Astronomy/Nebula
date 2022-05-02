@@ -2,40 +2,45 @@
 {% extends "layouts/base.html" %}
 {% block title %}Index - Nebula{% endblock %}
 {% macro level_list_item(course_level) -%}
-    <p>
-        <a class="inline-link"
-           href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{ course_level.name }}</a>
-    </p>
+<p>
+    <a class="inline-link" href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{ course_level.name
+        }}</a>
+</p>
 {%- endmacro %}
 {% block include_header %}{% endblock %}
 {% block body %}
-    <main id="Main">
-        <section class="container container-introduction">
+<main id="Main">
+    <section class="container container-introduction">
+        {% if current_user.is_anonymous %}
+        <h2>Welcome to Nebula!</h2>
+        {% else %}
+        <h2>Welcome back to Nebula, {{ current_user.first_name }}!</h2>
+        {% endif %}
+        <p>
+            This is the Nebula Database by the Kapteyn Learning Community.
+        </p>
+        <p>
+            It is a repository of user-submitted practice questions.
+        </p>
+    </section>
+    <section class="container-index-browse">
+        <div class="container">
+            <h2>Browse the Nebula</h2>
             <p>
-                This is the Nebula Database by the Kapteyn Learning Community.
+                <a class="inline-link" href="{{ url_for('courses.all_courses')}}">All Courses</a>
             </p>
-            <p>
-                It is a repository of user-submitted practice questions.
-            </p>
-        </section>
-        <section class="container-index-browse">
-            <div class="container">
-                <h2>Browse the Nebula</h2>
-                <p>
-                    <a class="inline-link" href="{{ url_for('courses.all_courses')}}">All Courses</a>
-                </p>
-                <h3>Bachelor</h3>
-                {% for course_level in bsc_levels %}{{ level_list_item(course_level) }}{% endfor %}
-                <h3>Master</h3>
-                {% for course_level in msc_levels %}{{ level_list_item(course_level) }}{% endfor %}
-            </div>
-        </section>
-        <section class="container container-add-question">
-            <h2>Have a question?</h2>
-            <p>
-                Submit a question below:
-            </p>
-            <a class="inline-link" href="{{ url_for('add_question.add_question')}}">Add a question</a>
-        </section>
-    </main>
+            <h3>Bachelor</h3>
+            {% for course_level in bsc_levels %}{{ level_list_item(course_level) }}{% endfor %}
+            <h3>Master</h3>
+            {% for course_level in msc_levels %}{{ level_list_item(course_level) }}{% endfor %}
+        </div>
+    </section>
+    <section class="container container-add-question">
+        <h2>Have a question?</h2>
+        <p>
+            Submit a question below:
+        </p>
+        <a class="inline-link" href="{{ url_for('add_question.add_question')}}">Add a question</a>
+    </section>
+</main>
 {% endblock %}

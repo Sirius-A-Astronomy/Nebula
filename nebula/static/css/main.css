@@ -235,8 +235,14 @@ header {
 
 .dark-mode-toggle-container {
 	vertical-align: middle;
-	margin-right: 1rem;
+	margin-right: 0.5rem;
 	margin-left: auto;
+	color: #fff;
+}
+
+.account-management-dropdown {
+	vertical-align: middle;
+	margin-right: 1rem;
 	color: #fff;
 }
 
@@ -244,6 +250,9 @@ header {
 	.dark-mode-toggle-container {
 		order: 2;
 		margin-right: 0;
+	}
+	.account-management-dropdown {
+		order: 2;
 	}
 }
 

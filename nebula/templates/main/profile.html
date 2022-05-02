@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Login - Nebula{% endblock %}
+{% block body %}
+<main>
+    <div class="container">
+        <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+        <p>
+            Username: {{ current_user.username }}
+        </p>
+        <p>Questions asked: {{ current_user.questions|count }}</p>
+        <p>Comments created: {{ current_user.comments|count }}</p>
+        <p>Account created at: {{ current_user.created_at }}</p>
+
+        <p>
+            <a class="inline-link" href="{{ url_for('user.logout') }}">Logout</a>
+        </p>
+    </div>
+</main>
+{% endblock body %}

@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 def context_processor():
     # This function is called by the flask template engine and returns a dictionary of variables and functions
     def get_current_year():
+        """Returns the current year."""
         return datetime.now().year
 
     from nebula.models import CourseLevel, Course
@@ -17,6 +18,7 @@ def context_processor():
     }
 
     def utc_to_local(utc_dt):
+        """Converts a UTC datetime object to a local datetime object."""
         return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
     def pretty_date(time=False):
@@ -25,6 +27,9 @@ def context_processor():
         Get a datetime object or a int() Epoch timestamp and return a
         pretty string like 'an hour ago', 'Yesterday', '3 months ago',
         'just now', etc
+
+        :param time: The datetime object or Epoch timestamp to convert.
+        :type time: datetime or int
         """
         from datetime import datetime
         now = datetime.now().astimezone(tz=None)
@@ -73,12 +78,8 @@ def context_processor():
             return "a decade ago"
         return str(day_diff // 3650) + " decades ago"
 
-    def remove_newline(string):
-        return " ".join(string.splitlines())
-
     return dict(
         current_year=get_current_year(),
         nav=nav,
-        remove_newline=remove_newline,
         utc_to_local=utc_to_local,
         pretty_date=pretty_date)

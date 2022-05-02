@@ -1,9 +1,10 @@
-from nebula import db
 import uuid
 
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy import DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
+
+from nebula import db
 
 
 class GUID(TypeDecorator):
@@ -67,7 +68,13 @@ class User(Base):
     username = db.Column(db.String(128), nullable=False, unique=True)
     access_level = db.Column(db.Integer, nullable=False, default=0)
     password = db.Column(db.String(300), nullable=False)
-    access_token = db.Column(db.String(300), nullable=True)
+
+    is_authenticated = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
+    is_anonymous = db.Column(db.Boolean, default=False)
+
+    def get_id(self):
+        return self.uuid
 
     # email should just be: username@astro.rug.nl, no need to store it ?
 
