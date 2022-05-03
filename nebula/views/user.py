@@ -9,7 +9,7 @@
 """
 
 from wtforms import PasswordField, StringField, SubmitField, Form, SelectField, ValidationError, HiddenField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, NoneOf
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session
 from flask_login import login_user, current_user, logout_user
 from passlib.hash import sha256_crypt
@@ -59,18 +59,30 @@ def authenticate(username, password):
     return False
 
 
+def validate_username(form, field):
+    """
+    Validates the username to be unique.
+
+    :param form: The form to validate.
+    :type form: Form
+    :param field: The field to validate.
+    :type field: StringField
+    """
+    print(field.data.lower())
+    if User.query.filter_by(username=field.data.lower()).first() is not None:
+        raise ValidationError("Username already taken.")
+
+
 class RegisterForm(Form):
     """Form for registering a new user."""
-    username = StringField("Username", validators=[DataRequired()])
+    username = StringField("Username (case-insensitive)",
+                           validators=[DataRequired(), validate_username])
     first_name = StringField("First Name", validators=[DataRequired()])
     last_name = StringField("Last Name", validators=[DataRequired()])
 
     password = PasswordField("Password", validators=[DataRequired()])
     password_confirm = PasswordField("Confirm Password", validators=[
                                      DataRequired(), EqualTo("password")])
-    access_level = SelectField(
-        "Access Level", coerce=int, choices=ACCESS_LEVELS, validators=[DataRequired()])
-
     submit = SubmitField("Register")
 
 
@@ -80,16 +92,16 @@ def register():
         return redirect(url_for("main.index"))
 
     register_form = RegisterForm(request.form)
-    register_form.validate()
+
     if request.method == 'POST' and register_form.validate():
-        username = register_form.username.data
+
+        username = register_form.username.data.lower()
         first_name = register_form.first_name.data
         last_name = register_form.last_name.data
         password = register_form.password.data
-        access_level = register_form.access_level.data
 
         user = create_user(username=username, first_name=first_name,
-                           last_name=last_name, password=password, access_level=access_level)
+                           last_name=last_name, password=password)
         db.session.add(user)
         login_user(user)
         user.is_authenticated = True
@@ -103,22 +115,20 @@ def register():
 
 class LoginForm(Form):
     """Form for user login."""
-    username = StringField("Username", validators=[DataRequired()])
+    username = StringField("Username (case-insensitive)",
+                           validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Login")
 
 
-@bp.route("/login", methods=["GET", "POST"])
+@ bp.route("/login", methods=["GET", "POST"])
 def login(next=None):
     login_form = LoginForm(request.form)
     next = request.args.get('next')
-    print(is_safe_url(next, request))
-    print(f"next redirect: {next}")
     if request.method == "POST" and login_form.validate():
-        username = login_form.username.data
+        username = login_form.username.data.lower()
         password = login_form.password.data
         valid_credentials = authenticate(username, password)
-        print(f"Valid credentials: {valid_credentials}")
 
         if valid_credentials:
             session.permanent = True
@@ -140,7 +150,6 @@ def logout():
         return redirect(url_for("main.index"))
     user_uuid = current_user.uuid
 
-    print(user_uuid)
     user = User.query.filter_by(uuid=user_uuid).first()
     logout_user()
     if user.is_authenticated:

@@ -2,36 +2,58 @@
 {% block title %}Register - Nebula{% endblock %}
 {% block body %}
 <main>
-    <div class="container">
+    <div class="container needs-validation">
         <h2>Register</h2>
         <form action="{{ url_for('user.register') }}" method="post">
             {{ form.csrf_token }}
             {{ form.hidden_tag }}
             {{ form.username.label(class="form-label") }}
             {{ form.username(class="form-control") }}
+            {% for error in form['username'].errors %}
+            <div class="">
+                {{ error }}
+            </div>
+            {% endfor %}
 
             <div class="row mt-1">
                 <div class="col-md-6">
                     {{ form.first_name.label(class="form-label") }}
                     {{ form.first_name(class="form-control") }}
+                    {% for error in form['first_name'].errors %}
+                    <div class="">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
 
                 </div>
                 <div class="col-md-6">
 
                     {{ form.last_name.label(class="form-label") }}
                     {{ form.last_name(class="form-control") }}
+                    {% for error in form['last_name'].errors %}
+                    <div class="">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
 
             {{ form.password.label(class="form-label") }}
             {{ form.password(class="form-control") }}
+            {% for error in form['password'].errors %}
+            <div class="">
+                {{ error }}
+            </div>
+            {% endfor %}
 
             {{ form.password_confirm.label(class="form-label") }}
             {{ form.password_confirm(class="form-control") }}
-
-            {{ form.access_level.label(class="form-label") }}
-            {{ form.access_level(class="form-select") }}
+            {% for error in form['password_confirm'].errors %}
+            <div class="">
+                {{ error }}
+            </div>
+            {% endfor %}
 
             {{ form.submit(class="btn btn-primary") }}
         </form>
