@@ -56,6 +56,28 @@ class Base(db.Model):
 
 
 class User(Base):
+    """
+        User model for the database.
+
+        :param username: The username of the user. Must be unique. Case-insensitive.
+        :type username: str
+        :param password: The password of the user.
+        :type password: str
+        :param first_name: The first name of the user.
+        :type first_name: str
+        :param last_name: The last name of the user.
+        :type last_name: str
+        :param access_level: The access level of the user.
+        :type access_level: int
+        :param is_active: Whether the user is active or not.
+        :type is_active: bool
+        :param is_authenticated: Whether the user is authenticated or not. 
+            Is set to true when the user logs in and false when the user logs out.
+        :type is_authenticated: bool
+        :param is_anonymous: Whether the user is anonymous or not.
+        :type is_anonymous: bool
+
+    """
     ACCESS_LEVELS = {
         "guest": 0,
         "user": 1,
