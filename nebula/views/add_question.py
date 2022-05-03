@@ -49,7 +49,6 @@ def add_question(success=False, course_code=None):
         difficulty = question_form.difficulty.data
         difficulty = "Easy" if difficulty == 1 else "Medium" if difficulty == 2 else "Hard"
         user = current_user
-        print(user)
         course = Course.query.filter_by(id=course_id).first()
 
         question = Question(title=title, content=content, answer=answer, user=user, course=course,
