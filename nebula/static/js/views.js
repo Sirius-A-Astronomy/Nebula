@@ -23,9 +23,11 @@ window.MathJax = {
 document
 	.querySelectorAll(".expandable-text")
 	.forEach(function (expandableText) {
-		const expandableTextContent = expandableText.innerHTML
+		const expandableTextContent = expandableText.textContent
 			.trim()
-			.replace(/\s+/g, " ");
+			.replace(/\s+/g, " ")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;");
 
 		let displayLimit;
 		if (expandableText?.getAttribute("displaylimit") !== null) {
@@ -79,28 +81,30 @@ document
 		expandTextToggle.setAttribute("style", "font-size: 0.8125");
 		expandTextToggle.setAttribute("href", "#!");
 		expandTextToggle.classList.add("inline-link");
-		expandTextToggle.innerHTML = "Read more";
+		expandTextToggle.textContent = "Read more";
 		const expandableTextContentTruncated =
 			expandableTextContent.substring(0, displayLimit) + " (...) ";
 		let isTextExpanded = false;
 
 		expandTextToggle.addEventListener("click", function () {
 			if (isTextExpanded) {
-				expandableText.innerHTML = Server.HTMLEncode(expandableTextContentTruncated);
+				expandableText.textContent = expandableTextContentTruncated;
 				expandableText.blur();
 				expandableText.appendChild(expandTextToggle);
 				isTextExpanded = false;
-				expandTextToggle.innerHTML = "Read more";
+				expandTextToggle.textContent = "Read more";
 			} else {
-				expandableText.innerHTML = Server.HTMLEncode(expandableTextContent + " ");
+				expandableText.textContent = expandableTextContent + " ";
 				expandableText.appendChild(expandTextToggle);
 				expandableText.blur();
 				isTextExpanded = true;
-				expandTextToggle.innerHTML = "Read less";
+				expandTextToggle.textContent = "Read less";
 			}
 		});
 
-		expandableText.innerHTML = Server.HTMLEncode(expandableTextContentTruncated);
+		expandableText.textContent = Server.HTMLEncode(
+			expandableTextContentTruncated
+		);
 		expandableText.appendChild(expandTextToggle);
 	});
 // END !SECTION Expendable-Text
@@ -186,7 +190,7 @@ document
 					let inputForm = document.querySelector(
 						`#${element.attributes["data-preview-value-from"].value}`
 					);
-					element.innerHTML = Server.HTMLEncode(inputForm.value);
+					element.textContent = inputForm.value;
 					showPreviewButton.disabled = true;
 					MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
 					showPreviewButton.disabled = false;
