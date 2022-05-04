@@ -559,6 +559,13 @@ footer p {
 	box-shadow: 0 0 0 0.1rem var(--color-accent);
 }
 
+/* Form Validations */
+
+.validating-feedback {
+	color: var(--color-text-primary);
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+}
 /*
     Index Page
 */

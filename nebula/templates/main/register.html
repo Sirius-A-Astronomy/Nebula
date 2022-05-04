@@ -1,62 +1,72 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Register - Nebula{% endblock %}
+
+{% block include_head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+{% endblock %}
 {% block body %}
 <main>
     <div class="container needs-validation">
         <h2>Register</h2>
-        <form action="{{ url_for('user.register') }}" method="post">
+        <form action="{{ url_for('user.register') }}" id="register-form" method="post">
             {{ form.csrf_token }}
             {{ form.hidden_tag }}
             {{ form.username.label(class="form-label") }}
-            {{ form.username(class="form-control") }}
-            {% for error in form['username'].errors %}
-            <div class="">
+            {{ form.username(class="form-control", id="username-input-field") }}
+            <div id="username-input-field-feedback" class="">
+                {% for error in form['username'].errors %}
                 {{ error }}
+                {% endfor %}
             </div>
-            {% endfor %}
 
             <div class="row mt-1">
                 <div class="col-md-6">
                     {{ form.first_name.label(class="form-label") }}
-                    {{ form.first_name(class="form-control") }}
-                    {% for error in form['first_name'].errors %}
-                    <div class="">
+                    {{ form.first_name(class="form-control", id="first-name-input-field") }}
+                    <div class="" id="first-name-input-field-feedback">
+                        {% for error in form['first_name'].errors %}
                         {{ error }}
+                        {% endfor %}
                     </div>
-                    {% endfor %}
 
                 </div>
                 <div class="col-md-6">
 
                     {{ form.last_name.label(class="form-label") }}
-                    {{ form.last_name(class="form-control") }}
-                    {% for error in form['last_name'].errors %}
-                    <div class="">
+                    {{ form.last_name(class="form-control", id="last-name-input-field") }}
+                    <div class="" id="last-name-input-field-feedback">
+                        {% for error in form['last_name'].errors %}
                         {{ error }}
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
 
 
             {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control") }}
-            {% for error in form['password'].errors %}
-            <div class="">
+            {{ form.password(class="form-control", id="password-input-field") }}
+            <div class="" id="password-input-field-feedback">
+                {% for error in form['password'].errors %}
                 {{ error }}
+                {% endfor %}
             </div>
-            {% endfor %}
 
             {{ form.password_confirm.label(class="form-label") }}
-            {{ form.password_confirm(class="form-control") }}
-            {% for error in form['password_confirm'].errors %}
-            <div class="">
+            {{ form.password_confirm(class="form-control", id="password-confirmation-input-field")
+            }}
+            <div class="" id="password-confirmation-input-field-feedback">
+                {% for error in form['password_confirm'].errors %}
                 {{ error }}
+                {% endfor %}
             </div>
-            {% endfor %}
 
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit(class="btn btn-primary", id="register-form-submit-button") }}
         </form>
     </div>
 </main>
 {% endblock body %}
+
+{% block include_js %}
+<script src="{{ url_for('static', filename='js/form_validation.js') }}"></script>
+{% endblock %}

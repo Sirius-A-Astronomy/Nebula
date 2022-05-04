@@ -63,6 +63,7 @@ def create_app(config_environment='default'):
         app.register_blueprint(question.bp)
         app.register_blueprint(add_question.bp)
         app.register_blueprint(user.bp)
+        app.register_blueprint(user.apibp)
 
     from nebula.context_functions import context_processor
 

@@ -8,9 +8,9 @@
         User logout
 """
 
-from wtforms import PasswordField, StringField, SubmitField, Form, SelectField, ValidationError, HiddenField
-from wtforms.validators import DataRequired, EqualTo, NoneOf
-from flask import Blueprint, render_template, request, redirect, url_for, abort, session
+from wtforms import PasswordField, StringField, SubmitField, Form, ValidationError
+from wtforms.validators import DataRequired, EqualTo
+from flask import Blueprint, render_template, request, redirect, url_for, abort, session, jsonify
 from flask_login import login_user, current_user, logout_user
 from passlib.hash import sha256_crypt
 
@@ -25,6 +25,7 @@ ACCESS_LEVELS = [
 ]
 
 bp = Blueprint("user", __name__)
+apibp = Blueprint("api", __name__, url_prefix="/api")
 
 
 def create_user(username, password, **kwargs):
@@ -70,24 +71,45 @@ def validate_username(form, field):
     """
     print(field.data.lower())
     if User.query.filter_by(username=field.data.lower()).first() is not None:
-        raise ValidationError("Username already taken.")
+        raise ValidationError(
+            "Uh oh, it looks like that username is already taken, please try another one.")
 
 
 class RegisterForm(Form):
     """Form for registering a new user."""
-    username = StringField("Username (case-insensitive)",
-                           validators=[DataRequired(), validate_username])
-    first_name = StringField("First Name", validators=[DataRequired()])
-    last_name = StringField("Last Name", validators=[DataRequired()])
+    username = StringField(
+        "Username (case-insensitive)",
+        validators=[
+            DataRequired(
+                "Please enter a username, you will use this to log in."),
+            validate_username])
+    first_name = StringField(
+        "First Name",
+        validators=[
+            DataRequired(
+                "Please enter your first name."
+            )])
+    last_name = StringField(
+        "Last Name",
+        validators=[
+            DataRequired(
+                "Please enter your last name."
+            )])
 
-    password = PasswordField("Password", validators=[DataRequired()])
+    password = PasswordField(
+        "Password",
+        validators=[
+            DataRequired(
+                "Please enter a password."
+            )])
     password_confirm = PasswordField("Confirm Password", validators=[
-                                     DataRequired(), EqualTo("password")])
+        DataRequired(), EqualTo("password")])
     submit = SubmitField("Register")
 
 
-@bp.route("/register", methods=['GET', 'POST'])
+@ bp.route("/register", methods=['GET', 'POST'])
 def register():
+    """Creates the register page."""
     if current_user.is_authenticated:
         return redirect(url_for("main.index"))
 
@@ -102,10 +124,11 @@ def register():
 
         user = create_user(username=username, first_name=first_name,
                            last_name=last_name, password=password)
+        session.permanent = True
         db.session.add(user)
-        login_user(user)
         user.is_authenticated = True
         db.session.commit()
+        login_user(user)
 
         return redirect(url_for('main.index'))
 
@@ -123,6 +146,7 @@ class LoginForm(Form):
 
 @ bp.route("/login", methods=["GET", "POST"])
 def login(next=None):
+    """Creates the login page."""
     login_form = LoginForm(request.form)
     next = request.args.get('next')
     if request.method == "POST" and login_form.validate():
@@ -146,6 +170,7 @@ def login(next=None):
 
 @bp.route("/logout")
 def logout():
+    """Logs out the current user."""
     if current_user.is_anonymous:
         return redirect(url_for("main.index"))
     user_uuid = current_user.uuid
@@ -160,5 +185,18 @@ def logout():
 
 @bp.route("/profile")
 def profile():
+    """Creates the profile page for the current user."""
 
     return render_template("main/profile.html")
+
+
+@apibp.route("/is_username_available", methods=["post", "GET"])
+def is_username_available():
+    """Returns true if the username is available."""
+    if request.method == "POST":
+        request_data = request.get_json()
+        username = request_data["username"].lower()
+        if User.query.filter_by(username=username).one_or_none() is None:
+            return jsonify({"available": True})
+        return jsonify({"available": False})
+    return "Not a valid request"
