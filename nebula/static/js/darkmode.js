@@ -16,6 +16,8 @@ const colorScheme = [
 	"--color-primary",
 	"--color-secondary",
 	"--color-accent",
+	"--color-form-is-valid",
+	"--color-form-is-invalid",
 ];
 
 const darkModeToggle = document.getElementById("dark-mode-toggler");

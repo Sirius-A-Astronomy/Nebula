@@ -7,62 +7,95 @@
 {% endblock %}
 {% block body %}
 <main>
-    <div class="container needs-validation">
-        <h2>Register</h2>
-        <form action="{{ url_for('user.register') }}" id="register-form" method="post">
-            {{ form.csrf_token }}
-            {{ form.hidden_tag }}
-            {{ form.username.label(class="form-label") }}
-            {{ form.username(class="form-control", id="username-input-field") }}
-            <div id="username-input-field-feedback" class="">
-                {% for error in form['username'].errors %}
-                {{ error }}
-                {% endfor %}
-            </div>
 
-            <div class="row mt-1">
-                <div class="col-md-6">
-                    {{ form.first_name.label(class="form-label") }}
-                    {{ form.first_name(class="form-control", id="first-name-input-field") }}
-                    <div class="" id="first-name-input-field-feedback">
-                        {% for error in form['first_name'].errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </div>
+    <div class="container">
+        <div class="container-register">
 
-                </div>
-                <div class="col-md-6">
-
-                    {{ form.last_name.label(class="form-label") }}
-                    {{ form.last_name(class="form-control", id="last-name-input-field") }}
-                    <div class="" id="last-name-input-field-feedback">
-                        {% for error in form['last_name'].errors %}
+            <h1 id="create-account-title">Create a new account<span class="text-primary">.</span>
+            </h1>
+            <h3 class="text-tertiary">
+                Already have an account? <a class="inline-link"
+                    href="{{ url_for('user.login') }}">Log
+                    in</a>
+            </h3>
+            <form action="{{ url_for('user.register') }}" id="register-form" method="post">
+                {{ form.csrf_token }}
+                {{ form.hidden_tag }}
+                <div class="input-field">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", id="username-input-field") }}
+                    <div id="username-input-field-feedback" class="input-feedback">
+                        {% for error in form['username'].errors %}
                         {{ error }}
                         {% endfor %}
                     </div>
                 </div>
-            </div>
+
+                <div class="input-field">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control", id="email-input-field") }}
+                    <div id="email-input-field-feedback" class="input-feedback">
+                        {% for error in form['email'].errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                </div>
 
 
-            {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control", id="password-input-field") }}
-            <div class="" id="password-input-field-feedback">
-                {% for error in form['password'].errors %}
-                {{ error }}
-                {% endfor %}
-            </div>
+                <div class="row mt-1">
+                    <div class="col-md-6">
+                        <div class="input-field">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control",
+                            id="first-name-input-field") }}
+                            <div class="input-feedback" id="first-name-input-field-feedback">
+                                {% for error in form['first_name'].errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
 
-            {{ form.password_confirm.label(class="form-label") }}
-            {{ form.password_confirm(class="form-control", id="password-confirmation-input-field")
-            }}
-            <div class="" id="password-confirmation-input-field-feedback">
-                {% for error in form['password_confirm'].errors %}
-                {{ error }}
-                {% endfor %}
-            </div>
+                    <div class="col-md-6">
+                        <div class="input-field">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control", id="last-name-input-field")
+                            }}
+                            <div class="input-feedback" id="last-name-input-field-feedback">
+                                {% for error in form['last_name'].errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            {{ form.submit(class="btn btn-primary", id="register-form-submit-button") }}
-        </form>
+                <div class="input-field">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", id="password-input-field") }}
+                    <div class="input-feedback" id="password-input-field-feedback">
+                        {% for error in form['password'].errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    {{ form.password_confirm.label(class="form-label") }}
+                    {{ form.password_confirm(class="form-control",
+                    id="password-confirmation-input-field") }}
+                    <div class="input-feedback" id="password-confirmation-input-field-feedback">
+                        {% for error in form['password_confirm'].errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {{ form.submit(class="btn btn-primary", id="register-form-submit-button") }}
+            </form>
+        </div>
+    </div>
+    <div class="container-register-background">
     </div>
 </main>
 {% endblock body %}

@@ -33,6 +33,8 @@
 	--color-secondary-dark: #102a43;
 	--color-tertiary-dark: #67a0f5;
 	--color-accent-dark: #adee98;
+	--color-form-is-valid-dark: var(--color-tertiary-dark);
+	--color-form-is-invalid-dark: #ddc4dd;
 
 	/*
     Light Theme color-scheme (Change colors for the light theme here)
@@ -52,6 +54,8 @@
 	--color-secondary-light: #67a0f5;
 	--color-tertiary-light: #004791;
 	--color-accent-light: #ff9b42;
+	--color-form-is-valid-light: #198754;
+	--color-form-is-invalid-light: #dc3545;
 
 	/*
     Applied color-scheme (Use these variables to set colors)
@@ -71,6 +75,8 @@
 	--color-secondary: var(--color-secondary-light);
 	--color-tertiary: var(--color-tertiary-light);
 	--color-accent: var(--color-accent-light);
+	--color-form-is-valid: var(--color-form-is-valid-light);
+	--color-form-is-invalid: var(--color-form-is-invalid-light);
 	--color-scheme: light;
 
 	color-scheme: var(--color-scheme);
@@ -139,6 +145,22 @@ h3 {
 	color: var(--color-text-secondary);
 	font-size: 1rem;
 	letter-spacing: 0.04rem;
+}
+
+.text-primary {
+	color: var(--color-text-primary) !important;
+}
+
+.text-secondary {
+	color: var(--color-text-secondary) !important;
+}
+
+.text-tertiary {
+	color: var(--color-text-tertiary) !important;
+}
+
+.text-accent {
+	color: var(--color-accent) !important;
 }
 
 p {
@@ -511,18 +533,6 @@ footer p {
 	opacity: 0.00001 !important;
 }
 
-.text-primary {
-	color: var(--color-text-primary) !important;
-}
-
-.text-secondary {
-	color: var(--color-text-secondary) !important;
-}
-
-.text-tertiary {
-	color: var(--color-text-tertiary) !important;
-}
-
 .row {
 	margin-top: 30px;
 }
@@ -545,27 +555,148 @@ footer p {
     Forms
 */
 
-.form-control,
-.form-select {
+.input-field {
 	background-color: var(--color-background-secondary);
 	color: var(--color-text-primary);
+	border-radius: 0.7rem;
+	margin-bottom: 1rem;
+}
+
+.form-label {
+	font-size: 0.875rem;
+	margin-bottom: 0.5rem;
+	margin-left: 0.75rem;
+}
+
+.input-feedback {
+	color: var(--color-text-secondary);
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+	margin-left: 0.75rem;
+}
+
+.form-control,
+.form-select {
+	color: var(--color-text-primary);
+	border: none;
+	padding-top: 0;
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.input-field:focus-within {
+	color: var(--color-text-primary);
+	background-color: var(--color-background-tertiary);
+	border: none;
+	box-shadow: none;
 }
 
 .form-control:focus,
 .form-select:focus {
 	color: var(--color-text-primary);
-	background-color: var(--color-background-tertiary);
-	border-color: var(--color-accent);
-	box-shadow: 0 0 0 0.1rem var(--color-accent);
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
 }
 
+#register-form-submit-button {
+	margin-left: auto;
+	display: block;
+	padding: 1em 3em;
+}
 /* Form Validations */
+
+/* reset bootstrap styling */
+.form-control.is-valid,
+.form-select.is-valid,
+.form-select.is-valid:focus,
+.form-control.is-valid:focus,
+.form-constol.is-invalid,
+.form-select.is-invalid,
+.form-select.is-invalid:focus,
+.form-control.is-invalid:focus {
+	border: none;
+	box-shadow: none;
+	outline: none;
+	background-image: none;
+	background-color: none;
+}
+
+.input-field.is-valid {
+	outline: var(--color-form-is-valid) solid 2px;
+	box-shadow: none;
+}
+
+.input-field:focus-within.is-valid {
+	box-shadow: 0 0 0 0.25rem var(--color-form-is-valid);
+}
+
+.input-field.is-invalid {
+	outline: var(--color-form-is-invalid) solid 2px;
+	box-shadow: none;
+}
+
+.input-field:focus-within.is-invalid {
+	box-shadow: 0 0 0 0.25rem var(--color-form-is-invalid);
+}
+
+.input-field.is-validating {
+	outline: var(--color-text-secondary) solid 2px;
+	box-shadow: none;
+}
+
+.input-field:focus-within.is-validating {
+	box-shadow: 0 0 0 0.25rem var(--color-text-secondary);
+}
 
 .validating-feedback {
 	color: var(--color-text-primary);
-	font-size: 0.875rem;
-	margin-top: 0.25rem;
 }
+
+.valid-feedback {
+	color: var(--color-form-is-valid);
+}
+
+.invalid-feedback {
+	color: var(--color-form-is-invalid);
+}
+
+/*
+    Register Page
+*/
+
+.container-register {
+	margin-top: 60px;
+	margin-bottom: 60px;
+	width: 65%;
+
+	@media (min-width: 768px) {
+		margin-top: 0;
+		margin-bottom: 0;
+		width: 100%;
+	}
+}
+
+.container-register-background {
+	position: absolute;
+	top: 0;
+	z-index: -1;
+	background-color: var(--color-background-secondary);
+	opacity: 0.5;
+	width: 70%;
+	height: 100%;
+	min-height: 100vh;
+}
+
+#create-account-title {
+	font-size: 3rem;
+	color: var(--color-accent);
+	margin-bottom: 0.5rem;
+	font-weight: 700;
+	font-family: "Product Sans", sans-serif;
+}
+
 /*
     Index Page
 */

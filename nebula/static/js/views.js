@@ -198,3 +198,20 @@ document
 			e.target.blur();
 		});
 	});
+
+// !SECTION Preview-Form-Input
+
+/*
+    SECTION focus-form-input-field 
+*/
+
+document.querySelectorAll(".input-field").forEach((inputField) => {
+	inputField.addEventListener("click", function (e) {
+		// only focus the input field if the user is not trying to select text
+		if (window.getSelection().toString() === "") {
+			inputField.querySelector("input").focus();
+		} else {
+			e.stopPropagation();
+		}
+	});
+});

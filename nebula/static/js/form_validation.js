@@ -36,7 +36,6 @@ function debounce(callback, wait) {
 
 async function startFormValidation() {
 	$("#username-input-field").on("input", debounce(validateUsername, 500));
-	console.log("startFormValidation");
 	$("#password-confirmation-input-field").on(
 		"input",
 		debounce(validatePasswordConfirmation, 500)
@@ -44,6 +43,7 @@ async function startFormValidation() {
 	$("#password-input-field").on("input", debounce(validatePassword, 500));
 	$("#first-name-input-field").on("input", debounce(validateFirstName, 500));
 	$("#last-name-input-field").on("input", debounce(validateLastName, 500));
+	$("#email-input-field").on("input", debounce(validateEmail, 500));
 }
 
 async function validateUsername() {
@@ -53,7 +53,7 @@ async function validateUsername() {
 	if (username.length < 3) {
 		addInvalidFeedback(
 			usernameInputField,
-			"Username must be at least 3 characters long"
+			"Please enter a username with at least 3 characters"
 		);
 		return;
 	}
@@ -61,7 +61,7 @@ async function validateUsername() {
 	if (username.length >= 30) {
 		addInvalidFeedback(
 			usernameInputField,
-			"Username must be at most 30 characters long"
+			"Please enter a username with most 30 characters"
 		);
 		return;
 	}
@@ -69,7 +69,7 @@ async function validateUsername() {
 	if (/\s/.test(username)) {
 		addInvalidFeedback(
 			usernameInputField,
-			"Username cannot contain spaces"
+			"Please enter a username without any spaces"
 		);
 		return;
 	}
@@ -78,14 +78,14 @@ async function validateUsername() {
 	if (regex.test(username)) {
 		addInvalidFeedback(
 			usernameInputField,
-			"Username cannot contain special characters"
+			"Please enter a username without any special characters"
 		);
 		return;
 	}
 
 	addValidatingFeedback(
 		usernameInputField,
-		"Checking if username already exists..."
+		`Checking if we know someone with username ${username}...`
 	);
 	let usernameAvailable = await isUsernameAvailable(username);
 	if (usernameAvailable) {
@@ -93,7 +93,7 @@ async function validateUsername() {
 	} else {
 		addInvalidFeedback(
 			usernameInputField,
-			"Uh oh, it looks like that username is already taken, please try another one"
+			"It looks like we already know someone with that username, do you want to try another one?"
 		);
 	}
 }
@@ -124,7 +124,7 @@ function validatePasswordConfirmation() {
 	if (!validatePassword()) {
 		addInvalidFeedback(
 			passwordConfirmationInputField,
-			"Please enter a password first"
+			"Please enter a valid password first"
 		);
 		return;
 	}
@@ -142,10 +142,15 @@ function validateFirstName() {
 	let firstNameInputField = document.getElementById("first-name-input-field");
 	let firstName = $(firstNameInputField).val();
 
-	if (firstName.length < 2) {
+	if (firstName.length < 1) {
+		addInvalidFeedback(firstNameInputField, "Please enter your first name");
+		return;
+	}
+
+	if (firstName.length >= 120) {
 		addInvalidFeedback(
 			firstNameInputField,
-			"First name must be at least 2 characters long"
+			"Our system only supports names up to 120 characters long"
 		);
 		return;
 	}
@@ -156,20 +161,38 @@ function validateLastName() {
 	let lastNameInputField = document.getElementById("last-name-input-field");
 	let lastName = $(lastNameInputField).val();
 
-	if (lastName.length < 2) {
-		addInvalidFeedback(
-			lastNameInputField,
-			"Last name must be at least 2 characters long"
-		);
+	if (lastName.length < 1) {
+		addInvalidFeedback(lastNameInputField, "Please enter your last name");
 		return;
 	}
 	addValidFeedback(lastNameInputField, "Looks good!");
+}
+
+function validateEmail() {
+	let emailInputField = document.getElementById("email-input-field");
+	let email = $(emailInputField).val();
+
+	// rfc2822 regex for emails
+	const emailRegex =
+		/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+	if (!emailRegex.test(email)) {
+		addInvalidFeedback(
+			emailInputField,
+			"We can't recognize that as an email address, please double check it"
+		);
+		return;
+	}
+	addValidFeedback(emailInputField, "Looks good!");
 }
 
 function addInvalidFeedback(element, feedbackMessage) {
 	$(element).addClass("is-invalid");
 	$(element).removeClass("is-valid");
 	$(element).removeClass("is-validating");
+	$(element).parent().addClass("is-invalid");
+	$(element).parent().removeClass("is-valid");
+	$(element).parent().removeClass("is-validating");
+
 	$(`#${element.id}-feedback`).addClass("invalid-feedback");
 	$(`#${element.id}-feedback`).removeClass("valid-feedback");
 	$(`#${element.id}-feedback`).removeClass("validating-feedback");
@@ -184,6 +207,11 @@ function addValidatingFeedback(element, feedbackMessage) {
 	$(element).addClass("is-validating");
 	$(element).removeClass("is-invalid");
 	$(element).removeClass("is-valid");
+	$(element).parent().addClass("is-validating");
+
+	$(element).parent().removeClass("is-invalid");
+	$(element).parent().removeClass("is-valid");
+
 	$(`#${element.id}-feedback`).addClass("validating-feedback");
 	$(`#${element.id}-feedback`).removeClass("invalid-feedback");
 	$(`#${element.id}-feedback`).removeClass("valid-feedback");
@@ -194,6 +222,10 @@ function addValidFeedback(element, feedbackMessage) {
 	$(element).addClass("is-valid");
 	$(element).removeClass("is-invalid");
 	$(element).removeClass("is-validating");
+	$(element).parent().addClass("is-valid");
+	$(element).parent().removeClass("is-invalid");
+	$(element).parent().removeClass("is-validating");
+
 	$(`#${element.id}-feedback`).addClass("valid-feedback");
 	$(`#${element.id}-feedback`).removeClass("invalid-feedback");
 	$(`#${element.id}-feedback`).removeClass("validating-feedback");
