@@ -9,7 +9,7 @@
 """
 
 from wtforms import PasswordField, StringField, SubmitField, Form, ValidationError
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, Email
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session, jsonify
 from flask_login import login_user, current_user, logout_user
 from passlib.hash import sha256_crypt
@@ -72,13 +72,13 @@ def validate_username(form, field):
     print(field.data.lower())
     if User.query.filter_by(username=field.data.lower()).first() is not None:
         raise ValidationError(
-            "Uh oh, it looks like that username is already taken, please try another one.")
+            "It looks like that username is already taken, please try another one.")
 
 
 class RegisterForm(Form):
     """Form for registering a new user."""
     username = StringField(
-        "Username (case-insensitive)",
+        "Username",
         validators=[
             DataRequired(
                 "Please enter a username, you will use this to log in."),
@@ -95,6 +95,15 @@ class RegisterForm(Form):
             DataRequired(
                 "Please enter your last name."
             )])
+    email = StringField(
+        "Email",
+        validators=[
+            DataRequired(
+                "Please enter your email address."
+            ), Email(
+                "We can't recognise that as an email address, please double check it."
+            )
+        ])
 
     password = PasswordField(
         "Password",
@@ -138,7 +147,7 @@ def register():
 
 class LoginForm(Form):
     """Form for user login."""
-    username = StringField("Username (case-insensitive)",
+    username = StringField("Username",
                            validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Login")
