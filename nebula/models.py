@@ -90,6 +90,7 @@ class User(Base):
     username = db.Column(db.String(128), nullable=False, unique=True)
     access_level = db.Column(db.Integer, nullable=False, default=0)
     password = db.Column(db.String(300), nullable=False)
+    email = db.Column(db.String(128), nullable=True)
 
     is_authenticated = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
