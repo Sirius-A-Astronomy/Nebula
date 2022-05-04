@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request
 from flask_login import current_user, login_required
 
-from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField, HiddenField
+from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Optional
 
 from nebula import db
-from nebula.models import Course, Question, User
+from nebula.models import Course, Question
 
 bp = Blueprint("add_question", __name__)
 
@@ -28,7 +28,7 @@ def add_question(success=False, course_code=None):
     question_form.course.choices = [
         (course.id, course.name) for course in Course.query.all()]
     course_code = request.args.get('course_code')
-    if(course_code is not None):
+    if course_code is not None:
         course = Course.query.filter_by(code=course_code).first()
         course_id = course.id
         question_form.course.default = course_id
@@ -56,5 +56,12 @@ def add_question(success=False, course_code=None):
         db.session.add(question)
         db.session.commit()
 
-        return render_template("main/add_question_succes.html", question=question, course=course, course_code=course_code)
-    return render_template("main/add_question.html", question_form=question_form, success=success, course=course, course_code=course_code)
+        return render_template("main/add_question_succes.html",
+                               question=question,
+                               course=course,
+                               course_code=course_code)
+    return render_template("main/add_question.html",
+                           question_form=question_form,
+                           success=success,
+                           course=course,
+                           course_code=course_code)
