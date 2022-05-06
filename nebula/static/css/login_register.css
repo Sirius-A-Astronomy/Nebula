@@ -225,7 +225,8 @@ h3 {
 	color: var(--color-text-on-primary);
 }
 
-.btn.transparent:hover {
+.btn.transparent:hover,
+.btn.transparent:focus {
     box-shadow: none;
     opacity: 0.65;
 }
@@ -278,18 +279,13 @@ h3 {
 }
 
 @media (max-width: 870px) {
-	.forms-container {
-		/* position: relative; */
-	}
 	form {
-		/* position: relative; */
 		top: 0%;
 		padding-bottom: 1em;
 	}
 	.login-register-container {
 		min-height: 900px;
 		height: calc(100vh - 120px);
-		/* position: relative; */
 	}
 
 	.login-register-container.sign-up-mode {
@@ -297,7 +293,6 @@ h3 {
 		overflow-x: hidden;
 	}
 	.signin-signup {
-		/* position: relative; */
 		transform-origin: top;
 		width: 100%;
 		top: 5%;
@@ -430,136 +425,3 @@ h3 {
 		left: 50%;
 	}
 }
-
-/* @media (max-width: 870px) {
-	.login-register-container {
-		min-height: 900px;
-		height: 100vh;
-	}
-	.signin-signup {
-		width: 100%;
-		top: 95%;
-		transform: translate(-50%, -120%);
-		transition: 1s 0.8s ease-in-out;
-	}
-
-	.signin-signup,
-	.login-register-container.sign-up-mode .signin-signup {
-		left: 50%;
-	}
-
-	.panels-container {
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr 2fr 1fr;
-	}
-
-	.panel {
-		flex-direction: row;
-		justify-content: space-around;
-		align-items: center;
-		padding: 2.5rem 8%;
-		grid-column: 1 / 2;
-	}
-
-	.right-panel {
-		grid-row: 3 / 4;
-	}
-
-	.left-panel {
-		grid-row: 1 / 2;
-	}
-
-	.image {
-		width: 200px;
-		transition: transform 0.9s ease-in-out;
-		transition-delay: 0.6s;
-	}
-
-	.panel .content {
-		padding-right: 15%;
-		transition: transform 0.9s ease-in-out;
-		transition-delay: 0.8s;
-	}
-
-	.panel h3 {
-		font-size: 1.2rem;
-	}
-
-	.panel p {
-		font-size: 0.7rem;
-		padding: 0.5rem 0;
-	}
-
-	.btn.transparent {
-		font-size: 0.7rem;
-	}
-
-	.login-register-container:before {
-		width: 1500px;
-		height: 1500px;
-		transform: translateX(-50%);
-		left: 30%;
-		bottom: 68%;
-		right: initial;
-		top: initial;
-		transition: 2s ease-in-out;
-	}
-
-	.login-register-container.sign-up-mode:before {
-		transform: translate(-50%, 102%);
-		bottom: 32%;
-		right: initial;
-	}
-
-	.login-register-container.sign-up-mode .left-panel .image,
-	.login-register-container.sign-up-mode .left-panel .content {
-		transform: translateY(-1000px);
-	}
-
-	.login-register-container.sign-up-mode .right-panel .image,
-	.login-register-container.sign-up-mode .right-panel .content {
-		transform: translateY(0px);
-	}
-
-	.right-panel .image,
-	.right-panel .content {
-		transform: translateY(1000px);
-	}
-
-	.login-register-container.sign-up-mode .signin-signup {
-		top: 5%;
-		transform: translate(-50%, 0);
-	}
-}
-
-@media (max-width: 767px) {
-	.col-md-6 + .col-md-6 {
-		padding-left: 0;
-	}
-}
-
-@media (max-width: 570px) {
-	form {
-		padding: 0 1.5rem;
-	}
-
-	.image {
-		display: none;
-	}
-	.panel .content {
-		padding: 0.5rem 1rem;
-	}
-	.login-register-container {
-		padding: 1.5rem;
-	}
-
-	.login-register-container:before {
-		bottom: 72%;
-		left: 50%;
-	}
-
-	.login-register-container.sign-up-mode:before {
-		bottom: 28%;
-		left: 50%;
-	}
-} */
