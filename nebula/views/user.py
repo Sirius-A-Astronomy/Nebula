@@ -113,7 +113,7 @@ class RegisterForm(Form):
             )])
     password_confirm = PasswordField("Confirm Password", validators=[
         DataRequired(), EqualTo("password")])
-    submit = SubmitField("Register")
+    register_submit = SubmitField("Register")
 
 
 @ bp.route("/register", methods=['GET', 'POST'])
@@ -150,7 +150,7 @@ class LoginForm(Form):
     username = StringField("Username",
                            validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Login")
+    login_submit = SubmitField("Login")
 
 
 @ bp.route("/login", methods=["GET", "POST"])
@@ -175,6 +175,56 @@ def login(next=None):
             raise ValidationError("Invalid username or password")
 
     return render_template("main/login.html", form=login_form, next=next)
+
+
+@bp.route("/login-register", methods=["GET", "POST"])
+def login_register(next=None):
+    login_form = LoginForm(request.form)
+    register_form = RegisterForm(request.form)
+    next = request.args.get('next')
+
+    if request.method == "POST":
+
+        if (login_form.login_submit.data == True):
+            # Login form handling
+            if login_form.validate():
+                username = login_form.username.data.lower()
+                password = login_form.password.data
+                valid_credentials = authenticate(username, password)
+
+                if valid_credentials:
+                    session.permanent = True
+                    valid_credentials.is_authenticated = login_user(
+                        valid_credentials)
+                    db.session.commit()
+                else:
+                    raise ValidationError("Invalid username or password")
+        elif register_form.validate():
+            # Register form handling
+            username = register_form.username.data.lower()
+            first_name = register_form.first_name.data
+            last_name = register_form.last_name.data
+            password = register_form.password.data
+
+            user = create_user(username=username, first_name=first_name,
+                               last_name=last_name, password=password)
+            session.permanent = True
+            db.session.add(user)
+            user.is_authenticated = True
+            db.session.commit()
+            login_user(user)
+        else:
+            return render_template("main/login_signup.html",
+                                   login_form=login_form,
+                                   register_form=register_form)
+        # redirect to next url if it is safe
+        if not is_safe_url(next, request):
+            return abort(400)
+        return redirect(next or url_for("main.index"))
+    return render_template("main/login_signup.html",
+                           login_form=login_form,
+                           register_form=register_form,
+                           next=next)
 
 
 @bp.route("/logout")

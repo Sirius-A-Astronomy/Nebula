@@ -235,4 +235,18 @@ function addValidFeedback(element, feedbackMessage) {
 	$("#register-form-submit-button").prop("disabled", false);
 }
 
+const signInBtn = document.querySelector("#sign-in-btn");
+const signUpBtn = document.querySelector("#sign-up-btn");
+const loginRegisterContainer = document.querySelector(
+	".login-register-container"
+);
+
+signUpBtn.addEventListener("click", () => {
+	loginRegisterContainer.classList.add("sign-up-mode");
+});
+
+signInBtn.addEventListener("click", () => {
+	loginRegisterContainer.classList.remove("sign-up-mode");
+});
+
 startFormValidation();

@@ -600,11 +600,6 @@ footer p {
 	box-shadow: none;
 }
 
-#register-form-submit-button {
-	margin-left: auto;
-	display: block;
-	padding: 1em 3em;
-}
 /* Form Validations */
 
 /* reset bootstrap styling */
@@ -660,41 +655,6 @@ footer p {
 
 .invalid-feedback {
 	color: var(--color-form-is-invalid);
-}
-
-/*
-    Register Page
-*/
-
-.container-register {
-	margin-top: 60px;
-	margin-bottom: 60px;
-	width: 65%;
-
-	@media (min-width: 768px) {
-		margin-top: 0;
-		margin-bottom: 0;
-		width: 100%;
-	}
-}
-
-.container-register-background {
-	position: absolute;
-	top: 0;
-	z-index: -1;
-	background-color: var(--color-background-secondary);
-	opacity: 0.5;
-	width: 70%;
-	height: 100%;
-	min-height: 100vh;
-}
-
-#create-account-title {
-	font-size: 3rem;
-	color: var(--color-accent);
-	margin-bottom: 0.5rem;
-	font-weight: 700;
-	font-family: "Product Sans", sans-serif;
 }
 
 /*
