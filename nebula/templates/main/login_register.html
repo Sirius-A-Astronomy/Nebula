@@ -56,24 +56,35 @@
                     {{ register_form.hidden_tag }}
                     <div class="input-field">
                         {{ register_form.username.label(class="form-label") }}
-                        {{ register_form.username(class="form-control",
-                        id="username-input-field")
-                        }}
-                        <div id="username-input-field-feedback" class="input-feedback">
+
+                        {% if register_form.username.errors|length > 0 %}
+                        {{ register_form.username(class="form-control is-invalid") }}
+                        <div id="username-input-field-feedback"
+                            class="input-feedback invalid-feedback">
                             {% for error in register_form['username'].errors %}
                             {{ error }}
                             {% endfor %}
                         </div>
+                        {% else %}
+                        {{ register_form.username(class="form-control",
+                        id="username-input-field") }}
+                        {% endif %}
                     </div>
 
                     <div class="input-field">
                         {{ register_form.email.label(class="form-label") }}
-                        {{ register_form.email(class="form-control", id="email-input-field") }}
-                        <div id="email-input-field-feedback" class="input-feedback">
+                        {% if register_form.email.errors|length > 0 %}
+                        {{ register_form.email(class="form-control is-invalid",
+                        id="email-input-field") }}
+                        <div id="email-input-field-feedback"
+                            class="input-feedback invalid-feedback">
                             {% for error in register_form['email'].errors %}
                             {{ error }}
                             {% endfor %}
                         </div>
+                        {% else %}
+                        {{ register_form.email(class="form-control", id="email-input-field") }}
+                        {% endif %}
                     </div>
 
 
@@ -81,52 +92,76 @@
                         <div class="col-md-6">
                             <div class="input-field">
                                 {{ register_form.first_name.label(class="form-label") }}
-                                {{ register_form.first_name(class="form-control",
+                                {% if register_form.first_name.errors|length > 0 %}
+                                {{ register_form.first_name(class="form-control is-invalid",
                                 id="first-name-input-field") }}
-                                <div class="input-feedback" id="first-name-input-field-feedback">
+                                <div class="input-feedback invalid-feedback"
+                                    id="first-name-input-field-feedback">
                                     {% for error in register_form['first_name'].errors %}
                                     {{ error }}
                                     {% endfor %}
                                 </div>
+                                {% else %}
+                                {{ register_form.first_name(class="form-control",
+                                id="first-name-input-field") }}
+                                {% endif %}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="input-field">
                                 {{ register_form.last_name.label(class="form-label") }}
-                                {{ register_form.last_name(class="form-control",
-                                id="last-name-input-field")
-                                }}
-                                <div class="input-feedback" id="last-name-input-field-feedback">
+                                {% if register_form.last_name.errors|length > 0 %}
+                                {{ register_form.last_name(class="form-control is-invalid",
+                                id="last-name-input-field") }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="last-name-input-field-feedback">
                                     {% for error in register_form['last_name'].errors %}
                                     {{ error }}
                                     {% endfor %}
                                 </div>
+                                {% else %}
+                                {{ register_form.last_name(class="form-control",
+                                id="last-name-input-field")
+                                }}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
 
                     <div class="input-field">
                         {{ register_form.password.label(class="form-label") }}
-                        {{ register_form.password(class="form-control",
-                        id="password-input-field")
-                        }}
-                        <div class="input-feedback" id="password-input-field-feedback">
+                        {% if register_form.password.errors|length > 0 %}
+                        {{ register_form.password(class="form-control is-invalid",
+                        id="password-input-field") }}
+                        <div class="input-feedback invalid-feedback"
+                            id="password-input-field-feedback">
                             {% for error in register_form['password'].errors %}
                             {{ error }}
                             {% endfor %}
                         </div>
+                        {% else %}
+                        {{ register_form.password(class="form-control",
+                        id="password-input-field")
+                        }}
+                        {% endif %}
                     </div>
 
                     <div class="input-field">
                         {{ register_form.password_confirm.label(class="form-label") }}
-                        {{ register_form.password_confirm(class="form-control",
-                        id="password-confirmation-input-field") }}
-                        <div class="input-feedback" id="password-confirmation-input-field-feedback">
+                        {% if register_form.password_confirm.errors|length > 0 %}
+                        {{ register_form.password_confirm(class="form-control is-invalid",
+                        id="password-confirm-input-field") }}
+                        <div class="input-feedback invalid-feedback"
+                            id="password-confirmation-input-field-feedback">
                             {% for error in register_form['password_confirm'].errors %}
                             {{ error }}
                             {% endfor %}
                         </div>
+                        {% else %}
+                        {{ register_form.password_confirm(class="form-control",
+                        id="password-confirmation-input-field") }}
+                        {% endif %}
                     </div>
 
                     {{ register_form.register_submit(class="btn",

@@ -72,36 +72,36 @@ def validate_username(form, field):
     print(field.data.lower())
     if User.query.filter_by(username=field.data.lower()).first() is not None:
         raise ValidationError(
-            "It looks like that username is already taken, please try another one.")
+            "It looks like we already know someone with that username, do you want to try another one?")
 
 
 class RegisterForm(Form):
-    """Form for registering a new user."""
+    """Form for registering a new user"""
     username = StringField(
         "Username",
         validators=[
             DataRequired(
-                "Please enter a username, you will use this to log in."),
+                "Please enter a username, you will use this to log in"),
             validate_username])
     first_name = StringField(
         "First Name",
         validators=[
             DataRequired(
-                "Please enter your first name."
+                "Please enter your first name"
             )])
     last_name = StringField(
         "Last Name",
         validators=[
             DataRequired(
-                "Please enter your last name."
+                "Please enter your last name"
             )])
     email = StringField(
         "Email",
         validators=[
             DataRequired(
-                "Please enter your email address."
+                "Please enter your email address"
             ), Email(
-                "We can't recognise that as an email address, please double check it."
+                "We can't recognise that as an email address, please double check it"
             )
         ])
 
@@ -112,7 +112,10 @@ class RegisterForm(Form):
                 "Please enter a password."
             )])
     password_confirm = PasswordField("Confirm Password", validators=[
-        DataRequired(), EqualTo("password")])
+        DataRequired(
+            "Please confirm your password"),
+        EqualTo("password",
+                message="Please double check that your passwords match")])
     register_submit = SubmitField("Register")
 
 
@@ -147,9 +150,10 @@ def register():
 
 class LoginForm(Form):
     """Form for user login."""
-    username = StringField("Username",
-                           validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired(
+        "Please enter your username")])
+    password = PasswordField("Password", validators=[DataRequired(
+        "Please enter your password")])
     login_submit = SubmitField("Login")
 
 
@@ -177,7 +181,7 @@ def login(next=None):
     return render_template("main/login.html", form=login_form, next=next)
 
 
-@bp.route("/login-register", methods=["GET", "POST"])
+@ bp.route("/login-register", methods=["GET", "POST"])
 def login_register(next=None, register=None):
     login_form = LoginForm(request.form)
     register_form = RegisterForm(request.form)
@@ -238,7 +242,7 @@ def login_register(next=None, register=None):
                            register=register)
 
 
-@bp.route("/logout")
+@ bp.route("/logout")
 def logout():
     """Logs out the current user."""
     if current_user.is_anonymous:
@@ -253,14 +257,14 @@ def logout():
     return redirect(url_for("main.index"))
 
 
-@bp.route("/profile")
+@ bp.route("/profile")
 def profile():
     """Creates the profile page for the current user."""
 
     return render_template("main/profile.html")
 
 
-@apibp.route("/is_username_available", methods=["post", "GET"])
+@ apibp.route("/is_username_available", methods=["post", "GET"])
 def is_username_available():
     """Returns true if the username is available."""
     if request.method == "POST":
