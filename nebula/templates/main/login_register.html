@@ -8,7 +8,8 @@
 {% endblock %}
 {% block body %}
 <main>
-    <div class="login-register-container">
+    <div {% if register|lower=='true' %} class="login-register-container sign-up-mode" {% else %}
+        class="login-register-container" {% endif %}>
         <div class="forms-container">
             <div class="signin-signup">
                 <form action="{{ url_for('user.login_register', next=next) }}" method="post"
@@ -18,15 +19,34 @@
                     {{ login_form.hidden_tag }}
                     <div class="input-field">
                         {{ login_form.username.label(class="form-label") }}
+                        {% if login_form.username.errors|length > 0 %}
+                        {{ login_form.username(class="form-control is-invalid") }}
+                        <div class="input-feedback invalid-feedback">
+                            {% for error in login_form.username.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% else %}
                         {{ login_form.username(class="form-control") }}
+                        {% endif %}
                     </div>
 
                     <div class="input-field">
                         {{ login_form.password.label(class="form-label") }}
+
+                        {% if login_form.password.errors|length > 0 %}
+                        {{ login_form.password(class="form-control is-invalid") }}
+                        <div class="input-feedback invalid-feedback">
+                            {% for error in login_form.password.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% else %}
                         {{ login_form.password(class="form-control") }}
+                        {% endif %}
                     </div>
 
-                    {{ login_form.login_submit(class="btn btn-primary") }}
+                    {{ login_form.login_submit(class="btn" ) }}
                 </form>
                 <form action="{{ url_for('user.login_register', next=next) }}" id="register-form"
                     method="post" class="sign-up-form">
@@ -36,7 +56,8 @@
                     {{ register_form.hidden_tag }}
                     <div class="input-field">
                         {{ register_form.username.label(class="form-label") }}
-                        {{ register_form.username(class="form-control", id="username-input-field")
+                        {{ register_form.username(class="form-control",
+                        id="username-input-field")
                         }}
                         <div id="username-input-field-feedback" class="input-feedback">
                             {% for error in register_form['username'].errors %}
@@ -87,7 +108,8 @@
 
                     <div class="input-field">
                         {{ register_form.password.label(class="form-label") }}
-                        {{ register_form.password(class="form-control", id="password-input-field")
+                        {{ register_form.password(class="form-control",
+                        id="password-input-field")
                         }}
                         <div class="input-feedback" id="password-input-field-feedback">
                             {% for error in register_form['password'].errors %}
@@ -107,7 +129,7 @@
                         </div>
                     </div>
 
-                    {{ register_form.register_submit(class="btn btn-primary",
+                    {{ register_form.register_submit(class="btn",
                     id="register-form-submit-button") }}
                 </form>
             </div>

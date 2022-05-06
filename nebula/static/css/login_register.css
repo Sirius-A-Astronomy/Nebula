@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+
 header {
 	margin-bottom: 0;
 }
@@ -10,7 +12,7 @@ footer {
 	position: relative;
 	width: 100%;
 	background-color: var(--color-background);
-	min-height: 100vh;
+	min-height: max(100vh, 600px);
 	overflow: hidden;
 }
 
@@ -24,7 +26,7 @@ footer {
 
 .signin-signup {
 	position: absolute;
-	top: 50%;
+	top: max(50%, 300px);
 	transform: translate(-50%, -50%);
 	left: 75%;
 	width: 50%;
@@ -39,7 +41,7 @@ form {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	padding: 0rem 5rem;
+	padding: 0rem 2rem;
 	transition: all 0.2s 0.7s;
 	overflow: hidden;
 	grid-column: 1 / 2;
@@ -61,9 +63,14 @@ form.sign-in-form {
 }
 
 .title {
+	font-family: "Poppins", sans-serif;
 	font-size: 2.2rem;
 	color: var(--color-text-primary);
 	margin-bottom: 10px;
+}
+
+h3 {
+	font-family: "Poppins", sans-serif;
 }
 
 .input-field .form-label {
@@ -83,21 +90,6 @@ form.sign-in-form {
 	padding-left: 1rem;
 }
 
-/* .input-field input {
-	background: none;
-	outline: none;
-	border: none;
-	line-height: 1;
-	font-weight: 600;
-	font-
-    size: 1.1rem;
-	color: #333;
-}
-
-.input-field input::placeholder {
-	color: #aaa;
-	font-weight: 500;
-} */
 .social-text {
 	padding: 0.7rem 0;
 	font-size: 1rem;
@@ -139,7 +131,7 @@ form.sign-in-form {
 	font-weight: 600;
 	margin: 10px 0;
 	cursor: pointer;
-	transition: 0.5s;
+	transition: transform 0.5s;
 }
 
 .btn:hover {
@@ -210,7 +202,7 @@ form.sign-in-form {
 }
 
 .panel h3 {
-	font-weight: 600;
+	font-weight: 500;
 	line-height: 1;
 	font-size: 1.5rem;
 	color: var(--color-text-on-primary);
@@ -279,6 +271,160 @@ form.sign-in-form {
 }
 
 @media (max-width: 870px) {
+	.forms-container {
+		/* position: relative; */
+	}
+	form {
+		/* position: relative; */
+		top: 0%;
+		padding-bottom: 1em;
+	}
+	.login-register-container {
+		min-height: 900px;
+		height: calc(100vh - 120px);
+		/* position: relative; */
+	}
+
+	.login-register-container.sign-up-mode {
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
+	.signin-signup {
+		/* position: relative; */
+		transform-origin: top;
+		width: 100%;
+		top: 5%;
+		transform: translate(-50%, 0);
+		transition: 1s 0.8s ease-in-out;
+	}
+
+	.signin-signup,
+	.login-register-container.sign-up-mode .signin-signup {
+		left: 50%;
+	}
+
+	.login-register-container.sign-up-mode .signin-signup {
+		margin-top: 200px;
+		top: 100%;
+		transform: translate(-50%, -800px);
+	}
+
+	.panels-container {
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr 2fr 1fr;
+	}
+
+	.panel {
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		padding: 2.5rem 8%;
+		grid-column: 1 / 2;
+		overflow: hidden;
+	}
+
+	.right-panel {
+		grid-row: 1 / 2;
+	}
+
+	.left-panel {
+		grid-row: 3 / 4;
+	}
+
+	.image {
+		width: 200px;
+		transition: transform 0.9s ease-in-out;
+		transition-delay: 0.6s;
+	}
+
+	.panel .content {
+		padding-right: 15%;
+		transition: transform 0.9s ease-in-out;
+		transition-delay: 0.8s;
+	}
+
+	.panel h3 {
+		font-size: 1.2rem;
+	}
+
+	.panel p {
+		font-size: 0.7rem;
+		padding: 0.5rem 0;
+	}
+
+	.btn.transparent {
+		font-size: 0.7rem;
+	}
+
+	.login-register-container:before {
+		position: absolute;
+		width: 1500px;
+		height: 1500px;
+		transform: translate(-50%, 102%);
+		left: 30%;
+		bottom: 32%;
+		right: initial;
+		top: initial;
+		transition: 2s ease-in-out;
+		overflow: hidden;
+	}
+
+	.login-register-container.sign-up-mode:before {
+		bottom: 72%;
+		transform: translateX(-50%);
+		right: initial;
+		overflow: hidden;
+	}
+
+	.login-register-container.sign-up-mode .left-panel .image,
+	.login-register-container.sign-up-mode .left-panel .content {
+		transform: translateY(1000px);
+	}
+
+	.right-panel .image,
+	.right-panel .content {
+		transform: translateY(-1000px);
+	}
+
+	.login-register-container.sign-up-mode .right-panel .image,
+	.login-register-container.sign-up-mode .right-panel .content {
+		transform: translateY(0px);
+	}
+}
+
+@media (max-width: 767px) {
+	.col-md-6 + .col-md-6 {
+		padding-left: 0;
+	}
+}
+
+@media (max-width: 570px) {
+	form {
+		padding: 0 1.5rem;
+	}
+
+	.image {
+		display: none;
+	}
+	.panel .content {
+		padding: 0.5rem 1rem;
+	}
+	.login-register-container {
+		padding: 1.5rem;
+	}
+
+	.login-register-container:before {
+		bottom: 28%;
+		left: 50%;
+	}
+
+	.login-register-container.sign-up-mode:before {
+		bottom: 72%;
+		left: 50%;
+	}
+}
+
+/* @media (max-width: 870px) {
 	.login-register-container {
 		min-height: 900px;
 		height: 100vh;
@@ -409,4 +555,4 @@ form.sign-in-form {
 		bottom: 28%;
 		left: 50%;
 	}
-}
+} */

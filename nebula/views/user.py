@@ -178,10 +178,11 @@ def login(next=None):
 
 
 @bp.route("/login-register", methods=["GET", "POST"])
-def login_register(next=None):
+def login_register(next=None, register=None):
     login_form = LoginForm(request.form)
     register_form = RegisterForm(request.form)
     next = request.args.get('next')
+    register = request.args.get('register')
 
     if request.method == "POST":
 
@@ -198,7 +199,15 @@ def login_register(next=None):
                         valid_credentials)
                     db.session.commit()
                 else:
-                    raise ValidationError("Invalid username or password")
+                    login_form.username.errors.append(
+                        "Invalid username or password")
+                    login_form.password.errors.append(
+                        "Invalid username or password")
+                    return render_template("main/login_register.html",
+                                           login_form=login_form,
+                                           register_form=register_form,
+                                           next=next,
+                                           register='false')
         elif register_form.validate():
             # Register form handling
             username = register_form.username.data.lower()
@@ -214,17 +223,19 @@ def login_register(next=None):
             db.session.commit()
             login_user(user)
         else:
-            return render_template("main/login_signup.html",
+            return render_template("main/login_register.html",
                                    login_form=login_form,
-                                   register_form=register_form)
+                                   register_form=register_form,
+                                   register='true')
         # redirect to next url if it is safe
         if not is_safe_url(next, request):
             return abort(400)
         return redirect(next or url_for("main.index"))
-    return render_template("main/login_signup.html",
+    return render_template("main/login_register.html",
                            login_form=login_form,
                            register_form=register_form,
-                           next=next)
+                           next=next,
+                           register=register)
 
 
 @bp.route("/logout")

@@ -551,6 +551,14 @@ footer p {
 	border-color: var(--color-secondary);
 }
 
+.btn-primary:disabled {
+	pointer-events: none;
+	opacity: 0.65;
+	background-color: var(--color-primary);
+	color: var(--color-text-on-primary);
+	border-color: var(--color-primary);
+}
+
 /*
     Forms
 */
@@ -572,6 +580,7 @@ footer p {
 	color: var(--color-text-secondary);
 	font-size: 0.875rem;
 	margin-top: 0.25rem;
+	margin-left: 0.75rem;
 	margin-left: 0.75rem;
 }
 

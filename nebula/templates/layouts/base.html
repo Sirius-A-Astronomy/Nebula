@@ -136,7 +136,7 @@
                                     Sirius A website</a>
                             </li>
                             <div class="nav-item dropdown">
-                                <a {% if '/course' in request.path or '/level' in request.path %}
+                                <a {% if 'login' in request.path or 'profile' in request.path %}
                                     class="nav-link dropdown-toggle active" {% else %}
                                     class="nav-link dropdown-toggle" {% endif %} href="#"
                                     id="navbarDropdownMenuLink" role="button"
@@ -157,13 +157,25 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     {% if current_user.is_anonymous == true %}
                                     <li>
-                                        <a class="dropdown-item"
-                                            href="{{ url_for('user.login_register') }}">Login/Register</a>
+                                        <a {% if 'login-register' in request.path and
+                                            request.args['register'] !='True' %}
+                                            class="dropdown-item active" {% else %}
+                                            class="dropdown-item" {% endif %}
+                                            href="{{ url_for('user.login_register') }}">Login</a>
                                     </li>
+                                    <li>
+                                        <a {% if request.args['register']=='True' %}
+                                            class="dropdown-item active" {% else %}
+                                            class="dropdown-item" {% endif %}
+                                            href="{{ url_for('user.login_register', register=true) }}">Register</a>
+                                    </li>
+
 
                                     {% else %}
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a {% if 'profile' in request.path %}
+                                            class="dropdown-item active" {% else %}
+                                            class="dropdown-item" {% endif %}
                                             href="{{ url_for('user.profile') }}">Profile</a>
                                     </li>
                                     <li>
@@ -171,6 +183,7 @@
                                             href="{{ url_for('user.logout') }}">Logout</a>
                                     </li>
                                     {% endif %}
+
                                 </ul>
                             </div>
                         </ul>
