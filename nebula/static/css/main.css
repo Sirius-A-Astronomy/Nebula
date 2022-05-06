@@ -102,7 +102,9 @@ body {
 	/* background: transparent; */
 }
 
-::selection {
+::selection,
+::-moz-selection,
+::-webkit-selection {
 	background-color: var(--color-accent);
 	color: var(--color-text-on-accent);
 }
@@ -589,8 +591,9 @@ footer p {
 	color: var(--color-text-primary);
 	border: none;
 	padding-top: 0;
-	background-color: transparent;
+	background-color: var(--color-background-secondary);
 	border: none;
+	border-radius: 0.7rem;
 	box-shadow: none;
 }
 
@@ -604,7 +607,7 @@ footer p {
 .form-control:focus,
 .form-select:focus {
 	color: var(--color-text-primary);
-	background-color: transparent;
+	background-color: var(--color-background-tertiary);
 	border: none;
 	box-shadow: none;
 }

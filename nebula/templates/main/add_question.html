@@ -7,50 +7,69 @@
         <p>
             Submit a question below
         </p>
-        <form method='POST' action="{{ url_for('add_question.add_question')}}" id="add-question-form">
+        <form method='POST' action="{{ url_for('add_question.add_question')}}"
+            id="add-question-form">
             {{ question_form.csrf_token }}
             {{ question_form.hidden_tag }}
-            {{ question_form.course.label(class="form-label") }}
-            {{ question_form.course(class="form-select") }}
+            <div class="input-field">
+                {{ question_form.course.label(class="form-label") }}
+                {{ question_form.course(class="form-select") }}
+            </div>
+
             <div>
-                <a href="#!" class="inline-link" id="toggle-latex-instructions-button">Want to learn how to use LaTex in
+                <a href="#!" class="inline-link" id="toggle-latex-instructions-button">Want to learn
+                    how to use LaTex in
                     your question?</a>
             </div>
             <div class="latex-instructions-container">
                 <p class="text-secondary">
                     If you want to add Latex to your question, please use the following format:
                     <br>
-                    <span class="tex2jax_ignore">For block equations, use $$ equation $$, which will look like
+                    <span class="tex2jax_ignore">For block equations, use $$ equation $$, which will
+                        look like
                         this:</span>
                     <br>
-                    $$ \nabla f = [\frac{\partial f}{\partial x} \hat{x} + \frac{\partial f}{\partial y} \hat{y} +
+                    $$ \nabla f = [\frac{\partial f}{\partial x} \hat{x} + \frac{\partial
+                    f}{\partial y} \hat{y} +
                     \frac{\partial f}{\partial z} \hat{z}] $$
-                    <span class="tex2jax_ignore">For inline equations, use \( equation \), which will look like
+                    <span class="tex2jax_ignore">For inline equations, use \( equation \), which
+                        will look like
                         this:</span>
                     \( |\vec{r}| = \sqrt{x^2 + y^2 + z^2} \)
                     <br>
                 </p>
             </div>
-            {{ question_form.title.label(class="form-label") }}
-            {{ question_form.title(class="form-control", id="question-title-input") }}
-            <a href="#!" id="show-title-preview" class="show-preview-button inline-link">Show preview</a>
+            <div class="input-field">
+                {{ question_form.title.label(class="form-label") }}
+                {{ question_form.title(class="form-control", id="question-title-input") }}
+            </div>
+            <a href="#!" id="show-title-preview" class="show-preview-button inline-link">Show
+                preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-title-preview"
                 data-preview-value-from="question-title-input">
             </div>
-            {{ question_form.content.label(class="form-label") }}
-            {{ question_form.content(class="form-control", id="question-content-input") }}
-            <a href="#!" id="show-question-preview" class="show-preview-button inline-link">Show preview</a>
+            <div class="input-field">
+                {{ question_form.content.label(class="form-label") }}
+                {{ question_form.content(class="form-control", id="question-content-input") }}
+            </div>
+            <a href="#!" id="show-question-preview" class="show-preview-button inline-link">Show
+                preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-question-preview"
                 data-preview-value-from="question-content-input">
             </div>
-            {{ question_form.answer.label(class="form-label") }}
-            {{ question_form.answer(class="form-control", id="question-answer-input") }}
-            <a href="#!" id="show-answer-preview" class="show-preview-button inline-link">Show preview</a>
+            <div class="input-field">
+                {{ question_form.answer.label(class="form-label") }}
+                {{ question_form.answer(class="form-control", id="question-answer-input") }}
+            </div>
+            <a href="#!" id="show-answer-preview" class="show-preview-button inline-link">Show
+                preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-answer-preview"
                 data-preview-value-from="question-answer-input">
             </div>
-            {{ question_form.difficulty.label(class="form-label") }}
-            {{ question_form.difficulty(class="form-select") }}
+            <div class="input-field">
+                {{ question_form.difficulty.label(class="form-label") }}
+                {{ question_form.difficulty(class="form-select") }}
+            </div>
             <div class="add-question-button-container">
                 {{ question_form.submit(class="btn btn-primary") }}
                 {% if course is not none %}
