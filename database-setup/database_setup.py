@@ -3,7 +3,7 @@ import datetime
 from random import randrange
 from datetime import timedelta
 from nebula.models import User, Course, CourseLevel, Question, Comment
-from nebula.account_manager import create_user
+from nebula.views.user import create_user
 
 app = create_app()
 
