@@ -134,9 +134,11 @@ h3 {
 	transition: transform 0.5s;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:focus {
 	background-color: var(--color-text-accent-focus);
 	color: var(--color-text-on-accent);
+    box-shadow: 0px 0px 0px 0.25rem var(--color-text-accent-focus);
 }
 
 .panels-container {
