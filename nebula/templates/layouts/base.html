@@ -31,8 +31,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
     <!-- Google Material Icon Font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
     <!-- GSAP ANIMATIONS-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
     <!-- Stylesheets -->
@@ -40,6 +43,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/queries.css') }}" />
     <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script> -->
     <!-- <script src="{{ url_for('static', filename='js/loadMathJax.js') }}" async></script> -->
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
     {% block include_head %}{% endblock %}
     {% macro nav_course_list_item(course) -%}
     <li>
@@ -161,13 +168,13 @@
                                             request.args['register'] !='True' %}
                                             class="dropdown-item active" {% else %}
                                             class="dropdown-item" {% endif %}
-                                            href="{{ url_for('user.login_register') }}">Login</a>
+                                            href="{{ url_for('user.login_register', next=request.path) }}">Login</a>
                                     </li>
                                     <li>
                                         <a {% if request.args['register']=='True' %}
                                             class="dropdown-item active" {% else %}
                                             class="dropdown-item" {% endif %}
-                                            href="{{ url_for('user.login_register', register=true) }}">Register</a>
+                                            href="{{ url_for('user.login_register', register=true, next=request.path) }}">Register</a>
                                     </li>
 
 
