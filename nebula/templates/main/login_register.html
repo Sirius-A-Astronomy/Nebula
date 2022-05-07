@@ -2,12 +2,10 @@
 {% block title %}Register - Nebula{% endblock %}
 
 {% block include_head %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-</script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login_register.css') }}">
 {% endblock %}
 {% block body %}
-<main>
+<main class="no-header-margin">
     <div {% if register|lower=='true' %} class="login-register-container sign-up-mode" {% else %}
         class="login-register-container" {% endif %}>
         <div class="forms-container">
@@ -28,6 +26,7 @@
                         </div>
                         {% else %}
                         {{ login_form.username(class="form-control") }}
+                        <div class="input-feedback invalid-feedback"></div>
                         {% endif %}
                     </div>
 
@@ -58,7 +57,8 @@
                         {{ register_form.username.label(class="form-label") }}
 
                         {% if register_form.username.errors|length > 0 %}
-                        {{ register_form.username(class="form-control is-invalid") }}
+                        {{ register_form.username(class="form-control is-invalid",
+                        id="username-input-field") }}
                         <div id="username-input-field-feedback"
                             class="input-feedback invalid-feedback">
                             {% for error in register_form['username'].errors %}
@@ -68,6 +68,8 @@
                         {% else %}
                         {{ register_form.username(class="form-control",
                         id="username-input-field") }}
+                        <div id="username-input-field-feedback"
+                            class="input-feedback invalid-feedback"></div>
                         {% endif %}
                     </div>
 
@@ -84,6 +86,8 @@
                         </div>
                         {% else %}
                         {{ register_form.email(class="form-control", id="email-input-field") }}
+                        <div id="email-input-field-feedback"
+                            class="input-feedback invalid-feedback"></div>
                         {% endif %}
                     </div>
 
@@ -104,6 +108,8 @@
                                 {% else %}
                                 {{ register_form.first_name(class="form-control",
                                 id="first-name-input-field") }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="first-name-input-field-feedback"></div>
                                 {% endif %}
                             </div>
                         </div>
@@ -122,8 +128,9 @@
                                 </div>
                                 {% else %}
                                 {{ register_form.last_name(class="form-control",
-                                id="last-name-input-field")
-                                }}
+                                id="last-name-input-field") }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="last-name-input-field-feedback"></div>
                                 {% endif %}
                             </div>
                         </div>
@@ -144,6 +151,8 @@
                         {{ register_form.password(class="form-control",
                         id="password-input-field")
                         }}
+                        <div class="input-feedback invalid-feedback"
+                            id="password-input-field-feedback"></div>
                         {% endif %}
                     </div>
 
@@ -161,6 +170,8 @@
                         {% else %}
                         {{ register_form.password_confirm(class="form-control",
                         id="password-confirmation-input-field") }}
+                        <div class="input-feedback invalid-feedback"
+                            id="password-confirmation-input-field-feedback"></div>
                         {% endif %}
                     </div>
 
