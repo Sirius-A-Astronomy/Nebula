@@ -41,6 +41,12 @@
                 {{ question.answer }}
             </p>
         </div>
+        {% if current_user.is_anonymous == false and
+        (current_user == question.user or current_user.access_level > 2) %}
+        <div class="d-flex justify-content-end">
+            <a href="#!" class="inline-link ml-auto">Edit</a>
+        </div>
+        {% endif %}
         <div class="divider"></div>
     </div>
     <div class="container container-question-comments">
@@ -48,6 +54,12 @@
             <h4>{{ question.comments|length }} Comments</h4>
         </div>
         <div class="add-comment-container">
+            {% if current_user.is_anonymous %}
+            <p>
+                You need to be logged in to add a comment. <a class="inline-link"
+                    href="{{ url_for('user.login_register', next=request.path)}}">Login</a>
+            </p>
+            {% else %}
             <form method="POST"
                 action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
                 id="add-comment-form">
@@ -61,22 +73,29 @@
                 <div class="d-flex flex-column flex-md-row">
                     {{comment_form.content(class="form-control hidden-form-field-control",
                     placeholder="Add a comment...", id="comment-content")}}
-                    {{comment_form.submit(class="btn btn-primary hidden-form-field-element mt-2 mt-md-0",
+                    {{comment_form.submit(class="btn btn-primary hidden-form-field-element mt-2
+                    mt-md-0",
                     id="comment-submit-button")}}
                 </div>
             </form>
+            {% endif %}
+
         </div>
         <div class="question-comments-content">
             {% for comment in question.comments|sort(attribute='created_at', reverse=true) %}
-            <div {% if new_comment_uuid==comment.uuid|string %} class="question-comment question-new-comment" {% else %}
-                class="question-comment" {% endif %}>
+            <div {% if new_comment_uuid==comment.uuid|string %}
+                class="question-comment question-new-comment" {% else %} class="question-comment" {%
+                endif %}>
                 <div class="question-comment-info">
                     <p>
                         {% if comment.user.first_name != None or comment.user.last_name != None %}
-                        <span class="text-secondary">{{ comment.user.first_name }} {{ comment.user.last_name }}</span>
+                        <span class="text-secondary">{{ comment.user.first_name }} {{
+                            comment.user.last_name }}</span>
                         {% endif %}
-                        {% if comment.is_suggestion %}<span class="text-tertiary">- Suggestion -</span>{% endif %}
-                        <span class="text-tertiary">{{ pretty_date(time = comment.created_at)}}</span>
+                        {% if comment.is_suggestion %}<span class="text-tertiary">- Suggestion
+                            -</span>{% endif %}
+                        <span class="text-tertiary">{{ pretty_date(time =
+                            comment.created_at)}}</span>
                     </p>
                 </div>
                 <div class="question-comment-content text-primary">

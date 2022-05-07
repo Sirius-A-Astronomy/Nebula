@@ -24,10 +24,12 @@ class CommentForm(Form):
 @bp.route('/<question_uuid>', methods=['GET', 'POST'])
 def question(course_code, question_uuid, new_comment_uuid=None):
     new_comment_uuid = (request.args.get('new_comment_uuid'))
-
-    comment_form = CommentForm(request.form)
     question = Question.query.filter_by(uuid=question_uuid).first()
     course = Course.query.filter_by(code=course_code).first()
+    comment_form = CommentForm(request.form)
+    if current_user.is_anonymous:
+        return render_template('main/question.html', course=course, question=question,
+                               comment_form=comment_form, new_comment_uuid=new_comment_uuid)
 
     user = User.query.filter_by(uuid=current_user.uuid).first()
     if request.form and comment_form.validate():
