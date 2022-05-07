@@ -9,7 +9,10 @@
         </p>
         <p>Questions asked: {{ current_user.questions|count }}</p>
         <p>Comments created: {{ current_user.comments|count }}</p>
-        <p>Account created at: {{ current_user.created_at }}</p>
+        <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
+        <p>Account access level: {{ "Guest" if current_user.access_level==0 else
+            "User" if current_user.access_level==1 else "Moderator" if current_user.access_level==2
+            else "Admin" }}</p>
 
         <p>
             <a class="inline-link" href="{{ url_for('user.logout') }}">Logout</a>
