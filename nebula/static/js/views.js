@@ -102,9 +102,7 @@ document
 			}
 		});
 
-		expandableText.textContent = Server.HTMLEncode(
-			expandableTextContentTruncated
-		);
+		expandableText.textContent = expandableTextContentTruncated;
 		expandableText.appendChild(expandTextToggle);
 	});
 // END !SECTION Expendable-Text
@@ -209,7 +207,11 @@ document.querySelectorAll(".input-field").forEach((inputField) => {
 	inputField.addEventListener("click", function (e) {
 		// only focus the input field if the user is not trying to select text
 		if (window.getSelection().toString() === "") {
-			inputField.querySelector("input").focus();
+			inputField
+				.querySelectorAll("input, textarea, select")
+				.forEach((input) => {
+					input.focus();
+				});
 		} else {
 			e.stopPropagation();
 		}
