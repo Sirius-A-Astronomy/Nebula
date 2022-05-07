@@ -71,7 +71,8 @@
                 {{ question_form.difficulty(class="form-select") }}
             </div>
             <div class="add-question-button-container">
-                {{ question_form.submit(class="btn btn-primary") }}
+                {{ question_form.submit(class="btn btn-primary",
+                value="Submit as %s %s" % (current_user.first_name, current_user.last_name)) }}
                 {% if course is not none %}
                 <a href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
                     class="btn btn-primary">
