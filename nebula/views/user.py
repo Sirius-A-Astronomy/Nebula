@@ -233,7 +233,8 @@ def login_register(next=None, register=None):
                                    register='true')
         # redirect to next url if it is safe
         if not is_safe_url(next, request):
-            return abort(400)
+            print("Tried to redirect to an unsafe url, redirecting to index")
+            return redirect(url_for("main.index"))
         return redirect(next or url_for("main.index"))
     return render_template("main/login_register.html",
                            login_form=login_form,
