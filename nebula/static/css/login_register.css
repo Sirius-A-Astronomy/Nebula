@@ -9,7 +9,7 @@ footer {
 .login-register-container {
 	position: relative;
 	width: 100%;
-	background-color: var(--color-background);
+	/* background-color: var(--color-background); */
 	min-height: max(100vh, 600px);
 	overflow: hidden;
 }

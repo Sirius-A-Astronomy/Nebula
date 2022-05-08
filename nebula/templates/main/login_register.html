@@ -8,6 +8,8 @@
 <main class="no-header-margin">
     <div {% if register|lower=='true' %} class="login-register-container sign-up-mode" {% else %}
         class="login-register-container" {% endif %}>
+        <div class="stars"></div>
+        <div class="twinkling"></div>
         <div class="forms-container">
             <div class="signin-signup">
                 <form action="{{ url_for('user.login_register', next=next) }}" method="post"
