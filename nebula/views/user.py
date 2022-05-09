@@ -11,7 +11,7 @@
 from wtforms import PasswordField, StringField, SubmitField, Form, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Email
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session, jsonify
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_required, login_user, current_user, logout_user
 from passlib.hash import sha256_crypt
 
 from nebula import db, is_safe_url
@@ -259,6 +259,7 @@ def logout():
 
 
 @ bp.route("/profile")
+@login_required
 def profile():
     """Creates the profile page for the current user."""
 
