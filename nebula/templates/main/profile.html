@@ -1,22 +1,104 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Login - Nebula{% endblock %}
 {% block body %}
-<main>
-    <div class="container">
-        <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
-        <p>
-            Username: {{ current_user.username }}
-        </p>
-        <p>Questions asked: {{ current_user.questions|count }}</p>
-        <p>Comments created: {{ current_user.comments|count }}</p>
-        <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
-        <p>Account access level: {{ "Guest" if current_user.access_level==0 else
-            "User" if current_user.access_level==1 else "Moderator" if current_user.access_level==2
-            else "Admin" }}</p>
+<main class="no-header-margin no-footer-margin">
+    <div class="container-background container-background-profile">
+        <div class="container-profile">
 
-        <p>
-            <a class="inline-link" href="{{ url_for('user.logout') }}">Logout</a>
-        </p>
-    </div>
+            <div class="left-panel panel">
+                <div class="profile-identity">
+
+                    <img class="profile-pic"
+                        src="{{ url_for('static', filename='images/profile.svg') }}" alt="">
+                    <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+
+                </div>
+                <div class="profile-summary">
+
+                    <p>
+                        Username: {{ current_user.username }}
+                    </p>
+                    <p>Questions asked: {{ current_user.questions|count }}</p>
+                    <p>Questions answered: {{ current_user.answers|count }}</p>
+                    <p>Comments created: {{ current_user.comments|count }}</p>
+                    <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
+                    <p>Account access level: {{ "Guest" if current_user.access_level==0 else
+                        "User" if current_user.access_level==1 else "Moderator" if
+                        current_user.access_level==2
+                        else "Admin" }}</p>
+
+                    <p>
+                        <a class="inline-link" href="{{ url_for('user.logout') }}">Logout</a>
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="right-panel panel profile-submitted">
+                <h2>Questions Asked</h2>
+                <div class="questions-list">
+                    {% for question in current_user.questions %}
+                    <div class="question-list-item">
+                        <a
+                            href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid) }}">
+                            <div class="text-primary question-title">{{ question.title }}</div>
+                        </a>
+                        <div class="text-secondary question-info-main">
+                            Posted {{ pretty_date(question.created_at)}}
+                            <a class="text-secondary"
+                                href="{{ url_for('course.course', course_level_code=question.course.course_level.code, course_code=question.course.code) }}">
+                                in {{ question.course.name }}
+                            </a>
+                        </div>
+                        <div class="text-tertiary question-info">
+                            {% if question.comments|count == 1 %}
+                            {{ question.comments|count }} comment -
+                            {% else %}
+                            {{ question.comments|count }} comments -
+                            {% endif %}
+
+                            {% if question.answers == 1 %}
+                            {{ question.answers|count }} answer
+                            {% else %}
+                            {{ question.answers|count }} answers
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <h2>Questions Answered</h2>
+                <div class="questions-list">
+                    {% for answer in current_user.answers %}
+                    <div class="question-list-item">
+                        <a
+                            href="{{ url_for('question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid) }}">
+                            <div class="text-primary question-title">{{ answer.question.title }}
+                            </div>
+                        </a>
+                        <div class="text-secondary question-posted">
+                            Posted {{ pretty_date(answer.created_at)}}
+                            <a class="text-secondary"
+                                href="{{ url_for('course.course', course_level_code=answer.question.course.course_level.code, course_code=answer.question.course.code) }}">
+                                in {{ answer.question.course.name }}
+                            </a>
+                        </div>
+                        <div class="text-tertiary question-info">
+                            {% if answer.question.comments|count == 1 %}
+                            {{ answer.question.comments|count }} comment -
+                            {% else %}
+                            {{ answer.question.comments|count }} comments -
+                            {% endif %}
+
+                            {% if answer.question.answers == 1 %}
+                            {{ answer.question.answers|count }} answer
+                            {% else %}
+                            {{ answer.question.answers|count }} answers
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 </main>
 {% endblock body %}
