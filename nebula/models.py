@@ -1,7 +1,8 @@
 import uuid
 
 from sqlalchemy.types import TypeDecorator, CHAR
-from sqlalchemy import DateTime, func
+from sqlalchemy import DateTime, PickleType, func
+from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.dialects.postgresql import UUID
 
 from nebula import db
@@ -42,7 +43,6 @@ class GUID(TypeDecorator):
 
 
 class Base(db.Model):
-
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
@@ -100,6 +100,7 @@ class User(Base):
         return self.uuid
 
     # email should just be: username@astro.rug.nl, no need to store it ?
+    # storing email anyway in case user wants to use a different email address
 
     def has_access(self, required_access_level):
         """Check if the user has the required access level."""
@@ -142,7 +143,6 @@ class Question(Base):
     title = db.Column(db.String(256), nullable=False)
     difficulty = db.Column(db.Integer)
     content = db.Column(db.Text, nullable=False)
-    answer = db.Column(db.Text, nullable=False)
     approved = db.Column(db.Boolean, default=False)
     sources = db.Column(db.Text)
 
@@ -170,8 +170,6 @@ class Question(Base):
 class Comment(Base):
     content = db.Column(db.Text, nullable=False)
     is_suggestion = db.Column(db.Boolean, nullable=False, default=False)
-    # creation_datetime = db.Column(
-    #     db.DateTime, nullable=True, default=datetime.now)
 
     # relation one-to-many: one: user, many: comments
     user_uuid = db.Column(GUID(), db.ForeignKey(
@@ -187,6 +185,27 @@ class Comment(Base):
 
     def __repr__(self):
         return f"Comment(\"{self.content}\")"
+
+
+class Answer(Base):
+    content = db.Column(db.Text, nullable=False)
+    approved = db.Column(db.Boolean, nullable=False, default=False)
+    sources = db.Column(MutableList.as_mutable(PickleType), default=[])
+
+    # relation one-to-many: one: user, many: answers
+    user_uuid = db.Column(GUID(), db.ForeignKey(
+        'user.uuid'), nullable=False)
+    user = db.relationship('User', backref=db.backref('answers', lazy=True))
+
+    # relation one-to-many: one: question, many: answers
+    question_uuid = db.Column(GUID(),
+                              db.ForeignKey('question.uuid'),
+                              nullable=False)
+    question = db.relationship('Question',
+                               backref=db.backref('answers', lazy=True))
+
+    def __repr__(self):
+        return f"Answer(\"{self.content}\")"
 
 
 def init_db():

@@ -2,14 +2,14 @@ from nebula import db, create_app
 import datetime
 from random import randrange
 from datetime import timedelta
-from nebula.models import User, Course, CourseLevel, Question, Comment
+from nebula.models import User, Course, CourseLevel, Question, Comment, Answer
 from nebula.views.user import create_user
 
 app = create_app()
 
 app.app_context().push()
 
-for column in [User, Course, CourseLevel, Question, Comment]:
+for column in [User, Course, CourseLevel, Question, Comment, Answer]:
     column.query.delete()
 db.session.commit()
 
@@ -197,157 +197,75 @@ db.session.add_all(course_levels)
 db.session.commit()
 
 users = [
-    create_user(password="unsafe", username="johndoe",
-                first_name="John", last_name="Doe"),
-    create_user(password="unsafe", username="sipma",
-                first_name="Sten", last_name="Sipma"),
-    create_user(password="unsafe", username="hans",
-                first_name="Hans", last_name="Wurst"),
-    create_user(password="unsafe", username="james",
-                first_name="James", last_name="Bond"),
-    create_user(password="unsafe", username="matt",
-                first_name="Matt", last_name="Harrison"),
-    create_user(password="unsafe", username="nathan",
-                first_name="Nathan", last_name="Baker"),
-    create_user(password="unsafe", username="jeff",
-                first_name="Jeff", last_name="Baker"),
-    create_user(password="unsafe", username="joseph",
-                first_name="Joseph", last_name="Baker"),
-    create_user(password="unsafe", username="julian",
-                first_name="Julian", last_name="Baker"),
+    create_user("test_user", "unsafe", email="test_user1@nebula.com",
+                access_level=1, first_name="Test", last_name="User1"),
+    create_user("test_user2", "unsafe", email="test_user2@nebula.com",
+                access_level=1, first_name="Test", last_name="User2"),
+    create_user("test_moderator1", "unsafe", email="test_moderator1@nebula.com",
+                access_level=2, first_name="Test", last_name="Moderator1"),
+    create_user("test_moderator2", "unsafe", email="test_moderator2@nebula.com",
+                access_level=2, first_name="Test", last_name="Moderator2"),
+    create_user("test_admin", "unsafe", email="test_admin@nebula.com",
+                access_level=3, first_name="Test", last_name="Admin"),
+
+    create_user("pieterh", "unsafe", email="pieterh@nebula.com",
+                access_level=3, first_name="Pieter", last_name="Huizenga"),
 ]
 
 questions = [
-    Question(title="How to solve an equation",
-             content="Solve for x: 2x + 1 = 0",
-             answer="""First subtract one on both sides: 2x = -1,
-             then divide by 2 to get the answer: x = -1/2""",
-             user=users[0],
-             course=Course.query.filter_by(code="WBPH054-05").first()),
-    Question(title="This is another question",
-             content="It has different content",
-             answer="This is the answer",
-             user=users[1],
-             course=Course.query.filter_by(code="WBPH054-05").first(),
-             difficulty="Hard"),
-    Question(title="Is it possible to create a question with a date",
-             content="I guess we see what happens",
-             answer="""If implemented correctly, it is possible to specify
-             an arbitrary creation date, by passing it as an argument to the
-             question.""",
-             created_at=datetime.date(2021, 9, 2),
-             user=users[1],
-             course=courses[0]),
-    Question(title="What is the answer to this question?",
-             content="I don't know",
-             answer="42",
-             user=users[2],
-             course=Course.query.filter_by(name="General Relativity").first()),
-    Question(title="How to solve a system of equations",
-             content="Solve for x and y: 2x + y = 1, 3x + y = 2",
-             answer="""First subtract one on both sides: 2x + y = -1, 3x + y = -2,
-                then divide by 2 to get the answer: x = -1/2, y = -3/2""",
-             user=users[3],
-             course=Course.query.filter_by(name="Linear Algebra (for Physics)").first()),
-    Question(title="How to take the derivative of a function",
-             content="Take the derivative of f(x) = x^2",
-             answer="""The derivative of f(x) is 2x""",
-             user=users[4],
-             course=Course.query.filter_by(name="Calculus 1").first()),
-    Question(title="How to solve a differential equation",
-             content="Solve for x: x'' = -x",
-             answer="""The solution is x = 0""",
-             user=users[2],
-             course=Course.query.filter_by(name="Calculus 1").first()),
-    Question(title="How to find the determinant of a matrix",
-             content="Find the determinant of the matrix {{ 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }}",
-             answer="""The determinant is:
-                1*(5*6 - 9*4) - 2*(3*6 - 8*4) + 3*(3*4 - 8*2) =
-                -2*(3*6 - 8*4) + 3*(3*4 - 8*2) =
-                -1*(3*6 - 8*4) + 3*(3*4 - 8*2) =
-                -(3*6 - 8*4) + 3*(3*4 - 8*2) =
-                -6 + 6 =
-                2""",
-             user=users[5],
-             course=Course.query.filter_by(name="Linear Algebra (for Physics)").first()),
-    Question(title="How to invert a matrix",
-             content="Invert the matrix {{ 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }}",
-             answer="""The inverse is:
-                {{ -3,  2,  1 }, {  2, -1, -1 }, { -1,  1,  0 }}
-                """,
-             user=users[4],
-             course=Course.query.filter_by(name="Linear Algebra (for Physics)").first()),
-    Question(title="How to find the eigenvalues of a matrix",
-             content="Find the eigenvalues of the matrix {{ 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }}",
-             answer="""The eigenvalues are:
-                1, 2, 3
-                4, 5, 6
-                7, 8, 9
-                """,
-             user=users[6],
-             course=Course.query.filter_by(name="Linear Algebra (for Physics)").first()),
-    Question(title="How to find the eigenvectors of a matrix",
-             content="Find the eigenvectors of the matrix {{ 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }}",
-             answer="""The eigenvectors are:
-                1, 0, 0
-                0, 1, 0
-                0, 0, 1
-                """,
-             user=users[5],
-             course=Course.query.filter_by(name="Linear Algebra (for Physics)").first()),
-    Question(title="How to find the characteristic polynomial of a matrix",
-             content="Find the characteristic polynomial of the matrix {{ 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }}",
-             answer="""The characteristic polynomial is:
-                x^3 + 2*x^2 + 3*x + 1
-                """,
-             user=users[7],
-             course=Course.query.filter_by(name="Linear Algebra (for Physics)").first())
+    Question(title="What is the answer to life, the universe and everything?",
+             content="How do you know?",
+             course=courses[0],
+             user=users[5]),
+    Question(title="This is the first question",
+             content="This is the first content",
+             course=courses[0],
+             user=users[5]),
+    Question(title="This is the second question",
+             content="This is the second content",
+             course=courses[0],
+             user=users[5]),
+    Question(title="This is the third question",
+             content="This is the third content",
+             course=courses[0],
+             user=users[5])
+]
 
+Answers = [
+    Answer(content="42",
+           question=questions[0],
+           sources=["https://www.google.com",
+                    "https://www.wikipedia.org", "https://www.reddit.com"],
+           user=users[5]),
+    Answer(content="This is the first answer",
+           question=questions[0],
+           sources=["https://www.google.com",
+                    "https://www.wikipedia.org", "https://www.reddit.com"],
+           user=users[2]),
+    Answer(content="This is the second answer",
+           question=questions[0],
+           sources=["https://www.google.com"],
+           user=users[3]),
+    Answer(content="This is the third answer",
+           question=questions[1],
+           sources=["https://www.google.com"],
+           user=users[1])
 ]
 
 
 comments = [
-    Comment(content="""This is an awful question, as it is not related to
-    Linear Algebra at all!""",
-            user=users[2],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a good question, as it is related to
-       Linear Algebra.""",
-            user=users[3],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a third comment, which is testing the datetime property.""",
-            user=users[4],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2016, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a fourth comment, which is testing the datetime property.""",
-            user=users[5],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(1980, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a fifth comment, which is testing the datetime property. It is also a comment to test how the website deals with long comments. So it is a long comment. Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-    culpa qui officia deserunt mollit anim id est laborum.""",
-            user=users[6],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a sixth comment, will the expandable-text break if I don't have any periods in my comment? How do I test this? I am testing this comment to see if it will break the website if I dont have any periods in my comment // that does mean I need to make the comment quite long""",
-            user=users[7],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a seventh comment, which will test non-ASCII characters. áéíóúñ
-    §¡¿?¿¡!@#$%^&*()_+{}|[]\:";'<>?,./«
-    ±¶
-    ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώ""",
-            user=users[8],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.utcnow())),
-    Comment(content="""This is a comment to test the comment_count property.""",
-            user=users[3],
-            question=questions[1],
-            created_at=random_date(datetime.datetime(2021, 1, 1), datetime.datetime.utcnow())),
-
+    Comment(content="This is the first comment",
+            question=questions[0],
+            user=users[5]),
+    Comment(content="This is the second comment",
+            question=questions[0],
+            user=users[4]),
+    Comment(content="This is the third comment",
+            question=questions[0],
+            user=users[2]),
+    Comment(content="This is the fourth comment",
+            question=questions[0],
+            user=users[5])
 ]
 
 db.session.add_all(questions)
