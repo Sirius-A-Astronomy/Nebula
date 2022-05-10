@@ -212,6 +212,7 @@ users = [
                 access_level=3, first_name="Pieter", last_name="Huizenga"),
 ]
 
+print(users)
 questions = [
     Question(title="What is the answer to life, the universe and everything?",
              content="How do you know?",
@@ -235,12 +236,12 @@ Answers = [
     Answer(content="42",
            question=questions[0],
            sources=["https://www.google.com",
-                    "https://www.wikipedia.org", "https://www.reddit.com"],
+                    "https://www.wikipedia.org", "https://www.youtube.com"],
            user=users[5]),
     Answer(content="This is the first answer",
            question=questions[0],
            sources=["https://www.google.com",
-                    "https://www.wikipedia.org", "https://www.reddit.com"],
+                    "https://www.wikipedia.org", "https://rug.nl"],
            user=users[2]),
     Answer(content="This is the second answer",
            question=questions[0],
@@ -249,7 +250,29 @@ Answers = [
     Answer(content="This is the third answer",
            question=questions[1],
            sources=["https://www.google.com"],
-           user=users[1])
+           user=users[1]),
+    Answer(content="This is the fourth answer",
+           question=questions[2],
+           sources=["https://www.google.com"],
+           user=users[5]),
+    Answer(content="This is the fifth answer",
+           question=questions[3],
+           sources=["https://www.google.com"],
+           user=users[5]),
+    Answer(content="This is the sixth answer",
+           question=questions[3],
+           sources=["https://www.google.com"],
+           user=users[5]),
+    Answer(content="This is the seventh answer",
+           question=questions[3],
+           sources=["https://www.google.com"],
+           user=users[5]),
+    Answer(content="This is the eighth answer",
+           question=questions[3],
+           user=users[5])
+
+
+
 ]
 
 
@@ -268,5 +291,10 @@ comments = [
             user=users[5])
 ]
 
+
+db.session.add_all(users)
+
+
 db.session.add_all(questions)
+
 db.session.commit()
