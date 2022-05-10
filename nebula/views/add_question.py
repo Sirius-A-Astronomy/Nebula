@@ -74,10 +74,12 @@ def add_question(success=False, course_code=None):
         difficulty = "Easy" if difficulty == 1 else "Medium" if difficulty == 2 else "Hard"
         user = current_user
         course = Course.query.filter_by(id=course_id).first()
-
         question = Question(title=title, content=content, user=user, course=course,
                             difficulty=difficulty, approved=False)
-        if answer is not None or answer != "":
+
+        print(answer)
+
+        if answer is not None and answer != "":
             answer_obj = Answer(content=answer, user=user,
                                 question=question, approved=False)
             db.session.add(answer_obj)
