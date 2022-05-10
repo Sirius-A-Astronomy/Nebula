@@ -3,6 +3,9 @@ const colorsSource = getComputedStyle(document.documentElement);
 
 // Add colors that should respond to the prefers-color-scheme media query here:
 const colorScheme = [
+	"--color-primary",
+	"--color-secondary",
+	"--color-tertiary",
 	"--color-background",
 	"--color-background-secondary",
 	"--color-background-tertiary",
@@ -10,11 +13,8 @@ const colorScheme = [
 	"--color-text-secondary",
 	"--color-text-tertiary",
 	"--color-text-on-primary",
-	"--color-text-accent",
 	"--color-text-on-accent",
-	"--color-text-accent-focus",
-	"--color-primary",
-	"--color-secondary",
+	"--color-accent-focus",
 	"--color-accent",
 	"--color-form-is-valid",
 	"--color-form-is-invalid",

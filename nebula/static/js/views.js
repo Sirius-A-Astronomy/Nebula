@@ -217,3 +217,39 @@ document.querySelectorAll(".input-field").forEach((inputField) => {
 		}
 	});
 });
+
+// !SECTION focus-form-input-field
+
+/*
+    SECTION Edit-Question-Button AND auto-adjust-textarea
+*/
+
+const autoAdjustTextAreas = document.querySelectorAll(".auto-adjust-textarea");
+
+function autoAdjustTextArea(textarea) {
+	textarea.style.height = "auto";
+	textarea.style.height = Math.min(textarea.scrollHeight, 500) + "px";
+}
+
+document.querySelectorAll("#question-edit-button").forEach((button) => {
+	button.addEventListener("click", function (e) {
+		const questionPageContainer = document.querySelectorAll(
+			".container-question-page"
+		);
+		questionPageContainer.forEach((element) => {
+			element.classList.add("edit-mode");
+		});
+		autoAdjustTextAreas.forEach((element) => {
+			autoAdjustTextArea(element);
+		});
+	});
+});
+
+autoAdjustTextAreas.forEach((textarea) => {
+	console.log(textarea.scrollHeight);
+	textarea.addEventListener("keyup", function (e) {
+		autoAdjustTextArea(textarea);
+	});
+});
+
+// !SECTION Edit-Question-Button AND auto-adjust-textarea

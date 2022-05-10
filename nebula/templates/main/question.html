@@ -1,163 +1,233 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ question.title }} - {{ course.name }}- Nebula{% endblock %}
 {% block body %}
+{% macro linebreaks( string ) -%}
+{% if string.split('\n')|count > 1 %}
+{% for line in string.split('\n') %}
+{{ line }}
+<br />
+{% endfor %}
+{% else %}
+{{ string }}
+{% endif %}
+{%- endmacro %}
 <main>
-    <div class="container">
-        <div class="container-question-info">
-            <p class="text-tertiary">
-                Question in <a class="inline-link-secondary"
-                    href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">
-                    {{ course.name }}
-                </a>
-            </p>
-            <div class="question-info">
+    <div {% if current_user.is_anonymous==false and question_edit_form.errors|length> 0 %}
+        class="container-question-page edit-mode"
+        {% else %}
+        class="container-question-page"
+        {% endif %}
+        >
+        <div class="container container-question">
+
+            <div class="container-question-info">
                 <p class="text-tertiary">
-                    {% if question.difficulty != None %}{{ question.difficulty }} -{% endif %}
-                    {% if question.created_at.strftime('%Y-%m-%d') != '1970-01-01' %}
-                    {{ question.created_at.strftime('%Y-%m-%d')}} -
-                    {% endif %}
-                    {% if question.user.first_name != None or question.user.last_name != None %}
-                    {{ question.user.first_name }} {{ question.user.last_name }}
-                    {% endif %}
+                    Question in <a class="inline-link-secondary"
+                        href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">
+                        {{ course.name }}
+                    </a>
                 </p>
+                <div class="question-info">
+                    <p class="text-tertiary">
+                        {% if question.difficulty != None %}{{ question.difficulty }} -{% endif
+                        %}
+                        {% if question.created_at.strftime('%Y-%m-%d') != '1970-01-01' %}
+                        {{ question.created_at.strftime('%Y-%m-%d')}} -
+                        {% endif %}
+                        {% if question.user.first_name != None or question.user.last_name !=
+                        None %}
+                        {{ question.user.first_name }} {{ question.user.last_name }}
+                        {% endif %}
+                    </p>
+                </div>
             </div>
-        </div>
-        <div class="question-title">
-            <h4>{{ question.title }}</h4>
-        </div>
-    </div>
-    <div class="container container-question-content">
-        <div>
-            <p class="small-accent">
-                Question content:
-            </p>
-            <p>
-                {{ question.content }}
-            </p>
-            <p class="small-accent">
-                Answers:
-            </p>
-            {% if question.answers|count == 0 %}
-            <p>There aren't any answers for this question yet.</p>
-            {% else %}
-            <p>
-                {{ question.answers[0].content }}
-            </p>
-            {% endif %}
+            <div class="container-question-content">
+                <div class="question-title">
+                    <h4>{{ question.title }}</h4>
+                </div>
+                <div>
+                    <p class="small-accent">
+                        Question content:
+                    </p>
+                    <p class="question-content">
+                        {{ linebreaks(question.content) }}
+                    </p>
+                </div>
+                {% if current_user.is_anonymous == false and
+                (current_user == question.user or current_user.access_level > 2) %}
+                <div class="d-flex justify-content-end">
+                    <a href="#!" class="inline-link ml-auto" id="question-edit-button">Edit</a>
+                </div>
+                {% endif %}
+                <div class="divider"></div>
+            </div>
         </div>
         {% if current_user.is_anonymous == false and
         (current_user == question.user or current_user.access_level > 2) %}
-        <div class="d-flex justify-content-end">
-            <a href="#!" class="inline-link ml-auto">Edit</a>
-        </div>
-        {% endif %}
-        <div class="divider"></div>
-    </div>
-    <div class="container-question-answers container">
-        <h4>Answers</h4>
-        {% if question.answers|count == 0 %}
-        <p>There aren't any answers for this question yet.</p>
-        {% else %}
-        {% for answer in question.answers %}
-        <div class="question-answer">
-            <div class="answer-info">
-                <p class="text-primary">
-                    {{ answer.user.first_name }} {{ answer.user.last_name }}
-                    <span class="text-tertiary">{{ pretty_date(answer.created_at) }}</span>
-                </p>
-            </div>
-            <div class="answer-content">
-                <p>{{ answer.content }}</p>
 
-            </div>
-            <div class="answer-sources">
-                {% if answer.sources|count == 1 %}
-                <span class="text-secondary">Source:</span>
-                {% else %}
-                <span class="text-secondary">Sources:</span>
-                {% endif %}
-                {% if answer.sources|count == 0 %}
-                <p>None</p>
-                {% else %}
-                {% for source in answer.sources %}
-                <a class="inline-link-secondary" href="{{ source }}">
-                    {{ source }}
-                </a>
-                {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% if current_user.is_anonymous == false %}
-        <div class="d-flex justify-content-end">
-            <a href="#!" class="btn btn-primary">Add answer</a>
-        </div>
-        <div class="divider"></div>
-        {% endif %}
-    </div>
-    <div class="container container-question-comments">
-        <div class="question-comments-title">
-            <h4>{{ question.comments|length }} Comments</h4>
-        </div>
-        <div class="add-comment-container">
-            {% if current_user.is_anonymous %}
-            <p>
-                You need to be logged in to add a comment. <a class="inline-link"
-                    href="{{ url_for('user.login_register', next=request.path)}}">Login</a>
-            </p>
-            {% else %}
-            <form method="POST"
-                action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
-                id="add-comment-form">
-                {{ comment_form.csrf_token }}
-                {{ comment_form.hidden_tag }}
-                {{ comment_form.content.label(class="form-label, visually-hidden")}}
-                {{comment_form.is_suggestion(class="form-checkbox
-                hidden-form-field-element",
-                data_hidden_by="comment-content")}}
-                {{ comment_form.is_suggestion.label(class="form-label
-                hidden-form-field-element",
-                data_hidden_by="comment-content") }}
-                <div class="d-flex flex-column flex-md-row">
-                    {{comment_form.content(class="form-control hidden-form-field-control",
-                    placeholder="Add a comment...", id="comment-content")}}
-                    {{comment_form.submit(class="btn btn-primary hidden-form-field-element
-                    mt-2
-                    mt-md-0",
-                    id="comment-submit-button")}}
+        <div class="container container-question-edit">
+            <form method="post"
+                action="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid) }}">
+                <h4>Edit question:</h4>
+
+                {{ question_edit_form.csrf_token }}
+                {{ question_edit_form.hidden_tag }}
+
+                {{ question_edit_form.title.label(class="form-label") }}
+                {% if question_edit_form.title.errors|length > 0 %}
+                {{ question_edit_form.title(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in question_edit_form.title.errors %}
+                    {{ error }}
+                    {% endfor %}
                 </div>
+                {% else %}
+                {{ question_edit_form.title(class="form-control") }}
+                {% endif %}
+
+                {{ question_edit_form.content.label(class="form-label") }}
+                {% if question_edit_form.content.errors|length > 0 %}
+                {{ question_edit_form.content(class="form-control is-invalid auto-adjust-textarea")
+                }}
+                <div class="invalid-feedback">
+                    {% for error in question_edit_form.content.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_edit_form.content(class="form-control auto-adjust-textarea") }}
+                {% endif %}
+
+                {{ question_edit_form.difficulty.label(class="form-label") }}
+                {% if question_edit_form.difficulty.errors|length > 0 %}
+                {{ question_edit_form.difficulty(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in question_edit_form.difficulty.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_edit_form.difficulty(class="form-control") }}
+                {% endif %}
+
+                <div class="d-flex justify-content-end">
+                    {{ question_edit_form.question_edit_submit(class="btn btn-primary") }}
+                </div>
+
+
+
+
             </form>
-            {% endif %}
-
         </div>
-        <div class="question-comments-content">
-            {% for comment in question.comments|sort(attribute='created_at', reverse=true)
-            %}
-            <div {% if new_comment_uuid==comment.uuid|string %}
-                class="question-comment question-new-comment" {% else %} class="question-comment" {%
-                endif %}>
-                <div class="question-comment-info">
-                    <p>
-                        {% if comment.user.first_name != None or comment.user.last_name !=
-                        None %}
-                        <span class="text-secondary">{{ comment.user.first_name }} {{
-                            comment.user.last_name }}</span>
-                        {% endif %}
-                        {% if comment.is_suggestion %}<span class="text-tertiary">-
-                            Suggestion
-                            -</span>{% endif %}
-                        <span class="text-tertiary">{{ pretty_date(time =
-                            comment.created_at)}}</span>
+        {% endif %}
+        <div class="container-question-answers container">
+            <h4>Answers</h4>
+            {% if question.answers|count == 0 %}
+            <p>There aren't any answers for this question yet.</p>
+            {% else %}
+            {% for answer in question.answers %}
+            <div class="question-answer">
+                <div class="answer-info">
+                    <p class="text-primary">
+                        {{ answer.user.first_name }} {{ answer.user.last_name }}
+                        <span class="text-tertiary">{{ pretty_date(answer.created_at) }}</span>
                     </p>
                 </div>
-                <div class="question-comment-content text-primary">
-                    <p class="expandable-text">
-                        {{ comment.content }}
-                    </p>
+                <div class="answer-content">
+                    <p>{{ linebreaks(answer.content) }}</p>
+
+                </div>
+                <div class="answer-sources">
+                    {% if answer.sources|count == 1 %}
+                    <span class="text-secondary">Source:</span>
+                    {% else %}
+                    <span class="text-secondary">Sources:</span>
+                    {% endif %}
+                    {% if answer.sources|count == 0 %}
+                    <p>None</p>
+                    {% else %}
+                    {% for source in answer.sources %}
+                    <a class="inline-link-secondary" href="{{ source }}">
+                        {{ source }}
+                    </a>
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
+            {% endif %}
+            {% if current_user.is_anonymous == false %}
+            <div class="d-flex justify-content-end">
+                <a href="#!" class="btn btn-primary">Add answer</a>
+            </div>
+            {% endif %}
+            <div class="divider"></div>
+        </div>
+        <div class="container container-question-comments">
+            <div class="question-comments-title">
+                <h4>{{ question.comments|length }} Comments</h4>
+            </div>
+            <div class="add-comment-container">
+                {% if current_user.is_anonymous %}
+                <p>
+                    You need to be logged in to add a comment. <a class="inline-link"
+                        href="{{ url_for('user.login_register', next=request.path)}}">Login</a>
+                </p>
+                {% else %}
+                <form method="POST"
+                    action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid)}}"
+                    id="add-comment-form">
+                    {{ comment_form.csrf_token }}
+                    {{ comment_form.hidden_tag }}
+                    {{ comment_form.content.label(class="form-label, visually-hidden")}}
+                    {{comment_form.is_suggestion(class="form-checkbox
+                    hidden-form-field-element",
+                    data_hidden_by="comment-content")}}
+                    {{ comment_form.is_suggestion.label(class="form-label
+                    hidden-form-field-element",
+                    data_hidden_by="comment-content") }}
+                    <div class="d-flex flex-column flex-md-row">
+                        {{comment_form.content(class="form-control hidden-form-field-control
+                        auto-adjust-textarea",
+                        placeholder="Add a comment...", id="comment-content")}}
+                        {{comment_form.comment_submit(class="btn btn-primary
+                        hidden-form-field-element
+                        mt-2
+                        mt-md-0",
+                        id="comment-submit-button")}}
+                    </div>
+                </form>
+                {% endif %}
+
+            </div>
+            <div class="question-comments-content">
+                {% for comment in question.comments|sort(attribute='created_at', reverse=true)
+                %}
+                <div {% if new_comment_uuid==comment.uuid|string %}
+                    class="question-comment question-new-comment" {% else %}
+                    class="question-comment" {% endif %}>
+                    <div class="question-comment-info">
+                        <p>
+                            {% if comment.user.first_name != None or comment.user.last_name !=
+                            None %}
+                            <span class="text-secondary">{{ comment.user.first_name }} {{
+                                comment.user.last_name }}</span>
+                            {% endif %}
+                            {% if comment.is_suggestion %}<span class="text-tertiary">-
+                                Suggestion
+                                -</span>{% endif %}
+                            <span class="text-tertiary">{{ pretty_date(time =
+                                comment.created_at)}}</span>
+                        </p>
+                    </div>
+                    <div class="question-comment-content text-primary">
+                        <p class="expandable-text">
+                            {{ linebreaks(comment.content) }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </main>

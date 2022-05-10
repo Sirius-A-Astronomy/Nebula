@@ -16,6 +16,29 @@
     */
 
 	/*
+    Global colors
+    */
+
+	--color-primary-base: #2872c2;
+	--color-primary-l12: #4283c9;
+	--color-primary-l24: #5c94d1;
+	--color-primary-l36: #75a5d8;
+	--color-primary-l48: #8fb6df;
+	--color-primary-l60: #a9c7e7;
+	--color-primary-l72: #c3d8ee;
+	--color-primary-l84: #dde8f5;
+	--color-primary-l96: #f6f9fd;
+
+	--color-primary-d12: #2364ab;
+	--color-primary-d24: #1e5793;
+	--color-primary-d36: #1a497c;
+	--color-primary-d48: #153b65;
+	--color-primary-d60: #102e4e;
+	--color-primary-d72: #0b2036;
+	--color-primary-d84: #06121f;
+	--color-primary-d96: #020508;
+
+	/*
     Dark Theme color-scheme (Change colors for the dark theme here)
     */
 
@@ -26,13 +49,12 @@
 	--color-text-secondary-dark: #cbd2d9;
 	--color-text-tertiary-dark: #9aa5b1;
 	--color-text-on-primary-dark: #f5f7fa;
-	--color-text-accent-dark: #adee98;
-	--color-text-accent-focus-dark: #85bd72;
 	--color-text-on-accent-dark: #3e3e3e;
-	--color-primary-dark: #2872c2;
-	--color-secondary-dark: #102a43;
-	--color-tertiary-dark: #67a0f5;
+	--color-primary-dark: var(--color-primary-base);
+	--color-secondary-dark: var(--color-primary-d12);
+	--color-tertiary-dark: var(--color-primary-l24);
 	--color-accent-dark: #adee98;
+	--color-accent-focus-dark: #85bd72;
 	--color-form-is-valid-dark: var(--color-tertiary-dark);
 	--color-form-is-invalid-dark: #ddc4dd;
 
@@ -47,20 +69,21 @@
 	--color-text-secondary-light: #787878;
 	--color-text-tertiary-light: #b3b3b3;
 	--color-text-on-primary-light: #f0f4f8;
-	--color-text-accent-light: #ff9b42;
-	--color-text-accent-focus-light: #cc7c35;
 	--color-text-on-accent-light: #000000;
-	--color-primary-light: #2872c2;
-	--color-secondary-light: #67a0f5;
-	--color-tertiary-light: #004791;
+	--color-primary-light: var(--color-primary-base);
+	--color-secondary-light: var(--color-primary-d12);
+	--color-tertiary-light: var(--color-primary-l24);
 	--color-accent-light: #ff9b42;
+	--color-accent-focus-light: #cc7c35;
 	--color-form-is-valid-light: #198754;
 	--color-form-is-invalid-light: #dc3545;
 
 	/*
     Applied color-scheme (Use these variables to set colors)
     */
-
+	--color-primary: var(--color-primary-light);
+	--color-secondary: var(--color-secondary-light);
+	--color-tertiary: var(--color-tertiary-light);
 	--color-background: var(--color-background-light);
 	--color-background-secondary: var(--color-background-secondary-light);
 	--color-background-tertiary: var(--color-background-tertiary-light);
@@ -68,13 +91,9 @@
 	--color-text-secondary: var(--color-text-secondary-light);
 	--color-text-tertiary: var(--color-text-tertiary-light);
 	--color-text-on-primary: var(--color-text-on-primary-light);
-	--color-text-accent: var(--color-text-accent-light);
-	--color-text-accent-focus: var(--color-text-accent-focus-light);
 	--color-text-on-accent: var(--color-text-on-accent-light);
-	--color-primary: var(--color-primary-light);
-	--color-secondary: var(--color-secondary-light);
-	--color-tertiary: var(--color-tertiary-light);
 	--color-accent: var(--color-accent-light);
+	--color-accent-focus: var(--color-accent-focus-light);
 	--color-form-is-valid: var(--color-form-is-valid-light);
 	--color-form-is-invalid: var(--color-form-is-invalid-light);
 	--color-scheme: light;
@@ -183,12 +202,12 @@ p:last-child {
 	font-family: "PT Sans", sans-serif;
 	font-weight: 400;
 	font-size: 0.875rem;
-	color: var(--color-text-accent);
+	color: var(--color-accent);
 }
 
 .inline-link {
 	/* inline links */
-	color: var(--color-text-accent);
+	color: var(--color-accent);
 
 	opacity: 0.87;
 	text-decoration: none;
@@ -207,7 +226,7 @@ p:last-child {
 
 .inline-link:hover,
 .inline-link:focus {
-	color: var(--color-text-accent-focus);
+	color: var(--color-accent-focus);
 }
 
 .inline-link-secondary {
@@ -549,24 +568,31 @@ footer p {
 
 .btn-primary {
 	opacity: 1;
+	margin-top: 0.5rem;
 	background-color: var(--color-primary);
 	color: var(--color-text-on-primary);
-	border-color: var(--color-primary);
+	background-image: linear-gradient(
+		45deg,
+		var(--color-primary),
+		var(--color-primary-d36)
+	);
+	background-size: 200% auto;
+	border: none;
+	transition: 0.4s ease-in-out;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-	background-color: var(--color-secondary);
 	color: var(--color-text-on-primary);
-	border-color: var(--color-secondary);
+	background-position: right center;
+	border: none;
 }
 
 .btn-primary:disabled {
 	pointer-events: none;
 	opacity: 0.65;
-	background-color: var(--color-primary);
 	color: var(--color-text-on-primary);
-	border-color: var(--color-primary);
+	border: none;
 }
 
 a {
@@ -582,6 +608,10 @@ a {
 	color: var(--color-text-primary);
 	border-radius: 0.7rem;
 	margin-bottom: 1rem;
+}
+.input-field,
+.input-field > * {
+	transition: all 0.1s ease-in-out;
 }
 
 .form-label {
@@ -758,14 +788,6 @@ a {
 
 .container-add-question .btn-primary {
 	margin-top: 1rem;
-	background-image: linear-gradient(
-		45deg,
-		var(--color-primary),
-		var(--color-tertiary)
-	);
-	background-size: 200% auto;
-	border: none;
-	transition: 0.4s ease-in-out;
 }
 
 .container-add-question .btn-primary:hover,
@@ -830,6 +852,22 @@ a {
 /*
     Add Question Page
 */
+
+.container-question-page.edit-mode .container-question {
+	display: none;
+}
+
+.container-question-page.edit-mode .container-question-edit {
+	display: block;
+}
+
+.container-question-page .container-question {
+	display: block;
+}
+
+.container-question-page .container-question-edit {
+	display: none;
+}
 
 .add-question-button-container {
 	margin-top: 1rem;
@@ -959,6 +997,8 @@ a {
 	background: black url("../images/stars.png") repeat;
 	position: absolute;
 	background-position: center;
+	height: 100%;
+	min-height: 100vh;
 	top: 0;
 	bottom: 0;
 	left: 0;
@@ -970,6 +1010,7 @@ a {
 .twinkling {
 	width: 10000px;
 	height: 100%;
+	min-height: 100vh;
 	background: transparent url("../images/twinkling.png") repeat;
 	background-size: 1000px 1000px;
 	position: absolute;
@@ -1051,12 +1092,14 @@ a {
 .question-answer {
 	display: grid;
 	grid-template-columns: 3fr 1fr;
+	align-items: flex-start;
 }
 
 .question-answer .answer-content {
 	grid-column: 1 / 2;
 	grid-row: 2 / 3;
 	justify-content: start;
+	align-items: flex-start;
 }
 
 .question-answer .answer-content p {
@@ -1076,11 +1119,10 @@ a {
 .question-answer .answer-info {
 	grid-column: 1 / 2;
 	grid-row: 1 / 2;
-	font-size: 1.25rem;
 }
 
 .question-answer .answer-info p {
-	font-size: 1.1rem;
+	font-size: 0.875rem;
 }
 
 @media (max-width: 991px) {
@@ -1162,7 +1204,7 @@ a {
 	margin-top: 0.5rem;
 }
 
-.container-profile .questions-list-item {
+.container-profile .question-list-item {
 	margin-bottom: 0.5rem;
 }
 
