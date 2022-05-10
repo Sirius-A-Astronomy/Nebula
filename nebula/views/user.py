@@ -8,6 +8,8 @@
         User logout
 """
 
+import re
+
 from wtforms import PasswordField, StringField, SubmitField, Form, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Email
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session, jsonify
@@ -40,6 +42,7 @@ def create_user(username, password, **kwargs):
     """
     hashed_password = sha256_crypt.encrypt(password)
     user = User(username=username, password=hashed_password, **kwargs)
+    print(f"Created user {user.username}")
     return user
 
 
@@ -75,6 +78,21 @@ def validate_username(form, field):
             "It looks like we already know someone with that username, do you want to try another one?")
 
 
+def validate_email(form, field):
+    """
+    Validates the email to be unique. Also checks if the email is valid according to rfc2822.
+
+    :param form: The form to validate.
+    :type form: Form
+    :param field: The field to validate.
+    :type field: StringField
+    """
+    email_regex = r"""(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"""
+    if not re.match(email_regex, field.data):
+        raise ValidationError(
+            "We can't recognize that as an email address, please double check it")
+
+
 class RegisterForm(Form):
     """Form for registering a new user"""
     username = StringField(
@@ -100,10 +118,7 @@ class RegisterForm(Form):
         validators=[
             DataRequired(
                 "Please enter your email address"
-            ), Email(
-                "We can't recognise that as an email address, please double check it"
-            )
-        ])
+            ), validate_email])
 
     password = PasswordField(
         "Password",
@@ -133,9 +148,10 @@ def register():
         first_name = register_form.first_name.data
         last_name = register_form.last_name.data
         password = register_form.password.data
+        email = register_form.email.data
 
         user = create_user(username=username, first_name=first_name,
-                           last_name=last_name, password=password)
+                           last_name=last_name, password=password, email=email)
         session.permanent = True
         db.session.add(user)
         user.is_authenticated = True
@@ -188,6 +204,8 @@ def login_register(next=None, register=None):
     next = request.args.get('next')
     register = request.args.get('register')
 
+    print(request.form)
+
     if request.method == "POST":
 
         if (login_form.login_submit.data == True):
@@ -218,9 +236,11 @@ def login_register(next=None, register=None):
             first_name = register_form.first_name.data
             last_name = register_form.last_name.data
             password = register_form.password.data
+            email = register_form.email.data
 
             user = create_user(username=username, first_name=first_name,
-                               last_name=last_name, password=password)
+                               last_name=last_name, password=password,
+                               email=email)
             session.permanent = True
             db.session.add(user)
             user.is_authenticated = True
@@ -259,7 +279,7 @@ def logout():
 
 
 @ bp.route("/profile")
-@login_required
+@ login_required
 def profile():
     """Creates the profile page for the current user."""
 
