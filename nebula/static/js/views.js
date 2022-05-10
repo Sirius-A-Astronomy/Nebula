@@ -227,7 +227,7 @@ document.querySelectorAll(".input-field").forEach((inputField) => {
 const autoAdjustTextAreas = document.querySelectorAll(".auto-adjust-textarea");
 
 function autoAdjustTextArea(textarea) {
-	textarea.style.height = "auto";
+	// textarea.style.height = "auto";
 	textarea.style.height = Math.min(textarea.scrollHeight, 500) + "px";
 }
 
@@ -253,3 +253,31 @@ autoAdjustTextAreas.forEach((textarea) => {
 });
 
 // !SECTION Edit-Question-Button AND auto-adjust-textarea
+
+/*
+    SECTION show-more-button
+*/
+
+document.querySelectorAll(".show-more-button").forEach((button) => {
+	const showMoreContainers = document.querySelectorAll(
+		`.show-more-container[data-toggled-by='${button.id}']`
+	);
+	showMoreContainers.forEach((element) => {
+		element.style.display = "none";
+	});
+
+	button.addEventListener("click", function (e) {
+		showMoreContainers.forEach((element) => {
+			if (element.style.display === "none") {
+				element.style.display = "block";
+				button.textContent = "Show less";
+			} else {
+				element.style.display = "none";
+				button.textContent = "Show more";
+			}
+		});
+		button.blur();
+	});
+});
+
+// !SECTION show-more-button

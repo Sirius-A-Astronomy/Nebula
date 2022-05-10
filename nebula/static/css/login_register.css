@@ -10,7 +10,7 @@ footer {
 	position: relative;
 	width: 100%;
 	/* background-color: var(--color-background); */
-	min-height: max(100vh, 650px);
+	min-height: max(100vh, 700px);
 	overflow: hidden;
 }
 
@@ -55,6 +55,10 @@ form .form-group {
 	width: 100%;
 }
 
+.form-group + .form-group {
+	margin-top: 1.5rem;
+}
+
 form.sign-up-form {
 	opacity: 0;
 	z-index: 1;
@@ -62,6 +66,7 @@ form.sign-up-form {
 
 form.sign-in-form {
 	z-index: 2;
+	opacity: 1;
 }
 
 .title {
@@ -199,6 +204,7 @@ h3 {
 .left-panel {
 	pointer-events: all;
 	padding: 3rem 17% 2rem 12%;
+	opacity: 1;
 }
 
 .left-panel .image {
@@ -206,6 +212,7 @@ h3 {
 }
 
 .right-panel {
+	opacity: 0;
 	pointer-events: none;
 	padding: 3rem 12% 2rem 17%;
 }
@@ -284,10 +291,12 @@ h3 {
 
 .login-register-container.sign-up-mode .left-panel {
 	pointer-events: none;
+	animation: fadeOut 2s ease-in-out;
 }
 
 .login-register-container.sign-up-mode .right-panel {
 	pointer-events: all;
+	opacity: 1;
 }
 
 @media (max-width: 870px) {
@@ -434,5 +443,33 @@ h3 {
 	.login-register-container.sign-up-mode:before {
 		bottom: 72%;
 		left: 50%;
+	}
+}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+
+	99% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	1% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 1;
 	}
 }

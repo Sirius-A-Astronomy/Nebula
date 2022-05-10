@@ -1,5 +1,64 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Login - Nebula{% endblock %}
+
+{% macro question_view(question) -%}
+<div class="question-list-item">
+    <a
+        href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid) }}">
+        <div class="text-primary question-title">{{ question.title }}</div>
+    </a>
+    <div class="text-secondary question-info-main">
+        Posted {{ pretty_date(question.created_at)}}
+        <a class="text-secondary"
+            href="{{ url_for('course.course', course_level_code=question.course.course_level.code, course_code=question.course.code) }}">
+            in {{ question.course.name }}
+        </a>
+    </div>
+    <div class="text-tertiary question-info">
+        {% if question.comments|count == 1 %}
+        {{ question.comments|count }} comment -
+        {% else %}
+        {{ question.comments|count }} comments -
+        {% endif %}
+
+        {% if question.answers == 1 %}
+        {{ question.answers|count }} answer
+        {% else %}
+        {{ question.answers|count }} answers
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro answer_view(answer) -%}
+<div class="question-list-item">
+    <a
+        href="{{ url_for('question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid) }}">
+        <div class="text-primary question-title">{{ answer.question.title }}
+        </div>
+    </a>
+    <div class="text-secondary question-posted">
+        Posted {{ pretty_date(answer.created_at)}}
+        <a class="text-secondary"
+            href="{{ url_for('course.course', course_level_code=answer.question.course.course_level.code, course_code=answer.question.course.code) }}">
+            in {{ answer.question.course.name }}
+        </a>
+    </div>
+    <div class="text-tertiary question-info">
+        {% if answer.question.comments|count == 1 %}
+        {{ answer.question.comments|count }} comment -
+        {% else %}
+        {{ answer.question.comments|count }} comments -
+        {% endif %}
+
+        {% if answer.question.answers == 1 %}
+        {{ answer.question.answers|count }} answer
+        {% else %}
+        {{ answer.question.answers|count }} answers
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
 {% block body %}
 <main class="no-header-margin no-footer-margin">
     <div class="container-background container-background-profile">
@@ -18,8 +77,6 @@
                     <p>
                         Username: {{ current_user.username }}
                     </p>
-                    <p>Questions asked: {{ current_user.questions|count }}</p>
-                    <p>Questions answered: {{ current_user.answers|count }}</p>
                     <p>Comments created: {{ current_user.comments|count }}</p>
                     <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
                     <p>Account access level: {{ "Guest" if current_user.access_level==0 else
@@ -35,69 +92,48 @@
             </div>
 
             <div class="right-panel panel profile-submitted">
-                <h2>Questions Asked</h2>
+                <h2>{{ current_user.questions|length }} Questions Asked</h2>
+                {% if current_user.questions|length == 0 %}
+                <p>You have not asked any questions yet.</p>
+                {% else %}
                 <div class="questions-list">
-                    {% for question in current_user.questions %}
-                    <div class="question-list-item">
-                        <a
-                            href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid) }}">
-                            <div class="text-primary question-title">{{ question.title }}</div>
-                        </a>
-                        <div class="text-secondary question-info-main">
-                            Posted {{ pretty_date(question.created_at)}}
-                            <a class="text-secondary"
-                                href="{{ url_for('course.course', course_level_code=question.course.course_level.code, course_code=question.course.code) }}">
-                                in {{ question.course.name }}
-                            </a>
-                        </div>
-                        <div class="text-tertiary question-info">
-                            {% if question.comments|count == 1 %}
-                            {{ question.comments|count }} comment -
-                            {% else %}
-                            {{ question.comments|count }} comments -
-                            {% endif %}
-
-                            {% if question.answers == 1 %}
-                            {{ question.answers|count }} answer
-                            {% else %}
-                            {{ question.answers|count }} answers
-                            {% endif %}
-                        </div>
-                    </div>
+                    {% for question in current_user.questions[:3] %}
+                    {{ question_view(question) }}
                     {% endfor %}
                 </div>
-                <h2>Questions Answered</h2>
-                <div class="questions-list">
-                    {% for answer in current_user.answers %}
-                    <div class="question-list-item">
-                        <a
-                            href="{{ url_for('question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid) }}">
-                            <div class="text-primary question-title">{{ answer.question.title }}
-                            </div>
-                        </a>
-                        <div class="text-secondary question-posted">
-                            Posted {{ pretty_date(answer.created_at)}}
-                            <a class="text-secondary"
-                                href="{{ url_for('course.course', course_level_code=answer.question.course.course_level.code, course_code=answer.question.course.code) }}">
-                                in {{ answer.question.course.name }}
-                            </a>
-                        </div>
-                        <div class="text-tertiary question-info">
-                            {% if answer.question.comments|count == 1 %}
-                            {{ answer.question.comments|count }} comment -
-                            {% else %}
-                            {{ answer.question.comments|count }} comments -
-                            {% endif %}
-
-                            {% if answer.question.answers == 1 %}
-                            {{ answer.question.answers|count }} answer
-                            {% else %}
-                            {{ answer.question.answers|count }} answers
-                            {% endif %}
-                        </div>
-                    </div>
+                <div class="questions-list questions-expanded-list show-more-container"
+                    data-toggled-by="show-all-questions">
+                    {% for question in current_user.questions[3:] %}
+                    {{ question_view(question) }}
                     {% endfor %}
                 </div>
+                {% if current_user.questions|length >= 3 %}
+                <a href="#!" class="inline-link show-more-button" id="show-all-questions">Show
+                    more</a>
+                {% endif %}
+                {% endif %}
+
+                <h2>{{ current_user.answers|length }} Questions Answered</h2>
+
+                {% if current_user.answers|count == 0 %}
+                <p>You have not answered any questions yet.</p>
+                {% else %}
+                <div class="answers-list">
+                    {% for answer in current_user.answers[:3] %}
+                    {{ answer_view(answer) }}
+                    {% endfor %}
+                </div>
+                <div class="answers-list answers-expanded-list show-more-container"
+                    data-toggled-by="show-all-answers">
+                    {% for answer in current_user.answers[3:] %}
+                    {{ answer_view(answer) }}
+                    {% endfor %}
+                </div>
+                {% if current_user.answers|length >= 3 %}
+                <a href="#!" class="inline-link show-more-button" id="show-all-answers">Show
+                    more</a>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
 </main>

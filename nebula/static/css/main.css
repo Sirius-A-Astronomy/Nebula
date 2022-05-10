@@ -849,9 +849,6 @@ a {
 	transition: 1s ease-in-out;
 	overflow: hidden;
 }
-/*
-    Add Question Page
-*/
 
 .container-question-page.edit-mode .container-question {
 	display: none;
@@ -867,12 +864,6 @@ a {
 
 .container-question-page .container-question-edit {
 	display: none;
-}
-
-.add-question-button-container {
-	margin-top: 1rem;
-	display: flex;
-	justify-content: space-between;
 }
 
 @media (max-width: 768px) {
@@ -1027,6 +1018,22 @@ a {
 }
 
 /*
+    Add Question Page
+*/
+
+.add-question-button-container {
+	margin-top: 1rem;
+	display: flex;
+	justify-content: space-between;
+}
+
+.show-preview-button,
+.latex-instructions-container,
+#toggle-latex-instructions-button {
+	margin-left: 0.75rem;
+}
+
+/*
     Course Page
 */
 
@@ -1093,6 +1100,7 @@ a {
 	display: grid;
 	grid-template-columns: 3fr 1fr;
 	align-items: flex-start;
+	margin-top: 0.5rem;
 }
 
 .question-answer .answer-content {
@@ -1103,8 +1111,9 @@ a {
 }
 
 .question-answer .answer-content p {
-	margin: 0;
+	margin-top: 0.2rem;
 	font-size: 1rem;
+	font-weight: 200;
 }
 
 .question-answer .answer-sources {
@@ -1123,6 +1132,7 @@ a {
 
 .question-answer .answer-info p {
 	font-size: 0.875rem;
+	font-weight: 500;
 }
 
 @media (max-width: 991px) {
@@ -1169,7 +1179,8 @@ a {
 }
 
 .container-profile .left-panel {
-	justify-content: center;
+	margin-top: 10%;
+	justify-content: start;
 	align-items: center;
 }
 
@@ -1194,14 +1205,15 @@ a {
 	max-width: 400px;
 	padding: 1rem 3rem 0 3rem;
 }
-.container-profile .questions-list {
+.container-profile .questions-list,
+.container-profile .answers-list {
 	padding: 0 0.5rem 0 0.5rem;
 	max-width: 600px;
 	width: 100%;
 }
 
 .container-profile .profile-submitted h2 {
-	margin-top: 0.5rem;
+	margin-top: 2rem;
 }
 
 .container-profile .question-list-item {
