@@ -13,7 +13,17 @@
             {{ question_form.hidden_tag }}
             <div class="input-field">
                 {{ question_form.course.label(class="form-label") }}
-                {{ question_form.course(class="form-select") }}
+                {% if question_form.course.errors|length > 0%}
+                {{ question_form.course(class="form-select is-invalid", id="course-input-field") }}
+                <div class="input-feedback invalid-feedback" id="course-input-field-feedback">
+                    {% for error in question_form.course.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_form.course(class="form-select", id="course-input-field") }}
+                <div class="input-feedback" id="course-input-field-feedback"></div>
+                {% endif %}
             </div>
 
             <div>
@@ -41,25 +51,59 @@
             </div>
             <div class="input-field">
                 {{ question_form.title.label(class="form-label") }}
-                {{ question_form.title(class="form-control", id="question-title-input") }}
+                {% if question_form.title.errors|length > 0 %}
+                {{ question_form.title(class="form-control is-invalid", id="title-input-field") }}
+                <div class="input-feedback invalid-feedback" id="title-input-field-feedback">
+                    {% for error in question_form.title.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_form.title(class="form-control", id="title-input-field") }}
+                <div class="input-feedback" id="title-input-field-feedback"></div>
+                {% endif %}
             </div>
             <a href="#!" id="show-title-preview" class="show-preview-button inline-link">Show
                 preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-title-preview"
-                data-preview-value-from="question-title-input">
+                data-preview-value-from="title-input-field">
             </div>
             <div class="input-field">
                 {{ question_form.content.label(class="form-label") }}
-                {{ question_form.content(class="form-control", id="question-content-input") }}
+                {% if question_form.content.errors|length > 0 %}
+                {{ question_form.content(class="form-control is-invalid auto-adjust-textarea",
+                id="content-input-field") }}
+                <div class="input-feedback invalid-feedback" id="content-input-field-feedback">
+                    {% for error in question_form.content.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_form.content(class="form-control auto-adjust-textarea",
+                id="content-input-field") }}
+                <div class="input-feedback" id="content-input-field-feedback"></div>
+                {% endif %}
             </div>
             <a href="#!" id="show-question-preview" class="show-preview-button inline-link">Show
                 preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-question-preview"
-                data-preview-value-from="question-content-input">
+                data-preview-value-from="content-input-field">
             </div>
             <div class="input-field">
                 {{ question_form.answer.label(class="form-label") }}
-                {{ question_form.answer(class="form-control", id="question-answer-input") }}
+                {% if question_form.answer.errors|length > 0 %}
+                {{ question_form.answer(class="form-control is-invalid auto-adjust-textarea",
+                id="answer-input-field") }}
+                <div class="input-feedback invalid-feedback" id="answer-input-field-feedback">
+                    {% for error in question_form.answer.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_form.answer(class="form-control auto-adjust-textarea",
+                id="answer-input-field") }}
+                <div class="input-feedback" id="answer-input-field-feedback"></div>
+                {% endif %}
             </div>
             <a href="#!" id="show-answer-preview" class="show-preview-button inline-link">Show
                 preview</a>
@@ -68,7 +112,18 @@
             </div>
             <div class="input-field">
                 {{ question_form.difficulty.label(class="form-label") }}
-                {{ question_form.difficulty(class="form-select") }}
+                {% if question_form.difficulty.errors|length > 0 %}
+                {{ question_form.difficulty(class="form-select is-invalid",
+                id="difficulty-input-field") }}
+                <div class="input-feedback invalid-feedback" id="difficulty-input-field-feedback">
+                    {% for error in question_form.difficulty.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ question_form.difficulty(class="form-select", id="difficulty-input-field") }}
+                <div class="input-feedback" id="difficulty-input-field-feedback"></div>
+                {% endif %}
             </div>
             <div class="add-question-button-container">
                 {{ question_form.submit(class="btn btn-primary",
