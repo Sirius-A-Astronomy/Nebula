@@ -51,6 +51,10 @@ form > * {
 	max-width: 600px;
 }
 
+form .form-group {
+	width: 100%;
+}
+
 form.sign-up-form {
 	opacity: 0;
 	z-index: 1;
@@ -78,6 +82,10 @@ h3 {
 .input-field,
 .row {
 	width: 100%;
+}
+
+.row {
+	--bs-gutter-x: 0;
 }
 
 .col-md-6 {
@@ -120,7 +128,12 @@ h3 {
 
 .btn {
 	padding: 0.5em 2em;
-	background-color: var(--color-text-accent);
+	background-image: linear-gradient(
+		45deg,
+		var(--color-accent),
+		var(--color-primary)
+	);
+	background-size: 300% auto;
 	border: none;
 	outline: none;
 	border-radius: 49px;
@@ -129,12 +142,13 @@ h3 {
 	font-weight: 600;
 	margin: 10px 0;
 	cursor: pointer;
-	transition: transform 0.5s;
+	transition: 0.4s ease-in-out;
+	transition-property: transform background-position;
 }
 
 .btn:hover,
 .btn:focus {
-	background-color: var(--color-text-accent-focus);
+	background-position: right center;
 	color: var(--color-text-on-accent);
 	box-shadow: none;
 }
@@ -399,7 +413,7 @@ h3 {
 
 @media (max-width: 570px) {
 	form {
-		padding: 0 1.5rem;
+		padding: 0 0.5rem;
 	}
 
 	.image {
