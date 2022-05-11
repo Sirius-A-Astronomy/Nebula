@@ -17,11 +17,11 @@
     The app is returned.
 """
 from urllib.parse import urlparse, urljoin
-from datetime import timedelta
 
 from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+import subprocess
 
 from config import configs
 
@@ -71,6 +71,8 @@ def create_app(config_environment='default'):
 
     login_manager.login_view = "user.login_register"
 
+    compile_sass()
+
     return app
 
 
@@ -88,6 +90,14 @@ def is_safe_url(target, request):
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and \
         ref_url.netloc == test_url.netloc
+
+
+def compile_sass():
+    """Compiles the sass files."""
+    print("Compiling sass files...")
+    subprocess.run([
+        "sass", "./nebula/static/scss/:./nebula/static/css"])
+    print("Sass files compiled.")
 
 
 if __name__ == "__main__":
