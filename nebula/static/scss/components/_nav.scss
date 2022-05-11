@@ -2,12 +2,6 @@
 	display: flex;
 }
 
-.navbar-brand img,
-.navbar-brand div {
-	display: inline-block;
-	/* margin-left: 10px; */
-}
-
 @media (hover: hover) and (min-width: 992px) {
 	.navbar .nav-item .dropdown-menu {
 		display: none;
@@ -43,6 +37,27 @@
 	}
 }
 
+.navbar-brand {
+	img {
+		display: inline-block;
+		max-height: 3.125rem;
+	}
+
+	div {
+		display: inline-block;
+		vertical-align: middle;
+	}
+}
+.navbar-brand img,
+.navbar-brand div {
+	display: inline-block;
+
+	p {
+		margin-bottom: 0;
+		font-size: 65%;
+	}
+}
+
 .navbar-brand div {
 	vertical-align: middle;
 }
@@ -50,10 +65,6 @@
 .navbar-brand div p {
 	margin-bottom: 0;
 	font-size: 65%;
-}
-
-.navbar-brand img {
-	max-height: 3.125rem;
 }
 
 .dropdown-menu {

@@ -16,6 +16,8 @@ yarn.lock
 package-lock.json
 settings.json
 
+nebula/static/css/
+
 dist/
 build/
 *.egg-info/
