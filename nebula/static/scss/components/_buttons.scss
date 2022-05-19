@@ -1,0 +1,57 @@
+.button-accent {
+	/* inline links */
+	color: var(--color-accent);
+
+	opacity: 0.87;
+	text-decoration: none;
+	font-family: "Roboto", sans-serif;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-size: 0.875rem;
+	font-weight: 500;
+	letter-spacing: 0.04rem;
+	line-height: 1.25rem;
+
+	-webkit-transition: opacity 0.1s;
+	transition: opacity 0.1s;
+	&:hover,
+	&:focus {
+		color: var(--color-accent-focus);
+	}
+
+	&.on-primary {
+		color: var(--color-accent-50);
+		padding-block-end: 0.1em;
+		border-block-end: var(--color-accent-50) solid 1px;
+
+		&:hover,
+		&:focus {
+			color: var(--color-accent-100);
+		}
+	}
+
+	&.on-dark {
+		color: var(--color-accent-on-dark-background);
+
+		&:hover,
+		&:focus {
+			color: var(--color-accent-on-dark-background-focus);
+		}
+	}
+}
+
+.button-secondary {
+	color: var(--color-text-tertiary);
+	font-weight: 500;
+	letter-spacing: 0.04rem;
+	text-decoration: none;
+	font-family: "Roboto", sans-serif;
+
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+
+	&:hover,
+	&:focus {
+		color: var(--color-text-secondary);
+	}
+}

@@ -2,12 +2,14 @@
     Creates the question view.
 """
 from re import A
+from urllib.parse import urlparse
+
 from flask import Blueprint, render_template, url_for, request, redirect
 from flask_login import current_user
-from wtforms import Form, SubmitField, TextAreaField, BooleanField, SelectField, StringField
-from wtforms.validators import DataRequired
+from wtforms import Form, SubmitField, TextAreaField, BooleanField, SelectField, StringField, FieldList
+from wtforms.validators import DataRequired, Optional
 from nebula import db
-from nebula.models import Course, Question, Comment, User
+from nebula.models import Course, Question, Comment, User, Answer
 
 bp = Blueprint('question', __name__,
                url_prefix='/course/<course_code>/question')
@@ -44,6 +46,17 @@ class QuestionEditForm(Form):
     question_edit_submit = SubmitField('Submit')
 
 
+class AnswerForm(Form):
+    class Meta:
+        locales = ['en_US', 'en']
+    content = TextAreaField('Answer content', validators=[
+                            DataRequired()])
+    sources = TextAreaField('Add sources', validators=[
+                            Optional()])
+
+    add_answer_submit = SubmitField('Submit')
+
+
 @bp.route('/<question_uuid>', methods=['GET', 'POST'])
 def question(course_code, question_uuid, new_comment_uuid=None):
     new_comment_uuid = (request.args.get('new_comment_uuid'))
@@ -56,6 +69,7 @@ def question(course_code, question_uuid, new_comment_uuid=None):
     comment_form = CommentForm(request.form)
 
     question_edit_form = QuestionEditForm(request.form)
+    add_answer_form = AnswerForm(request.form)
 
     user = User.query.filter_by(uuid=current_user.uuid).first()
 
@@ -72,6 +86,7 @@ def question(course_code, question_uuid, new_comment_uuid=None):
             return redirect(url_for(
                 'question.question', course_code=course_code,
                 comment_form=comment_form, question_edit_form=question_edit_form,
+                add_answer_form=add_answer_form,
                 question_uuid=question_uuid, new_comment_uuid=str(comment.uuid)))
 
         if question_edit_form.question_edit_submit.data == True and question_edit_form.validate():
@@ -84,7 +99,19 @@ def question(course_code, question_uuid, new_comment_uuid=None):
             return redirect(url_for(
                 'question.question', course_code=course_code,
                 comment_form=comment_form, question_edit_form=question_edit_form,
-                question_uuid=question_uuid))
+                question_uuid=question_uuid, add_answer_form=add_answer_form))
+
+        if add_answer_form.add_answer_submit.data == True and add_answer_form.validate():
+            content = add_answer_form.content.data
+            sources = [
+                urlparse(source, scheme="https", allow_fragments=True).geturl().replace("///", "//") for source in add_answer_form.sources.data.split(";") if source]
+            answer = Answer(
+                content=content, sources=sources, user=user, question=question)
+            db.session.add(answer)
+            db.session.commit()
+            return redirect(url_for('question.question', course_code=course_code,
+                                    comment_form=comment_form, question_edit_form=question_edit_form,
+                                    question_uuid=question_uuid, add_answer_form=add_answer_form))
 
     question_edit_form.title.default = question.title
     question_edit_form.content.default = question.content
@@ -94,4 +121,4 @@ def question(course_code, question_uuid, new_comment_uuid=None):
     return render_template(
         'main/question.html', course=course, question=question,
         question_edit_form=question_edit_form, comment_form=comment_form,
-        new_comment_uuid=new_comment_uuid)
+        new_comment_uuid=new_comment_uuid, add_answer_form=add_answer_form)

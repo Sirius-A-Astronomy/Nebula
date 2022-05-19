@@ -3,37 +3,50 @@
 }
 
 @media (hover: hover) and (min-width: 992px) {
-	.navbar .nav-item .dropdown-menu {
+	.navbar {
+		.nav-item {
+			&:hover,
+			&:focus {
+				.dropdown-menu {
+					display: block;
+				}
+			}
+		}
+
+		.carot-left:after,
+		.dropdown-menu > li > a:hover:after,
+		.dropdown-menu > li > a:focus:after {
+			/* rotate caret on hover */
+			transform: rotate(90deg);
+		}
+	}
+	.dropdown-menu {
 		display: none;
 		margin-top: 0;
-	}
 
-	.navbar .nav-item:hover .dropdown-menu,
-	.navbar .nav-item:focus .dropdown-menu {
-		display: block;
-	}
+		.dropdown-submenu {
+			display: none;
+			position: absolute;
+			right: 100%;
+			top: 0px;
+		}
 
-	.dropdown-menu li {
-		position: relative;
-	}
+		li {
+			position: relative;
 
-	.dropdown-menu .dropdown-submenu {
-		display: none;
-		position: absolute;
-		right: 100%;
-		top: 0px;
-	}
+			&:hover,
+			&:focus {
+				.dropdown-submenu {
+					display: block;
+				}
+			}
 
-	.dropdown-menu > li:hover > .dropdown-submenu,
-	.dropdown-menu > li:focus > .dropdown-submenu {
-		display: block;
-	}
-
-	/* rotate caret on hover */
-	.carot-left:after,
-	.dropdown-menu > li > a:hover:after,
-	.dropdown-menu > li > a:focus:after {
-		transform: rotate(90deg);
+			a:hover::after,
+			a:focus::after,
+			.carot-left:after {
+				transform: rotate(90deg);
+			}
+		}
 	}
 }
 
@@ -46,25 +59,12 @@
 	div {
 		display: inline-block;
 		vertical-align: middle;
+
+		p {
+			margin-bottom: 0;
+			font-size: 65%;
+		}
 	}
-}
-.navbar-brand img,
-.navbar-brand div {
-	display: inline-block;
-
-	p {
-		margin-bottom: 0;
-		font-size: 65%;
-	}
-}
-
-.navbar-brand div {
-	vertical-align: middle;
-}
-
-.navbar-brand div p {
-	margin-bottom: 0;
-	font-size: 65%;
 }
 
 .dropdown-menu {
@@ -75,14 +75,14 @@
 	background-color: var(--color-background);
 	color: var(--color-text-primary);
 	overflow: visible;
-}
 
-.dropdown-menu .active,
-.dropdown-item:active {
-	text-decoration: underline;
-	color: inherit;
-	background-color: var(--color-background);
-	color: var(--color-text-secondary);
+	& .active,
+	&:active {
+		text-decoration: underline;
+		color: inherit;
+		background-color: var(--color-background);
+		color: var(--color-text-secondary);
+	}
 }
 
 .dropdown-submenu {

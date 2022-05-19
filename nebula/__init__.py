@@ -95,8 +95,8 @@ def is_safe_url(target, request):
 def compile_sass():
     """Compiles the sass files."""
     print(" * Compiling sass files...")
-    subprocess.run([
-        "sass", "./nebula/static/scss/:./nebula/static/css"])
+    subprocess.run(
+        ["sass", "./nebula/static/scss/:./nebula/static/css"])
     print(" * Sass files compiled.")
 
 

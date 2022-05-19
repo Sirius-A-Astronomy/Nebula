@@ -13,7 +13,7 @@ class Config:
     # TODO: create proper key and place it somewhere else
     SECRET_KEY = 'VERY_SECRET_KEY_PLEASE_CHANGE_LATER_3e6fGh2'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'  # '///' means relative path
-    PERMAMENT_SESSION_LIFETIME = timedelta(minutes=30)
+    PERMAMENT_SESSION_LIFETIME = timedelta(hours=2)
 
 
 class DevelopmentConfig(Config):

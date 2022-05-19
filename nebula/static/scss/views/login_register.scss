@@ -1,3 +1,7 @@
+/*
+    Login / Register Page
+*/
+
 header {
 	margin-bottom: 0;
 }
@@ -9,7 +13,6 @@ footer {
 .login-register-container {
 	position: relative;
 	width: 100%;
-	/* background-color: var(--color-background); */
 	min-height: max(100vh, 700px);
 	overflow: hidden;
 }
@@ -72,7 +75,7 @@ form.sign-in-form {
 .title {
 	font-family: "Poppins", sans-serif;
 	font-size: 2.2rem;
-	color: var(--color-text-primary);
+	color: var(--color-neutral-50);
 	margin-bottom: 10px;
 }
 
@@ -135,14 +138,14 @@ h3 {
 	padding: 0.5em 2em;
 	background-image: linear-gradient(
 		45deg,
-		var(--color-accent),
-		var(--color-primary)
+		var(--color-accent-700),
+		var(--color-primary-900)
 	);
 	background-size: 300% auto;
 	border: none;
 	outline: none;
 	border-radius: 49px;
-	color: var(--color-text-on-accent);
+	color: var(--color-text-on-primary);
 	text-transform: uppercase;
 	font-weight: 600;
 	margin: 10px 0;
@@ -154,7 +157,7 @@ h3 {
 .btn:hover,
 .btn:focus {
 	background-position: right center;
-	color: var(--color-text-on-accent);
+	color: var(--color-text-on-primary);
 	box-shadow: none;
 }
 
@@ -212,7 +215,7 @@ h3 {
 }
 
 .right-panel {
-	opacity: 0;
+	animation: fadeout 2s ease-in-out;
 	pointer-events: none;
 	padding: 3rem 12% 2rem 17%;
 }

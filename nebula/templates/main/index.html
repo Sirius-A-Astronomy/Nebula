@@ -3,8 +3,9 @@
 {% block title %}Index - Nebula{% endblock %}
 {% macro level_list_item(course_level) -%}
 <p>
-    <a class="inline-link"
-        href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{ course_level.name
+    <a class="button-accent on-dark"
+        href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{
+        course_level.name
         }}</a>
 </p>
 {%- endmacro %}
@@ -43,7 +44,8 @@
                 <section class="container-index-browse">
                     <h2>Browse the Nebula</h2>
                     <p>
-                        <a class="inline-link" href="{{ url_for('courses.all_courses')}}">All
+                        <a class="button-accent on-dark"
+                            href="{{ url_for('courses.all_courses')}}">All
                             Courses</a>
                     </p>
                     <h3>Bachelor</h3>

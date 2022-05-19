@@ -16,6 +16,16 @@ window.MathJax = {
 	document.head.appendChild(script);
 })();
 
+function debounce(callback, wait) {
+	let timeout;
+	return (...args) => {
+		clearTimeout(timeout);
+		timeout = setTimeout(function () {
+			callback.apply(this, args);
+		}, wait);
+	};
+}
+
 /*
     SECTION Expendable-Text
 */
@@ -80,7 +90,7 @@ document
 		const expandTextToggle = document.createElement("a");
 		expandTextToggle.setAttribute("style", "font-size: 0.8125");
 		expandTextToggle.setAttribute("href", "#!");
-		expandTextToggle.classList.add("inline-link");
+		expandTextToggle.classList.add("button");
 		expandTextToggle.textContent = "Read more";
 		const expandableTextContentTruncated =
 			expandableTextContent.substring(0, displayLimit) + " (...) ";
@@ -143,7 +153,7 @@ document
     SECTION Toggle latex instructions
 */
 // first hide all latex instructions
-instructionContainers = document.querySelectorAll(
+let instructionContainers = document.querySelectorAll(
 	".latex-instructions-container"
 );
 
@@ -175,11 +185,8 @@ document
 document
 	.querySelectorAll(".show-preview-button")
 	.forEach((showPreviewButton) => {
+		showPreviewButton.style.display = "inline";
 		showPreviewButton.addEventListener("click", function (e) {
-			const previewContent = e.target.parentElement.querySelector(
-				".preview-form-container"
-			);
-			previewContent.style.display = "block";
 			document
 				.querySelectorAll(
 					`[data-preview-toggled-by=${showPreviewButton.id}]`
@@ -188,10 +195,25 @@ document
 					let inputForm = document.querySelector(
 						`#${element.attributes["data-preview-value-from"].value}`
 					);
-					element.textContent = inputForm.value;
-					showPreviewButton.disabled = true;
-					MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
-					showPreviewButton.disabled = false;
+
+					element.style.display = "block";
+					let previewContent =
+						element.querySelector(".preview-content");
+					previewContent.textContent = inputForm.value;
+					MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+					showPreviewButton.style.display = "none";
+
+					inputForm.addEventListener(
+						"keyup",
+						debounce(() => {
+							previewContent.textContent = inputForm.value;
+							MathJax.Hub.Queue([
+								"Typeset",
+								MathJax.Hub,
+								previewContent,
+							]);
+						}, 500)
+					);
 				});
 			e.target.blur();
 		});
@@ -246,13 +268,37 @@ document.querySelectorAll("#question-edit-button").forEach((button) => {
 });
 
 autoAdjustTextAreas.forEach((textarea) => {
-	console.log(textarea.scrollHeight);
 	textarea.addEventListener("keyup", function (e) {
 		autoAdjustTextArea(textarea);
 	});
 });
 
 // !SECTION Edit-Question-Button AND auto-adjust-textarea
+
+/*
+    SECTION Add-Question-Button
+*/
+const addAnswerContainers = document.querySelectorAll(
+	".container-question-answers-add"
+);
+
+addAnswerContainers.forEach((addAnswerContainer) => {
+	addAnswerContainer.style.display = "none";
+});
+
+document.querySelectorAll("#add-answer-button").forEach((button) => {
+	button.addEventListener("click", function (e) {
+		addAnswerContainers.forEach((addAnswerContainer) => {
+			if (addAnswerContainer.style.display == "none") {
+				addAnswerContainer.style.display = "block";
+				button.textContent = "Cancel";
+			} else {
+				addAnswerContainer.style.display = "none";
+				button.textContent = "Add Answer";
+			}
+		});
+	});
+});
 
 /*
     SECTION show-more-button

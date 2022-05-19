@@ -61,50 +61,94 @@ _Note: to deactivate the virtual environment symply run ```deactivate```_
 ```bash
 python3 -m pip install -r requirements.txt
 ```
+
+* You will also need to install nodejs and sass to be able to compile the scss files to valid css
+* [installing nodejs](https://nodejs.org/en/download/package-manager/)
+
+* Now nodejs is installed, you can install sass with:
+
+```bash
+npm install -g sass
+```
+
+_Note: omit the -g flag if you don't wish to install sass globally_
+
+
 </details>
 
 
-6. It should be possible to run Nebula via the following command:
-
-```bash
-env FLASK_APP=nebula FLASK_ENV=development flask run
-```
-_Note: to close the flask local webserver: ctrl+c_
-
-7. It should be available at [localhost:5000](localhost:5000/) in your browser, or via the command line.
-
-<details><summary>8. Most likely you'll not be able to access the website just yet as the database needs to be created locally as well.</summary>
+<details><summary>6. Create the nebula database</summary>
 
 1. To create the database you'll first need to install nebula as a package. (still within the virtual environment)
 
     ```bash
     python3 -m pip install -e .
     ```
-2. Enter python:
-   
-   ```bash
-   python3
-   ```
-3. Create the database:
+2. Now initialise the database:
 
-    ```python
-    from nebula import create_app, db
-
-    app = create_app()
-
-    app.app_context().push()
-
-    db.create_all()
-
-    exit()
+    ```bash
+    python3 database-setup/init_db.py
     ```
 
-You can now run Nebula as shown above, however you'll find that there are no courses or anything on the site as the database we just created is completely empty. To fix that run (in the virtual environment):
-```bash
-python3 database-setup/database_setup.py
-```
+3. The database is still empty, though. Let's fill it with some sample data.
+
+    ```bash
+    python3 database-setup/database_test_data.py
+    ```
+
 </details>
+
+
+7. It should be possible to run Nebula via the following command:
+
+```bash
+env FLASK_APP=nebula FLASK_ENV=development flask run
+```
+
+_Note: to close the flask local webserver: ctrl+c_
+
+8. It should be available at [localhost:5000](localhost:5000/) in your browser, or via a link in the command prompt.
+
 Now you should be good to go!
+
+## Nebula uses SASS
+
+[SASS, or Synthactically Awesome Style Sheets](https://sass-lang.com/), is a superset of CSS. Since nebula uses the SCSS syntax any css written in the .scss files is valid
+
+When Nebula builds it will automatically compile all sass files in the static/scss folder into css files on startup. For this it uses sass via a subprocess on the local machine. This needs to be installed (step 5 of installation and setup). 
+
+To also have nebula detect changes and automatically reload while you are editing scss files you can start nebula with an extra environment variable.
+
+```bash
+export FLASK_RUN_EXTRA_FILES="path/to/file:/path/to/other/file"
+```
+
+Since every file needs to be added individually this can of course get really tedious. By adding the following code to your ~/.bashrc or ~/.bash_profile you can start nebula with one simple command that automatically finds all scss files and tell nebula to watch them for changes.
+
+```bash
+function nebrunner () {
+    echo "Running nebula"
+    export FLASK_APP=nebula
+    export FLASK_ENV=development
+
+    # find all scss files and add them to the extra files that flask will watch
+    export search_dir="./nebula/static/scss"/*
+    export FLASK_RUN_EXTRA_FILES=""
+
+    for i in $(find $search_dir -name '*.scss');
+    do
+        export FLASK_RUN_EXTRA_FILES="$FLASK_RUN_EXTRA_FILES$i:"
+        
+    done;
+    export FLASK_RUN_EXTRA_FILES=${FLASK_RUN_EXTRA_FILES%?} # remove last colon
+
+    # run flask
+    python3 -m flask run
+}
+```
+_Note: this will only watch files that exist when nebula starts. To also watch a new file, restart nebula._
+
+Now starting nebula is as simple as running ```nebularun``` in your command line.
 
 
 ## Testing

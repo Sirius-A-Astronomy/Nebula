@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" type="text/css"
-        href="{{ url_for('static', filename='css/lato.css') }}" />
+        href="{{ url_for('static', filename='css/fonts/fonts.css') }}" />
     <link
         href="//fonts.googleapis.com/css?family=Roboto+Mono:200,300,400,500|Roboto:200,300,400,500"
         rel="stylesheet" />
@@ -119,6 +119,13 @@
                                     class="nav-link active" {% else %} class="nav-link" {% endif %}
                                     href="{{ url_for('main.index') }}">Home</a>
                             </li>
+                            <li class="nav-item">
+                                <a {% if request.path==url_for('add_question.add_question') %}
+                                    class="nav-link active" {% else %} class="nav-link" {% endif %}
+                                    href="{{ url_for('add_question.add_question')}}">Submit a
+                                    question</a>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a {% if '/course' in request.path or '/level' in request.path %}
                                     class="nav-link dropdown-toggle active" {% else %}
@@ -221,7 +228,7 @@
     {% endblock include_js %}
     <!--- Scripts -->
     <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
-    <script src="{{url_for('static', filename='js/views.js')}}"></script>
+    <script type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
 </body>
 
 </html>

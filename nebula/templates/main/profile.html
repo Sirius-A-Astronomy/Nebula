@@ -1,5 +1,8 @@
 {% extends 'layouts/base.html' %}
-{% block title %}Login - Nebula{% endblock %}
+{% block title %}Profile - Nebula{% endblock %}
+{% block include_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/views/profile.css') }}">
+{% endblock %}
 
 {% macro question_view(question) -%}
 <div class="question-list-item">
@@ -9,16 +12,20 @@
     </a>
     <div class="text-secondary question-info-main">
         Posted {{ pretty_date(question.created_at)}}
-        <a class="text-secondary"
+        by <a href="#!" class="text-secondary">
+            {{ question.user.username }}
+            <!-- by <a href=" url_for('user.user', user_uuid=question.user.uuid) "> -->
+        </a>
+        in <a class="text-secondary"
             href="{{ url_for('course.course', course_level_code=question.course.course_level.code, course_code=question.course.code) }}">
-            in {{ question.course.name }}
+            {{ question.course.name }}
         </a>
     </div>
     <div class="text-tertiary question-info">
         {% if question.comments|count == 1 %}
-        {{ question.comments|count }} comment -
+        {{ question.comments|count }} comment ·
         {% else %}
-        {{ question.comments|count }} comments -
+        {{ question.comments|count }} comments ·
         {% endif %}
 
         {% if question.answers == 1 %}
@@ -39,9 +46,13 @@
     </a>
     <div class="text-secondary question-posted">
         Posted {{ pretty_date(answer.created_at)}}
-        <a class="text-secondary"
+        by <a href="#!" class="text-secondary">
+            {{ answer.user.username }}
+            <!-- by <a href=" url_for('user.user', user_uuid=question.user.uuid) "> -->
+        </a>
+        in <a class="text-secondary"
             href="{{ url_for('course.course', course_level_code=answer.question.course.course_level.code, course_code=answer.question.course.code) }}">
-            in {{ answer.question.course.name }}
+            {{ answer.question.course.name }}
         </a>
     </div>
     <div class="text-tertiary question-info">
@@ -85,7 +96,8 @@
                         else "Admin" }}</p>
 
                     <p>
-                        <a class="inline-link" href="{{ url_for('user.logout') }}">Logout</a>
+                        <a class="button-accent on-primary"
+                            href="{{ url_for('user.logout') }}">Logout</a>
                     </p>
                 </div>
 
@@ -108,7 +120,7 @@
                     {% endfor %}
                 </div>
                 {% if current_user.questions|length >= 3 %}
-                <a href="#!" class="inline-link show-more-button" id="show-all-questions">Show
+                <a href="#!" class="button-accent show-more-button" id="show-all-questions">Show
                     more</a>
                 {% endif %}
                 {% endif %}
@@ -130,7 +142,7 @@
                     {% endfor %}
                 </div>
                 {% if current_user.answers|length >= 3 %}
-                <a href="#!" class="inline-link show-more-button" id="show-all-answers">Show
+                <a href="#!" class="button-accent show-more-button" id="show-all-answers">Show
                     more</a>
                 {% endif %}
                 {% endif %}

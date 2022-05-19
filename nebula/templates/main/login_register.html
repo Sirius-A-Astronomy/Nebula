@@ -2,14 +2,18 @@
 {% block title %}Register - Nebula{% endblock %}
 
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/login_register.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/views/login_register.css') }}">
 {% endblock %}
 {% block body %}
 <main class="no-header-margin">
     <div {% if register|lower=='true' %} class="login-register-container sign-up-mode" {% else %}
         class="login-register-container" {% endif %}>
-        <div class="stars"></div>
-        <div class="twinkling"></div>
+        <div class="stars-container">
+            <div class="stars"></div>
+            <div class="twinkling"></div>
+        </div>
+
+
         <div class="forms-container">
             <div class="signin-signup">
                 <form action="{{ url_for('user.login_register', next=next) }}" method="post"
@@ -62,11 +66,13 @@
                                 <div class="input-field">
                                     {{ register_form.first_name.label(class="form-label") }}
                                     {% if register_form.first_name.errors|length > 0 %}
-                                    {{ register_form.first_name(class="form-control is-invalid",
+                                    {{ register_form.first_name(class="form-control
+                                    is-invalid",
                                     id="first-name-input-field") }}
                                     <div class="input-feedback invalid-feedback"
                                         id="first-name-input-field-feedback">
-                                        {% for error in register_form['first_name'].errors %}
+                                        {% for error in register_form['first_name'].errors
+                                        %}
                                         {{ error }}
                                         {% endfor %}
                                     </div>
@@ -83,7 +89,8 @@
                                 <div class="input-field">
                                     {{ register_form.last_name.label(class="form-label") }}
                                     {% if register_form.last_name.errors|length > 0 %}
-                                    {{ register_form.last_name(class="form-control is-invalid",
+                                    {{ register_form.last_name(class="form-control
+                                    is-invalid",
                                     id="last-name-input-field") }}
                                     <div class="input-feedback invalid-feedback"
                                         id="last-name-input-field-feedback">
@@ -113,7 +120,8 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                            {{ register_form.email(class="form-control", id="email-input-field") }}
+                            {{ register_form.email(class="form-control",
+                            id="email-input-field") }}
                             <div id="email-input-field-feedback"
                                 class="input-feedback invalid-feedback"></div>
                             {% endif %}
@@ -166,7 +174,8 @@
                         <div class="input-field">
                             {{ register_form.password_confirm.label(class="form-label") }}
                             {% if register_form.password_confirm.errors|length > 0 %}
-                            {{ register_form.password_confirm(class="form-control is-invalid",
+                            {{ register_form.password_confirm(class="form-control
+                            is-invalid",
                             id="password-confirm-input-field") }}
                             <div class="input-feedback invalid-feedback"
                                 id="password-confirmation-input-field-feedback">

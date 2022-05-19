@@ -1,25 +1,25 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ course_level.study_type }} {{ course_level.name }} - Nebula{% endblock %}
 {% macro course_list_item(course) -%}
-    <a class="inline-link"
-       href="{{ url_for('course.course', course_level_code = course_level.code, course_code=course.code)}}">
-        <div class="row">
-            <div class="col-sm-1">{{ course.semester }}</div>
-            <div class="col-sm">{{ course.name }}</div>
-            <div class="col-sm-auto">{{ course.code }}</div>
-        </div>
-    </a>
+<a class="button-accent"
+    href="{{ url_for('course.course', course_level_code = course_level.code, course_code=course.code)}}">
+    <div class="row">
+        <div class="col-sm-1">{{ course.semester }}</div>
+        <div class="col-sm">{{ course.name }}</div>
+        <div class="col-sm-auto">{{ course.code }}</div>
+    </div>
+</a>
 {%- endmacro %}
 <!-- Level dependent url for course pages -->
 <!-- href="{{url_for('course.course', course_code=course.code, course_level_code = course_level.code, ref = True)}}"> -->
 {% block body %}
-    <main>
-        <section class="container">
-            <h2>{{ course_level.study_type }} {{ course_level.name }}</h2>
-            <h3>Courses</h3>
-            <div class="container">
-                {% for course in courses %}{{ course_list_item(course)}}{% endfor %}
-            </div>
-        </section>
-    </main>
+<main>
+    <section class="container">
+        <h2>{{ course_level.study_type }} {{ course_level.name }}</h2>
+        <h3>Courses</h3>
+        <div class="container">
+            {% for course in courses %}{{ course_list_item(course)}}{% endfor %}
+        </div>
+    </section>
+</main>
 {% endblock %}

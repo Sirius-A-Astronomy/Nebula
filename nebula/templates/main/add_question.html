@@ -27,7 +27,8 @@
             </div>
 
             <div>
-                <a href="#!" class="inline-link" id="toggle-latex-instructions-button">Want to learn
+                <a href="#!" class="button-accent" id="toggle-latex-instructions-button">Want to
+                    learn
                     how to use LaTex in
                     your question?</a>
             </div>
@@ -62,11 +63,15 @@
                 {{ question_form.title(class="form-control", id="title-input-field") }}
                 <div class="input-feedback" id="title-input-field-feedback"></div>
                 {% endif %}
+                <a href="#!" id="show-title-preview" class="show-preview-button button-accent">Show
+                    preview</a>
             </div>
-            <a href="#!" id="show-title-preview" class="show-preview-button inline-link">Show
-                preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-title-preview"
                 data-preview-value-from="title-input-field">
+                <div class="text-tertiary">
+                    Preview title:
+                </div>
+                <div class="preview-content"></div>
             </div>
             <div class="input-field">
                 {{ question_form.content.label(class="form-label") }}
@@ -83,13 +88,18 @@
                 id="content-input-field") }}
                 <div class="input-feedback" id="content-input-field-feedback"></div>
                 {% endif %}
+                <a href="#!" id="show-question-preview"
+                    class="show-preview-button button-accent">Show
+                    preview</a>
             </div>
-            <a href="#!" id="show-question-preview" class="show-preview-button inline-link">Show
-                preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-question-preview"
                 data-preview-value-from="content-input-field">
+                <div class="text-tertiary">
+                    Preview question content:
+                </div>
+                <div class="preview-content"></div>
             </div>
-            <div class="input-field">
+            <!-- <div class="input-field">
                 {{ question_form.answer.label(class="form-label") }}
                 {% if question_form.answer.errors|length > 0 %}
                 {{ question_form.answer(class="form-control is-invalid auto-adjust-textarea",
@@ -104,12 +114,16 @@
                 id="answer-input-field") }}
                 <div class="input-feedback" id="answer-input-field-feedback"></div>
                 {% endif %}
+                <a href="#!" id="show-answer-preview" class="show-preview-button button-accent">Show
+                    preview</a>
             </div>
-            <a href="#!" id="show-answer-preview" class="show-preview-button inline-link">Show
-                preview</a>
             <div class="preview-form-container" data-preview-toggled-by="show-answer-preview"
-                data-preview-value-from="question-answer-input">
-            </div>
+                data-preview-value-from="answer-input-field">
+                <div class="text-tertiary">
+                    Preview:
+                </div>
+                <div class="preview-content"></div>
+            </div> -->
             <div class="input-field">
                 {{ question_form.difficulty.label(class="form-label") }}
                 {% if question_form.difficulty.errors|length > 0 %}

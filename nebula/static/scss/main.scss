@@ -1,18 +1,13 @@
 /* 
-    CSS is written in SCSS, which compiles to CSS.
-    SCSS is a superset of CSS, so you can use all of the CSS features.
+    Nebula uses the SCSS syntax to write stylesheets.
+    The main.scss file is the entry point for all stylesheets.
+    
+    The main.scss file is compiled into main.css.
+    Please do not write directly to any of the files in the /css directory, 
+        !!these files may get overwritten when nebula builds!!
+        instead, write to in the /scss directory.
 
-    Please do not write directly to any of the files in the static/css directory.
-    Instead, use the SCSS files in the static/scss directory.
-
-    When nebula is built, the SCSS files are compiled to CSS files.
-    The CSS files are then copied to the /css directory.
-    Any CSS files will be overwritten when nebula is built.
-
-    To have live compilation while you are writing SCSS files, you can use an extension like Live Sass Compiler (in VS Code),
-        or another SCSS compiler. Make sure that the source directory is set to the static/scss directory and the
-        target directory is set to the static/css directory.
-    Alternatively, you can restart the development server and it will automatically compile the SCSS files.
+    Please see the Nebula documentation for more information.
     
     !!!NOTE the scss compiler in nebula does not like mixing types (e.g. vh and px) in 'calc', 'min' and 'max' functions. To use them,
         you must escape them with #{" calc(...) "} or #{" min(...) "} or #{" max(...) "}. This is because the scss compiler (libsass) in nebula is deprecated,
@@ -21,8 +16,13 @@
     @TODO: Find a better way of compiling SCSS files within Python.
 */
 
-@import "colors";
-@import "components/nav";
+/* 
+    Imports all forwarded SCSS files 
+
+    To forward a SCSS file, add the @forward 'file_name' to the index.scss file.
+*/
+@use "abstracts"; // Imports all files specified in the index.scss file in the abstracts directory.
+@use "components";
 
 .bg-blue {
 	background-color: var(--color-primary) !important;
@@ -52,122 +52,6 @@ body {
 }
 
 /* 
-    Typography 
-*/
-
-body {
-	font-family: "Lato", "Roboto", "Arial", sans-serif;
-	font-weight: 300;
-	color: var(--color-text-primary);
-}
-
-h1,
-h2,
-h3 {
-	font-weight: 400;
-	font-family: "Poppins", "Roboto", "Arial", sans-serif;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
-}
-
-h1 {
-	margin-top: 0px;
-	font-size: 2.7rem;
-	margin: 1rem 0px 1rem 0px;
-	letter-spacing: -0.04rem;
-}
-
-h2 {
-	font-size: 1.5rem;
-	margin: 0px 0px 1rem 0px;
-	letter-spacing: -0.04rem;
-}
-
-h3 {
-	/* Tertiary titles */
-	margin: 1rem 0px 0.5rem 0px;
-	color: var(--color-text-secondary);
-	font-size: 1rem;
-	letter-spacing: 0.04rem;
-}
-
-.text-primary {
-	color: var(--color-text-primary) !important;
-}
-
-.text-secondary {
-	color: var(--color-text-secondary) !important;
-}
-
-.text-tertiary {
-	color: var(--color-text-tertiary) !important;
-}
-
-.text-accent {
-	color: var(--color-accent) !important;
-}
-
-p {
-	/* General Text */
-	margin: 0 0 0.5rem 0;
-	font-size: 0.8125rem;
-	font-weight: 400;
-	letter-spacing: 0.04rem;
-	line-height: 1.25rem;
-	word-wrap: break-word;
-}
-
-p:last-child {
-	margin-bottom: 0 !important;
-}
-
-.small-accent {
-	font-family: "PT Sans", sans-serif;
-	font-weight: 400;
-	font-size: 0.875rem;
-	color: var(--color-accent);
-}
-
-.inline-link {
-	/* inline links */
-	color: var(--color-accent);
-
-	opacity: 0.87;
-	text-decoration: none;
-	font-family: "Roboto", sans-serif;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
-	font-size: 0.875rem;
-	font-weight: 500;
-	letter-spacing: 0.04rem;
-	line-height: 1.25rem;
-
-	-webkit-transition: opacity 0.1s;
-	transition: opacity 0.1s;
-}
-
-.inline-link:hover,
-.inline-link:focus {
-	color: var(--color-accent-focus);
-}
-
-.inline-link-secondary {
-	color: var(--color-text-tertiary);
-	font-weight: 500;
-	letter-spacing: 0.04rem;
-	text-decoration: none;
-	font-family: "Roboto", sans-serif;
-
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
-}
-
-.inline-link-secondary:hover,
-.inline-link-secondary:focus {
-	color: var(--color-text-secondary);
-}
-
-/* 
     Layout
 */
 
@@ -182,7 +66,7 @@ p:last-child {
 */
 
 main {
-	min-height: #{"calc(100vh - 140px)"};
+	min-height: calc(100vh - 140px);
 }
 
 /*
@@ -333,6 +217,7 @@ footer p {
 	color: var(--color-text-on-primary);
 	background-position: right center;
 	border: none;
+	box-shadow: none;
 }
 
 .btn-primary:disabled {
@@ -345,119 +230,6 @@ footer p {
 a {
 	text-decoration: none;
 }
-
-/*
-    Forms
-*/
-
-.input-field {
-	background-color: var(--color-background-secondary);
-	color: var(--color-text-primary);
-	border-radius: 0.7rem;
-	margin-bottom: 1rem;
-}
-.input-field,
-.input-field > * {
-	transition: all 0.1s ease-in-out;
-}
-
-.form-label {
-	font-size: 0.875rem;
-	margin-bottom: 0.5rem;
-	margin-left: 0.75rem;
-}
-
-.input-feedback {
-	color: var(--color-text-secondary);
-	font-size: 0.875rem;
-	margin-top: 0.25rem;
-	margin-left: 0.75rem;
-	margin-left: 0.75rem;
-}
-
-.form-control,
-.form-select {
-	color: var(--color-text-primary);
-	border: none;
-	padding-top: 0;
-	background-color: var(--color-background-secondary);
-	border: none;
-	border-radius: 0.7rem;
-	box-shadow: none;
-}
-
-.input-field:focus-within {
-	color: var(--color-text-primary);
-	background-color: var(--color-background-tertiary);
-	border: none;
-	box-shadow: none;
-}
-
-.form-control:focus,
-.form-select:focus {
-	color: var(--color-text-primary);
-	background-color: var(--color-background-tertiary);
-	border: none;
-	box-shadow: none;
-}
-
-/* Form Validations */
-
-/* reset bootstrap styling */
-.form-control.is-valid,
-.form-select.is-valid,
-.form-select.is-valid:focus,
-.form-control.is-valid:focus,
-.form-constol.is-invalid,
-.form-select.is-invalid,
-.form-select.is-invalid:focus,
-.form-control.is-invalid:focus {
-	border: none;
-	box-shadow: none;
-	outline: none;
-	background-image: none;
-	background-color: none;
-}
-
-.input-field.is-valid {
-	outline: var(--color-form-is-valid) solid 2px;
-	box-shadow: none;
-}
-
-.input-field:focus-within.is-valid {
-	box-shadow: 0 0 0 0.25rem var(--color-form-is-valid);
-}
-
-.input-field.is-invalid {
-	outline: var(--color-form-is-invalid) solid 2px;
-	box-shadow: none;
-}
-
-.input-field:focus-within.is-invalid {
-	box-shadow: 0 0 0 0.25rem var(--color-form-is-invalid);
-}
-
-.input-field.is-validating {
-	outline: var(--color-text-secondary) solid 2px;
-	box-shadow: none;
-}
-
-.input-field:focus-within.is-validating {
-	box-shadow: 0 0 0 0.25rem var(--color-text-secondary);
-}
-
-.validating-feedback {
-	color: var(--color-text-primary);
-}
-
-.valid-feedback {
-	color: var(--color-form-is-valid);
-}
-
-.invalid-feedback {
-	color: var(--color-form-is-invalid);
-}
-
 /*
     Index Page
 */
@@ -476,7 +248,7 @@ a {
 	font-family: "Poppins", sans-serif;
 }
 
-.container-index .inline-link {
+.container-index .button-accent {
 	font-size: 1.2rem;
 }
 
@@ -629,7 +401,7 @@ a {
 	.container-index p {
 		font-size: 1rem;
 	}
-	.container-index .inline-link {
+	.container-index .button-accent {
 		font-size: 1rem;
 	}
 	.container-index h3 {
@@ -728,12 +500,21 @@ a {
 	}
 }
 
+// .stars-container {
+// 	position: relative;
+// 	width: 100%;
+// 	height: 100%;
+// 	overflow: hidden;
+// 	min-height: max(100vh, 900px);
+// 	display: flex;
+// 	flex-grow: 1;
+// pointer-events: none;
+
 .stars {
 	background: black url("../images/stars.png") repeat;
 	position: absolute;
 	background-position: center;
 	height: 100%;
-	min-height: 100vh;
 	top: 0;
 	bottom: 0;
 	left: 0;
@@ -745,7 +526,6 @@ a {
 .twinkling {
 	width: 10000px;
 	height: 100%;
-	min-height: 100vh;
 	background: transparent url("../images/twinkling.png") repeat;
 	background-size: 1000px 1000px;
 	position: absolute;
@@ -760,7 +540,7 @@ a {
 	-webkit-animation: move-background 70s linear infinite;
 	animation: move-background 70s linear infinite;
 }
-
+// }
 /*
     Add Question Page
 */
@@ -771,221 +551,7 @@ a {
 	justify-content: space-between;
 }
 
-.show-preview-button,
 .latex-instructions-container,
 #toggle-latex-instructions-button {
-	margin-left: 0.75rem;
-}
-
-/*
-    Course Page
-*/
-
-.question-list-item-title {
-	min-width: 50%;
-	flex-grow: 4;
-}
-
-@media (max-width: 440px) {
-	.question-list-item {
-		flex-direction: column;
-	}
-}
-
-/*
-    Question Page
-*/
-
-#comment-submit-button {
-	margin-inline-start: 0.5rem;
-	max-height: 2.5rem;
-	align-self: flex-end;
-}
-
-.container-question-info {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.question-info {
-	display: flex;
-	flex-direction: row;
-	color: var(--color-text-secondary);
-}
-
-.question-comment {
-	margin-top: 0.5rem;
-}
-
-.question-new-comment {
-	animation: new-element 2s ease-in-out;
-	-webkit-animation: new-element 2s ease-in-out;
-	-moz-animation: new-element 2s ease-in-out;
-	-ms-animation: new-element 2s ease-in-out;
-	-o-animation: new-element 2s ease-in-out;
-}
-
-@keyframes new-element {
-	0% {
-		background-color: var(--color-background-secondary);
-	}
-	100% {
-		background-color: transparent;
-	}
-}
-
-.question-comments-content {
-	margin-top: 1rem;
-}
-
-.question-answer {
-	display: grid;
-	grid-template-columns: 3fr 1fr;
-	align-items: flex-start;
-	margin-top: 0.5rem;
-}
-
-.question-answer .answer-content {
-	grid-column: 1 / 2;
-	grid-row: 2 / 3;
-	justify-content: start;
-	align-items: flex-start;
-}
-
-.question-answer .answer-content p {
-	margin-top: 0.2rem;
-	font-size: 1rem;
-	font-weight: 200;
-}
-
-.question-answer .answer-sources {
-	grid-column: 2 / 3;
-	grid-row: 1 / 3;
-}
-
-.question-answer .answer-sources a {
-	font-size: 0.875rem;
-}
-
-.question-answer .answer-info {
-	grid-column: 1 / 2;
-	grid-row: 1 / 2;
-}
-
-.question-answer .answer-info p {
-	font-size: 0.875rem;
-	font-weight: 500;
-}
-
-@media (max-width: 991px) {
-	.container-question-info {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.question-answer {
-		grid-template-columns: 1fr;
-		margin-bottom: 0.5rem;
-	}
-	.question-answer .answer-content {
-		grid-column: 1 / 2;
-		grid-row: 2 / 3;
-		justify-content: start;
-	}
-	.question-answer .answer-sources {
-		grid-column: 1 / 2;
-		grid-row: 3 / 4;
-	}
-	.question-answer .answer-info {
-		grid-column: 1 / 2;
-		grid-row: 1 / 2;
-	}
-}
-/*
-    Profile Page
-*/
-
-.container-background.container-background-profile::before {
-	right: 65%;
-}
-
-.container-profile {
-	display: grid;
-	grid-template-columns: 1fr 2fr;
-}
-
-.container-profile .panel {
-	padding: 2rem 0.5rem;
-	display: flex;
-	flex-direction: column;
-}
-
-.container-profile .left-panel {
-	margin-top: 10%;
-	justify-content: start;
-	align-items: center;
-}
-
-.container-profile .right-panel {
-	justify-content: center;
-	align-items: center;
-}
-
-.container-profile .profile-identity {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.container-profile .profile-identity img {
-	max-width: 100px;
-}
-
-.container-profile .profile-summary {
-	width: 100%;
-	max-width: 400px;
-	padding: 1rem 3rem 0 3rem;
-}
-.container-profile .questions-list,
-.container-profile .answers-list {
-	padding: 0 0.5rem 0 0.5rem;
-	max-width: 600px;
-	width: 100%;
-}
-
-.container-profile .profile-submitted h2 {
-	margin-top: 2rem;
-}
-
-.container-profile .question-list-item {
-	margin-bottom: 0.5rem;
-}
-
-@media (max-width: 768px) {
-	.container-profile {
-		grid-template-columns: 1fr;
-	}
-
-	.container-profile .left-panel {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: flex-start;
-	}
-
-	.container-profile .profile-summary {
-		width: auto;
-		padding: 1rem;
-	}
-
-	.container-profile .profile-summary p {
-		margin-bottom: 0;
-	}
-
-	.container-profile .profile-identity {
-		padding: 1rem;
-	}
+	margin-left: 1rem;
 }
