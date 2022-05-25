@@ -1,8 +1,9 @@
+from re import sub
 from nebula import db, create_app
 import datetime
 from random import randrange
 from datetime import timedelta
-from nebula.models import User, Course, CourseLevel, Question, Comment, Answer
+from nebula.models import User, Course, CourseLevel, Question, Comment, Answer, SubjectTag
 from nebula.views.user import create_user
 
 app = create_app()
@@ -212,48 +213,87 @@ users = [
                 access_level=3, first_name="Pieter", last_name="Huizenga"),
 ]
 
+subject_tags = {
+    "Astronomy":     SubjectTag(name="Astronomy"),
+    "Astrophysics":  SubjectTag(name="Astrophysics"),
+    "Computing":     SubjectTag(name="Computing"),
+    "Earth Science": SubjectTag(name="Earth Science"),
+    "Mathematics":   SubjectTag(name="Mathematics"),
+    "Physics":       SubjectTag(name="Physics"),
+    "Quantum Physics": SubjectTag(name="Quantum Physics"),
+    "Statistics":    SubjectTag(name="Statistics")
+}
+
+
 print(users)
 questions = [
     Question(title="What is the answer to life, the universe and everything?",
              content="How do you know?",
              course=courses[0],
+             subject_tags=[subject_tags["Physics"]],
              user=users[5]),
     Question(title="This is the first question",
              content="This is the first content",
              course=courses[0],
+             subject_tags=[subject_tags["Mathematics"]],
+
              user=users[5]),
     Question(title="This is the second question",
              content="This is the second content",
              course=courses[0],
+             subject_tags=[subject_tags["Statistics"]],
              user=users[5]),
     Question(title="This is the third question",
              content="This is the third content",
-             course=courses[0],
+             course=courses[13],
+             subject_tags=[subject_tags["Astronomy"],
+                           subject_tags["Astrophysics"], subject_tags["Computing"]],
              user=users[5]),
     Question(title="This is the fourth question",
              content="This is the fourth content",
              course=courses[0],
+             subject_tags=[subject_tags["Earth Science"],
+                           subject_tags["Mathematics"]],
              user=users[3]),
     Question(title="This is the fifth question",
              content="This is the fifth content",
              course=courses[0],
+             subject_tags=[subject_tags["Physics"],
+                           subject_tags["Quantum Physics"]],
              user=users[2]),
     Question(title="This is the sixth question",
              content="This is the sixth content",
              course=courses[0],
+             subject_tags=[subject_tags["Physics"],
+                           subject_tags["Quantum Physics"]],
              user=users[1]),
     Question(title="This is the seventh question",
              content="This is the seventh content",
              course=courses[0],
+             subject_tags=[subject_tags["Statistics"],
+                           subject_tags["Quantum Physics"]],
              user=users[0]),
     Question(title="This is the eighth question",
              content="This is the eighth content",
              course=courses[0],
+             subject_tags=[subject_tags["Physics"]],
              user=users[0]),
     Question(title="This is the ninth question",
              content="This is the ninth content",
              course=courses[0],
-             user=users[4])
+             subject_tags=[subject_tags["Physics"]],
+             user=users[4]),
+    Question(title="This is the tenth question",
+             content="This is the tenth content",
+             course=courses[1],
+             subject_tags=[subject_tags["Astronomy"]],
+             user=users[1]),
+    Question(title="This is the eleventh question",
+             content="This is the eleventh content",
+             course=courses[1],
+             subject_tags=[subject_tags["Astronomy"]],
+             user=users[0]),
+
 ]
 
 Answers = [
