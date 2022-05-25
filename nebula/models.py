@@ -55,6 +55,14 @@ class Base(db.Model):
     updated_at = db.Column(DateTime(timezone=True), onupdate=func.now())
 
 
+subject_tags = db.Table('subject_tags',
+                        db.Column('subject_tag_uuid', GUID(),
+                                  db.ForeignKey('subject_tag.uuid')),
+                        db.Column('question_uuid', GUID(),
+                                  db.ForeignKey('question.uuid'))
+                        )
+
+
 class User(Base):
     """
         User model for the database.
@@ -163,8 +171,18 @@ class Question(Base):
     # TODO relation many-to-many: many: subject_tag, many: questions
     # TODO relation many-to-many: many: type_tag, many: questions
 
+    subject_tags = db.relationship('SubjectTag', secondary=subject_tags,
+                                   backref=db.backref('questions', lazy=True))
+
     def __repr__(self):
         return f"Question(\"{self.title}\")"
+
+
+class SubjectTag(Base):
+    name = db.Column(db.String(128), nullable=False)
+
+    def __repr__(self):
+        return f"SubjectTag(\"{self.name}\")"
 
 
 class Comment(Base):
