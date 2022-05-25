@@ -11,6 +11,7 @@ $colors: (
 		100: #bcddfc,
 		200: #92c9fb,
 		300: #67b4f9,
+		400: #48a3f8,
 		500: #2f94f6,
 		600: #2e86e8,
 		700: #2a74d4,
@@ -79,14 +80,14 @@ $colors: (
     Light Theme color-scheme (Change colors for the light theme here)
     */
 
-	--color-background: var(--color-neutral-100);
-	--color-background-secondary: var(--color-secondary-200);
-	--color-background-tertiary: var(--color-secondary-300);
-	--color-text-primary: var(--color-neutral-800);
-	--color-text-secondary: var(--color-neutral-600);
-	--color-text-tertiary: var(--color-neutral-500);
+	--color-background: var(--color-neutral-50);
+	--color-background-secondary: var(--color-secondary-100);
+	--color-background-tertiary: var(--color-secondary-200);
+	--color-text-primary: var(--color-neutral-900);
+	--color-text-secondary: var(--color-neutral-800);
+	--color-text-tertiary: var(--color-neutral-700);
 	--color-text-on-primary: var(--color-secondary-50);
-	--color-text-on-accent: var(--color-neutral-900);
+	--color-text-on-accent: var(--color-neutral-50);
 	--color-primary: var(--color-primary-800);
 	--color-secondary: var(--color-primary-600);
 	--color-tertiary: var(--color-primary-500);
@@ -94,24 +95,24 @@ $colors: (
 	--color-accent-focus: var(--color-accent-700);
 	--color-accent-on-dark-background: var(--color-accent-200);
 	--color-accent-on-dark-background-focus: var(--color-accent-300);
-	--color-form-is-valid: #198754;
-	--color-form-is-invalid: #dc3545;
+	--color-form-is-valid: var(--color-primary-600);
+	--color-form-is-invalid: var(--color-accent-800);
 
 	&.dark-mode {
 		--color-background: var(--color-neutral-800);
-		--color-background-secondary: var(--color-neutral-900);
+		--color-background-secondary: var(--color-secondary-800);
 		--color-background-tertiary: var(--color-secondary-900);
-		--color-text-primary: #f5f7fa;
-		--color-text-secondary: #cbd2d9;
-		--color-text-tertiary: #9aa5b1;
-		--color-text-on-primary: #f5f7fa;
-		--color-text-on-accent: #3e3e3e;
+		--color-text-primary: var(--color-neutral-50);
+		--color-text-secondary: var(--color-neutral-100);
+		--color-text-tertiary: var(--color-neutral-200);
+		--color-text-on-primary: var(--color-neutral-50);
+		--color-text-on-accent: var(--color-neutral-900);
 		--color-primary: var(--color-primary-800);
 		--color-secondary: var(--color-primary-600);
 		--color-tertiary: var(--color-primary-500);
 		--color-accent: var(--color-accent-100);
 		--color-accent-focus: var(--color-accent-200);
-		--color-form-is-valid: $primary-l24;
-		--color-form-is-invalid: #ddc4dd;
+		--color-form-is-valid: var(--color-primary-400);
+		--color-form-is-invalid: var(--color-accent-200);
 	}
 }
