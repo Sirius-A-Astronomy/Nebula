@@ -1,26 +1,46 @@
 {% extends "layouts/base.html" %}
 {% block title %}All Courses - Nebula{% endblock %}
 {% macro course_list_item(course) -%}
-<a class="button-accent"
-    href="{{ url_for('course.course', course_level_code=course.course_level.code, course_code=course.code)}}">
-    <div class="row">
-        <div class="col-sm-1">{{ course.semester }}</div>
-        <div class="col-sm">{{ course.name }}</div>
-        <div class="col-sm-auto">{{ course.code }}</div>
+<div class="course-item">
+    <div class="course-item__header">
+        <h4 class="course-item__header__title">
+            <a
+                href="{{ url_for('course.course', course_level_code=course.course_level.code, course_code=course.code)}}">{{
+                course.name }}</a>
+        </h4>
     </div>
-</a>
+    <div class="course-item__body">
+        <p>
+            {{ course.description }}
+        </p>
+        <p>
+        </p>
+    </div>
+    <div class="course-item__footer">
+        <p>
+            {{ course.questions|length }} questions
+            <a class="button-accent on-dark"
+                href="{{ url_for('course.course', course_level_code=course.course_level.code, course_code=course.code)}}">View
+                Course</a>
+        </p>
+    </div>
+</div>
+
 {%- endmacro %}
 {% block body %}
 <main>
     <section class="container">
         <h2>All Courses</h2>
-        </div>
-        <div>
-            {% for course_level in course_levels %}
-            <h3>{{ course_level.study_type }} {{ course_level.name }}</h3>
-            {% for course in courses[course_level.id - 1] %}{{ course_list_item(course)}}{% endfor
-            %}
-            {% endfor %}
+        <div class="course-list">
+            <div class="course-level">
+                {% for course_level in course_levels %}
+
+                <h3>{{ course_level.study_type }} {{ course_level.name }}</h3>
+                {% for course in courses[course_level.id - 1] %}{{ course_list_item(course)}}{%
+                endfor
+                %}
+                {% endfor %}
+            </div>
         </div>
     </section>
 </main>
