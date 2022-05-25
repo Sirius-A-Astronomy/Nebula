@@ -1,0 +1,9 @@
+.course-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+
+	.course-level {
+		flex: 1, 1, 100px;
+	}
+}

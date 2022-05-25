@@ -8,6 +8,32 @@
 	border-radius: 0.7rem;
 	padding: 0.5rem 1rem;
 	margin-bottom: 1rem;
+
+	&.is-valid {
+		outline: var(--color-form-is-valid) solid 3px;
+		box-shadow: none;
+	}
+	&.is-invalid {
+		outline: var(--color-form-is-invalid) solid 3px;
+		box-shadow: none;
+	}
+
+	&.is-validating {
+		outline: var(--color-text-secondary) solid 3px;
+		box-shadow: none;
+	}
+
+	:focus-within {
+		.is-invalid {
+			box-shadow: 0 0 0 0.25rem var(--color-form-is-invalid);
+		}
+		.is-valid {
+			box-shadow: 0 0 0 0.25rem var(--color-form-is-valid);
+		}
+		.is-validating {
+			box-shadow: 0 0 0 0.25rem var(--color-text-secondary);
+		}
+	}
 }
 .input-field,
 .input-field > * {
@@ -32,7 +58,6 @@
 	padding-top: 0;
 	background-color: var(--color-background-secondary);
 	border: none;
-	border-radius: 0.7rem;
 	box-shadow: none;
 }
 
@@ -53,46 +78,20 @@
 /* form validations */
 
 /* reset bootstrap styling */
-.form-control.is-valid,
-.form-select.is-valid,
-.form-select.is-valid:focus,
-.form-control.is-valid:focus,
-.form-constol.is-invalid,
-.form-select.is-invalid,
-.form-select.is-invalid:focus,
-.form-control.is-invalid:focus {
-	border: none;
-	box-shadow: none;
-	outline: none;
-	background-image: none;
-	background-color: none;
-}
 
-.input-field.is-valid {
-	outline: var(--color-form-is-valid) solid 2px;
-	box-shadow: none;
-}
-
-.input-field:focus-within.is-valid {
-	box-shadow: 0 0 0 0.25rem var(--color-form-is-valid);
-}
-
-.input-field.is-invalid {
-	outline: var(--color-form-is-invalid) solid 2px;
-	box-shadow: none;
-}
-
-.input-field:focus-within.is-invalid {
-	box-shadow: 0 0 0 0.25rem var(--color-form-is-invalid);
-}
-
-.input-field.is-validating {
-	outline: var(--color-text-secondary) solid 2px;
-	box-shadow: none;
-}
-
-.input-field:focus-within.is-validating {
-	box-shadow: 0 0 0 0.25rem var(--color-text-secondary);
+.form-control,
+.form-select {
+	&.is-valid,
+	&.is-invalid {
+		&,
+		&:focus {
+			border: none;
+			box-shadow: none;
+			outline: none;
+			background-image: none;
+			background-color: none;
+		}
+	}
 }
 
 .validating-feedback {
