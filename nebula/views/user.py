@@ -12,7 +12,7 @@ import re
 
 from wtforms import PasswordField, StringField, SubmitField, Form, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Email
-from flask import Blueprint, render_template, request, redirect, url_for, abort, session, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from flask_login import login_required, login_user, current_user, logout_user
 from passlib.hash import sha256_crypt
 
@@ -27,7 +27,6 @@ ACCESS_LEVELS = [
 ]
 
 bp = Blueprint("user", __name__)
-apibp = Blueprint("api", __name__, url_prefix="/api")
 
 
 def create_user(username, password, **kwargs):
@@ -134,36 +133,6 @@ class RegisterForm(Form):
     register_submit = SubmitField("Register")
 
 
-@ bp.route("/register", methods=['GET', 'POST'])
-def register():
-    """Creates the register page."""
-    if current_user.is_authenticated:
-        return redirect(url_for("main.index"))
-
-    register_form = RegisterForm(request.form)
-
-    if request.method == 'POST' and register_form.validate():
-
-        username = register_form.username.data.lower()
-        first_name = register_form.first_name.data
-        last_name = register_form.last_name.data
-        password = register_form.password.data
-        email = register_form.email.data
-
-        user = create_user(username=username, first_name=first_name,
-                           last_name=last_name, password=password, email=email)
-        session.permanent = True
-        db.session.add(user)
-        user.is_authenticated = True
-        db.session.commit()
-        login_user(user)
-
-        return redirect(url_for('main.index'))
-
-        # return render_template("main/register.html", success=True, user=user)
-    return render_template("main/register.html", form=register_form)
-
-
 class LoginForm(Form):
     """Form for user login."""
     username = StringField("Username", validators=[DataRequired(
@@ -173,36 +142,16 @@ class LoginForm(Form):
     login_submit = SubmitField("Login")
 
 
+@ bp.route("/register", methods=['GET', 'POST'])
 @ bp.route("/login", methods=["GET", "POST"])
-def login(next=None):
-    """Creates the login page."""
-    login_form = LoginForm(request.form)
-    next = request.args.get('next')
-    if request.method == "POST" and login_form.validate():
-        username = login_form.username.data.lower()
-        password = login_form.password.data
-        valid_credentials = authenticate(username, password)
-
-        if valid_credentials:
-            session.permanent = True
-            valid_credentials.is_authenticated = login_user(
-                valid_credentials)
-            db.session.commit()
-            if not is_safe_url(next, request):
-                return abort(400)
-            return redirect(next or url_for("main.index"))
-        else:
-            raise ValidationError("Invalid username or password")
-
-    return render_template("main/login.html", form=login_form, next=next)
-
-
 @ bp.route("/login-register", methods=["GET", "POST"])
 def login_register(next=None, register=None):
     login_form = LoginForm(request.form)
     register_form = RegisterForm(request.form)
     next = request.args.get('next')
     register = request.args.get('register')
+    if request.path == "/register":
+        register = True
 
     print(request.form)
 
@@ -284,15 +233,3 @@ def profile():
     """Creates the profile page for the current user."""
 
     return render_template("main/profile.html")
-
-
-@ apibp.route("/is_username_available", methods=["post", "GET"])
-def is_username_available():
-    """Returns true if the username is available."""
-    if request.method == "POST":
-        request_data = request.get_json()
-        username = request_data["username"].lower()
-        if User.query.filter_by(username=username).one_or_none() is None:
-            return jsonify({"available": True})
-        return jsonify({"available": False})
-    return "Not a valid request"
