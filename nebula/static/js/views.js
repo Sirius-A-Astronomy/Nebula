@@ -204,7 +204,7 @@ document
 					showPreviewButton.style.display = "none";
 
 					inputForm.addEventListener(
-						"keyup",
+						"input",
 						debounce(() => {
 							previewContent.textContent = inputForm.value;
 							MathJax.Hub.Queue([
