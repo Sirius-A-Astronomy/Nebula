@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+{% block title %}Search - Nebula{% endblock %}
+
+{% block body %}
+<main>
+    <section class="container">
+        <h2>Search</h2>
+        <div class="input-field">
+            <label class="form-label" for="search-input-field">Start typing to search</label>
+            <input class="form-control" id="search-input-field" type="text">
+
+        </div>
+
+        <div class="question-list-container" id="question-list-container">
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block include_js %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}
