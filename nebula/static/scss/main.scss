@@ -22,6 +22,7 @@
     To forward a SCSS file, add the @forward 'file_name' to the index.scss file.
 */
 @use "abstracts"; // Imports all files specified in the index.scss file in the abstracts directory.
+@use "mixins";
 @use "components";
 
 .bg-blue {
