@@ -154,8 +154,13 @@ class Question {
 	}
 }
 
+let questionsJSON;
+
 async function getQuestions() {
-	return fetch("/api/get_questions")
+	if (questionsJSON != null) {
+		return questionsJSON;
+	}
+	questionsJSON = await fetch("/api/get_questions")
 		.then((response) => response.json())
 		.then((data) => {
 			console.log("Success:", data);
@@ -164,38 +169,43 @@ async function getQuestions() {
 		.catch((error) => {
 			console.error("Error:", error);
 		});
+
+	return questionsJSON;
 }
 
-let questionsJSON;
 let questions = [];
+const questionListContainer = document.getElementById(
+	"question-list-container"
+);
+const searchInputField = document.getElementById("search-input-field");
 
 async function initSearch() {
-	questionsJSON = await getQuestions();
-
-	let url_string = window.location.href; // www.test.com?filename=test
+	let url_string = window.location.href;
 	let url = new URL(url_string);
 	let query = url.searchParams.get("query");
 	if (query != null) {
 		query = query.toLowerCase();
 		searchInputField.value = query;
-		search();
 	}
-	let searchInputField = document.getElementById("search-input-field");
 	searchInputField.addEventListener("input", search);
+	search();
 }
 
-function search() {
-	questionListContainer = document.getElementById("question-list-container");
+async function search() {
 	questionListContainer.textContent = "";
 
 	if (questions.length == 0) {
+		questionsJSON = await getQuestions();
 		for (let question of questionsJSON.questions) {
 			questions.push(new Question(question));
 		}
 	}
 
-	let searchInputField = document.getElementById("search-input-field");
 	let searchInput = searchInputField.value.toLowerCase();
+	if (searchInput.length == 0) {
+		return;
+	}
+
 	let matchingQuestions = [];
 
 	for (let question of questions) {

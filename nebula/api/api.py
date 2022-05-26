@@ -36,7 +36,7 @@ def getQuestions():
         "user": {
             "uuid": question.user.uuid,
             "username": question.user.username,
-            "url": url_for("search.search", filter_by=question.user.username)
+            "url": url_for("search.search", query=question.user.username)
         },
         "answers_count": len(question.answers),
         "comments_count": len(question.comments),
@@ -45,12 +45,12 @@ def getQuestions():
                 "uuid": question.course.uuid,
                 "name": question.course.name,
                 "course_code": question.course.code,
-                "url":  url_for('search.search', filter_by=question.course.name)
+                "url":  url_for('search.search', query=question.course.name)
         },
         "subject_tags": [
             {
                 "name": subject_tag.name,
-                "url": url_for('search.search', filter_by=subject_tag.name)
+                "url": url_for('search.search', query=subject_tag.name)
 
             } for subject_tag in question.subject_tags]
     } for question in questions]
