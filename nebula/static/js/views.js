@@ -327,3 +327,9 @@ document.querySelectorAll(".show-more-button").forEach((button) => {
 });
 
 // !SECTION show-more-button
+
+document.querySelectorAll(".question-list-item").forEach((questionItem) => {
+    questionItem.addEventListener("click", function (e) {
+        window.location = questionItem.attributes["href"].value;
+    });
+});

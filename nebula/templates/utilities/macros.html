@@ -1,26 +1,31 @@
 {% macro question_view(question) -%}
-<div class="question-list-item">
+<div class="question-list-item"
+    href="{{ url_for('question.question', question_uuid=question.uuid, course_code=question.course.code) }}">
+
     <div class="question-list-item__header">
         <div class="question-list-item__header__username">
-            <a href="{{ url_for('questions.questions', filter_by=question.user.username) }}">{{
+            <a href="{{ url_for('search.search', query=question.user.username) }}">{{
                 question.user.username }}</a>
         </div>
         <div class="question-list-item__header__subject-tags">
             {% for subject_tag in question.subject_tags %}
-            <a class="subject-tag"
-                href="{{ url_for('questions.questions', filter_by=subject_tag.name) }}">{{
+            <a class="subject-tag" href="{{ url_for('search.search', query=subject_tag.name) }}">{{
                 subject_tag.name }}</a>
             {% endfor %}
         </div>
         <div class="question-list-item__header__course">
-            <a href="{{ url_for('questions.questions', filter_by=question.course.name) }}">{{
+            <a
+                href="{{ url_for('course.course', course_code=question.course.code, course_level_code=course.course_level.code) }}">{{
                 question.course.name }}</a>
         </div>
     </div>
 
     <div class="question-list-item__body">
         <div class="question-list-item__body__title">
-            {{ question.title }}
+            <a href="{{ url_for('question.question', question_uuid=question.uuid, course_code=question.course.code) }}"
+                class="question-list-item__body__title__link">
+                {{ question.title }}
+            </a>
         </div>
 
         <div class="question-list-item__body__posted-at">
