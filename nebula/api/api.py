@@ -45,7 +45,8 @@ def getQuestions():
                 "uuid": question.course.uuid,
                 "name": question.course.name,
                 "course_code": question.course.code,
-                "url":  url_for('search.search', query=question.course.name)
+            "url": url_for('course.course', course_code=question.course.code, course_level_code=question.course.course_level.code),
+
         },
         "subject_tags": [
             {
