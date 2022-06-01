@@ -4,43 +4,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/views/profile.css') }}">
 {% endblock %}
 
-{% macro question_view(question) -%}
-<div class="question-list-item">
-    <a
-        href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid) }}">
-        <div class="text-primary question-title">{{ question.title }}</div>
-    </a>
-    <div class="text-secondary question-info-main">
-        Posted {{ pretty_date(question.created_at)}}
-        by <a href="#!" class="text-secondary">
-            {{ question.user.username }}
-            <!-- by <a href=" url_for('user.user', user_uuid=question.user.uuid) "> -->
-        </a>
-        in <a class="text-secondary"
-            href="{{ url_for('course.course', course_level_code=question.course.course_level.code, course_code=question.course.code) }}">
-            {{ question.course.name }}
-        </a>
-    </div>
-    <div class="text-tertiary question-info">
-        {% if question.comments|count == 1 %}
-        {{ question.comments|count }} comment ·
-        {% else %}
-        {{ question.comments|count }} comments ·
-        {% endif %}
-
-        {% if question.answers == 1 %}
-        {{ question.answers|count }} answer
-        {% else %}
-        {{ question.answers|count }} answers
-        {% endif %}
-    </div>
-</div>
-{% endmacro %}
-
+{% from 'utilities/macros.html' import question_view with context %}
 {% macro answer_view(answer) -%}
 <div class="question-list-item">
     <a
-        href="{{ url_for('question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid) }}">
+        href="{{ url_for('question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid, course_level_code=answer.question.course.course_level.code) }}">
         <div class="text-primary question-title">{{ answer.question.title }}
         </div>
     </a>
@@ -109,13 +77,13 @@
                 <p>You have not asked any questions yet.</p>
                 {% else %}
                 <div class="questions-list">
-                    {% for question in current_user.questions[:3] %}
+                    {% for question in current_user.questions[-3:]|reverse %}
                     {{ question_view(question) }}
                     {% endfor %}
                 </div>
                 <div class="questions-list questions-expanded-list show-more-container"
                     data-toggled-by="show-all-questions">
-                    {% for question in current_user.questions[3:] %}
+                    {% for question in current_user.questions[:-3]|reverse %}
                     {{ question_view(question) }}
                     {% endfor %}
                 </div>
@@ -131,13 +99,13 @@
                 <p>You have not answered any questions yet.</p>
                 {% else %}
                 <div class="answers-list">
-                    {% for answer in current_user.answers[:3] %}
+                    {% for answer in current_user.answers[-3:]|reverse %}
                     {{ answer_view(answer) }}
                     {% endfor %}
                 </div>
                 <div class="answers-list answers-expanded-list show-more-container"
                     data-toggled-by="show-all-answers">
-                    {% for answer in current_user.answers[3:] %}
+                    {% for answer in current_user.answers[:-3]|reverse %}
                     {{ answer_view(answer) }}
                     {% endfor %}
                 </div>
