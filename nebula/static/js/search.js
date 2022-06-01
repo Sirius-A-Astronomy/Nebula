@@ -3,29 +3,55 @@ class Question {
 	matchingElements = [];
 	matchingTags = [];
 	_element = null;
+	matchedStringArray;
 
 	constructor(questionJSON) {
 		this.id = questionJSON.id;
-		this.title = questionJSON.title;
-		this.content = questionJSON.content;
-		this.created_at = questionJSON.created_at;
+		this.title = DOMPurify.sanitize(questionJSON.title, {
+			ALLOWED_TAGS: [],
+		});
+		this.content = DOMPurify.sanitize(questionJSON.content, {
+			ALLOWED_TAGS: [],
+		});
+		this.created_at = DOMPurify.sanitize(questionJSON.created_at, {
+			ALLOWED_TAGS: [],
+		});
 		this.url = questionJSON.url;
 		this.user = questionJSON.user;
+		this.user.username = DOMPurify.sanitize(this.user.username, {
+			ALLOWED_TAGS: [],
+		});
 		this.answersCount = questionJSON.answers_count;
 		this.commentsCount = questionJSON.comments_count;
 		this.subjectTags = questionJSON.subject_tags;
 		this.course = questionJSON.course;
+		this.subject_tags_names = DOMPurify.sanitize(
+			questionJSON.subject_tags_names,
+			{
+				ALLOWED_TAGS: [],
+			}
+		);
 	}
 
 	get element() {
 		// If the element has already been created, return it
-		if (this._element) {
-			return this._element;
-		}
+		// if (this._element) {
+		// 	return this._element;
+		// }
+
 		// Otherwise, create it
 		let questionElement = document.createElement("a");
+		questionElement.style.display = "block";
 		questionElement.classList.add("question-list-item");
 		questionElement.href = this.url;
+
+		// let matchedString = document.createElement("p");
+		// matchedString.classList.add("matched-string");
+		// matchedString.style.fontSize = "1.2em";
+		// matchedString.innerHTML =
+		// 	this.ranking + DOMPurify.sanitize(this.matchedStringArray);
+
+		// questionElement.appendChild(matchedString);
 
 		// HEADER
 		let questionListItem__Header = document.createElement("div");
@@ -39,8 +65,19 @@ class Question {
 		let questionListItem__Header__UserName__Link =
 			document.createElement("a");
 		questionListItem__Header__UserName__Link.href = this.user.url;
-		questionListItem__Header__UserName__Link.textContent =
-			this.user.username;
+
+		let usernameHighlighted = this.searchResult[3]
+			? DOMPurify.sanitize(
+					fuzzysort.highlight(
+						this.searchResult[3],
+						"<span>",
+						"</span>"
+					),
+					{ ALLOWED_TAGS: ["span"] }
+			  )
+			: this.user.username;
+		questionListItem__Header__UserName__Link.innerHTML =
+			usernameHighlighted;
 
 		questionListItem__Header__UserName.appendChild(
 			questionListItem__Header__UserName__Link
@@ -51,12 +88,26 @@ class Question {
 		questionListItem__Header__SubjectTags.classList.add(
 			"question-list-item__header__subject-tags"
 		);
-		for (let subjectTag of this.subjectTags) {
+
+		let subjectTagsHighlighted = (
+			this.searchResult[2]
+				? DOMPurify.sanitize(
+						fuzzysort.highlight(
+							this.searchResult[2],
+							"<span>",
+							"</span>"
+						),
+						{ ALLOWED_TAGS: ["span"] }
+				  )
+				: this.subject_tags_names
+		).split(" ; ");
+
+		for (let [i, subjectTag] of this.subjectTags.entries()) {
 			let questionListItem__Header__SubjectTags__Tag =
 				document.createElement("a");
 			questionListItem__Header__SubjectTags__Tag.href = subjectTag.url;
-			questionListItem__Header__SubjectTags__Tag.textContent =
-				subjectTag.name;
+			questionListItem__Header__SubjectTags__Tag.innerHTML =
+				subjectTagsHighlighted[i];
 			questionListItem__Header__SubjectTags__Tag.classList.add(
 				"subject-tag"
 			);
@@ -73,7 +124,20 @@ class Question {
 		let questionListItem__Header__Course__Link =
 			document.createElement("a");
 		questionListItem__Header__Course__Link.href = this.course.url;
-		questionListItem__Header__Course__Link.textContent = this.course.name;
+
+		let courseHighlighted = this.searchResult[4]
+			? DOMPurify.sanitize(
+					fuzzysort.highlight(
+						this.searchResult[4],
+						"<span>",
+						"</span>"
+					),
+					{ ALLOWED_TAGS: ["span"] }
+			  )
+			: this.course.name;
+
+		questionListItem__Header__Course__Link.innerHTML = courseHighlighted;
+
 		questionListItem__Header__Course.appendChild(
 			questionListItem__Header__Course__Link
 		);
@@ -95,10 +159,46 @@ class Question {
 		);
 		let questionListItem__Body__Title__Link = document.createElement("a");
 		questionListItem__Body__Title__Link.href = this.url;
-		questionListItem__Body__Title__Link.textContent = this.title;
+
+		let titleHighlighted = this.searchResult[0]
+			? DOMPurify.sanitize(
+					fuzzysort.highlight(
+						this.searchResult[0],
+						"<span>",
+						"</span>"
+					),
+					{ ALLOWED_TAGS: ["span"] }
+			  )
+			: this.title;
+		questionListItem__Body__Title__Link.innerHTML = titleHighlighted;
+
 		questionListItem__Body__Title.appendChild(
 			questionListItem__Body__Title__Link
 		);
+
+		//      CONTENT
+		let questionListItem__Body__Content = document.createElement("div");
+		questionListItem__Body__Content.classList.add(
+			"question-list-item__body__content"
+		);
+
+		if (this.searchResult[1] && this.searchResult[1].score > -20000) {
+			let contentHighlighted = DOMPurify.sanitize(
+				"In content: " +
+					fuzzysort.highlight(
+						this.searchResult[1],
+						"<span>",
+						"</span>"
+					),
+				{ ALLOWED_TAGS: ["span"] }
+			);
+
+			questionListItem__Body__Content.innerHTML = contentHighlighted;
+
+			questionListItem__Body__Title.appendChild(
+				questionListItem__Body__Content
+			);
+		}
 
 		//      POSTED AT
 		let questionListItem__Body__PostedAt = document.createElement("div");
@@ -147,10 +247,7 @@ class Question {
 			questionListItem__Body,
 			questionListItem__Footer
 		);
-
-		// Add the element to the cache
-		this._element = questionElement;
-		return this._element;
+		return questionElement;
 	}
 }
 
@@ -177,7 +274,17 @@ let questions = [];
 const questionListContainer = document.getElementById(
 	"question-list-container"
 );
-const searchInputField = document.getElementById("search-input-field");
+// const searchInputField = document.getElementById("search-search-input-field");
+const courseSearchInputField = document.getElementById(
+	"course-search-input-field"
+);
+
+const searchInputField = [
+	"search-search-input-field",
+	"course-search-input-field",
+]
+	.map((id) => document.getElementById(id))
+	.find((el) => el != null);
 
 async function initSearch() {
 	let url_string = window.location.href;
@@ -187,7 +294,9 @@ async function initSearch() {
 		query = query.toLowerCase();
 		searchInputField.value = query;
 	}
-	searchInputField.addEventListener("input", search);
+	if (searchInputField) {
+		searchInputField.addEventListener("input", search);
+	}
 	search();
 }
 
@@ -201,60 +310,95 @@ async function search() {
 		}
 	}
 
-	let searchInput = searchInputField.value.toLowerCase();
+	let searchInput = searchInputField.value;
 	if (searchInput.length == 0) {
 		return;
 	}
 
-	let matchingQuestions = [];
+	let searchResults = fuzzysort.go(searchInput, questions, {
+		keys: [
+			"title",
+			"content",
+			"subject_tags_names",
+			"user.username",
+			"course.name",
+		],
 
-	for (let question of questions) {
-		question.ranking = 0;
-		question.matchingElements = [];
-		question.matchingTags = [];
-		if (question.title.toLowerCase().includes(searchInput)) {
-			question.ranking += 5;
-			question.matchingElements.push("title");
-		}
-		if (question.course.name.toLowerCase().includes(searchInput)) {
-			question.ranking += 1;
-			question.matchingElements.push("course");
-		}
-		if (question.user.username.toLowerCase().includes(searchInput)) {
-			question.matchingElements.push("user");
-		}
-		if (question.subjectTags.length > 0) {
-			for (let subjectTag of question.subjectTags) {
-				// if the tag matches the search input exactly, increase the ranking by a lot
-				if (subjectTag.name.toLowerCase() == searchInput) {
-					question.ranking += 5;
-					question.matchingElements.push("subjectTag");
-				}
-				// if the tag contains the search input, increase the ranking by a little
-				else if (subjectTag.name.toLowerCase().includes(searchInput)) {
-					question.ranking += 2;
-					question.matchingElements.push("subjectTag");
-					question.matchingTags.push(subjectTag.name);
-				}
-			}
-		}
-		if (question.content.toLowerCase().includes(searchInput)) {
-			question.ranking += 2;
-			question.matchingElements.push("content");
-		}
-
-		if (question.matchingElements.length > 0) {
-			matchingQuestions.push(question);
-		}
-	}
-
-	matchingQuestions.sort((a, b) => {
-		return b.ranking - a.ranking;
+		scoreFn: (a) => {
+			return Math.max(
+				a[0] ? a[0].score : -Infinity,
+				a[1] ? a[1].score : -Infinity,
+				a[2] ? a[2].score : -Infinity,
+				a[3] ? a[3].score - 200 : -Infinity,
+				a[4] ? a[4].score : -Infinity
+			);
+		},
+		threshold: -40000,
 	});
 
-	for (let question of matchingQuestions) {
-		questionListContainer.appendChild(question.element);
+	console.log({ searchResults });
+
+	for (let searchResult of searchResults) {
+		let question = searchResult.obj;
+		// question.matchedStringArray = [
+		// 	searchResult[0] ? fuzzysort.highlight(searchResult[0]) : null,
+		// 	searchResult[1] ? fuzzysort.highlight(searchResult[1]) : null,
+		// 	searchResult[2] ? fuzzysort.highlight(searchResult[2]) : null,
+		// 	searchResult[3] ? fuzzysort.highlight(searchResult[3]) : null,
+		// ];
+		// question.ranking = searchResult.score;
+		question.searchResult = searchResult;
+		let questionElement = question.element;
+		questionListContainer.appendChild(questionElement);
 	}
+
+	// for (let question of questions) {
+	// 	question.ranking = 0;
+	// 	question.matchingElements = [];
+	// 	question.matchingTags = [];
+	// 	if (question.title.toLowerCase().includes(searchInput)) {
+	// 		question.ranking += 5;
+	// 		question.matchingElements.push("title");
+	// 	}
+	// 	if (question.course.name.toLowerCase().includes(searchInput)) {
+	// 		question.ranking += 1;
+	// 		question.matchingElements.push("course");
+	// 	}
+	// 	if (question.user.username.toLowerCase().includes(searchInput)) {
+	// 		question.matchingElements.push("user");
+	// 	}
+	// 	if (question.subjectTags.length > 0) {
+	// 		for (let subjectTag of question.subjectTags) {
+	// 			// if the tag matches the search input exactly, increase the ranking by a lot
+	// 			if (subjectTag.name.toLowerCase() == searchInput) {
+	// 				question.ranking += 5;
+	// 				question.matchingElements.push("subjectTag");
+	// 			}
+	// 			// if the tag contains the search input, increase the ranking by a little
+	// 			else if (subjectTag.name.toLowerCase().includes(searchInput)) {
+	// 				question.ranking += 2;
+	// 				question.matchingElements.push("subjectTag");
+	// 				question.matchingTags.push(subjectTag.name);
+	// 			}
+	// 		}
+	// 	}
+	// 	if (question.content.toLowerCase().includes(searchInput)) {
+	// 		question.ranking += 2;
+	// 		question.matchingElements.push("content");
+	// 	}
+
+	// 	if (question.matchingElements.length > 0) {
+	// 		matchingQuestions.push(question);
+	// 	}
+	// }
+
+	// matchingQuestions.sort((a, b) => {
+	// 	return b.ranking - a.ranking;
+	// });
+
+	// for (let question of matchingQuestions) {
+	// 	questionListContainer.appendChild(question.element);
+	// }
 }
 
 initSearch();

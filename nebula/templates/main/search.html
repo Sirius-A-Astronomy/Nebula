@@ -3,12 +3,12 @@
 
 {% block body %}
 <main>
-    <section class="container">
+    <section class="container-lg">
         <h2>Search</h2>
         <div class="search-bar">
             <label class="form-label visually-hidden" for="search-input-field">Start typing to
                 search</label>
-            <input class="form-control" id="search-input-field" type="text"
+            <input class="form-control" id="search-search-input-field" type="text"
                 placeholder="Start typing to search...">
             <!-- <img src="{{ url_for('static', filename='images/search.svg') }}" alt="search icon"> -->
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -26,5 +26,7 @@
 {% endblock %}
 
 {% block include_js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
 <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
