@@ -41,7 +41,7 @@ def add_question(success=False, course_code=None):
         course = None
 
     if request.method == 'POST' and question_form.validate():
-        title = question_form.title.data
+        title = question_form.title.data.strip()
 
         # replace $$ with \( and \) for LaTeX equations to only have inline equations in the title
         block_equations = [i for i in range(
@@ -67,8 +67,8 @@ def add_question(success=False, course_code=None):
                         cleaned_title += title[index + 2:]
             title = cleaned_title
 
-        content = question_form.content.data
-        answer = question_form.answer.data
+        content = question_form.content.data.strip()
+        answer = question_form.answer.data.strip()
         course_id = question_form.course.data
         difficulty = question_form.difficulty.data
         difficulty = "Easy" if difficulty == 1 else "Medium" if difficulty == 2 else "Hard"
