@@ -39,8 +39,8 @@
     <!-- GSAP ANIMATIONS-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/queries.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
     <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script> -->
     <!-- <script src="{{ url_for('static', filename='js/loadMathJax.js') }}" async></script> -->
 
@@ -72,7 +72,7 @@
 <body>
     <header>
         <noscript>
-            <div style="background-color: var(--color-primary);
+            <div style="background-color: var(--color-background);
                             text-align: center;
                             color: #fff;">
                 This site works best with JavaScript enabled. For the best experience, please enable
@@ -80,59 +80,109 @@
             </div>
         </noscript>
         <div class="nebula-nav">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-blue">
-                <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container-lg">
                     <a class="navbar-brand" href="{{ url_for('main.index') }}">
                         <div>
                             <span class="site-name">Nebula</span>
                         </div>
                     </a>
                     {% if intranet is not defined %}
-                    <div class="dark-mode-toggle-container">
-                        <a type="checkbox" name="toggle-dark-mode" id="dark-mode-toggler" href="#"
-                            aria-label="Toggle dark mode" class="">
-                            <svg class="dark-mode-icon" xmlns="http://www.w3.org/2000/svg"
-                                enable-background="new 0 0 24 24" height="1.4em" viewBox="0 0 24 24"
-                                width="1.4em" fill="currentcolor">
-                                <rect fill="none" height="24" width="24" />
-                                <path
-                                    d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z" />
-                            </svg>
-                            <svg class="light-mode-icon" xmlns="http://www.w3.org/2000/svg"
-                                enable-background="new 0 0 24 24" height="1.4em" viewBox="0 0 24 24"
-                                width="1.4em" fill="currentcolor">
-                                <rect fill="none" height="24" width="24" />
-                                <path
-                                    d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0 c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2 c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1 C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06 c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41 l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41 c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36 c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z" />
-                            </svg>
-                        </a>
+                    <div class="persistent-nav-container">
+
+                        <div class="dark-mode-toggle-container">
+                            <a type="checkbox" name="toggle-dark-mode" id="dark-mode-toggler"
+                                href="#" aria-label="Toggle dark mode" class="">
+                                <svg class="dark-mode-icon" xmlns="http://www.w3.org/2000/svg"
+                                    enable-background="new 0 0 24 24" height="24px"
+                                    viewBox="0 0 24 24" width="24px" fill="currentcolor">
+                                    <!-- <rect fill="none" height="24" width="24" /> -->
+                                    <path
+                                        d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z" />
+                                </svg>
+                                <svg class="light-mode-icon" xmlns="http://www.w3.org/2000/svg"
+                                    enable-background="new 0 0 24 24" height="24px"
+                                    viewBox="0 0 24 24" width="24px" fill="currentcolor">
+                                    <!-- <rect fill="none" height="24" width="24" /> -->
+                                    <path
+                                        d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0 c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2 c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1 C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06 c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41 l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41 c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36 c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z" />
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="nav-item dropdown">
+                            <a {% if 'login' in request.path or 'register' in request.path
+                                or 'profile' in request.path %}
+                                class="nav-link dropdown-toggle account-management-dropdown active"
+                                {% else %}
+                                class="nav-link dropdown-toggle account-management-dropdown" {%
+                                endif %} href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 0 24 24" width="24px" fill="currentcolor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                                </svg>
+                                {% if current_user.is_anonymous == false %}
+                                <span>
+                                    {{ current_user.first_name }} {{ current_user.last_name }}
+                                </span>
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                {% if current_user.is_anonymous == true %}
+                                <li>
+                                    <a {% if ('login-register' in request.path and
+                                        request.args['register'] !='True' ) %}
+                                        class="dropdown-item active" {% else %}
+                                        class="dropdown-item" {% endif %}
+                                        href="{{ url_for('user.login_register', next=request.path) }}">Login</a>
+                                </li>
+                                <li>
+                                    <a {% if request.args['register']=='True' or '/register' in
+                                        request.path %} class="dropdown-item active" {% else %}
+                                        class="dropdown-item" {% endif %}
+                                        href="{{ url_for('user.login_register', register=true, next=request.path) }}">Register</a>
+                                </li>
+
+
+                                {% else %}
+                                <li>
+                                    <a {% if 'profile' in request.path %}
+                                        class="dropdown-item active" {% else %}
+                                        class="dropdown-item" {% endif %}
+                                        href="{{ url_for('user.profile') }}">Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('user.logout') }}">Logout</a>
+                                </li>
+                                {% endif %}
+
+                            </ul>
+                        </div>
                     </div>
+
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarText" aria-controls="navbarText"
                         aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" width="24px"
+                            viewbox="0 0 24 24" fill="currentcolor">
+                            <path d="M3 18V16H21V18ZM3 13V11H21V13ZM3 8V6H21V8Z" />
+                        </svg>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarText">
-                        <ul class="navbar-nav ml-auto">
+                    <div class="collapse navbar-collapse justify-content-start" id="navbarText">
+                        <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a {% if request.path==url_for('main.index') %}
                                     class="nav-link active" {% else %} class="nav-link" {% endif %}
                                     href="{{ url_for('main.index') }}">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a {% if request.path==url_for('add_question.add_question') %}
-                                    class="nav-link active" {% else %} class="nav-link" {% endif %}
-                                    href="{{ url_for('add_question.add_question')}}">Submit a
-                                    question</a>
-                            </li>
-                            <li class="nav-item">
-                                <a {% if request.path==url_for('search.search') %}
-                                    class="nav-link active" {% else %} class="nav-link" {% endif %}
-                                    href="{{ url_for('search.search')}}">Search</a>
-                            </li>
 
                             <li class="nav-item dropdown">
-                                <a {% if '/course' in request.path or '/level' in request.path %}
+                                <a {% if '/bsc' in request.path or '/msc' in request.path %}
                                     class="nav-link dropdown-toggle active" {% else %}
                                     class="nav-link dropdown-toggle" {% endif %} href="#"
                                     id="navbarDropdownMenuLink" role="button"
@@ -151,61 +201,12 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="https://sirius.astro.rug.nl/">Back to
-                                    Sirius A website</a>
+                                <a {% if request.path==url_for('add_question.add_question') %}
+                                    class="nav-link active" {% else %} class="nav-link" {% endif %}
+                                    href="{{ url_for('add_question.add_question')}}">Submit a
+                                    question</a>
                             </li>
-                            <div class="nav-item dropdown">
-                                <a {% if 'login' in request.path or 'register' in request.path
-                                    or 'profile' in request.path %}
-                                    class="nav-link dropdown-toggle active" {% else %}
-                                    class="nav-link dropdown-toggle" {% endif %} href="#"
-                                    id="navbarDropdownMenuLink" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                        viewBox="0 0 24 24" width="24px" fill="currentcolor">
-                                        <path d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
-                                    </svg>
-                                    {% if current_user.is_anonymous == false %}
-                                    {{ current_user.first_name }} {{ current_user.last_name }}
-                                    {% else %}
-                                    Login
-                                    {% endif %}
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    {% if current_user.is_anonymous == true %}
-                                    <li>
-                                        <a {% if ('login-register' in request.path and
-                                            request.args['register'] !='True' ) %}
-                                            class="dropdown-item active" {% else %}
-                                            class="dropdown-item" {% endif %}
-                                            href="{{ url_for('user.login_register', next=request.path) }}">Login</a>
-                                    </li>
-                                    <li>
-                                        <a {% if request.args['register']=='True' or '/register' in
-                                            request.path %} class="dropdown-item active" {% else %}
-                                            class="dropdown-item" {% endif %}
-                                            href="{{ url_for('user.login_register', register=true, next=request.path) }}">Register</a>
-                                    </li>
 
-
-                                    {% else %}
-                                    <li>
-                                        <a {% if 'profile' in request.path %}
-                                            class="dropdown-item active" {% else %}
-                                            class="dropdown-item" {% endif %}
-                                            href="{{ url_for('user.profile') }}">Profile</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
-                                            href="{{ url_for('user.logout') }}">Logout</a>
-                                    </li>
-                                    {% endif %}
-
-                                </ul>
-                            </div>
                         </ul>
                     </div>
                     </ul>

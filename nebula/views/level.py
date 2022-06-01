@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template
 from nebula.models import Course, CourseLevel
-bp = Blueprint('level', __name__, url_prefix='/course_levels')
+bp = Blueprint('level', __name__)
 
 
 @bp.route('/<course_level_code>')
-@bp.route('/<course_level_code>/courses')
 def level(course_level_code):
     course_level = CourseLevel.query.filter_by(code=course_level_code).first()
     course_level_uuid = course_level.uuid
