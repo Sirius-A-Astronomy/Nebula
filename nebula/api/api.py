@@ -32,7 +32,7 @@ def getQuestions():
         "title": question.title,
         "content": question.content,
         "created_at": pretty_date(question.created_at),
-        "url": url_for("question.question", question_uuid=question.uuid, course_code=question.course.code),
+        "url": url_for("question.question", question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code),
         "user": {
             "uuid": question.user.uuid,
             "username": question.user.username,
@@ -48,12 +48,12 @@ def getQuestions():
             "url": url_for('course.course', course_code=question.course.code, course_level_code=question.course.course_level.code),
 
         },
+            "subject_tags_names": " ; ".join([subject_tag.name for subject_tag in question.subject_tags]),
         "subject_tags": [
             {
                 "name": subject_tag.name,
                 "url": url_for('search.search', query=subject_tag.name)
-
-            } for subject_tag in question.subject_tags]
+            } for subject_tag in question.subject_tags],
     } for question in questions]
 
     courses = Course.query.all()
@@ -72,3 +72,42 @@ def getQuestions():
 
     } for course in courses]
     return(jsonify({"questions": questions_json, "courses": courses_json}))
+
+
+@ apibp.route("/get_course_questions", methods=["post", "GET"])
+def get_course_questions(course_code=None):
+    """Returns a json object with all the questions from the requested course"""
+    course_code = request.args.get("course_code")
+
+    questions = Course.query.filter_by(code=course_code).first().questions
+
+    questions_json = [{
+        "uuid": question.uuid,
+        "title": question.title,
+        "content": question.content,
+        "created_at": pretty_date(question.created_at),
+        "url": url_for("question.question", question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code),
+        "user": {
+            "uuid": question.user.uuid,
+            "username": question.user.username,
+            "url": url_for("course.course", course_level_code=question.course.course_level.code, query=question.user.username, course_code=question.course.code)
+        },
+        "answers_count": len(question.answers),
+        "comments_count": len(question.comments),
+        "course":
+            {
+                "uuid": question.course.uuid,
+                "name": question.course.name,
+                "course_code": question.course.code,
+            "url": url_for('course.course', course_code=question.course.code, course_level_code=question.course.course_level.code),
+
+        },
+            "subject_tags_names": " ; ".join([subject_tag.name for subject_tag in question.subject_tags]),
+        "subject_tags": [
+            {
+                "name": subject_tag.name,
+                "url": url_for("course.course", course_level_code=question.course.course_level.code, query=subject_tag.name, course_code=question.course.code)
+            } for subject_tag in question.subject_tags],
+    } for question in questions]
+
+    return(jsonify({"questions": questions_json}))
