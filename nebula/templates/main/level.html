@@ -13,8 +13,7 @@
 
 
         <section class="background-card">
-            <h2>{{ course_level.study_type }} {{ course_level.name }}</h2>
-            <h3>Courses</h3>
+            <h2>{{ course_level.study_type }} {{ course_level.name }} Courses</h2>
             <div class="course-list-container">
                 {% for course in courses %}{{ course_list_item(course)}}{% endfor %}
             </div>
