@@ -329,7 +329,7 @@ document.querySelectorAll(".show-more-button").forEach((button) => {
 // !SECTION show-more-button
 
 document
-	.querySelectorAll(".question-list-item", ".course-list-item")
+	.querySelectorAll(".question-list-item, .course-list-item, .clickable-div")
 	.forEach((questionItem) => {
 		questionItem.addEventListener("click", function (e) {
 			window.location = questionItem.attributes["href"].value;
