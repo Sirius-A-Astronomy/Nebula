@@ -1,9 +1,6 @@
-.course-list {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+.course-list-container {
+}
 
-	.course-level {
-		flex: 1, 1, 100px;
-	}
+.course-list-item {
+	cursor: pointer;
 }

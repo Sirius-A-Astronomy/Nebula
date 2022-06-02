@@ -1,7 +1,6 @@
 .subject-tag {
 	display: inline-block;
-	padding: 0.25rem 0.5rem;
-	margin-right: 0.5rem;
+	padding: 0.2rem 0.5rem;
 	border-radius: 0.3rem;
 	font-size: 0.75rem;
 	color: var(--color-text-on-accent);
@@ -12,4 +11,10 @@
 	line-height: 0.875rem;
 	text-align: center;
 	letter-spacing: 0.095em;
+	text-transform: lowercase;
+
+	&:hover {
+		background-color: var(--color-accent-focus);
+		color: var(--color-text-on-accent);
+	}
 }

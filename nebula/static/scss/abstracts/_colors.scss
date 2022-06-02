@@ -81,7 +81,7 @@ $colors: (
     */
 
 	--color-background: var(--color-neutral-50);
-	--color-background-secondary: var(--color-secondary-100);
+	--color-background-secondary: var(--color-neutral-100);
 	--color-background-tertiary: var(--color-secondary-200);
 	--color-text-primary: var(--color-neutral-900);
 	--color-text-secondary: var(--color-neutral-800);
@@ -98,9 +98,17 @@ $colors: (
 	--color-form-is-valid: var(--color-primary-600);
 	--color-form-is-invalid: var(--color-accent-800);
 
+	/* Navbar */
+
+	--color-navbar-background: var(--color-neutral-50);
+	--color-primary-active: var(--color-primary-800);
+
+	--box-shadow: 4px 4px 30px rgba(44, 55, 65, 0.1),
+		2px 2px 20px rgba(44, 55, 65, 0.04);
+
 	&.dark-mode {
-		--color-background: var(--color-neutral-800);
-		--color-background-secondary: var(--color-secondary-800);
+		--color-background: var(--color-neutral-900);
+		--color-background-secondary: var(--color-neutral-800);
 		--color-background-tertiary: var(--color-secondary-900);
 		--color-text-primary: var(--color-neutral-50);
 		--color-text-secondary: var(--color-neutral-100);
@@ -114,5 +122,13 @@ $colors: (
 		--color-accent-focus: var(--color-accent-200);
 		--color-form-is-valid: var(--color-primary-400);
 		--color-form-is-invalid: var(--color-accent-200);
+
+		/* Navbar */
+
+		--color-navbar-background: var(--color-neutral-900);
+		--color-primary-active: var(--color-primary-400);
+
+		--box-shadow: 6px 6px 40px rgba(44, 55, 65, 0.2),
+			4px 4px 30px rgba(0, 0, 0, 0.25);
 	}
 }

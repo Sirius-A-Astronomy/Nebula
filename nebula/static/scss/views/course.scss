@@ -1,3 +1,70 @@
+@use "../abstracs/mixins" as *;
+
 /*
     Course Page
 */
+
+.course-header {
+	margin-bottom: 1rem;
+
+	&__questions-amount {
+		font-family: "Poppins";
+		font-style: normal;
+		font-weight: 600;
+		font-size: var(--font-size-h4);
+		line-height: 30px;
+	}
+
+	&__description {
+		font-family: "Lato";
+		font-style: normal;
+		font-weight: 400;
+		font-size: var(--font-size-h3);
+		line-height: 25px;
+		color: var(--color-text-primary);
+	}
+
+	.add-question-button {
+		font-size: var(--font-size-h4);
+	}
+}
+@include mq(md) {
+	.course-header {
+		display: flex;
+		flex-direction: row;
+		align-items: baseline;
+		justify-content: space-between;
+		// grid-template-columns: 5fr 1fr auto auto;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+
+		&__title {
+			margin-bottom: 0;
+			flex: 1 1 40%;
+		}
+
+		&__questions-amount {
+			margin-bottom: 0;
+			text-align: end;
+			flex: 0 1 content;
+		}
+
+		&__description {
+			margin-bottom: 0;
+			flex: 1 1 60%;
+			order: 2;
+		}
+
+		.search-bar {
+			margin-bottom: 0;
+			flex: 1 0 20rem;
+			order: 2;
+		}
+
+		.add-question-button {
+			margin-bottom: 0;
+			flex: 0 1 content;
+			order: 1;
+		}
+	}
+}

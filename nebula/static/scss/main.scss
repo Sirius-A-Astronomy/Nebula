@@ -21,7 +21,10 @@
 
     To forward a SCSS file, add the @forward 'file_name' to the index.scss file.
 */
-@import "imports";
+@use "abstracts";
+@use "abstracts/mixins" as *;
+@use "components";
+
 .bg-blue {
 	background-color: var(--color-primary) !important;
 	text-align: right;

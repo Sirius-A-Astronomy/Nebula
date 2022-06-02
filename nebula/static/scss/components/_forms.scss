@@ -56,7 +56,7 @@
 	border: none;
 	padding-left: 0;
 	padding-top: 0;
-	background-color: var(--color-background-secondary);
+	background-color: transparent;
 	border: none;
 	box-shadow: none;
 }
@@ -71,9 +71,20 @@
 .form-control:focus,
 .form-select:focus {
 	color: var(--color-text-primary);
-	background-color: var(--color-background-tertiary);
 	border: none;
 	box-shadow: none;
+}
+
+.form-control {
+	&:focus {
+		background-color: transparent;
+	}
+}
+
+.form-select {
+	&:focus {
+		background-color: var(--color-background-tertiary);
+	}
 }
 /* form validations */
 
