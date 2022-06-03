@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, request, jsonify, Blueprint, url_for
 
-from nebula.models import db, User, Question, Course
+from nebula.models import db, User, Question, Course, SubjectTag
 from nebula.context_functions import context_processor
 
 pretty_date = context_processor()['pretty_date']
@@ -111,3 +111,14 @@ def get_course_questions(course_code=None):
     } for question in questions]
 
     return(jsonify({"questions": questions_json}))
+
+
+@apibp.route("/get_subject_tags", methods=["post", "GET"])
+def get_subject_tags():
+    """Returns a list of all subject tags"""
+    subject_tags = SubjectTag.query.all()
+    subject_tags_json = [{
+        "name": subject_tag.name,
+        "url": url_for("search.search", query=subject_tag.name)
+    } for subject_tag in subject_tags]
+    return(jsonify({"subject_tags": subject_tags_json}))

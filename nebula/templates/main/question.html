@@ -150,6 +150,26 @@
                             <div class="preview-content"></div>
                         </div>
                         <div class="input-field">
+                            {{ question_edit_form.subject_tags.label(class="form-label") }}
+                            {{ question_edit_form.subject_tags }}
+                            {% if question_edit_form.subject_tags.errors|length > 0 %}
+                            <input type="text" class="form-control is-invalid tag-input">
+                            {{ question_edit_form.subject_tags(class="form-control is-invalid
+                            tag-input") }}
+                            <div class="invalid-feedback input-feedback">
+                                {% for error in question_edit_form.subject_tags.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <input type="text" class="form-control tag-input"
+                                data-store-in="subject_tags">
+                            {% endif %}
+                            <div class="input-feedback">
+                                Press <kbd>Enter</kbd> to add a tag.
+                            </div>
+                        </div>
+                        <div class="input-field">
                             {{ question_edit_form.difficulty.label(class="form-label") }}
                             {% if question_edit_form.difficulty.errors|length > 0 %}
                             {{ question_edit_form.difficulty(class="form-control is-invalid") }}
@@ -162,13 +182,12 @@
                             {{ question_edit_form.difficulty(class="form-control") }}
                             {% endif %}
                         </div>
-                        <div class="d-flex justify-content-end">
-                            {{ question_edit_form.question_edit_submit(class="btn btn-outline") }}
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn btn-outline"
+                                id="cancel-edit-question">Cancel</button>
+                            {{ question_edit_form.question_edit_submit(class="btn btn-outline")
+                            }}
                         </div>
-
-
-
-
                     </form>
                 </div>
                 {% endif %}
@@ -360,4 +379,10 @@
         </div>
     </div>
 </main>
-{% endblock %}
+{% endblock body %}
+
+{% block include_js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
+<script src="{{ url_for('static', filename='js/tag_input.js') }}"></script>
+{% endblock include_js %}

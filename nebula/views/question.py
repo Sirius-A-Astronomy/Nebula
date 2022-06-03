@@ -1,15 +1,15 @@
 """
     Creates the question view.
 """
-from re import A
+import json
 from urllib.parse import urlparse
 
 from flask import Blueprint, render_template, url_for, request, redirect
 from flask_login import current_user
-from wtforms import Form, SubmitField, TextAreaField, BooleanField, SelectField, StringField, FieldList
+from wtforms import Form, SubmitField, TextAreaField, BooleanField, SelectField, StringField, HiddenField
 from wtforms.validators import DataRequired, Optional
 from nebula import db
-from nebula.models import Course, Question, Comment, User, Answer
+from nebula.models import Course, Question, Comment, User, Answer, SubjectTag
 
 bp = Blueprint('question', __name__,
                url_prefix='/<course_level_code>/<course_code>')
@@ -36,6 +36,8 @@ class QuestionEditForm(Form):
         validators=[
             DataRequired(
                 'Please enter a question content')])
+    subject_tags = HiddenField(
+        "Subject Tags (optional)", validators=[Optional()])
     difficulty = SelectField(
         'Edit Difficulty',
         choices=[(1, "Easy"), (2, "Medium"), (3, "Hard")],
@@ -50,14 +52,14 @@ class AnswerForm(Form):
     class Meta:
         locales = ['en_US', 'en']
     content = TextAreaField('Answer content', validators=[
-                            DataRequired()])
+        DataRequired()])
     sources = TextAreaField('Add sources', validators=[
-                            Optional()])
+        Optional()])
 
     add_answer_submit = SubmitField('Submit')
 
 
-@bp.route('/<question_uuid>', methods=['GET', 'POST'])
+@ bp.route('/<question_uuid>', methods=['GET', 'POST'])
 def question(course_code, question_uuid, course_level_code, new_comment_uuid=None):
     new_comment_uuid = (request.args.get('new_comment_uuid'))
     question = Question.query.filter_by(uuid=question_uuid).first()
@@ -92,9 +94,23 @@ def question(course_code, question_uuid, course_level_code, new_comment_uuid=Non
         if question_edit_form.question_edit_submit.data == True and question_edit_form.validate():
             question.title = question_edit_form.title.data.strip()
             question.content = question_edit_form.content.data.strip()
-            question.difficulty = "Easy" if question_edit_form.difficulty.data == 1 \
+
+            subject_tags = []
+            if question_edit_form.subject_tags.data is not "":
+                for tag in json.loads(question_edit_form.subject_tags.data):
+                    tag = tag.strip()
+                    if not tag:
+                        continue
+                    if SubjectTag.query.filter(SubjectTag.name.ilike(tag)).one_or_none() is None:
+                        subject_tags.append(SubjectTag(name=tag))
+                        print("Added not existing tag: " + tag)
+                        continue
+                    subject_tags.append(SubjectTag.query.filter(
+                        SubjectTag.name.ilike(tag)).one())
+            question.subject_tags = subject_tags
+
+            question.difficulty = "Easy" if question_edit_form.difficulty.data == 1\
                 else "Medium" if question_edit_form.difficulty.data == 2 else "Hard"
-            print(question)
             db.session.commit()
             return redirect(url_for(
                 'question.question', course_code=course_code,
@@ -118,6 +134,8 @@ def question(course_code, question_uuid, course_level_code, new_comment_uuid=Non
     question_edit_form.title.default = question.title
     question_edit_form.content.default = question.content
     question_edit_form.difficulty.default = question.difficulty
+    question_edit_form.subject_tags.default = json.dumps(
+        [tag.name for tag in question.subject_tags])
     question_edit_form.process()
 
     return render_template(

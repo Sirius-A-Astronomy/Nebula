@@ -13,8 +13,37 @@
 	letter-spacing: 0.095em;
 	text-transform: lowercase;
 
+	max-width: 200px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+
 	&:hover {
 		background-color: var(--color-accent-focus);
+		color: var(--color-text-on-accent);
+	}
+}
+
+.suggestions-container {
+	max-height: 120px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background-color: var(--color-background-tertiary);
+	color-scheme: var(--color-scheme);
+}
+
+.suggestion {
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color-primary-active);
+	}
+	span {
+		font-weight: 700;
+	}
+
+	&.selected {
+		background-color: var(--color-accent);
 		color: var(--color-text-on-accent);
 	}
 }

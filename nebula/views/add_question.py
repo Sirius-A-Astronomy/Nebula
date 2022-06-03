@@ -1,12 +1,14 @@
+import json
+
 from flask import Blueprint, render_template, request
 from flask_login import current_user, login_required
 import re
 
-from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField
+from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Optional
 
 from nebula import db
-from nebula.models import Course, Question, Answer
+from nebula.models import Course, Question, Answer, SubjectTag
 
 bp = Blueprint("add_question", __name__)
 
@@ -17,6 +19,8 @@ class QuestionForm(Form):
     content = TextAreaField("Question", validators=[DataRequired()])
     answer = TextAreaField("Answer (optional)", validators=[Optional()])
     course = SelectField("Course", coerce=int)
+    subject_tags = HiddenField(
+        "Subject Tags (optional)", validators=[Optional()])
     difficulty = SelectField("Difficulty", coerce=int, choices=[
                              (1, "Easy"), (2, "Medium"), (3, "Hard")], validators=[DataRequired()])
     submit = SubmitField("Submit")
@@ -67,6 +71,19 @@ def add_question(success=False, course_code=None):
                         cleaned_title += title[index + 2:]
             title = cleaned_title
 
+        subject_tags = []
+        if question_form.subject_tags.data is not "":
+            for tag in json.loads(question_form.subject_tags.data):
+                tag = tag.strip()
+                if not tag:
+                    continue
+                if SubjectTag.query.filter(SubjectTag.name.ilike(tag)).one_or_none() is None:
+                    subject_tags.append(SubjectTag(name=tag))
+                    print("Added not existing tag: " + tag)
+                    continue
+                subject_tags.append(SubjectTag.query.filter(
+                    SubjectTag.name.ilike(tag)).one())
+
         content = question_form.content.data.strip()
         answer = question_form.answer.data.strip()
         course_id = question_form.course.data
@@ -75,7 +92,7 @@ def add_question(success=False, course_code=None):
         user = current_user
         course = Course.query.filter_by(id=course_id).first()
         question = Question(title=title, content=content, user=user, course=course,
-                            difficulty=difficulty, approved=False)
+                            difficulty=difficulty, approved=False, subject_tags=subject_tags)
 
         print(answer)
 
