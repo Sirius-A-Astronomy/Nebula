@@ -153,8 +153,6 @@ def login_register(next=None, register=None):
     if request.path == "/register":
         register = True
 
-    print(request.form)
-
     if request.method == "POST":
 
         if (login_form.login_submit.data == True):
