@@ -67,6 +67,12 @@ body {
 	}
 }
 
+kbd {
+	background-color: var(--color-text-primary);
+	color: var(--color-background);
+	font-weight: 400;
+}
+
 /* 
     Layout
 */
@@ -277,6 +283,12 @@ a {
 	background-position: right center;
 	border: none;
 	box-shadow: none;
+}
+
+.tag-container {
+	* + * {
+		margin-left: 0.5rem;
+	}
 }
 
 .container-index .panel {

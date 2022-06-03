@@ -80,6 +80,8 @@ $colors: (
     Light Theme color-scheme (Change colors for the light theme here)
     */
 
+	--color-scheme: light;
+
 	--color-background: var(--color-neutral-50);
 	--color-background-secondary: var(--color-neutral-100);
 	--color-background-tertiary: var(--color-secondary-200);
@@ -107,6 +109,8 @@ $colors: (
 		2px 2px 20px rgba(44, 55, 65, 0.04);
 
 	&.dark-mode {
+		--color-scheme: dark;
+
 		--color-background: var(--color-neutral-900);
 		--color-background-secondary: var(--color-neutral-800);
 		--color-background-tertiary: var(--color-secondary-900);

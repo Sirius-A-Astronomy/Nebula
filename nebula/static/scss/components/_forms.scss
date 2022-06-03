@@ -3,11 +3,16 @@
 */
 
 .input-field {
-	background-color: var(--color-background-secondary);
+	background-color: var(--color-background);
 	color: var(--color-text-primary);
 	border-radius: 0.7rem;
 	padding: 0.5rem 1rem;
 	margin-bottom: 1rem;
+
+	&,
+	& > * {
+		transition: all 0.1s ease-in-out;
+	}
 
 	&.is-valid {
 		outline: var(--color-form-is-valid) solid 3px;
@@ -23,7 +28,11 @@
 		box-shadow: none;
 	}
 
-	:focus-within {
+	&:focus-within {
+		color: var(--color-text-primary);
+		background-color: var(--color-background-tertiary);
+		border: none;
+		box-shadow: none;
 		.is-invalid {
 			box-shadow: 0 0 0 0.25rem var(--color-form-is-invalid);
 		}
@@ -34,10 +43,6 @@
 			box-shadow: 0 0 0 0.25rem var(--color-text-secondary);
 		}
 	}
-}
-.input-field,
-.input-field > * {
-	transition: all 0.1s ease-in-out;
 }
 
 .form-label {
@@ -57,13 +62,6 @@
 	padding-left: 0;
 	padding-top: 0;
 	background-color: transparent;
-	border: none;
-	box-shadow: none;
-}
-
-.input-field:focus-within {
-	color: var(--color-text-primary);
-	background-color: var(--color-background-tertiary);
 	border: none;
 	box-shadow: none;
 }
@@ -118,7 +116,7 @@
 }
 
 .preview-form-container {
-	background-color: var(--color-background-secondary);
+	background-color: var(--color-background-primary);
 	border-radius: 0.7rem;
 	padding: 1rem;
 	display: none;
