@@ -56,6 +56,8 @@
                     <p>
                         Username: {{ current_user.username }}
                     </p>
+                    <p>Email: {{ current_user.email }}</p>
+                    <p>Password: ***********</p>
                     <p>Comments created: {{ current_user.comments|count }}</p>
                     <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
                     <p>Account access level: {{ "Guest" if current_user.access_level==0 else
@@ -63,10 +65,11 @@
                         current_user.access_level==2
                         else "Admin" }}</p>
 
-                    <p>
+                    <div class="d-flex justify-content-between">
+                        <a class="button-accent on-primary" href="#">Edit Info</a>
                         <a class="button-accent on-primary"
                             href="{{ url_for('user.logout') }}">Logout</a>
-                    </p>
+                    </div>
                 </div>
 
             </div>
