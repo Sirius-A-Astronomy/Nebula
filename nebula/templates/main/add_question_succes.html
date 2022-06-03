@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Added your question to {{ course.name }} - Nebula{% endblock %}
+{% from 'utilities/macros.html' import question_view with context %}
 {% block body %}
 <main>
     <div class="container-lg">
@@ -8,16 +9,7 @@
             Preview:
         </p>
         <div class="question-preview">
-            <h4>Title: {{ question.title }}</h4>
-            <p>
-                Question: {{ question.content }}
-            </p>
-            <p>
-                Difficulty: {{ question.difficulty }}
-            </p>
-            <p>
-                Answer: {{ question.answer }}
-            </p>
+            {{ question_view(question) }}
         </div>
         <div class="d-flex justify-content-between mt-3">
             <a href="{{ url_for('add_question.add_question', course_code=question.course.code)}}"
