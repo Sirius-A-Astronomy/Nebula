@@ -328,6 +328,10 @@ document.querySelectorAll(".show-more-button").forEach((button) => {
 
 // !SECTION show-more-button
 
+/*
+    SECTION clickable-divs
+*/
+
 document
 	.querySelectorAll(".question-list-item, .course-list-item, .clickable-div")
 	.forEach((questionItem) => {
@@ -335,3 +339,14 @@ document
 			window.location = questionItem.attributes["href"].value;
 		});
 	});
+
+// !SECTION clickable-divs
+
+/*
+        SECTION Ellipsify
+    */
+
+document.querySelectorAll(".ellipsify").forEach((element) => {
+	element.setAttribute("title", element.textContent);
+	console.log(element);
+});
