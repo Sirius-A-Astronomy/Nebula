@@ -1,6 +1,5 @@
 from re import sub
 from nebula import db, create_app
-import datetime
 from random import randrange
 from datetime import timedelta
 from nebula.models import User, Course, CourseLevel, Question, Comment, Answer, SubjectTag
@@ -10,8 +9,9 @@ app = create_app()
 
 app.app_context().push()
 
-for column in [User, Course, CourseLevel, Question, Comment, Answer]:
+for column in [User, Course, CourseLevel, Question, Comment, Answer, SubjectTag]:
     column.query.delete()
+
 db.session.commit()
 
 
