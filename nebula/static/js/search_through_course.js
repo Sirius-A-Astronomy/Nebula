@@ -101,8 +101,6 @@ class Question {
 				: this.subject_tags_names
 		).split(" ; ");
 
-		console.log(subjectTagsHighlighted);
-
 		for (let [i, subjectTag] of this.subjectTags.entries()) {
 			let questionListItem__Header__SubjectTags__Tag =
 				document.createElement("a");
@@ -112,6 +110,8 @@ class Question {
 			questionListItem__Header__SubjectTags__Tag.classList.add(
 				"subject-tag"
 			);
+			questionListItem__Header__SubjectTags__Tag.title =
+				subjectTagsHighlighted[i];
 			questionListItem__Header__SubjectTags.appendChild(
 				questionListItem__Header__SubjectTags__Tag
 			);
