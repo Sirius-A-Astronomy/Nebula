@@ -43,7 +43,7 @@
                     question</a>
             </div>
             <div class="question-list-container" id="question-list-container">
-                {% for question in questions|sort(attribute='created_at', reverse=true) %}
+                {% for question in questions|sort(attribute='id', reverse=true) %}
                 {{ question_view(question) }}
                 {% endfor %}
             </div>
