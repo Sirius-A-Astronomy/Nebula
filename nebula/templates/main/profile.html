@@ -70,6 +70,83 @@
                         <a class="button-accent on-primary"
                             href="{{ url_for('user.logout') }}">Logout</a>
                     </div>
+
+                    <form action="{{ url_for('user.profile') }}" method="post">
+                        {{ change_password_form.csrf_token }}
+                        {{ change_password_form.hidden_tag }}
+                        <div class="form-group">
+                            <div class="input-field">
+                                {{ change_password_form.current_password.label(class="form-label")
+                                }}
+
+                                {% if change_password_form.current_password.errors|length > 0 %}
+                                {{ change_password_form.current_password(class="form-control
+                                is-invalid",
+                                id="current_password-input-field") }}
+                                <div id="current-password-input-field-feedback"
+                                    class="input-feedback invalid-feedback">
+                                    {% for error in change_password_form['current_password'].errors
+                                    %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ change_password_form.current_password(class="form-control",
+                                id="current_password-input-field") }}
+                                <div id="current-password-input-field-feedback"
+                                    class="input-feedback invalid-feedback"></div>
+                                {% endif %}
+                            </div>
+
+                            <div class="input-field">
+                                {{ change_password_form.new_password.label(class="form-label") }}
+                                {% if change_password_form.new_password.errors|length > 0 %}
+                                {{ change_password_form.new_password(class="form-control
+                                is-invalid",
+                                id="new_password-input-field") }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="new-password-input-field-feedback">
+                                    {% for error in change_password_form['new_password'].errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ change_password_form.new_password(class="form-control",
+                                id="new_password-input-field")
+                                }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="new-password-input-field-feedback"></div>
+                                {% endif %}
+                            </div>
+
+                            <div class="input-field">
+                                {{
+                                change_password_form.new_password_confirm.label(class="form-label")
+                                }}
+                                {% if change_password_form.new_password_confirm.errors|length > 0 %}
+                                {{ change_password_form.new_password_confirm(class="form-control
+                                is-invalid",
+                                id="new-password-confirm-input-field") }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="new-password-confirmation-input-field-feedback">
+                                    {% for error in
+                                    change_password_form['new_password_confirm'].errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ change_password_form.new_password_confirm(class="form-control",
+                                id="new-password-confirmation-input-field") }}
+                                <div class="input-feedback invalid-feedback"
+                                    id="new-password-confirmation-input-field-feedback"></div>
+                                {% endif %}
+                            </div>
+
+                            {{ change_password_form.change_password_submit(class="btn btn-outline")
+                            }}
+
+                        </div>
+                    </form>
                 </div>
 
             </div>
