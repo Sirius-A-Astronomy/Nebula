@@ -26,7 +26,6 @@ class TagInput {
 		this.element.addEventListener("paste", this.onPaste);
 		this.element.addEventListener("cut", this.onCut);
 		for (let tag of this.tags) {
-			console.log("tag", tag);
 			this.options.addTag(tag);
 		}
 	}
@@ -52,7 +51,6 @@ class TagInput {
 				this.options.onRemoveTag();
 				e.preventDefault();
 			}
-			console.log("keyDown", e.key);
 			return false;
 		}
 	}
@@ -66,7 +64,6 @@ class TagInput {
 	}
 
 	onPaste(e) {
-		console.log("paste");
 		const clipboardData = e.clipboardData || window.clipboardData;
 		const pastedData = clipboardData.getData("Text");
 		const tags = pastedData.split(",");
@@ -86,7 +83,6 @@ class TagInput {
 	}
 
 	onCut(e) {
-		console.log("cut");
 		const clipboardData = e.clipboardData || window.clipboardData;
 		const cutData = clipboardData.getData("Text");
 		const tags = cutData.split(",");
@@ -102,8 +98,7 @@ class AutoComplete {
 		this.options = options;
 		this.source = options.source;
 		this.onKeyDown = this.onKeyDown.bind(this);
-		this.next = this.next.bind(this);
-		this.previous = this.previous.bind(this);
+		this.navigate = this.navigate.bind(this);
 		this.clear = this.clear.bind(this);
 		this.select = this.select.bind(this);
 		this.showAutocomplete = this.showAutocomplete.bind(this);
@@ -118,10 +113,10 @@ class AutoComplete {
 
 	onKeyDown(e) {
 		if (e.key === "ArrowDown") {
-			this.next();
+			this.navigate(1);
 			e.preventDefault();
 		} else if (e.key === "ArrowUp") {
-			this.previous();
+			this.navigate(-1);
 			e.preventDefault();
 		} else if (e.key === "Enter" || e.key === "Tab") {
 			if (this.element.value != "") {
@@ -170,74 +165,49 @@ class AutoComplete {
 		});
 	}
 
-	next() {
+	/**
+	 * Navigate through the suggestions
+	 * @param {int} direction how many steps to move in the direction (positive for next, negative for previous)
+	 */
+	navigate(direction) {
 		if (this.suggestionsContainer === undefined) {
 			return;
 		}
 
 		let suggestions =
 			this.suggestionsContainer.querySelectorAll(".suggestion");
+
 		if (suggestions.length === 0) {
 			return;
 		}
 		if (this.selected === undefined) {
-			this.selected = suggestions[0];
+			this.selected =
+				direction > 0
+					? suggestions[0]
+					: suggestions[suggestions.length - 1];
 			this.selected.classList.add("selected");
-			this.selectedIndex = 0;
+			this.selectedIndex = direction > 0 ? 0 : suggestions.length - 1;
 			this.element.value = DOMPurify.sanitize(this.selected.innerHTML, {
 				ALLOWED_TAGS: [],
 			});
+			this.selected.scrollIntoView();
 			return;
 		}
 
-		if (this.selectedIndex === suggestions.length - 1) {
-			this.selected.classList.remove("selected");
-			this.selected = suggestions[0];
-			this.selectedIndex = 0;
-			this.selected.classList.add("selected");
-		} else {
-			this.selected.classList.remove("selected");
-			this.selected = suggestions[this.selectedIndex + 1];
-			this.selectedIndex++;
-			this.selected.classList.add("selected");
+		let newIndex = (this.selectedIndex + direction) % suggestions.length;
+		if (newIndex < 0) {
+			newIndex += suggestions.length;
 		}
 
-		this.element.value = DOMPurify.sanitize(this.selected.innerHTML, {
-			ALLOWED_TAGS: [],
+		this.selected.classList.remove("selected");
+		this.selected = suggestions[newIndex];
+		this.selectedIndex = newIndex;
+		this.selected.classList.add("selected");
+		let topOffset = this.selected.offsetTop;
+		this.suggestionsContainer.scroll({
+			top: topOffset - this.suggestionsContainer.offsetTop,
+			behavior: "smooth",
 		});
-	}
-
-	previous() {
-		if (this.suggestionsContainer === undefined) {
-			return;
-		}
-
-		let suggestions =
-			this.suggestionsContainer.querySelectorAll(".suggestion");
-		if (suggestions.length === 0) {
-			return;
-		}
-		if (this.selected === undefined) {
-			this.selected = suggestions[0];
-			this.selected.classList.add("selected");
-			this.selectedIndex = 0;
-			this.element.value = DOMPurify.sanitize(this.selected.innerHTML, {
-				ALLOWED_TAGS: [],
-			});
-			return;
-		}
-
-		if (this.selectedIndex === 0) {
-			this.selected.classList.remove("selected");
-			this.selected = suggestions[suggestions.length - 1];
-			this.selectedIndex = suggestions.length - 1;
-			this.selected.classList.add("selected");
-		} else {
-			this.selected.classList.remove("selected");
-			this.selected = suggestions[this.selectedIndex - 1];
-			this.selectedIndex--;
-			this.selected.classList.add("selected");
-		}
 
 		this.element.value = DOMPurify.sanitize(this.selected.innerHTML, {
 			ALLOWED_TAGS: [],
@@ -265,6 +235,7 @@ class AutoComplete {
 	clear() {
 		if (this.suggestionsContainer !== undefined) {
 			this.suggestionsContainer.remove();
+			this.suggestionsContainer = undefined;
 		}
 	}
 }
@@ -305,7 +276,6 @@ async function initTagInputs() {
 					tags[tags.length - 1].remove();
 					this.element.value = tag_value;
 				}
-				console.log(tags);
 				this.tags.pop();
 				this.options.inputStore.value = JSON.stringify(this.tags);
 			},
@@ -337,12 +307,10 @@ async function initTagInputs() {
 	async function getSubjectTags() {
 		const subjectTags = await fetch("/api/get_subject_tags")
 			.then((response) => {
-				console.log(response);
 				return response.json();
 			})
 			.then((data) => data.subject_tags)
 			.catch((error) => console.log(error));
-		console.log({ subjectTags });
 		return subjectTags;
 	}
 }
