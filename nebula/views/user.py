@@ -267,7 +267,7 @@ class ChangeUsernameForm(Form):
     change_username_submit = SubmitField("Change Username")
 
 
-@ bp.route("/profile")
+@ bp.route("/profile", methods=["GET", "POST"])
 @ login_required
 def profile():
     """Creates the profile page for the current user."""
@@ -283,13 +283,13 @@ def profile():
                                        change_username_form=change_username_form,
                                        edit_profile_form=edit_profile_form)
 
-            current_password = change_password_form.old_password.data
+            current_password = change_password_form.current_password.data
 
             authenticated_user = authenticate(current_user.username,
                                               current_password)
             if not authenticated_user:
-                change_password_form.old_password.errors.append(
-                    "Invalid password")
+                change_password_form.current_password.errors.append(
+                    "That doesn't seem to be your current password")
                 return render_template("main/profile.html",
                                        change_password_form=change_password_form,
                                        change_username_form=change_username_form,
@@ -300,7 +300,7 @@ def profile():
             authenticated_user.password = new_password_hashed
             db.session.commit()
             flash("Password changed successfully")
-            return redirect(url_for("main.profile"))
+            return redirect(url_for("user.profile"))
 
     return render_template("main/profile.html", change_password_form=change_password_form,
                            change_username_form=change_username_form,
