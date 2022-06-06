@@ -41,33 +41,42 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/queries.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
-    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script> -->
-    <!-- <script src="{{ url_for('static', filename='js/loadMathJax.js') }}" async></script> -->
+
+    <!-- MathJax -->
+    <script src="{{ url_for('static', filename='js/mathjax-config.js') }}" defer></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-mml-chtml.js" defer></script>
+
+    <!-- Markdown -->
+    <script src="{{ url_for('static', filename='js/markdown-it.min.js') }}"></script>
 
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
     </script>
     {% block include_head %}{% endblock %}
-    {% macro nav_course_list_item(course) -%}
-    <li>
-        <a {% if course.code in request.path %} class="dropdown-item active" {% else %}
-            class="dropdown-item" {% endif %}
-            href="{{ url_for('course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{
-            course.name }}</a>
-    </li>
-    {%- endmacro %}
-    {% macro nav_course_level_list_item(course_level) -%}
-    <li class="caret-hover">
-        <a {% if course_level.code in request.path %} class="dropdown-item dropdown-toggle active"
-            {% else %} class="dropdown-item dropdown-toggle" {% endif %}
-            href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{
-            course_level.name }}</a>
-        <ul class="dropdown-submenu">
-            {% for course in course_level.courses %}{{ nav_course_list_item(course) }}{% endfor %}
-        </ul>
-    </li>
-    {%- endmacro %}
+
 </head>
+
+{% macro nav_course_list_item(course) -%}
+<li>
+    <a {% if course.code in request.path %} class="dropdown-item active" {% else %}
+        class="dropdown-item" {% endif %}
+        href="{{ url_for('course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{
+        course.name }}</a>
+</li>
+{%- endmacro %}
+{% macro nav_course_level_list_item(course_level) -%}
+<li class="caret-hover">
+    <a {% if course_level.code in request.path %} class="dropdown-item dropdown-toggle active" {%
+        else %} class="dropdown-item dropdown-toggle" {% endif %}
+        href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{
+        course_level.name }}</a>
+    <ul class="dropdown-submenu">
+        {% for course in course_level.courses %}{{ nav_course_list_item(course) }}{% endfor %}
+    </ul>
+</li>
+{%- endmacro %}
 
 <body>
     <header>
@@ -209,13 +218,24 @@
 
                         </ul>
                     </div>
-                    </ul>
                 </div>
                 {% endif %}
-        </div>
-        </nav>
+            </nav>
         </div>
     </header>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="btn btn-outline close" data-bs-dismiss="alert"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
     {% block body %}
     {% endblock body %}
     <footer class="footer">
@@ -235,7 +255,9 @@
     {% endblock include_js %}
     <!--- Scripts -->
     <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
-    <script type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
+    <script defer type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
 </body>
 
 </html>

@@ -1,21 +1,3 @@
-window.MathJax = {
-	tex: {
-		tags: "ams",
-	},
-	tex2jax: {
-		processEscapes: true,
-	},
-};
-
-(function () {
-	var script = document.createElement("script");
-	script.src =
-		// "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
-		"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML";
-	script.async = true;
-	document.head.appendChild(script);
-})();
-
 function debounce(callback, wait) {
 	let timeout;
 	return (...args) => {
@@ -179,6 +161,21 @@ document
 // !SECTION Toggle latex instructions
 
 /*
+    SECTION Markdown
+*/
+let markdown = window.markdownit();
+let mathjax = window.MathJax;
+
+document.querySelectorAll(".markdown-view").forEach((element) => {
+	element.innerHTML = markdown.render(
+		DOMPurify.sanitize(element.textContent.trim(), {
+			ALLOWED_TAGS: [],
+		})
+	);
+	mathjax.typesetPromise([element]);
+});
+
+/*
     SECTION Preview-Form-Input
 */
 
@@ -199,19 +196,28 @@ document
 					element.style.display = "block";
 					let previewContent =
 						element.querySelector(".preview-content");
-					previewContent.textContent = inputForm.value;
-					MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+					previewContent.innerHTML = markdown.render(
+						DOMPurify.sanitize(inputForm.value.trim(), {
+							ALLOWED_TAGS: [],
+						})
+					);
+					// Mathjax 2 method
+					//MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+
+					mathjax.typesetPromise([previewContent]);
 					showPreviewButton.style.display = "none";
 
 					inputForm.addEventListener(
 						"input",
 						debounce(() => {
-							previewContent.textContent = inputForm.value;
-							MathJax.Hub.Queue([
-								"Typeset",
-								MathJax.Hub,
-								previewContent,
-							]);
+							previewContent.innerHTML = markdown.render(
+								DOMPurify.sanitize(inputForm.value.trim(), {
+									ALLOWED_TAGS: [],
+								})
+							);
+							// Mathjax 2 method
+							//MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+							mathjax.typesetPromise([previewContent]);
 						}, 500)
 					);
 				});

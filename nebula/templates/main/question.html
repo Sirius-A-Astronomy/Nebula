@@ -68,8 +68,7 @@
                             <p class="small-accent">
                                 Question content:
                             </p>
-                            <p class="question-content">
-                                {{ linebreaks(question.content) }}
+                            <p class="question-content markdown-view">{{ question.content }}
                             </p>
                         </div>
                         {% if current_user.is_anonymous == false and
@@ -207,8 +206,8 @@
                                         }}</span>
                                 </p>
                             </div>
-                            <div class="answer-content">
-                                <p>{{ linebreaks(answer.content) }}</p>
+                            <div class="answer-content markdown-view">
+                                <p>{{ answer.content }}</p>
 
                             </div>
                         </div>
@@ -382,7 +381,6 @@
 {% endblock body %}
 
 {% block include_js %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
 <script src="{{ url_for('static', filename='js/tag_input.js') }}"></script>
 {% endblock include_js %}

@@ -36,16 +36,16 @@
                 <p class="text-secondary">
                     If you want to add Latex to your question, please use the following format:
                     <br>
-                    <span class="tex2jax_ignore">For block equations, use $$ equation $$, which will
-                        look like
-                        this:</span>
+                    For block equations, use <code>$$ equation $$</code>, which will
+                    look like
+                    this:
                     <br>
                     $$ \nabla f = [\frac{\partial f}{\partial x} \hat{x} + \frac{\partial
                     f}{\partial y} \hat{y} +
                     \frac{\partial f}{\partial z} \hat{z}] $$
-                    <span class="tex2jax_ignore">For inline equations, use \( equation \), which
-                        will look like
-                        this:</span>
+                    For inline equations, use <code>\( equation \)</code>, which
+                    will look like
+                    this:
                     \( |\vec{r}| = \sqrt{x^2 + y^2 + z^2} \)
                     <br>
                 </p>
@@ -150,7 +150,6 @@
 
 {% block include_js %}
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
 <script src="{{ url_for('static', filename='js/tag_input.js') }}"></script>
 {% endblock %}
