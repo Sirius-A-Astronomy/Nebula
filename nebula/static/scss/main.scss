@@ -173,6 +173,10 @@ a {
 	@include mq(sm) {
 		flex-direction: row;
 		gap: 0;
+
+		&__link {
+			text-align: start;
+		}
 	}
 
 	&__link {
@@ -182,6 +186,7 @@ a {
 		font-weight: 600;
 		font-size: var(--font-size-h4);
 		flex: 0 0 content;
+		text-align: center;
 
 		&:hover {
 			color: var(--color-text-primary);
