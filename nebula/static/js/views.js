@@ -161,10 +161,15 @@ document
 // !SECTION Toggle latex instructions
 
 /*
-    SECTION Markdown
+    SECTION Markdown and MathJax
 */
 let markdown = window.markdownit();
 let mathjax = window.MathJax;
+
+document.querySelectorAll(".latex-instructions-container").forEach((element) => {
+    console.log(element);
+    mathjax.typesetPromise([element]);
+});
 
 document.querySelectorAll(".markdown-view").forEach((element) => {
 	element.innerHTML = markdown.render(
@@ -226,6 +231,8 @@ document
 	});
 
 // !SECTION Preview-Form-Input
+
+// !SECTION Markdown and MathJax    
 
 /*
     SECTION focus-form-input-field 

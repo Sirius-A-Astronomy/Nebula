@@ -7,8 +7,7 @@
         <p>
             Submit a question below
         </p>
-        <form method='POST' action="{{ url_for('add_question.add_question')}}"
-            id="add-question-form">
+        <form method='POST' action="{{ url_for('add_question.add_question')}}" id="add-question-form">
             {{ question_form.csrf_token }}
             {{ question_form.hidden_tag }}
             <div class="input-field">
@@ -32,23 +31,32 @@
                     how to use LaTex in
                     your question?</a>
             </div>
-            <div class="latex-instructions-container">
-                <p class="text-secondary">
-                    If you want to add Latex to your question, please use the following format:
-                    <br>
-                    For block equations, use <code>$$ equation $$</code>, which will
-                    look like
-                    this:
-                    <br>
-                    $$ \nabla f = [\frac{\partial f}{\partial x} \hat{x} + \frac{\partial
-                    f}{\partial y} \hat{y} +
-                    \frac{\partial f}{\partial z} \hat{z}] $$
-                    For inline equations, use <code>\( equation \)</code>, which
-                    will look like
-                    this:
-                    \( |\vec{r}| = \sqrt{x^2 + y^2 + z^2} \)
-                    <br>
-                </p>
+            <div class="latex-instructions-container text-secondary">
+                If you want to add Latex to your question, please use the following format:
+                <br>
+                For block equations, use <code>$$ equation $$</code>, which will
+                look like
+                this:
+                <br>
+                $$ \nabla f = [\frac{\partial f}{\partial x} \hat{x} + \frac{\partial
+                f}{\partial y} \hat{y} +
+                \frac{\partial f}{\partial z} \hat{z}] $$
+                <br>
+                For inline equations, use <code>$ equation $</code>, which
+                will look like
+                this:
+                $ |\vec{r}| = \sqrt{x^2 + y^2 + z^2} $
+                <br>
+                To use numbered equations, use <code>\begin{equation}
+                \label{equation:number} 
+                equation
+                \end{equation}</code>
+                <br>
+
+                \begin{equation}
+                \label{equation:number}
+                \iiiint_V \mu(t,u,v,w) \,dt\,du\,dv\,dw
+                \end{equation}
             </div>
             <div class="input-field">
                 {{ question_form.title.label(class="form-label") }}
@@ -88,8 +96,7 @@
                 id="content-input-field") }}
                 <div class="input-feedback" id="content-input-field-feedback"></div>
                 {% endif %}
-                <a href="#!" id="show-question-preview"
-                    class="show-preview-button button-accent">Show
+                <a href="#!" id="show-question-preview" class="show-preview-button button-accent">Show
                     preview</a>
             </div>
             <div class="preview-form-container" data-preview-toggled-by="show-question-preview"
