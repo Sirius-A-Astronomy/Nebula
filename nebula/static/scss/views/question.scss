@@ -52,7 +52,7 @@
 .container-question-info {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: baseline;
 	justify-content: space-between;
 }
 
@@ -88,11 +88,8 @@
 }
 
 .question-answer {
-	display: flex;
-	flex-direction: row;
 	margin-top: 0.5rem;
 	background-color: var(--color-background-secondary);
-	padding: 0.5rem;
 	border-radius: 0.5rem;
 
 	.col-left {
@@ -100,10 +97,6 @@
 	}
 
 	.answer-info {
-		p {
-			font-size: 0.875rem;
-			font-weight: 500;
-		}
 	}
 
 	.answer-content {
@@ -115,9 +108,7 @@
 	}
 
 	.answer-sources {
-		width: 25%;
-		padding-inline-start: 0.5rem;
-		border-inline-start: 2px solid var(--color-primary-active);
+		margin-block-start: 0.5rem;
 
 		a {
 			padding-block: 0;

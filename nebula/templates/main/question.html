@@ -16,6 +16,9 @@
 {%- endmacro %}
 {% block body %}
 <main>
+
+    {% set edit_question_mode = current_user.is_anonymous == false and
+    (current_user == question.user or current_user.access_level > 2) and edit == True %}
     <div {% if current_user.is_anonymous==false and question_edit_form.errors|length> 0 %}
         class="container-lg edit-mode"
         {% else %}
@@ -50,7 +53,7 @@
         <div class="container-question-page">
 
             <div class="left-panel background-card">
-
+                {% if not edit_question_mode %}
                 <div class="container-question ">
 
                     <div class="container-question-info">
@@ -58,9 +61,9 @@
                             <h2>{{ question.title }}</h2>
                         </div>
                         <div class="question-info">
-                            <h4 class="text-tertiary">
+                            <h6 class="text-tertiary poppins fw-600">
                                 Posted {{ pretty_date(question.created_at) }}
-                                by {{ question.user.first_name }} {{ question.user.last_name }}</h4>
+                                by {{ question.user.first_name }} {{ question.user.last_name }}</h6>
                         </div>
                     </div>
                     <div class="container-question-content">
@@ -74,16 +77,16 @@
                         {% if current_user.is_anonymous == false and
                         (current_user == question.user or current_user.access_level > 2) %}
                         <div class="d-flex justify-content-end">
-                            <a href="#!" class="button-accent ml-auto"
-                                id="question-edit-button">Edit</a>
+                            <a href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code, edit=True) }}"
+                                class="button-accent ml-auto" id="question-edit-button">Edit</a>
                         </div>
                         {% endif %}
                         <div class="divider"></div>
                     </div>
                 </div>
-                {% if current_user.is_anonymous == false and
-                (current_user == question.user or current_user.access_level > 2) %}
+                {% endif %}
 
+                {% if edit_question_mode %}
                 <div class="container-question-edit">
                     <form method="post"
                         action="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
@@ -182,14 +185,16 @@
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-outline"
-                                id="cancel-edit-question">Cancel</button>
+                            <a href="{{ url_for('question.question', course_level_code=question.course.course_level.code, course_code=question.course.code, question_uuid=question.uuid) }}"
+                                class="btn btn-outline" id="cancel-edit-question">Cancel</a>
                             {{ question_edit_form.question_edit_submit(class="btn btn-outline")
                             }}
                         </div>
                     </form>
                 </div>
                 {% endif %}
+
+                {% if not edit_question_mode %}
                 <div class="container-question-answers">
                     <h4>Answers</h4>
                     {% if question.answers|count == 0 %}
@@ -197,19 +202,18 @@
                     {% else %}
                     {% for answer in question.answers %}
                     <div class="question-answer">
-                        <div class="col-left">
 
-                            <div class="answer-info">
-                                <p class="text-primary">
-                                    {{ answer.user.first_name }} {{ answer.user.last_name }}
-                                    <span class="text-tertiary">{{ pretty_date(answer.created_at)
-                                        }}</span>
-                                </p>
-                            </div>
-                            <div class="answer-content markdown-view">
-                                {{ answer.content }}
+                        <div class="answer-info">
+                            <h3 class="text-primary">
+                                {{ answer.user.first_name }} {{ answer.user.last_name }}
+                                <span class="h6 poppins text-tertiary">{{
+                                    pretty_date(answer.created_at)
+                                    }}</span>
+                            </h3>
+                        </div>
+                        <div class="answer-content markdown-view">
+                            {{ answer.content }}
 
-                            </div>
                         </div>
                         <div class="answer-sources">
                             {% if answer.sources|count == 1 %}
@@ -228,6 +232,10 @@
                             {% endif %}
                         </div>
                     </div>
+
+                    {% if not loop.last %}
+                    <hr>
+                    {% endif %}
                     {% endfor %}
                     {% endif %}
                     {% if current_user.is_anonymous == false %}
@@ -296,11 +304,11 @@
                             </div>
 
                         </form>
-                        <div class="divider"></div>
                     </div>
                     {% endif %}
 
                 </div>
+                {% endif %}
             </div>
 
             <div class="right-panel background-card">

@@ -165,7 +165,9 @@ a {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-top: 1rem;
 	margin-bottom: 1rem;
+
 	justify-content: flex-start;
 	flex-wrap: wrap;
 	gap: 0.125rem;
@@ -355,20 +357,12 @@ a {
 	box-shadow: var(--box-shadow);
 }
 
-.container-question-page.edit-mode .container-question {
-	display: none;
-}
-
 .container-question-page.edit-mode .container-question-edit {
 	display: block;
 }
 
 .container-question-page .container-question {
 	display: block;
-}
-
-.container-question-page .container-question-edit {
-	display: none;
 }
 
 @media (max-width: 768px) {
