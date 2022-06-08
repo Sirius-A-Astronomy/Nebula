@@ -207,7 +207,7 @@
                                 </p>
                             </div>
                             <div class="answer-content markdown-view">
-                                <p>{{ answer.content }}</p>
+                                {{ answer.content }}
 
                             </div>
                         </div>
@@ -365,10 +365,8 @@
                                         comment.created_at)}}</span>
                                 </p>
                             </div>
-                            <div class="question-comment-content text-primary">
-                                <p class="expandable-text">
-                                    {{ linebreaks(comment.content) }}
-                                </p>
+                            <div class="question-comment-content text-primary markdown-view">
+                                {{ comment.content }}
                             </div>
                         </div>
                         {% endfor %}
