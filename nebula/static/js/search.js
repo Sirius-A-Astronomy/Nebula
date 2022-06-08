@@ -260,7 +260,6 @@ async function getQuestions() {
 	questionsJSON = await fetch("/api/get_questions")
 		.then((response) => response.json())
 		.then((data) => {
-			console.log("Success:", data);
 			return data;
 		})
 		.catch((error) => {
@@ -335,8 +334,6 @@ async function search() {
 		},
 		threshold: -40000,
 	});
-
-	console.log({ searchResults });
 
 	for (let searchResult of searchResults) {
 		let question = searchResult.obj;

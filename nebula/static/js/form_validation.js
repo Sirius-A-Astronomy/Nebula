@@ -197,7 +197,6 @@ function addInvalidFeedback(element, feedbackMessage) {
 	$(`#${element.id}-feedback`).removeClass("valid-feedback");
 	$(`#${element.id}-feedback`).removeClass("validating-feedback");
 	$(`#${element.id}-feedback`).text(feedbackMessage);
-	console.log(`#${element.id}-feedback`);
 
 	// Disable the submit button
 	$("#register-form-submit-button").prop("disabled", true);
