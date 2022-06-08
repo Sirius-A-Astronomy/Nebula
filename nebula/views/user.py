@@ -299,7 +299,7 @@ def profile():
             new_password_hashed = sha256_crypt.encrypt(new_password)
             authenticated_user.password = new_password_hashed
             db.session.commit()
-            flash("Password changed successfully")
+            flash("Password changed successfully!", "success")
             return redirect(url_for("user.profile"))
 
     return render_template("main/profile.html", change_password_form=change_password_form,
