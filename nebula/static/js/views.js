@@ -166,12 +166,16 @@ document
 let markdown = window.markdownit();
 let mathjax = window.MathJax;
 
-document.querySelectorAll(".latex-instructions-container").forEach((element) => {
-    console.log(element);
-    mathjax.typesetPromise([element]);
-});
+document
+	.querySelectorAll(".latex-instructions-container")
+	.forEach((element) => {
+		mathjax.typesetPromise([element]);
+	});
 
 document.querySelectorAll(".markdown-view").forEach((element) => {
+	if (element.style.display === "none") {
+		return;
+	}
 	element.innerHTML = markdown.render(
 		DOMPurify.sanitize(element.textContent.trim(), {
 			ALLOWED_TAGS: [],
@@ -201,6 +205,7 @@ document
 					element.style.display = "block";
 					let previewContent =
 						element.querySelector(".preview-content");
+					mathjax.typesetClear([previewContent]);
 					previewContent.innerHTML = markdown.render(
 						DOMPurify.sanitize(inputForm.value.trim(), {
 							ALLOWED_TAGS: [],
@@ -215,6 +220,7 @@ document
 					inputForm.addEventListener(
 						"input",
 						debounce(() => {
+							mathjax.typesetClear([previewContent]);
 							previewContent.innerHTML = markdown.render(
 								DOMPurify.sanitize(inputForm.value.trim(), {
 									ALLOWED_TAGS: [],
@@ -223,6 +229,7 @@ document
 							// Mathjax 2 method
 							//MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
 							mathjax.typesetPromise([previewContent]);
+							mathjax.texReset();
 						}, 500)
 					);
 				});
@@ -232,7 +239,7 @@ document
 
 // !SECTION Preview-Form-Input
 
-// !SECTION Markdown and MathJax    
+// !SECTION Markdown and MathJax
 
 /*
     SECTION focus-form-input-field 
@@ -256,37 +263,25 @@ document.querySelectorAll(".input-field").forEach((inputField) => {
 // !SECTION focus-form-input-field
 
 /*
-    SECTION Edit-Question-Button AND auto-adjust-textarea
+    SECTION auto-adjust-textarea
 */
 
 const autoAdjustTextAreas = document.querySelectorAll(".auto-adjust-textarea");
 
 function autoAdjustTextArea(textarea) {
-	// textarea.style.height = "auto";
-	textarea.style.height = Math.min(textarea.scrollHeight, 500) + "px";
+	if (textarea.offsetHeight < 500) {
+		textarea.style.height = Math.min(textarea.scrollHeight, 500) + "px";
+	}
 }
 
-document.querySelectorAll("#question-edit-button").forEach((button) => {
-	button.addEventListener("click", function (e) {
-		const questionPageContainer = document.querySelectorAll(
-			".container-question-page"
-		);
-		questionPageContainer.forEach((element) => {
-			element.classList.add("edit-mode");
-		});
-		autoAdjustTextAreas.forEach((element) => {
-			autoAdjustTextArea(element);
-		});
-	});
-});
-
 autoAdjustTextAreas.forEach((textarea) => {
+	autoAdjustTextArea(textarea);
 	textarea.addEventListener("keyup", function (e) {
 		autoAdjustTextArea(textarea);
 	});
 });
 
-// !SECTION Edit-Question-Button AND auto-adjust-textarea
+// !SECTION auto-adjust-textarea
 
 /*
     SECTION Add-Question-Button
@@ -361,5 +356,4 @@ document
 
 document.querySelectorAll(".ellipsify").forEach((element) => {
 	element.setAttribute("title", element.textContent);
-	console.log(element);
 });
