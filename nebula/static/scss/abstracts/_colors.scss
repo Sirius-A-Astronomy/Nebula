@@ -108,6 +108,17 @@ $colors: (
 	--box-shadow: 4px 4px 30px rgba(44, 55, 65, 0.1),
 		2px 2px 20px rgba(44, 55, 65, 0.04);
 
+	/* Alerts */
+
+	--color-alert-error: #bd3838;
+	--color-alert-error-text: var(--color-neutral-50);
+	--color-alert-success: var(--color-primary-800);
+	--color-alert-success-text: var(--color-neutral-50);
+	--color-alert-warning: rgb(255, 210, 125);
+	--color-alert-warning-text: var(--color-neutral-900);
+	--color-alert-info: var(--color-neutral-900);
+	--color-alert-info-text: var(--color-neutral-50);
+
 	&.dark-mode {
 		--color-scheme: dark;
 
