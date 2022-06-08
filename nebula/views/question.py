@@ -86,9 +86,7 @@ def question(course_code, question_uuid, course_level_code, new_comment_uuid=Non
             db.session.commit()
 
             return redirect(url_for(
-                'question.question', course_code=course_code,
-                comment_form=comment_form, question_edit_form=question_edit_form,
-                add_answer_form=add_answer_form, course_level_code=course.course_level.code,
+                'question.question', course_code=course_code, course_level_code=course_level_code,
                 question_uuid=question_uuid, new_comment_uuid=str(comment.uuid)))
 
         if question_edit_form.question_edit_submit.data == True and question_edit_form.validate():
@@ -113,10 +111,8 @@ def question(course_code, question_uuid, course_level_code, new_comment_uuid=Non
                 else "Medium" if question_edit_form.difficulty.data == 2 else "Hard"
             db.session.commit()
             return redirect(url_for(
-                'question.question', course_code=course_code,
-                comment_form=comment_form, question_edit_form=question_edit_form,
-                course_level_code=course.course_level.code,
-                question_uuid=question_uuid, add_answer_form=add_answer_form))
+                'question.question', course_code=course_code, course_level_code=course_level_code,
+                question_uuid=question_uuid))
 
         if add_answer_form.add_answer_submit.data == True and add_answer_form.validate():
             content = add_answer_form.content.data.strip()
@@ -126,10 +122,7 @@ def question(course_code, question_uuid, course_level_code, new_comment_uuid=Non
                 content=content, sources=sources, user=user, question=question)
             db.session.add(answer)
             db.session.commit()
-            return redirect(url_for('question.question', course_code=course_code,
-                                    comment_form=comment_form, question_edit_form=question_edit_form,
-                                    course_level_code=course.course_level.code,
-                                    question_uuid=question_uuid, add_answer_form=add_answer_form))
+            return redirect(url_for('question.question', course_code=course_code, course_level_code=course_level_code, question_uuid=question_uuid))
 
     question_edit_form.title.default = question.title
     question_edit_form.content.default = question.content
