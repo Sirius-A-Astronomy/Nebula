@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/views/dashboard.css') }}">
+</head>
+
+<body>
+
+    <div class="navigation">
+        <div class="navigation__logo">
+            <div class="h1">Nebula</d>
+                <div>
+                    {% if not current_user.is_anonymous and current_user.access_level > 2 %}
+                    &lt;Admin Panel&gt;
+                    {% else %}
+                    &lt;KLC Panel&gt;
+                    {% endif %}
+                </div>
+            </div>
+            <div class="navigation__links">
+                <a href="#">Dashboard</a>
+                <a href="#">Users</a>
+                <a href="#">Settings</a>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>Dashboard</h1>
+        </div>
+
+</body>
+
+</html>
