@@ -12,7 +12,7 @@ from nebula import db
 from nebula.models import Course, Question, Comment, User, Answer, SubjectTag
 
 bp = Blueprint('question', __name__,
-               url_prefix='/<course_level_code>/<course_code>')
+               url_prefix='/q/<course_level_code>/<course_code>')
 
 
 class CommentForm(Form):
@@ -123,7 +123,7 @@ def question(course_code, question_uuid, course_level_code, new_comment_uuid=Non
         question.content = question_edit_form.content.data.strip()
 
         subject_tags = []
-        if question_edit_form.subject_tags.data is not "":
+        if question_edit_form.subject_tags.data != "":
             for tag in json.loads(question_edit_form.subject_tags.data):
                 tag = tag.strip()
                 if not tag:

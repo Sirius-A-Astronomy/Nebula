@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from nebula.models import Course, CourseLevel
-bp = Blueprint('level', __name__)
+bp = Blueprint('level', __name__, url_prefix='/q')
 
 
 @bp.route('/<course_level_code>')

@@ -3,7 +3,7 @@ from nebula.models import Course, CourseLevel, Question
 
 # Does a course need to be a sublevel of courseLevel?
 # level dependent blueprint:
-bp = Blueprint('course', __name__, url_prefix='/<course_level_code>')
+bp = Blueprint('course', __name__, url_prefix='/q/<course_level_code>')
 
 # level independent blueprint
 # bp = Blueprint('course', __name__, url_prefix='/courses')
