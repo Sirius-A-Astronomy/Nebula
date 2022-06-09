@@ -32,11 +32,13 @@ def add_question(success=False, course_code=None):
         flash("Please login to add a question.", "warning")
         return redirect(url_for('user.login_register'))
 
+    # Add courses to the form
     question_form = QuestionForm(request.form)
     question_form.course.choices = [
         (course.id, course.name) for course in Course.query.all()]
     course_code = request.args.get('course_code')
 
+    # Set the default course if a course code is provided
     if course_code is not None:
         course = Course.query.filter_by(code=course_code).first()
         course_id = course.id
@@ -48,6 +50,7 @@ def add_question(success=False, course_code=None):
     else:
         course = None
 
+    # If this is not a POST request, show the page
     if request.method != 'POST':
         return render_template("main/add_question.html",
                                question_form=question_form,
@@ -65,7 +68,7 @@ def add_question(success=False, course_code=None):
                                course_code=course_code)
     title = question_form.title.data.strip()
 
-    # replace $$ with \( and \) for LaTeX equations to only have inline equations in the title
+    # replace $$ with $ for LaTeX equations to only have inline equations in the title
     block_equations = [i for i in range(
         len(title)) if title.startswith('$$', i)]
     if len(block_equations) > 0:
@@ -75,8 +78,8 @@ def add_question(success=False, course_code=None):
                 cleaned_title += title[:index]
             if i % 2 == 0:
                 try:
-                    cleaned_title += r"\(" + \
-                        title[index + 2:block_equations[i + 1]] + r"\)"
+                    cleaned_title += r"$" + \
+                        title[index + 2:block_equations[i + 1]] + r"$"
                 except IndexError:
                     # if there is not another $$, just add the rest of the string
                     cleaned_title += title[index + 2:]
@@ -111,8 +114,6 @@ def add_question(success=False, course_code=None):
     course = Course.query.filter_by(id=course_id).first()
     question = Question(title=title, content=content, user=user, course=course,
                         difficulty=difficulty, approved=False, subject_tags=subject_tags)
-
-    print(answer)
 
     if answer is not None and answer != "":
         answer_obj = Answer(content=answer, user=user,
