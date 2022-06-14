@@ -1,118 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "dashboard/base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nebula Dashboard</title>
+{% block content %}
 
-    <!-- Google Fonts Includes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" type="text/css"
-        href="{{ url_for('static', filename='css/fonts/fonts.css') }}" />
-    <link
-        href="//fonts.googleapis.com/css?family=Roboto+Mono:200,300,400,500|Roboto:200,300,400,500"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/views/dashboard.css') }}">
-</head>
-
-{% from "dashboard/macros.html" import dashboard_question_view with context %}
-
-<body>
-    <main>
-        <div class="navigation">
-            <div class="navigation__logo">
-                <div class="navigation__logo__title">Nebula</div>
-                <div class="navigation__logo__subtitle">
-                    {% if (not current_user.is_anonymous) and current_user.access_level > 2 %}
-                    &lt;Admin Panel&gt;
-                    {% else %}
-                    &lt;KLC Panel&gt;
-                    {% endif %}
-                </div>
-            </div>
-            <div class="navigation__links">
-                <a class="navigation__links__link active" href="#">Dashboard</a>
-                <a class="navigation__links__link" href="#">Users</a>
-                <a href="#" class="navigation__links__link">Courses</a>
-                <a href="#" class="navigation__links__link">Questions</a>
-                <a href="#" class="navigation__links__link">Answers</a>
-                <a class="navigation__links__link navigation__links__link--minor"
-                    href="#">Settings</a>
-            </div>
+<div class="summary-cards-container">
+    <div class="summary-card">
+        <div class="summary-card__title">
+            <span class="summary-card__title__text">user questions</span>
+        </div>
+        <div class="summary-card__value">
+            <span class="summary-card__value__text">{{ questions|count }}</span>
         </div>
 
-        <div class="content-card">
-            <h2>Dashboard</h2>
-
-            <div class="summary-cards-container">
-                <div class="summary-card">
-                    <div class="summary-card__title">
-                        <span class="summary-card__title__text">user questions</span>
-                    </div>
-                    <div class="summary-card__value">
-                        <span class="summary-card__value__text">{{ questions|count }}</span>
-                    </div>
-
-                    <div class="summary-card__bar">
-                        <div class="summary-card__bar__progress"
-                            style="--progress: {{ reviewed_questions / (questions|length) * 100 }}%;">
-                        </div>
-                    </div>
-                    <div class="summary-card__secondary-info">
-                        <span class="summary-card__secondary-info__text">User Questions
-                            Reviewed</span>
-
-                    </div>
-                    <div class="summary-card__secondary-info__value">
-                        <span class="summary-card__secondary-info__value__text">{{
-                            reviewed_questions }}</span>
-                    </div>
-                </div>
-
-                <div class="summary-card">
-                    <div class="summary-card__title">
-                        <span class="summary-card__title__text">user answers</span>
-                    </div>
-                    <div class="summary-card__value">
-                        <span class="summary-card__value__text">{{ answers}}</span>
-                    </div>
-
-                    <div class="summary-card__pie">
-                        <div class="summary-card__pie__progress"
-                            style="--progress: {{ answered_questions / answers * 100 }}%">
-                        </div>
-                    </div>
-                    <div class="summary-card__secondary-info">
-                        <span class="summary-card__secondary-info__text">User Questions
-                            Answer Rate</span>
-
-                    </div>
-                    <div class="summary-card__secondary-info__value">
-                        <span class="summary-card__secondary-info__value__text"> {{
-                            (answered_questions / answers * 100)|round|int }}%</span>
-                    </div>
-                </div>
-
+        <div class="summary-card__bar">
+            <div class="summary-card__bar__progress"
+                style="--progress: {{ reviewed_questions / (questions|length) * 100 }}%;">
             </div>
+        </div>
+        <div class="summary-card__secondary-info">
+            <span class="summary-card__secondary-info__text">User Questions
+                Reviewed</span>
 
-            <div class="recent-questions-container background-card">
-                <div class=" recent-questions__title">recent user questions</div>
-                {% for question in questions[-5:]|reverse %}
-                {{ dashboard_question_view(question) }}
-                {% endfor %}
+        </div>
+        <div class="summary-card__secondary-info__value">
+            <span class="summary-card__secondary-info__value__text">{{
+                reviewed_questions }}</span>
+        </div>
+    </div>
 
-    </main>
-    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+    <div class="summary-card">
+        <div class="summary-card__title">
+            <span class="summary-card__title__text">user answers</span>
+        </div>
+        <div class="summary-card__value">
+            <span class="summary-card__value__text">{{ answers}}</span>
+        </div>
 
-</body>
+        <div class="summary-card__pie">
+            <div class="summary-card__pie__progress" style="--progress: {{ answered_questions / answers * 100 }}%">
+            </div>
+        </div>
+        <div class="summary-card__secondary-info">
+            <span class="summary-card__secondary-info__text">User Questions
+                Answer Rate</span>
 
-</html>
+        </div>
+        <div class="summary-card__secondary-info__value">
+            <span class="summary-card__secondary-info__value__text"> {{
+                (answered_questions / answers * 100)|round|int }}%</span>
+        </div>
+    </div>
+
+</div>
+
+<div class="recent-questions-container background-card">
+    <div class=" recent-questions__title">recent user questions</div>
+    {% for question in questions[-5:]|reverse %}
+    {{ dashboard_question_view(question) }}
+    {% endfor %}
+</div>
+
+
+{% endblock content %}
