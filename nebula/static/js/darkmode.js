@@ -27,7 +27,7 @@ const initialPrefersDarkMode = () => {
 		const darkModePreference = window.matchMedia(
 			"(prefers-color-scheme: dark)"
 		);
-		if (darkModePreference.matches) {
+		if (darkModePreference.matches && darkModeToggle) {
 			darkModeToggle.checked = true;
 		}
 		return darkModePreference.matches ? "dark" : "light";
@@ -45,17 +45,19 @@ function setDarkModeonLoad() {
 }
 setDarkModeonLoad();
 
-darkModeToggle.addEventListener("click", function () {
-	let currentDarkModePreference = localStorage.getItem("prefersDarkMode");
-	if (currentDarkModePreference != "light") {
-		localStorage.setItem("prefersDarkMode", "light");
-		setDarkMode("light");
-	} else {
-		localStorage.setItem("prefersDarkMode", "dark");
-		setDarkMode("dark");
-	}
-	darkModeToggle.classList.add("animate-rotation");
-});
+if (darkModeToggle) {
+	darkModeToggle.addEventListener("click", function () {
+		let currentDarkModePreference = localStorage.getItem("prefersDarkMode");
+		if (currentDarkModePreference != "light") {
+			localStorage.setItem("prefersDarkMode", "light");
+			setDarkMode("light");
+		} else {
+			localStorage.setItem("prefersDarkMode", "dark");
+			setDarkMode("dark");
+		}
+		darkModeToggle.classList.add("animate-rotation");
+	});
+}
 
 function setDarkMode(mode) {
 	// colorScheme.forEach(function (color) {
@@ -66,15 +68,21 @@ function setDarkMode(mode) {
 	// });
 	// document.documentElement.style.setProperty("color-scheme", mode);
 
-	darkModeToggle.checked = mode == "dark";
+	if (darkModeToggle) {
+		darkModeToggle.checked = mode == "dark";
+	}
 	if (mode == "dark") {
-		darkModeToggle.classList.add("dark-mode-enabled");
-		darkModeToggle.classList.remove("light-mode-enabled");
+		if (darkModeToggle) {
+			darkModeToggle.classList.add("dark-mode-enabled");
+			darkModeToggle.classList.remove("light-mode-enabled");
+		}
 
 		document.documentElement.classList.add("dark-mode");
 	} else {
-		darkModeToggle.classList.remove("dark-mode-enabled");
-		darkModeToggle.classList.add("light-mode-enabled");
+		if (darkModeToggle) {
+			darkModeToggle.classList.remove("dark-mode-enabled");
+			darkModeToggle.classList.add("light-mode-enabled");
+		}
 
 		document.documentElement.classList.remove("dark-mode");
 	}
