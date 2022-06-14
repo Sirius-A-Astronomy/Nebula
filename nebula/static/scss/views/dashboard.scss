@@ -1,5 +1,233 @@
+@use "../abstracts/mixins" as *;
+
+:root {
+	--navigation-card-width: max(10%, 180px);
+}
 .navigation {
-    background-color: var(--color-primary);
-    color: var(--color-text-on-primary);
-    border-radius: 25px;
+	background-color: var(--color-primary);
+	color: var(--color-text-on-primary);
+	height: 60%;
+	display: flex;
+	flex-direction: row;
+	box-shadow: var(--box-shadow);
+	z-index: 1;
+
+	@include mq(sm) {
+		width: var(--navigation-card-width);
+		position: fixed;
+		flex-direction: column;
+		padding: 2rem;
+		margin-left: 2rem;
+		margin-top: 3rem;
+	}
+	border-radius: 1.5rem;
+
+	&__logo {
+		&__title {
+			font-size: 2.5rem;
+			font-weight: 500;
+		}
+
+		&__subtitle {
+			font-size: 1.5rem;
+			font-weight: 400;
+		}
+	}
+
+	&__links {
+		display: flex;
+		height: 100%;
+		width: 100%;
+		padding: 0.5rem 0;
+		gap: 2rem;
+
+		@include mq(sm) {
+			margin-top: 3rem;
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		&__link {
+			font-size: 1.5rem;
+			font-weight: 400;
+			color: var(--color-text-on-primary);
+			text-decoration: none;
+			transition: color 0.2s ease-in-out;
+
+			&.active {
+				font-weight: 700;
+
+				&::before {
+					content: "<";
+				}
+
+				&::after {
+					content: ">";
+				}
+			}
+
+			&:hover,
+			&:focus {
+				color: var(--color-text-on-primary-focus);
+			}
+
+			&--minor {
+				font-size: 1.2rem;
+				font-weight: 300;
+			}
+		}
+	}
+}
+
+.content-card {
+	background-color: var(--color-background-secondary);
+	z-index: 0;
+	border-radius: 1.5rem;
+	box-shadow: var(--box-shadow);
+
+	@include mq(sm) {
+		position: fixed;
+		height: calc(100% - 8rem);
+		margin-left: 6rem;
+		margin-top: 4rem;
+		margin-bottom: 4rem;
+		margin-right: 3rem;
+		--padding-left: calc(var(--navigation-card-width) + 2rem);
+
+		padding-left: var(--padding-left);
+		padding-right: 2rem;
+		padding-top: 2rem;
+		width: calc(100% - 11rem - var(--padding-left));
+	}
+}
+
+.summary-cards-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	@include mq(sm) {
+		flex-direction: row;
+	}
+
+	.summary-card {
+		display: grid;
+		flex-direction: column;
+		flex: 1 1 400px;
+
+		background-color: var(--color-background-secondary);
+		border-radius: 1rem;
+		box-shadow: var(--box-shadow);
+		padding: 1.25rem;
+		grid-template-columns: 1fr auto;
+		grid-template-rows: auto auto 1fr auto auto;
+
+		&__title {
+			font-size: 1.5rem;
+			font-weight: 200;
+			text-transform: lowercase;
+			font-family: "Poppins", "Roboto", "Arial", sans-serif;
+			letter-spacing: 0.095rem;
+			grid-column: 1/2;
+		}
+
+		&__value {
+			font-size: 2.5rem;
+			font-weight: 700;
+			font-family: "Poppins", "Roboto", "Arial", sans-serif;
+			letter-spacing: -0.04rem;
+			grid-column: 1/2;
+		}
+
+		&__bar {
+			background-color: var(--color-primary-50);
+			width: min(100%, 400px);
+			height: 0.6rem;
+			border-radius: 0.25rem;
+			grid-column: 1/2;
+			grid-row: 3/4;
+
+			margin-top: 2rem;
+
+			&__progress {
+				background-color: var(--color-primary);
+				height: 100%;
+				width: var(--progress);
+				border-radius: 0.25rem;
+				grid-row: 3/4;
+				grid-column: 1/2;
+			}
+		}
+
+		&__pie {
+			width: 120px;
+			height: 120px;
+			grid-column: 2/3;
+
+			grid-row: 1/6;
+			align-self: end;
+
+			border-radius: 50%;
+			background-color: transparent;
+
+			&__progress {
+				border-radius: 50%;
+				width: 100%;
+				height: 100%;
+
+				background: conic-gradient(
+					var(--color-primary) 0%,
+					var(--color-primary) var(--progress),
+					var(--color-primary-50) calc(var(--progress) + 0.1%),
+					var(--color-primary-50) 100%
+				);
+
+				&::after {
+					display: block;
+					content: "";
+					position: relative;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					width: calc(100% - 1.2rem);
+					height: calc(100% - 1.2rem);
+					border-radius: 50%;
+					background-color: var(--color-background-secondary);
+				}
+			}
+		}
+
+		&__secondary-info {
+			margin-top: 0.5rem;
+			font-size: 1rem;
+			font-weight: 200;
+			font-family: "Poppins", "Roboto", "Arial", sans-serif;
+			grid-row: 4/5;
+			grid-column: 1/2;
+
+			&__value {
+				font-size: 1.25rem;
+				font-weight: 700;
+				font-family: "Poppins", "Roboto", "Arial", sans-serif;
+				letter-spacing: -0.04rem;
+				grid-row: 5/6;
+				grid-column: 1/2;
+			}
+		}
+	}
+}
+
+.recent-questions-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-top: 1.5rem;
+
+	.recent-questions__title {
+		font-size: 1.5rem;
+		font-weight: 200;
+		text-transform: lowercase;
+		font-family: "Poppins", "Roboto", "Arial", sans-serif;
+		letter-spacing: 0.095rem;
+	}
 }

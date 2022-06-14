@@ -105,9 +105,9 @@
 		flex-direction: row;
 		justify-content: flex-start;
 		align-items: center;
+		gap: 0.875rem;
 
 		&__item {
-			margin-right: 0.875rem;
 			font-style: normal;
 			font-weight: 500;
 			font-size: 0.875rem;
