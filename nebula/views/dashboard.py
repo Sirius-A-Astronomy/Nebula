@@ -35,3 +35,12 @@ def index():
         'dashboard/index.html', questions=questions,
         recent_user_count=recent_user_count, reviewed_questions=reviewed_questions,
         answers=answers, answered_questions=answered_questions)
+
+
+@bp.route('/question/<question_uuid>')
+def question(question_uuid):
+    question = Question.query.filter_by(uuid=question_uuid).first()
+    if not question:
+        flash("Question not found.", 'warning')
+        return redirect(url_for('dashboard.index'))
+    return render_template('dashboard/question.html', question=question)

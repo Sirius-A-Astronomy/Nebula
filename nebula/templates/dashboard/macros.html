@@ -42,7 +42,7 @@
     </div>
 
     <div class="question-list-item__footer">
-        <a href="#">Review</a>
+        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Review</a>
         <a href="#">Edit</a>
     </div>
 </div>
