@@ -151,7 +151,8 @@ class Question(Base):
     title = db.Column(db.String(256), nullable=False)
     difficulty = db.Column(db.Integer)
     content = db.Column(db.Text, nullable=False)
-    approved = db.Column(db.Boolean, default=False)
+    # 0 = not reviewed, 1 = approved, 2 = rejected
+    approved = db.Column(db.Integer, default=0)
     sources = db.Column(db.Text)
 
     # relation one-to-many: one course, many questions
