@@ -3,9 +3,7 @@ import json
 from flask import Flask, request, jsonify, Blueprint, url_for
 
 from nebula.models import db, User, Question, Course, SubjectTag
-from nebula.context_functions import context_processor
-
-pretty_date = context_processor()['pretty_date']
+from nebula.context_functions import pretty_date
 
 apibp = Blueprint('api', __name__, url_prefix='/api')
 

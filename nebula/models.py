@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy.types import TypeDecorator, CHAR
-from sqlalchemy import DateTime, PickleType, func
+from sqlalchemy import DateTime, ForeignKey, PickleType, func
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -152,7 +152,14 @@ class Question(Base):
     difficulty = db.Column(db.Integer)
     content = db.Column(db.Text, nullable=False)
     # 0 = not reviewed, 1 = approved, 2 = rejected
-    approved = db.Column(db.Integer, default=0)
+    reviewed = db.Column(db.Integer, default=0)
+    reviewed_by_uuid = db.Column(
+        GUID(), db.ForeignKey('user.uuid'),
+        nullable=True)
+    reviewed_by = db.relationship(
+        'User',
+        foreign_keys=[reviewed_by_uuid])
+
     sources = db.Column(db.Text)
 
     # relation one-to-many: one course, many questions
@@ -165,7 +172,8 @@ class Question(Base):
     # relation one-to-many: one user, many questions
     user_uuid = db.Column(GUID(), db.ForeignKey(
         'user.uuid'), nullable=False)
-    user = db.relationship('User', backref=db.backref('questions', lazy=True))
+    user = db.relationship('User', foreign_keys=[
+                           user_uuid], backref=db.backref('questions', lazy=True))
 
     # the many-to-many relations requires an extra table:
     # https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/#many-to-many-relationships
