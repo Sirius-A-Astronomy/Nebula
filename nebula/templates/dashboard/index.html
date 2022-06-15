@@ -1,5 +1,7 @@
 {% extends "dashboard/base.html" %}
+{% set active_page = "index" %}
 
+{% from "dashboard/macros.html" import dashboard_question_view with context %}
 {% block content %}
 
 <div class="summary-cards-container">
@@ -36,7 +38,8 @@
         </div>
 
         <div class="summary-card__pie">
-            <div class="summary-card__pie__progress" style="--progress: {{ answered_questions / answers * 100 }}%">
+            <div class="summary-card__pie__progress"
+                style="--progress: {{ answered_questions / answers * 100 }}%">
             </div>
         </div>
         <div class="summary-card__secondary-info">
