@@ -23,7 +23,7 @@ def index():
         Question.query.filter(Question.answers.any()).all())
 
     reviewed_questions = len(Question.query.filter(
-        Question.approved != 0).all())
+        Question.reviewed != 0).all())
     users = User.query.all()
 
     recent_user_count = len([1 if
