@@ -4,7 +4,8 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 import re
 
-from wtforms import Form, StringField, SubmitField, SelectField, TextAreaField, HiddenField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, HiddenField
+from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Optional
 
 from nebula import db
@@ -13,7 +14,7 @@ from nebula.models import Course, Question, Answer, SubjectTag
 bp = Blueprint("add_question", __name__)
 
 
-class QuestionForm(Form):
+class QuestionForm(FlaskForm):
     """Form for adding a new question."""
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Question", validators=[DataRequired()])

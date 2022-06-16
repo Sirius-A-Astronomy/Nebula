@@ -10,8 +10,9 @@
 
 import re
 
-from wtforms import PasswordField, StringField, SubmitField, Form, ValidationError
-from wtforms.validators import DataRequired, EqualTo, Email
+from wtforms import PasswordField, StringField, SubmitField, ValidationError
+from wtforms.validators import DataRequired, EqualTo
+from flask_wtf import FlaskForm
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from flask_login import login_required, login_user, current_user, logout_user
 from passlib.hash import sha256_crypt
@@ -92,7 +93,7 @@ def validate_email(form, field):
             "We can't recognize that as an email address, please double check it")
 
 
-class RegisterForm(Form):
+class RegisterForm(FlaskForm):
     """Form for registering a new user"""
     username = StringField(
         "Username",
@@ -133,7 +134,7 @@ class RegisterForm(Form):
     register_submit = SubmitField("Register")
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     """Form for user login."""
     username = StringField("Username", validators=[DataRequired(
         "Please enter your username")])
@@ -225,7 +226,7 @@ def logout():
     return redirect(url_for("main.index"))
 
 
-class EditProfileForm(Form):
+class EditProfileForm(FlaskForm):
     """Form for editing a user's profile."""
     first_name = StringField(
         "First Name", validators=[DataRequired(
@@ -239,7 +240,7 @@ class EditProfileForm(Form):
     edit_submit = SubmitField("Submit changes")
 
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
     """Form for changing a user's password."""
     current_password = PasswordField(
         "Current Password", validators=[DataRequired(
@@ -255,7 +256,7 @@ class ChangePasswordForm(Form):
     change_password_submit = SubmitField("Change Password")
 
 
-class ChangeUsernameForm(Form):
+class ChangeUsernameForm(FlaskForm):
     """Form for changing a user's username."""
     new_username = StringField(
         "New Username", validators=[DataRequired(

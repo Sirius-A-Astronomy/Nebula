@@ -17,16 +17,18 @@
     The app is returned.
 """
 from urllib.parse import urlparse, urljoin
+import subprocess
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-import subprocess
+from flask_wtf.csrf import CSRFProtect
 
 from config import configs
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 
 def create_app(config_environment='default'):
@@ -51,6 +53,7 @@ def create_app(config_environment='default'):
     #  this is required when multiple app 'contexts' are used
     db.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
     # Register all the views within an app context
     with app.app_context():
@@ -71,6 +74,11 @@ def create_app(config_environment='default'):
     from nebula.context_functions import context_processor
 
     app.context_processor(context_processor)
+
+    from nebula.views.errors import pagenotfound, internalerror, badrequest
+    app.register_error_handler(404, pagenotfound)
+    app.register_error_handler(500, internalerror)
+    app.register_error_handler(400, badrequest)
 
     login_manager.login_view = "user.login_register"
     login_manager.login_message = "Please log in to access this page."

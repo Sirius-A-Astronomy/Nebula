@@ -1,21 +1,22 @@
 """
     Creates the question view.
 """
+from nebula.models import Course, Question, Comment, User, Answer, SubjectTag
+from nebula import db
 import json
 from urllib.parse import urlparse
 
 from flask import Blueprint, render_template, url_for, request, redirect, flash
 from flask_login import current_user
-from wtforms import Form, SubmitField, TextAreaField, BooleanField, SelectField, StringField, HiddenField
+from wtforms import SubmitField, TextAreaField, BooleanField, SelectField, StringField, HiddenField
 from wtforms.validators import DataRequired, Optional
-from nebula import db
-from nebula.models import Course, Question, Comment, User, Answer, SubjectTag
+from flask_wtf import FlaskForm
 
 bp = Blueprint('question', __name__,
                url_prefix='/q/<course_level_code>/<course_code>')
 
 
-class CommentForm(Form):
+class CommentForm(FlaskForm):
     class Meta:
         locales = ['en_US', 'en']
     content = TextAreaField('Add a comment', validators=[
@@ -24,7 +25,7 @@ class CommentForm(Form):
     comment_submit = SubmitField('Submit')
 
 
-class QuestionEditForm(Form):
+class QuestionEditForm(FlaskForm):
     class Meta:
         locales = ['en_US', 'en']
     title = StringField(
@@ -48,7 +49,7 @@ class QuestionEditForm(Form):
     question_edit_submit = SubmitField('Submit')
 
 
-class AnswerForm(Form):
+class AnswerForm(FlaskForm):
     class Meta:
         locales = ['en_US', 'en']
     content = TextAreaField('Answer content', validators=[
