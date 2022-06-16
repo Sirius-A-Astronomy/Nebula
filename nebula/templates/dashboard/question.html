@@ -6,8 +6,22 @@
 <div class="container-question ">
 
     <div class="review-container">
-        <a href="#!" class="btn btn-outline">Accept</a>
-        <a href="#!" class="btn btn-outline">Reject</a>
+        {% if question.reviewed == 0 %}}
+        <form" action="{{ url_for('dashboard.question', question_uuid=question.uuid) }}" method="post">
+
+            {{ question_review_form.csrf_token }}
+            {{ question_review_form.accept_submit_button(class="btn btn-outline") }}
+            {{ question_review_form.reject_submit_button(class="btn btn-outline") }}
+            </form>
+            {% else %}
+            <div class="review-container__message">
+                {% if question.reviewed == 1 %}
+                <p>This question has been approved by {{ question.reviewed_by.username }}.</p>
+                {% else %}
+                <p>This question has been rejected by {{ question.reviewed_by.username }}.</p>
+                {% endif %}
+            </div>
+            {% endif %}
     </div>
 
     <div class="container-question-info">

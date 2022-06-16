@@ -1,7 +1,6 @@
 {% macro dashboard_question_view(question) %}
 
-<div class="question-list-item"
-    href="{{ url_for('question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}">
+<div class="question-list-item" href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">
 
     <div class="question-list-item__header">
         {% if "username" not in hide_elements %}
@@ -42,7 +41,18 @@
     </div>
 
     <div class="question-list-item__footer">
+        {% if question.reviewed == 0 %}
         <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Review</a>
+        {% endif %}
+        {% if question.reviewed == 1 %}
+        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Approved by {{
+            question.reviewed_by.username }}</a>
+        {% endif %}
+        {% if question.reviewed == 2 %}
+        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Rejected by {{
+            question.reviewed_by.username }}</a>
+        {% endif %}
+
         <a href="#">Edit</a>
     </div>
 </div>
