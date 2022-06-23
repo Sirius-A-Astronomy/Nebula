@@ -8,10 +8,11 @@
         User logout
 """
 
+from email import message
 import re
 
 from wtforms import PasswordField, StringField, SubmitField, ValidationError
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 from flask_wtf import FlaskForm
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from flask_login import login_required, login_user, current_user, logout_user
@@ -48,7 +49,8 @@ def create_user(username, password, **kwargs):
 
 def authenticate(username, password):
     """
-    Returns the user object if the credentials are valid or False otherwise.
+    Returns the user object if the credentials are valid.
+    Returns False in all other cases.
 
     :param username: The username of the user.
     :type username: str
@@ -72,7 +74,11 @@ def validate_username(form, field):
     :param field: The field to validate.
     :type field: StringField
     """
-    print(field.data.lower())
+    username = field.data.lower()
+    if re.findall(r"\s", username):
+        raise ValidationError(
+            "Please enter a username without any spaces"
+        )
     if User.query.filter_by(username=field.data.lower()).first() is not None:
         raise ValidationError(
             "It looks like we already know someone with that username, do you want to try another one?")
@@ -100,13 +106,20 @@ class RegisterForm(FlaskForm):
         validators=[
             DataRequired(
                 "Please enter a username, you will use this to log in"),
-            validate_username])
+            validate_username,
+            Length(
+                min=3, max=30,
+                message="Please enter a username with at least 3 and at most 30 characters"),
+            Regexp(r"[ @()+=\[\]{};':\"\\|,.<>\/?]",
+                   message="Please enter a username without any special characters")
+        ])
     first_name = StringField(
         "First Name",
         validators=[
             DataRequired(
                 "Please enter your first name"
-            )])
+            ),
+        ])
     last_name = StringField(
         "Last Name",
         validators=[
@@ -125,6 +138,10 @@ class RegisterForm(FlaskForm):
         validators=[
             DataRequired(
                 "Please enter a password."
+            ),
+            Length(
+                min=12, max=-1,
+                message="Please enter a password with at least 12 characters"
             )])
     password_confirm = PasswordField("Confirm Password", validators=[
         DataRequired(
@@ -143,72 +160,104 @@ class LoginForm(FlaskForm):
     login_submit = SubmitField("Login")
 
 
+@ bp.route("/login-register", methods=["GET", "POST"])
 @ bp.route("/register", methods=['GET', 'POST'])
 @ bp.route("/login", methods=["GET", "POST"])
-@ bp.route("/login-register", methods=["GET", "POST"])
 def login_register(next=None, register=None):
+    next = request.args.get('next')
+    if not current_user.is_anonymous:
+        flash("You're already logged in.", "info")
+        # redirect to next url if it is safe
+        if not is_safe_url(next, request):
+            flash(
+                "Tried to redirect to an unsafe url, redirecting to homepage", "warning")
+            return redirect(url_for("main.index"))
+        return redirect(next or url_for("main.index"))
+
     login_form = LoginForm(request.form)
     register_form = RegisterForm(request.form)
-    next = request.args.get('next')
     register = request.args.get('register')
     if request.path == "/register":
         register = True
 
-    if request.method == "POST":
+    if request.method != "POST":
+        return render_template("main/login_register.html",
+                               login_form=login_form,
+                               register_form=register_form,
+                               next=next,
+                               register=register)
 
-        if (login_form.login_submit.data == True):
-            # Login form handling
-            if login_form.validate():
-                username = login_form.username.data.lower()
-                password = login_form.password.data
-                valid_credentials = authenticate(username, password)
+    # POST
 
-                if valid_credentials:
-                    session.permanent = True
-                    valid_credentials.is_authenticated = login_user(
-                        valid_credentials)
-                    db.session.commit()
-                else:
-                    login_form.username.errors.append(
-                        "Invalid username or password")
-                    login_form.password.errors.append(
-                        "Invalid username or password")
-                    return render_template("main/login_register.html",
-                                           login_form=login_form,
-                                           register_form=register_form,
-                                           next=next,
-                                           register='false')
-        elif register_form.validate():
-            # Register form handling
-            username = register_form.username.data.lower()
-            first_name = register_form.first_name.data
-            last_name = register_form.last_name.data
-            password = register_form.password.data
-            email = register_form.email.data
-
-            user = create_user(username=username, first_name=first_name,
-                               last_name=last_name, password=password,
-                               email=email)
-            session.permanent = True
-            db.session.add(user)
-            user.is_authenticated = True
-            db.session.commit()
-            login_user(user)
-        else:
+    # Login Post
+    if (login_form.login_submit.data == True):
+        # Login form handling
+        if not login_form.validate():
             return render_template("main/login_register.html",
                                    login_form=login_form,
                                    register_form=register_form,
+                                   next=next,
+                                   register=register)
+
+        username = login_form.username.data.lower()
+        password = login_form.password.data
+
+        valid_credentials = authenticate(username, password)
+        # Returns a user object if the username and password are valid
+
+        if not valid_credentials:
+            login_form.username.errors.append(
+                "Invalid username or password")
+            login_form.password.errors.append(
+                "Invalid username or password")
+
+            # Show the login form with errors
+            return render_template("main/login_register.html",
+                                   login_form=login_form,
+                                   register_form=register_form,
+                                   next=next,
+                                   register='false')
+        # Log the user in
+        session.permanent = True
+        valid_credentials.is_authenticated = login_user(
+            valid_credentials)
+        db.session.commit()
+
+    # Register Post
+    elif (register_form.register_submit.data == True):
+
+        if not register_form.validate():
+            return render_template("main/login_register.html",
+                                   login_form=login_form,
+                                   register_form=register_form,
+                                   next=next,
                                    register='true')
-        # redirect to next url if it is safe
-        if not is_safe_url(next, request):
-            print("Tried to redirect to an unsafe url, redirecting to index")
-            return redirect(url_for("main.index"))
-        return redirect(next or url_for("main.index"))
-    return render_template("main/login_register.html",
-                           login_form=login_form,
-                           register_form=register_form,
-                           next=next,
-                           register=register)
+
+        # Register form handling
+        username = register_form.username.data.lower()
+        first_name = register_form.first_name.data
+        last_name = register_form.last_name.data
+        password = register_form.password.data
+        email = register_form.email.data
+
+        user = create_user(username=username, first_name=first_name,
+                           last_name=last_name, password=password,
+                           email=email)
+        session.permanent = True
+        db.session.add(user)
+        user.is_authenticated = True
+        db.session.commit()
+        login_user(user)
+    else:
+        return render_template("main/login_register.html",
+                               login_form=login_form,
+                               register_form=register_form,
+                               register=register)
+    # redirect to next url if it is safe
+    if not is_safe_url(next, request):
+        flash("Tried to redirect to an unsafe url, redirecting to homepage", "warning")
+        return redirect(url_for("main.index"))
+    return redirect(next or url_for("main.index"))
 
 
 @ bp.route("/logout")
