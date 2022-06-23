@@ -328,7 +328,7 @@ h3 {
 	.login-register-container.sign-up-mode .signin-signup {
 		margin-top: 200px;
 		top: 100%;
-		transform: translate(-50%, -800px);
+		transform: translate(-50%, min(-750px, calc(-100px - 68vh)));
 	}
 
 	.panels-container {
