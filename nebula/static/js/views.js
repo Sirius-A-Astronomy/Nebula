@@ -376,3 +376,23 @@ document
 document.querySelectorAll(".ellipsify").forEach((element) => {
 	element.setAttribute("title", element.textContent);
 });
+
+// !SECTION Ellipsify
+
+/*
+    SECTION Scroll new comment into view
+*/
+window.addEventListener("load", function () {
+	setTimeout(() => {
+		document
+			.querySelectorAll(".question-new-comment")
+			.forEach((comment) => {
+				comment.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+			});
+	}, 400);
+});
+
+// !SECTION Scroll new comment into view
