@@ -43,7 +43,7 @@ async function startFormValidation() {
 	$("#password-input-field").on("input", debounce(validatePassword, 500));
 	$("#first-name-input-field").on("input", debounce(validateFirstName, 500));
 	$("#last-name-input-field").on("input", debounce(validateLastName, 500));
-	$("#email-input-field").on("input", debounce(validateEmail, 500));
+	$("#email-input-field").on("input", debounce(validateEmail, 900));
 }
 
 async function validateUsername() {
@@ -61,7 +61,7 @@ async function validateUsername() {
 	if (username.length >= 30) {
 		addInvalidFeedback(
 			usernameInputField,
-			"Please enter a username with most 30 characters"
+			"Please enter a username with at most 30 characters"
 		);
 		return;
 	}
@@ -101,15 +101,32 @@ async function validateUsername() {
 function validatePassword() {
 	let passwordInputField = document.getElementById("password-input-field");
 	let password = $(passwordInputField).val();
+	let passwordConfirmationInputField = document.getElementById(
+		"password-confirmation-input-field"
+	);
+	let passwordConfirmation = $(passwordConfirmationInputField).val();
 
 	if (password.length < 12) {
 		addInvalidFeedback(
 			passwordInputField,
-			"Password must be at least 12 characters long"
+			"Please enter a password with at least 12 characters"
 		);
 		return false;
 	}
 	addValidFeedback(passwordInputField, "Looks good!");
+
+	// validate password confirmation on input of password
+	if (password == passwordConfirmation) {
+		addValidFeedback(passwordConfirmationInputField, "Looks good!");
+	} else {
+		// only give invalid feedback if the password confirmation is long enough to be a match
+		if (passwordConfirmation.length >= 12) {
+			addInvalidFeedback(
+				passwordConfirmationInputField,
+				"Please double check that your passwords match"
+			);
+		}
+	}
 	return true;
 }
 
@@ -178,7 +195,7 @@ function validateEmail() {
 	if (!emailRegex.test(email)) {
 		addInvalidFeedback(
 			emailInputField,
-			"We can't recognize that as an email address, please double check it"
+			"We can't recognize that as an email address quite yet, please double check it"
 		);
 		return;
 	}
