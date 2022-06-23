@@ -1,0 +1,117 @@
+.loader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: 9999;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+
+	background-color: var(--color-background);
+	transition: opacity 0.2s ease-in-out;
+	opacity: 1;
+
+	&.fade-out {
+		opacity: 0;
+	}
+
+	&::after {
+		font-family: "Poppins", "Open Sans", "Arial", sans-serif;
+		content: "Loading...";
+		font-size: 1.5rem;
+		position: relative;
+	}
+}
+
+.lds-ellipsis {
+	display: inline-block;
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+.lds-ellipsis div {
+	position: absolute;
+	top: 33px;
+	width: 13px;
+	height: 13px;
+	border-radius: 50%;
+	background: var(--color-primary-active);
+	animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+	left: 8px;
+	animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+	left: 8px;
+	animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+	left: 32px;
+	animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+	left: 56px;
+	animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@keyframes lds-ellipsis3 {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+@keyframes lds-ellipsis2 {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(24px, 0);
+	}
+}
+
+@keyframes placeHolderShimmer {
+	0% {
+		background-position: -800px 0;
+	}
+	100% {
+		background-position: 800px 0;
+	}
+}
+
+.content-loader {
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	animation-iteration-count: infinite;
+	animation-name: placeHolderShimmer;
+	animation-timing-function: linear;
+	background-color: #f6f7f8;
+	background: linear-gradient(to right, #eeeeee 8%, #bbbbbb 18%, #eeeeee 33%);
+	background-size: 800px 104px;
+	position: absolute;
+	z-index: 8000;
+
+	flex: 1;
+
+	min-height: 70px;
+
+	height: 100%;
+
+	min-width: 100%;
+	width: 100%;
+
+	overflow: hidden;
+}
