@@ -81,8 +81,8 @@ def create_app(config_environment='default'):
     app.register_error_handler(400, badrequest)
     app.register_error_handler(CSRFError, lambda e: (e.description, 400))
 
-    from nebula.utilities import before_request
-    app.before_request(before_request)
+    # from nebula.utilities import before_request
+    # app.before_request(before_request)
 
     login_manager.login_view = "user.login_register"
     login_manager.login_message = "Please log in to access this page."
