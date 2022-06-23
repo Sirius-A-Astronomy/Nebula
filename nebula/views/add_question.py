@@ -114,7 +114,7 @@ def add_question(success=False, course_code=None):
     user = current_user
     course = Course.query.filter_by(id=course_id).first()
     question = Question(title=title, content=content, user=user, course=course,
-                        difficulty=difficulty, approved=False, subject_tags=subject_tags)
+                        difficulty=difficulty, subject_tags=subject_tags)
 
     if answer is not None and answer != "":
         answer_obj = Answer(content=answer, user=user,
