@@ -1,5 +1,12 @@
 {% extends 'layouts/base.html' %}
-{% block title %}Register - Nebula{% endblock %}
+
+{% block title %}
+{% if register %}
+Register - Nebula
+{% else %}
+Login - Nebula
+{% endif %}
+{% endblock %}
 
 {% block include_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/views/login_register.css') }}">
@@ -20,7 +27,6 @@
                     class="sign-in-form">
                     <h2 class="title">Login</h2>
                     {{ login_form.csrf_token }}
-                    {{ login_form.hidden_tag }}
                     <div class="input-field">
                         {{ login_form.username.label(class="form-label") }}
                         {% if login_form.username.errors|length > 0 %}
@@ -58,7 +64,6 @@
 
                     <h2 class="title">Register</h2>
                     {{ register_form.csrf_token }}
-                    {{ register_form.hidden_tag }}
                     <div class="form-group">
 
                         <div class="row mt-1">
@@ -71,9 +76,8 @@
                                     id="first-name-input-field") }}
                                     <div class="input-feedback invalid-feedback"
                                         id="first-name-input-field-feedback">
-                                        {% for error in register_form['first_name'].errors
-                                        %}
-                                        {{ error }}
+                                        {% for error in register_form['first_name'].errors %}
+                                        {{ error }}{% if not loop.last %},<br>{% endif %}
                                         {% endfor %}
                                     </div>
                                     {% else %}
@@ -95,7 +99,7 @@
                                     <div class="input-feedback invalid-feedback"
                                         id="last-name-input-field-feedback">
                                         {% for error in register_form['last_name'].errors %}
-                                        {{ error }}
+                                        {{ error }}{% if not loop.last %},<br>{% endif %}
                                         {% endfor %}
                                     </div>
                                     {% else %}
@@ -116,7 +120,7 @@
                             <div id="email-input-field-feedback"
                                 class="input-feedback invalid-feedback">
                                 {% for error in register_form['email'].errors %}
-                                {{ error }}
+                                {{ error }}{% if not loop.last %},<br>{% endif %}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -140,7 +144,7 @@
                             <div id="username-input-field-feedback"
                                 class="input-feedback invalid-feedback">
                                 {% for error in register_form['username'].errors %}
-                                {{ error }}
+                                {{ error }}{% if not loop.last %},<br>{% endif %}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -159,7 +163,7 @@
                             <div class="input-feedback invalid-feedback"
                                 id="password-input-field-feedback">
                                 {% for error in register_form['password'].errors %}
-                                {{ error }}
+                                {{ error }}{% if not loop.last %},<br> {% endif %}
                                 {% endfor %}
                             </div>
                             {% else %}
@@ -180,7 +184,7 @@
                             <div class="input-feedback invalid-feedback"
                                 id="password-confirmation-input-field-feedback">
                                 {% for error in register_form['password_confirm'].errors %}
-                                {{ error }}
+                                {{ error }}{% if not loop.last %},<br>{% endif %}
                                 {% endfor %}
                             </div>
                             {% else %}
