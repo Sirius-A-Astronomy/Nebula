@@ -71,8 +71,18 @@
                             <p class="small-accent">
                                 Question content:
                             </p>
-                            <p class="question-content markdown-view">{{ question.content }}
-                            </p>
+                            <noscript>
+                                <p class="text-secondary">
+                                    Markdown and Latex rendering is not supported without
+                                    JavaScript.
+                                </p>
+                                <div class="question-content">
+                                    {{ linebreaks(question.content) }}
+                                </div>
+                            </noscript>
+                            <div class="question-content markdown-view js-only">{{ question.content
+                                }}
+                            </div>
                         </div>
                         {% if current_user.is_anonymous == false and
                         (current_user == question.user or current_user.access_level > 2) %}
@@ -93,7 +103,6 @@
                         <h4>Edit question:</h4>
 
                         {{ question_edit_form.csrf_token }}
-                        {{ question_edit_form.hidden_tag }}
 
                         <div class="input-field">
                             {{ question_edit_form.title.label(class="form-label") }}
@@ -250,7 +259,6 @@
                             <h4>Add answer:</h4>
 
                             {{ add_answer_form.csrf_token }}
-                            {{ add_answer_form.hidden_tag }}
                             <div class="input-field">
 
                                 {{ add_answer_form.content.label(class="form-label") }}
@@ -328,7 +336,6 @@
                             action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code)}}"
                             id="add-comment-form">
                             {{ comment_form.csrf_token }}
-                            {{ comment_form.hidden_tag }}
                             {{ comment_form.content.label(class="form-label, visually-hidden")}}
                             {{comment_form.is_suggestion(class="form-checkbox
                             hidden-form-field-element",
