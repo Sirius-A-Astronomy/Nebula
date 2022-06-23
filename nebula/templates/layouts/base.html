@@ -11,26 +11,22 @@
         content=" This is the Nebula Database by the Kapteyn Learning Community. It is a repository of user-submitted practice questions. ">
     <link rel="icon" type="image/png"
         href="{{ url_for('static', filename='images/siriuswebheader.png') }}" />
-    <!-- Bootstrap -->
-    <!-- {% if config.LOCAL_PACKAGES %}
-    <link rel="stylesheet" href="{{ url_for(static_target, filename='node_modules/bootstrap/dist/css/bootstrap.min.css')}}">
-    {% else %} -->
+
+    <!-- Load darkmode script first so it loads the fastest -->
+    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+
+    <!-- Show loading animation while everything gets loaded -->
+    <script src="{{ url_for('static', filename='js/pageloadanim.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous" />
-    <!-- {% endif %} -->
+
     <!-- Google Fonts Includes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" type="text/css"
         href="{{ url_for('static', filename='css/fonts/fonts.css') }}" />
-    <link
-        href="//fonts.googleapis.com/css?family=Roboto+Mono:200,300,400,500|Roboto:200,300,400,500"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
     <!-- Google Material Icon Font-->
@@ -39,8 +35,8 @@
     <!-- GSAP ANIMATIONS-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/queries.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+
 
     <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -119,6 +115,56 @@
                             </a>
                         </div>
 
+                        <!-- NOTIFICATIONS -->
+
+                        {% if current_user.is_anonymous == false %}
+                        {% set unread_notifications =
+                        current_user.notifications|selectattr('is_read', "equalto",
+                        false)|list|length %}
+                        <div class="nav-item dropdown">
+                            <a {% if unread_notifications !=0 %}
+                                class="nav-link dropdown-toggle notifications-dropdown unread" {%
+                                else %} class="nav-link dropdown-toggle notifications-dropdown" {%
+                                endif %} href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                data-unread-count="{{ unread_notifications }}">
+                                {% if unread_notifications !=0 %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                    fill="currentcolor">
+                                    <path
+                                        d="M2 10Q2 7.8 2.888 5.838Q3.775 3.875 5.425 2.45L6.85 3.85Q5.5 5.025 4.75 6.612Q4 8.2 4 10ZM20 10Q20 8.2 19.25 6.612Q18.5 5.025 17.15 3.85L18.575 2.45Q20.225 3.875 21.113 5.838Q22 7.8 22 10ZM4 19V17H6V10Q6 7.925 7.25 6.312Q8.5 4.7 10.5 4.2V3.5Q10.5 2.875 10.938 2.438Q11.375 2 12 2Q12.625 2 13.062 2.438Q13.5 2.875 13.5 3.5V4.2Q15.5 4.7 16.75 6.312Q18 7.925 18 10V17H20V19ZM12 11.5Q12 11.5 12 11.5Q12 11.5 12 11.5Q12 11.5 12 11.5Q12 11.5 12 11.5ZM12 22Q11.175 22 10.588 21.413Q10 20.825 10 20H14Q14 20.825 13.413 21.413Q12.825 22 12 22ZM8 17H16V10Q16 8.35 14.825 7.175Q13.65 6 12 6Q10.35 6 9.175 7.175Q8 8.35 8 10Z" />
+                                </svg>
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                    fill="currentcolor">
+                                    <path
+                                        d="M4 19V17H6V10Q6 7.925 7.25 6.312Q8.5 4.7 10.5 4.2V3.5Q10.5 2.875 10.938 2.438Q11.375 2 12 2Q12.625 2 13.062 2.438Q13.5 2.875 13.5 3.5V4.2Q15.5 4.7 16.75 6.312Q18 7.925 18 10V17H20V19ZM12 11.5Q12 11.5 12 11.5Q12 11.5 12 11.5Q12 11.5 12 11.5Q12 11.5 12 11.5ZM12 22Q11.175 22 10.588 21.413Q10 20.825 10 20H14Q14 20.825 13.413 21.413Q12.825 22 12 22ZM8 17H16V10Q16 8.35 14.825 7.175Q13.65 6 12 6Q10.35 6 9.175 7.175Q8 8.35 8 10Z" />
+                                </svg>
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right notifications-dropdown-menu"
+                                aria-labelledby="navbarDropdownMenuLink">
+
+                                {% if current_user.notifications %}
+                                {% for notification in current_user.notifications %}
+                                <li>
+                                    <a class="dropdown-item {% if notification.is_read == false %} unread {% endif %} {{ notification.category }}"
+                                        href="#">
+                                        {{ notification.content }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                                {% else %}
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        No notifications
+                                    </a>
+                                </li>
+
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
                         <div class="nav-item dropdown">
                             <a {% if 'login' in request.path or 'register' in request.path
                                 or 'profile' in request.path %}
@@ -140,12 +186,12 @@
                                 </span>
                                 {% endif %}
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <ul class="dropdown-menu dropdown-menu-right"
+                                aria-labelledby="navbarDropdownMenuLink">
                                 {% if current_user.is_anonymous == true %}
                                 <li>
-                                    <a {% if ('login-register' in request.path and
-                                        request.args['register'] !='True' ) %}
-                                        class="dropdown-item active" {% else %}
+                                    <a {% if ('login' in request.path and request.args['register']
+                                        !='True' ) %} class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
                                         href="{{ url_for('user.login_register', next=request.path) }}">Login</a>
                                 </li>
@@ -176,6 +222,7 @@
 
                             </ul>
                         </div>
+
                     </div>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -231,57 +278,19 @@
     {% if get_flashed_messages() %}
     <div class="alerts-container">
 
-        {% with messages = get_flashed_messages(category_filter="error") %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <div class="alert alert-dismissible alert__error fade show" role="alert">
+        {% for category, message in messages %}
+        <div class="alert alert-dismissible alert__{{ category }} fade show" role="alert">
             <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            {% for message in messages %}
             {{ message }}
-            {% endfor %}
         </div>
+        {% endfor %}
         {% endif %}
         {% endwith %}
 
-        {% with messages = get_flashed_messages(category_filter="success") %}
-        {% if messages %}
-        <div class="alert alert-dismissible alert__success fade show" role="alert">
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {% for message in messages %}
-            {{ message }}
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        {% with messages = get_flashed_messages(category_filter="warning") %}
-        {% if messages %}
-        <div class="alert alert-dismissible alert__warning fade show" role="alert">
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {% for message in messages %}
-            {{ message }}
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        {% with messages = get_flashed_messages(category_filter="info") %}
-        {% if messages %}
-        <div class="alert alert-dismissible alert__info fade show" role="alert">
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {% for message in messages %}
-            {{ message }}
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
     </div>
     {% endif %}
 
@@ -292,22 +301,39 @@
         <p>
             &copy; {{ current_year }} - Sirius A
             <!-- Add some kind of dynamic year ? -->
+
         </p>
     </footer>
-    <!-- Load darkmode script first so it loads the fastest -->
-    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+
+    <!-- CSRF TOKEN -->
+    <script type="text/javascript">
+        const CSRF_TOKEN = "{{ csrf_token() }}";
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", CSRF_TOKEN);
+                }
+            }
+        });
+    </script>
+
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous">
         </script>
-    {% block include_js %}
-    {% endblock include_js %}
     <!--- Scripts -->
     <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
     <script type="text/javascript"
         src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
     <script defer type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
+
+
+    {% block include_js %}
+    {% endblock include_js %}
+
+    <script src="{{ url_for('static', filename='js/stoppageloadanim.js') }}" defer></script>
 </body>
 
 </html>
