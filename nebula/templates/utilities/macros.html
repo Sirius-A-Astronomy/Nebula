@@ -78,7 +78,7 @@
     </div>
     <div class="course-item__footer">
         <p class="course-item__footer__questions-amount">
-            {{ course.questions|length }} Questions
+            {{ course.questions|selectattr('reviewed', 'equalto', 1)|list|length }} Questions
         </p>
     </div>
 </div>
