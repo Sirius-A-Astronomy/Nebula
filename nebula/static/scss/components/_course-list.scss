@@ -10,7 +10,7 @@
 
 .course-item__header {
 	&__title {
-		font-family: "Poppins";
+		font-family: "Poppins", "Open Sans", "Arial", sans-serif;
 		font-style: normal;
 		font-weight: 600;
 		font-size: var(--font-size-h3);
@@ -41,7 +41,7 @@
 
 .course-item__footer {
 	&__questions-amount {
-		font-family: "Poppins";
+		font-family: "Poppins", "Open Sans", "Arial", sans-serif;
 		font-style: normal;
 		font-weight: 300;
 		font-size: var(--font-size-p);
