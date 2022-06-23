@@ -160,8 +160,12 @@ class LoginForm(FlaskForm):
     login_submit = SubmitField("Login")
 
 
-@ bp.route("/login-register", methods=["GET", "POST"])
-@ bp.route("/register", methods=['GET', 'POST'])
+# function called below login_register definition
+def add_login_routes():
+    bp.add_url_rule("/register", view_func=login_register,
+                    methods=["GET", "POST"])
+
+
 @ bp.route("/login", methods=["GET", "POST"])
 def login_register(next=None, register=None):
     next = request.args.get('next')
@@ -258,6 +262,9 @@ def login_register(next=None, register=None):
         flash("Tried to redirect to an unsafe url, redirecting to homepage", "warning")
         return redirect(url_for("main.index"))
     return redirect(next or url_for("main.index"))
+
+
+add_login_routes()
 
 
 @ bp.route("/logout")

@@ -259,10 +259,72 @@ const loginRegisterContainer = document.querySelector(
 
 signUpBtn.addEventListener("click", () => {
 	loginRegisterContainer.classList.add("sign-up-mode");
+	let paramaters = window.location.search;
+	let url = new URL(window.location.href);
+	let registerParamater = url.searchParams.get("register");
+	if (registerParamater) {
+		paramaters = paramaters.replace("?register=" + registerParamater, "");
+	}
+	let title = "Register - Nebula";
+	window.history.pushState("Register", title, "/register" + paramaters);
+	document.title = title;
+	console.log("register", paramaters);
 });
 
 signInBtn.addEventListener("click", () => {
 	loginRegisterContainer.classList.remove("sign-up-mode");
+	let paramaters = window.location.search;
+	let url = new URL(window.location.href);
+	let registerParamater = url.searchParams.get("register");
+	let title = "Login - Nebula";
+	if (registerParamater) {
+		paramaters = paramaters.replace("?register=" + registerParamater, "");
+	}
+	window.history.pushState("Login", title, "/login" + paramaters);
+	document.title = title;
+	console.log("login", paramaters);
 });
+
+window.onpopstate = function (e) {
+	if (e.state) {
+		console.log(e);
+		switch (e.state) {
+			case "Register":
+				loginRegisterContainer.classList.add("sign-up-mode");
+				break;
+			case "Login":
+				loginRegisterContainer.classList.remove("sign-up-mode");
+				break;
+		}
+	}
+};
+
+if (loginRegisterContainer.classList.contains("sign-up-mode")) {
+	let paramaters = window.location.search;
+	let url = new URL(window.location.href);
+	let registerParamater = url.searchParams.get("register");
+	if (registerParamater) {
+		paramaters = paramaters.replace("?register=" + registerParamater, "");
+	}
+	window.history.replaceState(
+		"Register",
+		"Register - Nebula test",
+		"/register" + paramaters
+	);
+	console.log("Register");
+} else {
+	let paramaters = window.location.search;
+	let url = new URL(window.location.href);
+	let registerParamater = url.searchParams.get("register");
+	if (registerParamater) {
+		paramaters = paramaters.replace("?register=" + registerParamater, "");
+	}
+	window.history.replaceState(
+		"Login",
+		"Login - Nebula test",
+		"/login" + paramaters
+	);
+	console.log("Login");
+}
 
 startFormValidation();

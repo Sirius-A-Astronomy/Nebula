@@ -1,5 +1,11 @@
 {% extends 'layouts/base.html' %}
 
+{% if '/register' in request.path or register|lower == 'true' %}
+{% set register = true %}
+{% else %}
+{% set register = false %}
+{% endif %}
+
 {% block title %}
 {% if register %}
 Register - Nebula
@@ -13,7 +19,7 @@ Login - Nebula
 {% endblock %}
 {% block body %}
 <main class="no-header-margin">
-    <div {% if register|lower=='true' %} class="login-register-container sign-up-mode" {% else %}
+    <div {% if register %} class="login-register-container sign-up-mode" {% else %}
         class="login-register-container" {% endif %}>
         <div class="stars-container">
             <div class="stars"></div>
@@ -238,5 +244,5 @@ Login - Nebula
 {% endblock body %}
 
 {% block include_js %}
-<script src="{{ url_for('static', filename='js/form_validation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login-register.js') }}"></script>
 {% endblock %}
