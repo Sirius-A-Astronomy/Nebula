@@ -5,14 +5,16 @@
 @use "../abstracts/mixins" as *;
 
 .container-question-page {
-	display: grid;
 	@include mq(md) {
+		display: grid;
 		grid-template-columns: 3fr minmax(240px, 1fr);
 
 		gap: 1.5rem;
 	}
+}
 
-	gap: 1.5rem;
+.left-panel {
+	margin-bottom: 1.5rem;
 }
 
 .info-bar {
@@ -96,9 +98,6 @@
 
 	.col-left {
 		width: 75%;
-	}
-
-	.answer-info {
 	}
 
 	.answer-content {
