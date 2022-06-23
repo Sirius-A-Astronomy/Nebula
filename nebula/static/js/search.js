@@ -41,7 +41,6 @@ class Question {
 
 		// Otherwise, create it
 		let questionElement = document.createElement("a");
-		questionElement.style.display = "block";
 		questionElement.classList.add("question-list-item");
 		questionElement.href = this.url;
 

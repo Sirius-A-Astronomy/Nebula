@@ -41,7 +41,6 @@ class Question {
 
 		// Otherwise, create it
 		let questionElement = document.createElement("a");
-		questionElement.style.display = "block";
 		questionElement.classList.add("question-list-item");
 		questionElement.href = this.url;
 
@@ -318,6 +317,7 @@ async function search() {
 		},
 		threshold: -40000,
 	});
+	console.log("searchResults", searchResults);
 
 	questionListContainer.innerHTML = "";
 	for (let searchResult of searchResults) {
