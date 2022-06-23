@@ -9,6 +9,16 @@ function debounce(callback, wait) {
 }
 
 /*
+    SECTION Show .js-only content
+*/
+
+document.querySelectorAll(".js-only").forEach(function (el) {
+	el.classList.remove("js-only");
+});
+
+// !SECTION Show .js-only content
+
+/*
     SECTION Expendable-Text
 */
 
@@ -176,8 +186,17 @@ document.querySelectorAll(".markdown-view").forEach((element) => {
 	if (element.style.display === "none") {
 		return;
 	}
-	element.innerHTML = markdown.render(
-		DOMPurify.sanitize(element.textContent.trim(), {
+
+	let unsanitisedMarkdown = element.innerHTML;
+	element.innerHTML = "";
+
+	let contentDiv = document.createElement("div");
+	// let loaderDiv = document.createElement("div");
+	// loaderDiv.classList.add("content-loader");
+	element.append(contentDiv);
+
+	contentDiv.innerHTML = markdown.render(
+		DOMPurify.sanitize(unsanitisedMarkdown.trim(), {
 			ALLOWED_TAGS: [],
 		})
 	);
