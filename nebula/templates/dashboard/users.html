@@ -1,0 +1,40 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Nebula Dashboard - Users{% endblock %}
+
+{% set active_page = "users" %}
+
+{% block content %}
+
+<div class="user-list-card background-card">
+    <div class="user-list-card__title">
+        Users
+    </div>
+    <div class="users-container">
+        {% for user in users %}
+        <div class="users-container__user">
+            <div class="users-container__user__username">
+                {{ user.username }}
+            </div>
+            <div class="users-container__user__full-name">
+                {{ user.first_name }} {{ user.last_name }}
+            </div>
+            <div class="users-container__user__email">
+                {{ user.email }}
+            </div>
+            <div class="users-container__user__role">
+                {{ user.access_level }}
+            </div>
+            <div class="users-container__user__actions">
+                <a href="#">
+                    <button class="button button--primary">
+                        View
+                    </button>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock content %}

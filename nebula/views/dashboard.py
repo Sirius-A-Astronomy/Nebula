@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
 from re import A
+from unicodedata import category
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from sqlalchemy import func
-from flask_login import login_required, current_user
+from flask_login import current_user
 from wtforms import Form, SubmitField, HiddenField
 from flask_wtf import FlaskForm
 
-from nebula.models import User, Comment, Course, CourseLevel, Question, Answer
+from nebula.models import User, Comment, Course, CourseLevel, Question, Answer, Notification
 from nebula import db
 
 bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -19,24 +19,27 @@ def index():
         flash("You need to be a KLC or Cosmic Web Member to access this page.", 'warning')
         return redirect(url_for('main.index'))
 
-    questions = Question.query.all()
+    questions_for_review = Question.query.filter(Question.reviewed == 0).all()
+
+    total_questions = Question.query.count()
+
     answers = len(Answer.query.all())
     answered_questions = len(
         Question.query.filter(Question.answers.any()).all())
 
     reviewed_questions = len(Question.query.filter(
         Question.reviewed != 0).all())
+    approved_questions = len(Question.query.filter(
+        Question.reviewed == 1).all())
     users = User.query.all()
 
     recent_user_count = len([1 if
                              (datetime.now() - user.created_at).days <= 30 else None for user in users])
 
-    print(recent_user_count)
-
     return render_template(
-        'dashboard/index.html', questions=questions,
+        'dashboard/index.html', questions_for_review=questions_for_review, total_questions=total_questions,
         recent_user_count=recent_user_count, reviewed_questions=reviewed_questions,
-        answers=answers, answered_questions=answered_questions)
+        answers=answers, answered_questions=answered_questions, approved_questions=approved_questions)
 
 
 class QuestionReviewForm(FlaskForm):
@@ -72,12 +75,29 @@ def question(question_uuid):
     if question_review_form.accept_submit_button.data:
         question.reviewed = 1
         question.reviewed_by = current_user
+
+        notification = Notification(
+            content=f"Your question '{question.title}' has been approved and is now visible on the site.",
+            user=question.user, category="success")
         db.session.commit()
         flash("Question accepted.", 'success')
         return redirect(url_for('dashboard.index'))
     if question_review_form.reject_submit_button.data:
         question.reviewed = 2
         question.reviewed_by = current_user
+        notification = Notification(
+            content=f"Your question '{question.title}' has not been accepted will not be shown to other users.",
+            category="info", user=question.user)
         db.session.commit()
         flash("Question rejected.", 'success')
         return redirect(url_for('dashboard.index'))
+
+
+@bp.route('/users')
+def users():
+    if current_user.is_anonymous or current_user.access_level < 2:
+        flash("You need to be a KLC or Cosmic Web Member to access this page.", 'warning')
+        return redirect(url_for('main.index'))
+
+    users = User.query.all()
+    return render_template('dashboard/users.html', users=users)

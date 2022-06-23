@@ -10,20 +10,27 @@
     <!-- Google Fonts Includes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts/fonts.css') }}" />
-    <link href="//fonts.googleapis.com/css?family=Roboto+Mono:200,300,400,500|Roboto:200,300,400,500"
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='css/fonts/fonts.css') }}" />
+    <link
+        href="//fonts.googleapis.com/css?family=Roboto+Mono:200,300,400,500|Roboto:200,300,400,500"
         rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <script src="{{ url_for('static', filename='js/pageloadanim.js') }}"></script>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/views/dashboard.css') }}">
 
     <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script src="{{ url_for('static', filename='js/mathjax-config.js') }}" defer></script>
-    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-mml-chtml.js" defer></script>
+    <script id="MathJax-script"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-mml-chtml.js" defer></script>
 
     <!-- Markdown -->
     <script src="{{ url_for('static', filename='js/markdown-it.min.js') }}"></script>
@@ -32,65 +39,30 @@
 
 <body>
     <main>
+
         {% if get_flashed_messages() %}
         <div class="alerts-container">
 
-            {% with messages = get_flashed_messages(category_filter="error") %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-            <div class="alert alert-dismissible alert__error fade show" role="alert">
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible alert__{{ category }} fade show" role="alert">
                 <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                {% for message in messages %}
                 {{ message }}
-                {% endfor %}
             </div>
+            {% endfor %}
             {% endif %}
             {% endwith %}
 
-            {% with messages = get_flashed_messages(category_filter="success") %}
-            {% if messages %}
-            <div class="alert alert-dismissible alert__success fade show" role="alert">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-
-            {% with messages = get_flashed_messages(category_filter="warning") %}
-            {% if messages %}
-            <div class="alert alert-dismissible alert__warning fade show" role="alert">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-
-            {% with messages = get_flashed_messages(category_filter="info") %}
-            {% if messages %}
-            <div class="alert alert-dismissible alert__info fade show" role="alert">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
         </div>
         {% endif %}
+
+
         <div class="navigation">
             <div class="navigation__logo">
-                <div class="navigation__logo__title">Nebula</div>
+                <a class="navigation__logo__title" href="{{ url_for('main.index') }}">Nebula</a>
                 <div class="navigation__logo__subtitle">
                     {% if (not current_user.is_anonymous) and current_user.access_level > 2 %}
                     &lt;Admin Panel&gt;
@@ -100,19 +72,22 @@
                 </div>
             </div>
             <div class="navigation__links">
-                <a {% if active_page|lower=="index" %} class="navigation__links__link active" {% else %}
-                    class="navigation__links__link" {% endif %} href="{{ url_for('dashboard.index') }}">Dashboard</a>
-                <a {% if active_page|lower=="users" %} class="navigation__links__link active" {% else %}
-                    class="navigation__links__link" {% endif %} href="#">Users</a>
-                <a {% if active_page|lower=="courses" %} class="navigation__links__link active" {% else %}
-                    class="navigation__links__link" {% endif %} href="#">Courses</a>
-                <a {% if active_page|lower=="questions" %} class="navigation__links__link active" {% else %}
-                    class="navigation__links__link" {% endif %} href="#">Questions</a>
-                <a {% if active_page|lower=="answers" %} class="navigation__links__link active" {% else %}
-                    class="navigation__links__link" {% endif %} href="#">Answers</a>
+                <a {% if active_page|lower=="index" %} class="navigation__links__link active" {%
+                    else %} class="navigation__links__link" {% endif %}
+                    href="{{ url_for('dashboard.index') }}">Dashboard</a>
+                <a {% if active_page|lower=="users" %} class="navigation__links__link active" {%
+                    else %} class="navigation__links__link" {% endif %}
+                    href="{{ url_for('dashboard.users') }}">Users</a>
+                <a {% if active_page|lower=="courses" %} class="navigation__links__link active" {%
+                    else %} class="navigation__links__link" {% endif %} href="#">Courses</a>
+                <a {% if active_page|lower=="questions" %} class="navigation__links__link active" {%
+                    else %} class="navigation__links__link" {% endif %} href="#">Questions</a>
+                <a {% if active_page|lower=="answers" %} class="navigation__links__link active" {%
+                    else %} class="navigation__links__link" {% endif %} href="#">Answers</a>
                 <a {% if active_page|lower=="settings" %}
                     class="navigation__links__link navigation__links__link--minor active" {% else %}
-                    class="navigation__links__link navigation__links__link--minor" {% endif %} href="#">settings</a>
+                    class="navigation__links__link navigation__links__link--minor" {% endif %}
+                    href="#">settings</a>
             </div>
         </div>
 
@@ -122,9 +97,13 @@
     </main>
     <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous">
         </script>
     <script src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/views.js') }}" defer></script>
 
+    {% block include_js %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/stoppageloadanim.js') }}" defer></script>
 </body>
