@@ -28,10 +28,11 @@ class QuestionForm(FlaskForm):
 
 
 @bp.route("/add_question", methods=['GET', 'POST'])
+@login_required
 def add_question(success=False, course_code=None):
     if not current_user.is_authenticated:
         flash("Please login to add a question.", "warning")
-        return redirect(url_for('user.login_register'))
+        return redirect(url_for('user.login_register', next=request.full_path))
 
     # Add courses to the form
     question_form = QuestionForm(request.form)
