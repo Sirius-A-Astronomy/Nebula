@@ -78,7 +78,10 @@ def question(question_uuid):
 
         notification = Notification(
             content=f"Your question '{question.title}' has been approved and is now visible on the site.",
-            user=question.user, category="success")
+            user=question.user, category="success",
+            link=url_for('question.question', question_uuid=question_uuid,
+                         course_level_code=question.course.course_level.code, course_code=question.course.code),
+            link_text="View Question")
         db.session.commit()
         flash("Question accepted.", 'success')
         return redirect(url_for('dashboard.index'))

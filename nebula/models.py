@@ -239,6 +239,7 @@ class Notification(Base):
     content = db.Column(db.Text, nullable=False)
     is_read = db.Column(db.Boolean, nullable=False, default=False)
     link = db.Column(db.String(256))
+    link_text = db.Column(db.String(256))
     category = db.Column(db.String(64), nullable=False, default='info')
 
     # relation one-to-many: one: user, many: notifications

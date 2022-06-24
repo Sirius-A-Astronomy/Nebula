@@ -1,8 +1,7 @@
-import json
+from flask import request, jsonify, Blueprint, url_for
+from flask_login import current_user
 
-from flask import Flask, request, jsonify, Blueprint, url_for
-
-from nebula.models import db, User, Question, Course, SubjectTag
+from nebula.models import db, User, Question, Course, SubjectTag, Notification
 from nebula.context_functions import pretty_date
 
 apibp = Blueprint('api', __name__, url_prefix='/api')
@@ -120,3 +119,19 @@ def get_subject_tags():
         "url": url_for("search.search", query=subject_tag.name)
     } for subject_tag in subject_tags]
     return(jsonify({"subject_tags": subject_tags_json}))
+
+
+@apibp.route("mark_notification_as_read", methods=["post"])
+def mark_notification_as_read():
+    """Marks a notification as read"""
+    request_data = request.get_json()
+    notification_uuid = request_data["notification_uuid"]
+    notification = Notification.query.filter_by(uuid=notification_uuid).first()
+    if current_user.uuid is not notification.user.uuid:
+        return jsonify({"success": False, "message": "You are not the owner of this notification"})
+    read = request_data["read"]
+    notification.is_read = read
+    db.session.commit()
+
+    return jsonify({"success": True, "message": f"Notification marked as {read}",
+                    "read": notification.is_read})

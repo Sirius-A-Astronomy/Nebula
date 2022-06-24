@@ -84,6 +84,50 @@
                 it.
             </div>
         </noscript>
+
+
+        <div class="notifications__list">
+            <div class="notifications__list__header">
+                <div class="notifications__list__header__title">
+                    Notifications
+                </div>
+                <a href="#" class="notifications__list__header__read-all">Mark all as read</a>
+
+            </div>
+            {% if current_user.notifications|length > 0 %}
+            {% for notification in current_user.notifications|reverse %}
+            <div class="notifications__list__item
+            {% if not notification.is_read %} unread {% endif %}">
+                <div class="notifications__list__item__category {{ notification.category }}"></div>
+                <div class="notifications__list__item__read"></div>
+                <div class="notifications__list__item__content">
+                    {{ notification.content }}
+                </div>
+                <div class="notifications__list__item__actions">
+                    {% if notification.link %}
+                    <a href="{{ notification.link }}">
+                        {% if notification.link_text %}
+                        {{ notification.link_text }}
+                        {% else %}
+                        View
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                    <a type="submit"
+                        class="button button-accent notifications__list__item__actions__read"
+                        data-uuid="{{ notification.uuid }}" {% if notification.is_read %}
+                        data-read="true" {% else %} data-read="false" {% endif %}>
+                        Mark as read</a>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="notifications__list__no-notifications">
+                <p>You have no notifications</p>
+            </div>
+            {% endif %}
+        </div>
         <div class="nebula-nav">
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <div class="container-lg">
@@ -92,7 +136,6 @@
                             <span class="site-name">Nebula</span>
                         </div>
                     </a>
-                    {% if intranet is not defined %}
                     <div class="persistent-nav-container">
 
                         <div class="dark-mode-toggle-container">
@@ -121,12 +164,9 @@
                         {% set unread_notifications =
                         current_user.notifications|selectattr('is_read', "equalto",
                         false)|list|length %}
-                        <div class="nav-item dropdown">
-                            <a {% if unread_notifications !=0 %}
-                                class="nav-link dropdown-toggle notifications-dropdown unread" {%
-                                else %} class="nav-link dropdown-toggle notifications-dropdown" {%
-                                endif %} href="#" id="navbarDropdownMenuLink" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        <div class="notifications js-only">
+                            <a href="#"
+                                class="notifications__toggle {% if unread_notifications != 0 %}unread{% endif %}"
                                 data-unread-count="{{ unread_notifications }}">
                                 {% if unread_notifications !=0 %}
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
@@ -142,27 +182,7 @@
                                 </svg>
                                 {% endif %}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-right notifications-dropdown-menu"
-                                aria-labelledby="navbarDropdownMenuLink">
 
-                                {% if current_user.notifications %}
-                                {% for notification in current_user.notifications %}
-                                <li>
-                                    <a class="dropdown-item {% if notification.is_read == false %} unread {% endif %} {{ notification.category }}"
-                                        href="#">
-                                        {{ notification.content }}
-                                    </a>
-                                </li>
-                                {% endfor %}
-                                {% else %}
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        No notifications
-                                    </a>
-                                </li>
-
-                                {% endif %}
-                            </ul>
                         </div>
                         {% endif %}
                         <div class="nav-item dropdown">
@@ -270,7 +290,6 @@
                         </ul>
                     </div>
                 </div>
-                {% endif %}
             </nav>
         </div>
     </header>
@@ -327,6 +346,7 @@
     <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
     <script type="text/javascript"
         src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
+    <script type="module" src="{{url_for('static', filename='js/notifications.js')}}"></script>
     <script defer type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
 
 
