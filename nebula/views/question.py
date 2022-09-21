@@ -5,8 +5,9 @@ from nebula.models import Course, Question, Comment, User, Answer, SubjectTag
 from nebula import db
 import json
 from urllib.parse import urlparse
+from sqlalchemy.exc import StatementError
 
-from flask import Blueprint, render_template, url_for, request, redirect, flash
+from flask import Blueprint, render_template, url_for, request, redirect, flash, abort
 from flask_login import current_user
 from wtforms import SubmitField, TextAreaField, BooleanField, SelectField, StringField, HiddenField
 from wtforms.validators import DataRequired, Optional
@@ -63,7 +64,15 @@ class AnswerForm(FlaskForm):
 @ bp.route('/<question_uuid>', methods=['GET', 'POST'])
 def question(course_code, question_uuid, course_level_code, new_comment_uuid=None, edit=None):
     new_comment_uuid = (request.args.get('new_comment_uuid'))
-    question = Question.query.filter_by(uuid=question_uuid).first()
+
+    try:
+        question = Question.query.filter_by(uuid=question_uuid).first()
+    except (ValueError, StatementError) as e:
+        abort(404)
+
+    if not question:
+        abort(404)
+
     edit = request.args.get('edit')
     if edit is not None and edit.lower() == 'true':
         edit = True
