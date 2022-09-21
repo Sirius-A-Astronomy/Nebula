@@ -4,6 +4,7 @@
 	display: flex;
 	background-color: var(--color-background);
 	box-shadow: var(--box-shadow);
+	z-index: 10;
 }
 
 @media (hover: hover) and (min-width: 992px) {
