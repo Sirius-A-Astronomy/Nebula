@@ -57,6 +57,17 @@
             Comments
             {% endif %}
         </div>
+        <div class="question-list-item__footer__item">
+            {% if current_user.is_anonymous == false and question.user.uuid == current_user.uuid %}
+            {% if question.reviewed == 0 %}
+            Unreviewed
+            {% elif question.reviewed == 1 %}
+            Approved
+            {% else %}
+            Rejected
+            {% endif %}
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endmacro %}

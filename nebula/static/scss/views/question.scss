@@ -17,6 +17,15 @@
 	margin-bottom: 1.5rem;
 }
 
+.unapproved-message {
+	margin-bottom: 1.5rem;
+
+	&__text {
+		font-size: 1.3rem;
+		font-weight: 700;
+	}
+}
+
 .info-bar {
 	display: flex;
 	flex-direction: column;

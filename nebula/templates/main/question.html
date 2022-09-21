@@ -52,7 +52,27 @@
 
         <div class="container-question-page">
 
+
+
             <div class="left-panel background-card">
+
+                {% if question.reviewed != 1 and current_user.is_anonymous == false and
+                current_user.uuid == question.user.uuid %}
+
+                <div class="unapproved-message">
+                    <div class="unapproved-message__text">
+                        {% if question.reviewed == 0 %}
+                        This question has not yet been reviewed. It will be visible to all users
+                        after it has been reviewed and approved.
+                        {% else %}
+                        This question has been reviewed and was not approved. It will not be visible
+                        to other users.
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% endif %}
+
                 {% if not edit_question_mode %}
                 <div class="container-question ">
 
