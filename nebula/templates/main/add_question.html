@@ -1,7 +1,17 @@
 {% extends 'layouts/base.html' %}
+
+{% from 'components/markdown_editor.html' import markdown_editor with context %}
+
 {% block title %}Add a question - Nebula{% endblock %}
 {% block body %}
 <main>
+
+
+
+
+
+
+
     <div class="container-lg">
         <div class="background-card">
             <h2>Add a question</h2>
@@ -83,7 +93,10 @@
                     </div>
                     <div class="preview-content"></div>
                 </div>
-                <div class="input-field">
+
+
+                {{ markdown_editor(question_form.content, "Question content") }}
+                <!-- <div class="input-field">
                     {{ question_form.content.label(class="form-label") }}
                     {% if question_form.content.errors|length > 0 %}
                     {{ question_form.content(class="form-control is-invalid auto-adjust-textarea",
@@ -108,7 +121,7 @@
                         Preview question content:
                     </div>
                     <div class="preview-content"></div>
-                </div>
+                </div> -->
                 <div class="input-field">
                     {{ question_form.subject_tags.label(class="form-label") }}
                     {{ question_form.subject_tags }}

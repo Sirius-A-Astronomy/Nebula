@@ -256,6 +256,33 @@ document
 		});
 	});
 
+// markdown editor
+
+{
+	document.querySelectorAll(".markdown-editor").forEach((editor) => {
+		let textarea = editor.querySelector(
+			".markdown-editor__textarea > textarea"
+		);
+		let preview = editor.querySelector(".markdown-editor__preview");
+
+		textarea.addEventListener(
+			"input",
+			debounce(() => {
+				mathjax.typesetClear([preview]);
+				preview.innerHTML = markdown.render(
+					DOMPurify.sanitize(textarea.value.trim(), {
+						ALLOWED_TAGS: [],
+					})
+				);
+				// Mathjax 2 method
+				//MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+				mathjax.typesetPromise([preview]);
+				mathjax.texReset();
+			}, 500)
+		);
+	});
+}
+
 // !SECTION Preview-Form-Input
 
 // !SECTION Markdown and MathJax
