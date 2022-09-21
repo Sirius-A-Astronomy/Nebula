@@ -63,6 +63,17 @@ subject_tags = db.Table('subject_tags',
                         )
 
 
+subscriptions = db.Table(
+    'subscriptions',
+    db.Column('user_uuid', GUID(),
+              db.ForeignKey('user.uuid')
+              ),
+    db.Column('subscription_uuid', GUID(),
+              db.ForeignKey('subscription.uuid')
+              )
+)
+
+
 class User(Base):
     """
         User model for the database.
@@ -79,7 +90,7 @@ class User(Base):
         :type access_level: int
         :param is_active: Whether the user is active or not.
         :type is_active: bool
-        :param is_authenticated: Whether the user is authenticated or not. 
+        :param is_authenticated: Whether the user is authenticated or not.
             Is set to true when the user logs in and false when the user logs out.
         :type is_authenticated: bool
         :param is_anonymous: Whether the user is anonymous or not.
@@ -103,6 +114,9 @@ class User(Base):
     is_authenticated = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
     is_anonymous = db.Column(db.Boolean, default=False)
+
+    subscriptions = db.relationship('Subscription', secondary=subscriptions,
+                                    backref=db.backref('users', lazy=True))
 
     def get_id(self):
         return self.uuid
@@ -249,6 +263,17 @@ class Notification(Base):
 
     def __repr__(self):
         return f"Notification(\"{self.content}\", {self.category})"
+
+
+class Subscription(Base):
+    # relation many-to-many: many: users, many: subscriptions
+
+    # relation one-to-one: one: subscription, one: question
+    question_uuid = db.Column(GUID(),
+                              db.ForeignKey('question.uuid'),
+                              nullable=False)
+    question = db.relationship('Question',
+                               backref=db.backref('subscriptions', lazy=True))
 
 
 def init_db():
