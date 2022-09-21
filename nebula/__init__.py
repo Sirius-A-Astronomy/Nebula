@@ -58,7 +58,8 @@ def create_app(config_environment='default'):
     # Register all the views within an app context
     with app.app_context():
         from nebula.views import main, level, course, all_courses, \
-            question, add_question, user, search, dashboard
+            question, add_question, user, search, dashboard, \
+            documentation
         from nebula.api import api
         app.register_blueprint(main.bp)
         app.register_blueprint(level.bp)
@@ -70,6 +71,7 @@ def create_app(config_environment='default'):
         app.register_blueprint(search.bp)
         app.register_blueprint(api.apibp)
         app.register_blueprint(dashboard.bp)
+        app.register_blueprint(documentation.bp)
 
     from nebula.context_functions import context_processor
 
