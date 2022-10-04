@@ -221,7 +221,8 @@ subject_tags = {
     "Mathematics":   SubjectTag(name="Mathematics"),
     "Physics":       SubjectTag(name="Physics"),
     "Quantum Physics": SubjectTag(name="Quantum Physics"),
-    "Statistics":    SubjectTag(name="Statistics")
+    "Statistics":    SubjectTag(name="Statistics"),
+    "Markdown":      SubjectTag(name="Markdown"),
 }
 
 
@@ -604,8 +605,8 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 :::""",
              user=users[5],
              course=courses[0],
-             reviewed=0,
-             subject_tags=[SubjectTag(name="Markdown")])
+             reviewed=1,
+             subject_tags=[subject_tags["Markdown"]])
 ]
 
 Answers = [
