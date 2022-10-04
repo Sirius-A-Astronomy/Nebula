@@ -6,10 +6,8 @@ WORKDIR ./app
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
-RUN pip install -e .
 
-# Set up database
-RUN python3 database-setup/init_db.py
+COPY . .
 
 ENV FLASK_APP=nebula
 ENV FLASK_ENV=development
