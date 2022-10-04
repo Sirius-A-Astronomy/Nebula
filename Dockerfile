@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN ls -la
+RUN ls
 
 RUN pip install -e .
 
