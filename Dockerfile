@@ -9,6 +9,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN pip isntall -e .
+
 RUN python database-setup/init_db.py
 RUN python database-setup/test_database.py
 
