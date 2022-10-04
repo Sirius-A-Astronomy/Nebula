@@ -94,9 +94,9 @@
                     <div class="preview-content"></div>
                 </div>
 
+                <!-- {{ markdown_editor(question_form.content, "Question content") }} -->
 
-                {{ markdown_editor(question_form.content, "Question content") }}
-                <!-- <div class="input-field">
+                <div class="input-field">
                     {{ question_form.content.label(class="form-label") }}
                     {% if question_form.content.errors|length > 0 %}
                     {{ question_form.content(class="form-control is-invalid auto-adjust-textarea",
@@ -121,7 +121,7 @@
                         Preview question content:
                     </div>
                     <div class="preview-content"></div>
-                </div> -->
+                </div>
                 <div class="input-field">
                     {{ question_form.subject_tags.label(class="form-label") }}
                     {{ question_form.subject_tags }}
