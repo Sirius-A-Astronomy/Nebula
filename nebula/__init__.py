@@ -93,7 +93,8 @@ def create_app(config_environment='default'):
     from nebula.utilities import unauthorized_handler
     login_manager.unauthorized_handler(unauthorized_handler)
 
-    compile_sass()
+    # Compile the sass files, TODO find another way to compile sass outside of the app
+    # compile_sass()
 
     return app
 
