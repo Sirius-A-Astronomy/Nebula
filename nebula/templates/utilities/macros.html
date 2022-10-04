@@ -82,11 +82,11 @@
                 course.name }}</a>
         </h3>
     </div>
-    <div class="course-item__body">
+    <!-- <div class="course-item__body">
         <p class="course-item__body__description">
             {{ course.description }}
         </p>
-    </div>
+    </div> -->
     <div class="course-item__footer">
         <p class="course-item__footer__questions-amount">
             {{ course.questions|selectattr('reviewed', 'equalto', 1)|list|length }} Questions
