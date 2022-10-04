@@ -8,12 +8,12 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN ls
+COPY database-setup ./database-setup
 
 RUN pip install -e .
 
-RUN python database-setup/init_db.py
-RUN python database-setup/test_database.py
+RUN python ./database-setup/init_db.py
+RUN python ./database-setup/test_database.py
 
 ENV FLASK_APP=nebula
 ENV FLASK_ENV=development
