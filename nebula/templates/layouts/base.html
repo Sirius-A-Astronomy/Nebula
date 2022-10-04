@@ -75,6 +75,24 @@
 {%- endmacro %}
 
 <body>
+    {% if get_flashed_messages() %}
+    <div class="alerts-container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-dismissible alert__{{ category }} fade show" role="alert">
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+    </div>
+    {% endif %}
     <header>
         <noscript>
             <div style="background-color: var(--color-background, #f5f5f5);
@@ -294,24 +312,6 @@
         </div>
     </header>
 
-    {% if get_flashed_messages() %}
-    <div class="alerts-container">
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-dismissible alert__{{ category }} fade show" role="alert">
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-    </div>
-    {% endif %}
 
 
     {% block body %}
