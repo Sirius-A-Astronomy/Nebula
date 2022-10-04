@@ -12,8 +12,8 @@ COPY database-setup ./database-setup
 
 RUN pip install -e .
 
-RUN python ./database-setup/init_db.py
-RUN python ./database-setup/test_database.py
+RUN python database-setup/init_db.py
+RUN python database-setup/database_test_data.py
 
 ENV FLASK_APP=nebula
 ENV FLASK_ENV=development
