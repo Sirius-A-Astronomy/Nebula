@@ -79,6 +79,12 @@ def validate_username(form, field):
         raise ValidationError(
             "Please enter a username without any spaces"
         )
+
+    if re.match(r"[ @()+=\[\]{};\':\"\\|,.<>\/\?]", username):
+        raise ValidationError(
+            "Please enter a username without any special characters"
+        )
+
     if User.query.filter_by(username=field.data.lower()).first() is not None:
         raise ValidationError(
             "It looks like we already know someone with that username, do you want to try another one?")
@@ -106,12 +112,10 @@ class RegisterForm(FlaskForm):
         validators=[
             DataRequired(
                 "Please enter a username, you will use this to log in"),
-            validate_username,
             Length(
                 min=3, max=30,
                 message="Please enter a username with at least 3 and at most 30 characters"),
-            Regexp(r"[ @()+=\[\]{};':\"\\|,.<>\/?]",
-                   message="Please enter a username without any special characters")
+            validate_username,
         ])
     first_name = StringField(
         "First Name",
