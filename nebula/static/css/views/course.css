@@ -1,0 +1,61 @@
+/*
+    Course Page
+*/
+.course-header {
+  margin-bottom: 1rem;
+}
+.course-header__questions-amount {
+  font-family: "Poppins", "Open Sans", "Arial", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: var(--font-size-h4);
+  line-height: 30px;
+}
+.course-header__description {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: var(--font-size-h3);
+  line-height: 25px;
+  color: var(--color-text-primary);
+}
+.course-header .add-question-button {
+  font-size: var(--font-size-h4);
+}
+
+@media (min-width: 768px) {
+  .course-header {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .course-header__title {
+    margin-bottom: 0;
+    flex: 1 1 40%;
+  }
+  .course-header__questions-amount {
+    margin-bottom: 0;
+    text-align: end;
+    flex: 0 1 content;
+  }
+  .course-header__description {
+    margin-bottom: 0;
+    flex: 1 1 60%;
+    order: 2;
+  }
+  .course-header .search-bar {
+    margin-bottom: 0;
+    flex: 1 0 20rem;
+    order: 2;
+  }
+  .course-header .add-question-button {
+    margin-bottom: 0;
+    flex: 0 1 content;
+    order: 1;
+  }
+}
+
+/*# sourceMappingURL=course.css.map */
