@@ -40,7 +40,7 @@ def add_question(success=False, course_code=None):
     course_code = request.args.get('course_code')
 
     # Set the default course if a course code is provided
-    if course_code is not None:
+    if course_code != None:
         course = Course.query.filter_by(code=course_code).first()
         course_id = course.id
         question_form.course.default = course_id
@@ -94,7 +94,7 @@ def add_question(success=False, course_code=None):
         title = cleaned_title
 
     subject_tags = []
-    if question_form.subject_tags.data is not "":
+    if question_form.subject_tags.data != "":
         for tag in json.loads(question_form.subject_tags.data):
             tag = tag.strip()
             if not tag:
