@@ -76,8 +76,11 @@ def get_course_questions(course_code=None):
     """Returns a json object with all the questions from the requested course"""
     course_code = request.args.get("course_code")
 
+    course = Course.query.filter_by(code=course_code).one_or_none()
+
     questions = Question.query.filter_by(
-        course_code=course_code, reviewed=1).all()
+        course_uuid=course.uuid, reviewed=1).all()
+
     questions_json = [{
         "uuid": question.uuid,
         "title": question.title,
