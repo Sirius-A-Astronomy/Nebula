@@ -18,6 +18,14 @@
             <p>
                 Submit a question below
             </p>
+
+            <noscript>
+                <p>
+                    <strong>Warning:</strong> JavaScript is disabled or failed to load.
+                    You will not be able to preview your markdown before submitting your
+                    question or add subject tags to your question.
+                </p>
+            </noscript>
             <form method='POST' action="{{ url_for('add_question.add_question')}}"
                 id="add-question-form">
                 {{ question_form.csrf_token }}
@@ -68,6 +76,8 @@
                     \iiiint_V \mu(t,u,v,w) \,dt\,du\,dv\,dw
                     \end{equation}
                 </div>
+
+
                 <div class="input-field">
                     {{ question_form.title.label(class="form-label") }}
                     {% if question_form.title.errors|length > 0 %}
@@ -87,7 +97,7 @@
                         preview</a>
                 </div>
                 <div class="preview-form-container" data-preview-toggled-by="show-title-preview"
-                    data-preview-value-from="title-input-field">
+                    data-preview-value-from="title-input-field" data-latex-only="true">
                     <div class="text-tertiary">
                         Preview title:
                     </div>

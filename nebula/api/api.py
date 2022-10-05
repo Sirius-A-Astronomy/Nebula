@@ -7,7 +7,7 @@ from nebula.context_functions import pretty_date
 apibp = Blueprint('api', __name__, url_prefix='/api')
 
 
-@ apibp.route("/is_username_available", methods=["post", "GET"])
+@ apibp.route("/is_username_available", methods=["post"])
 def is_username_available():
     """Returns true if the username is available."""
     if request.method == "POST":
