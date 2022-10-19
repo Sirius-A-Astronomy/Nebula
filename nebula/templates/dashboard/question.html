@@ -1,0 +1,63 @@
+{% extends "dashboard/base.html" %}
+{% set active_page = "questions" %}
+
+{% block content %}
+
+<div class="container-question ">
+
+    <div class="review-container">
+        {% if question.reviewed == 0 %}
+        <form action="{{ url_for('dashboard.question', question_uuid=question.uuid) }}"
+            method="post">
+
+
+            {{ question_review_form.csrf_token }}
+            {{ question_review_form.accept_submit_button(class="btn btn-outline") }}
+            {{ question_review_form.reject_submit_button(class="btn btn-outline") }}
+        </form>
+        {% else %}
+        <div class="review-container__message">
+            {% if question.reviewed == 1 %}
+            <p>This question has been approved by {{ question.reviewed_by.username }}.</p>
+            {% else %}
+            <p>This question has been rejected by {{ question.reviewed_by.username }}.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="container-question-info">
+        <div class="question-title">
+            <h2>{{ question.title }}</h2>
+        </div>
+        <div class="question-info">
+            <h6 class="text-tertiary poppins fw-600">
+                Posted {{ pretty_date(question.created_at) }}
+                by {{ question.user.first_name }} {{ question.user.last_name }}</h6>
+        </div>
+    </div>
+    <div class="container-question-content">
+        <div>
+            <p class="small-accent">
+                Question content:
+            </p>
+            <p class="question-content markdown-view">{{ question.content }}
+            </p>
+        </div>
+        {% if current_user.is_anonymous == false and
+        (current_user == question.user or current_user.access_level > 2) %}
+        <div class="d-flex justify-content-end">
+            <a href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code, edit=True) }}"
+                class="button-accent ml-auto" id="question-edit-button">Edit</a>
+        </div>
+        {% endif %}
+        <div class="divider"></div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block include_js %}
+<script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
+<script src="{{ url_for('static', filename='js/tag_input.js') }}"></script>
+{% endblock include_js %}

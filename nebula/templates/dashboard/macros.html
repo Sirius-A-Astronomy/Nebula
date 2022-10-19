@@ -1,0 +1,59 @@
+{% macro dashboard_question_view(question) %}
+
+<div class="question-list-item" href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">
+
+    <div class="question-list-item__header">
+        {% if "username" not in hide_elements %}
+        <div class="question-list-item__header__username">
+            <a href="{{ url_for('search.search', query=question.user.username) }}">{{
+                question.user.username }}</a>
+        </div>
+        {% endif %}
+        {% if "subject-tags" not in hide_elements %}
+        <div class="question-list-item__header__subject-tags">
+            {% for subject_tag in question.subject_tags %}
+            <a class="subject-tag" href="{{ url_for('search.search', query=subject_tag.name) }}">{{
+                subject_tag.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if "course" not in hide_elements %}
+        <div class="question-list-item__header__course">
+            <a
+                href="{{ url_for('course.course', course_code=question.course.code, course_level_code=question.course.course_level.code) }}">{{
+                question.course.name }}</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="question-list-item__body">
+        <div class="question-list-item__body__title">
+            <a href="{{ url_for('question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}"
+                class="question-list-item__body__title__link">
+                {{ question.title }}
+            </a>
+        </div>
+
+        <div class="question-list-item__body__posted-at">
+            {{ pretty_date(question.created_at) }}
+        </div>
+
+    </div>
+
+    <div class="question-list-item__footer">
+        {% if question.reviewed == 0 %}
+        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Review</a>
+        {% endif %}
+        {% if question.reviewed == 1 %}
+        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Approved by {{
+            question.reviewed_by.username }}</a>
+        {% endif %}
+        {% if question.reviewed == 2 %}
+        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Rejected by {{
+            question.reviewed_by.username }}</a>
+        {% endif %}
+
+        <a href="#">Edit</a>
+    </div>
+</div>
+{% endmacro %}

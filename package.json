@@ -1,0 +1,10 @@
+{
+    "scripts": {},
+    "dependencies": {
+        "sass": "^1.55.0"
+    },
+    "devDependencies": {
+        "cypress": "^10.10.0",
+        "cypress-real-events": "^1.7.2"
+    }
+}

@@ -1,4 +1,5 @@
 venv/
+nebula-venv/
 
 *.pyc
 __pycache__/
@@ -7,8 +8,17 @@ instance/
 
 .pytest_cache/
 .coverage
+node_modules/
+cypress/videos/
 htmlcov/
+yarn.lock
+settings.json
+
+nebula/static/css/
 
 dist/
 build/
 *.egg-info/
+
+*.db
+*.mp4

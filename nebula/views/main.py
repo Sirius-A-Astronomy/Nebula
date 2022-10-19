@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template
-main = Blueprint('main', __name__)
+from nebula.models import CourseLevel
+
+bp = Blueprint('main', __name__)
 
 
-@main.route('/')
+@bp.route('/')
 def index():
-    return render_template('main/index.html')
+    bsc = CourseLevel.query.filter_by(study_type='Bachelor').all()
+    msc = CourseLevel.query.filter_by(study_type='Master').all()
+    return render_template('main/index.html', bsc_levels=bsc, msc_levels=msc)
