@@ -19,10 +19,10 @@ git clone https://gitlab.astro.rug.nl/sirius-a/nebula.git
 </details>
 <details><summary>2. Git checkout to the correct branch</summary>
 
-_Note: in this guide the branch 'flask-redevelopment' was used as it was the most recently used._
+_Note: in this guide the branch 'dev' was used as it was the most recently used._
 
 ```bash
-git checkout flask-redevelopment
+git checkout dev
 ```
 
 </details>
@@ -72,7 +72,7 @@ python3 -m pip install -r requirements.txt
 -   Now nodejs is installed, you can install sass with:
 
 ```bash
-npm install sass
+npm install
 ```
 
 _Note: omit the -g flag if you don't wish to install sass globally_
@@ -81,6 +81,7 @@ _Note: omit the -g flag if you don't wish to install sass globally_
 
 <details><summary>6. Create the nebula database</summary>
 - The following command will create the database and seed it with test data
+
 ```bash
 make db-migrate-fresh-seed
 ```
