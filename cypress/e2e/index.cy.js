@@ -21,24 +21,20 @@ describe("index", () => {
         );
         it("should have navigation to a course_level from browse", () => {
             cy.get("p > a").contains("First Year").click();
-            cy.url().should("include", "/course_levels/bsc-yr1");
+            cy.url().should("include", "/bsc-yr1");
         });
 
         it("should have navigation to a course_level from nav", () => {
             cy.get(".navbar-nav").contains("Courses").realHover();
             cy.get(".dropdown-menu").contains("First Year").click();
-            cy.url().should("include", "/course_levels/bsc-yr1");
+            cy.url().should("include", "/bsc-yr1");
         });
 
         it("should have navigation to a course from nav", () => {
             cy.get("a").contains("Courses").realHover();
             cy.get(".dropdown-menu > li > a").contains("First Year").realHover();
             cy.get(".dropdown-submenu > li > a").contains("Calculus 1").click();
-            cy.url().should("contain", "/levels/bsc-yr1/courses/WBMA003-05");
-        });
-
-        it("Should have navigation back to the main sirius a website", () => {
-            cy.get("a").contains("Sirius").should("have.attr", "href", "https://sirius.astro.rug.nl/");
+            cy.url().should("contain", "WBMA003-05");
         });
     });
 
@@ -62,7 +58,7 @@ describe("index", () => {
 
         it('should have navigation to a course_level from browse', () => {
             cy.get("p > a").contains("First Year").click();
-            cy.url().should("include", "/course_levels/bsc-yr1");
+            cy.url().should("include", "/bsc-yr1");
         });
 
         it('should have navigation to a course from nav', () => {
@@ -70,7 +66,7 @@ describe("index", () => {
             cy.get(".navbar-nav").contains("Courses").click();
             cy.get(".dropdown-menu").contains("First Year").click();
             cy.get(".dropdown-submenu").contains("Calculus 1").click();
-            cy.url().should("contain", "/levels/bsc-yr1/courses/WBMA003-05");
+            cy.url().should("contain", "WBMA003-05");
         });
     });
 });

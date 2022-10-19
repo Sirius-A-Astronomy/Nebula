@@ -263,7 +263,7 @@ def login_register(next=None, register=None):
     return redirect(next or url_for("main.index"))
 
 
-@ bp.route("/logout")
+@ bp.route("/logout", methods=["POST"])
 def logout():
     """Logs out the current user."""
     if current_user.is_anonymous:
