@@ -14,6 +14,8 @@ htmlcov/
 yarn.lock
 settings.json
 
+nebula/static/css/
+
 dist/
 build/
 *.egg-info/
