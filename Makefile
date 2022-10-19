@@ -28,10 +28,22 @@ server: install copy-static update-wsgi clean update-group-permissions
 # Quick version of 'server', it will not copy all the static content & permissions
 quick-update: install update-wsgi clean
 
+
+db-migrate-fresh: 
+	@echo "Creating development database"
+	@rm -f nebula/site.db
+	@touch nebula/site.db
+	@pip install -e .
+	@python3 database-setup/db_init.py
+
+db-seed: 
+	@python3 database-setup/db_seed.py
+
+db-migrate-fresh-seed: db-migrate-fresh db-seed
+
 # Start/Start the development version of the website
-# dev-server: SHELL := /bin/bash
 # find all scss files and add them to the extra files that flask will watch
-dev-server:
+dev-server: 
 	@export search_dir="./nebula/static/scss"/* ; \
 	export FLASK_RUN_EXTRA_FILES="" ; \
 	\
