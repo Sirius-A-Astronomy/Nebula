@@ -94,7 +94,9 @@ def create_app(config_environment='default'):
     login_manager.unauthorized_handler(unauthorized_handler)
 
     # Compile the sass files, TODO find another way to compile sass outside of the app
-    # compile_sass()
+    from os import environ
+    if (app.env == "development" or app.env == "testing"):
+        compile_sass()
 
     return app
 
@@ -118,8 +120,13 @@ def is_safe_url(target, request):
 def compile_sass():
     """Compiles the sass files."""
     print(" * Compiling sass files...")
-    subprocess.run(
-        ["sass", "./nebula/static/scss/:./nebula/static/css"])
+    try:
+        subprocess.run(
+            ["npx", "sass", "./nebula/static/scss/:./nebula/static/css"])
+    except Exception as e:
+        print(" * Error compiling sass files. Did you run 'npm install'?")
+        print(e)
+        return
     print(" * Sass files compiled.")
 
 
