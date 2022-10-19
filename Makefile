@@ -41,6 +41,10 @@ db-seed:
 
 db-migrate-fresh-seed: db-migrate-fresh db-seed
 
+build:
+	@echo "Compiling SASS"
+	@npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
+
 # Start/Start the development version of the website
 # find all scss files and add them to the extra files that flask will watch
 dev-server: 
