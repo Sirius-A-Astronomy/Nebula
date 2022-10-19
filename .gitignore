@@ -11,9 +11,7 @@ instance/
 node_modules/
 cypress/videos/
 htmlcov/
-package.json
 yarn.lock
-package-lock.json
 settings.json
 
 dist/
