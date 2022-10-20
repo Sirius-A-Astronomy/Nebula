@@ -203,6 +203,15 @@ document.querySelectorAll(".markdown-view").forEach((element) => {
 	mathjax.typesetPromise([element]);
 });
 
+// Latex only view
+
+document.querySelectorAll(".latex-view").forEach((element) => {
+	if (element.style.display === "none") {
+		return;
+	}
+	mathjax.typesetPromise([element]);
+});
+
 /*
     SECTION Preview-Form-Input
 */
@@ -225,13 +234,27 @@ document
 					let previewContent =
 						element.querySelector(".preview-content");
 					mathjax.typesetClear([previewContent]);
-					previewContent.innerHTML = markdown.render(
-						DOMPurify.sanitize(inputForm.value.trim(), {
-							ALLOWED_TAGS: [],
-						})
-					);
-					// Mathjax 2 method
-					//MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+
+					console.log(element.attributes);
+
+					if (
+						// if we also need to render markdown
+						element.attributes["data-latex-only"]?.value !== "true"
+					) {
+						previewContent.innerHTML = markdown.render(
+							DOMPurify.sanitize(inputForm.value.trim(), {
+								ALLOWED_TAGS: [],
+							})
+						);
+					} else {
+						// if latex only
+						previewContent.innerHTML = DOMPurify.sanitize(
+							inputForm.value.trim(),
+							{
+								ALLOWED_TAGS: [],
+							}
+						);
+					}
 
 					mathjax.typesetPromise([previewContent]);
 					showPreviewButton.style.display = "none";
@@ -240,13 +263,27 @@ document
 						"input",
 						debounce(() => {
 							mathjax.typesetClear([previewContent]);
-							previewContent.innerHTML = markdown.render(
-								DOMPurify.sanitize(inputForm.value.trim(), {
-									ALLOWED_TAGS: [],
-								})
-							);
-							// Mathjax 2 method
-							//MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewContent]);
+
+							if (
+								// if we also need to render markdown
+								element.attributes["data-latex-only"]?.value !==
+								"true"
+							) {
+								previewContent.innerHTML = markdown.render(
+									DOMPurify.sanitize(inputForm.value.trim(), {
+										ALLOWED_TAGS: [],
+									})
+								);
+							} else {
+								// if latex only
+								previewContent.innerHTML = DOMPurify.sanitize(
+									inputForm.value.trim(),
+									{
+										ALLOWED_TAGS: [],
+									}
+								);
+							}
+
 							mathjax.typesetPromise([previewContent]);
 							mathjax.texReset();
 						}, 500)
