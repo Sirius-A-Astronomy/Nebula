@@ -23,7 +23,7 @@ def is_username_available():
 def getQuestions():
     """Returns a list of all questions"""
 
-    questions = Question.query.filter_by(reviewed=1).all()
+    questions = Question.query.all()
     questions_json = [{
         "uuid": question.uuid,
         "title": question.title,
@@ -79,7 +79,7 @@ def get_course_questions(course_code=None):
     course = Course.query.filter_by(code=course_code).one_or_none()
 
     questions = Question.query.filter_by(
-        course_uuid=course.uuid, reviewed=1).all()
+        course_uuid=course.uuid).all()
 
     questions_json = [{
         "uuid": question.uuid,
