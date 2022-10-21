@@ -1,3 +1,5 @@
+let mathjax = window.MathJax;
+
 class Question {
 	ranking = 0;
 	matchingElements = [];
@@ -158,6 +160,7 @@ class Question {
 		);
 		let questionListItem__Body__Title__Link = document.createElement("a");
 		questionListItem__Body__Title__Link.href = this.url;
+		questionListItem__Body__Title__Link.classList.add("latex-view");
 
 		let titleHighlighted = this.searchResult[0]
 			? DOMPurify.sanitize(
@@ -170,6 +173,8 @@ class Question {
 			  )
 			: this.title;
 		questionListItem__Body__Title__Link.innerHTML = titleHighlighted;
+
+		mathjax.typesetPromise([questionListItem__Body__Title__Link]);
 
 		questionListItem__Body__Title.appendChild(
 			questionListItem__Body__Title__Link

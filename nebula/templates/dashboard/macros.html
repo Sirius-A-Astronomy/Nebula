@@ -1,6 +1,7 @@
 {% macro dashboard_question_view(question) %}
 
-<div class="question-list-item" href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">
+<div class="question-list-item"
+    href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">
 
     <div class="question-list-item__header">
         {% if "username" not in hide_elements %}
@@ -29,7 +30,7 @@
     <div class="question-list-item__body">
         <div class="question-list-item__body__title">
             <a href="{{ url_for('question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}"
-                class="question-list-item__body__title__link">
+                class="question-list-item__body__title__link latex-view">
                 {{ question.title }}
             </a>
         </div>

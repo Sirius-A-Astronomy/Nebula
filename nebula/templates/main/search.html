@@ -27,5 +27,5 @@
 
 {% block include_js %}
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
-<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
 {% endblock %}
