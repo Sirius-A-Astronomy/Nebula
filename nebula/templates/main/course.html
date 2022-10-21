@@ -38,9 +38,11 @@
                             fill="currentcolor" />
                     </svg>
                 </div>
+                {% if not current_user.is_anonymous and current_user.access_level >= 2 %}
                 <a href="{{ url_for('add_question.add_question', course_code=course.code)}}"
                     class="btn btn-outline add-question-button">Add a
                     question</a>
+                {% endif %}
             </div>
             <div class="question-list-container" id="question-list-container">
                 {% for question in questions|sort(attribute='id', reverse=true) %}

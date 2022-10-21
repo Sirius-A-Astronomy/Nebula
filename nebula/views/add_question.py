@@ -29,9 +29,11 @@ class QuestionForm(FlaskForm):
 
 @bp.route("/add_question", methods=['GET', 'POST'])
 def add_question(success=False, course_code=None):
-    if not current_user.is_authenticated:
-        flash("Please login to add a question.", "warning")
-        return redirect(url_for('user.login_register', next=request.full_path))
+
+    # Only admins or moderators can add questions
+    if not current_user.is_authenticated or current_user.access_level < 2:
+        flash("Only KLC or Cosmic Web members can create questions.", "warning")
+        return redirect(url_for("main.index"))
 
     # Add courses to the form
     question_form = QuestionForm(request.form)
@@ -116,15 +118,11 @@ def add_question(success=False, course_code=None):
     question = Question(title=title, content=content, user=user, course=course,
                         difficulty=difficulty, subject_tags=subject_tags)
 
-    if answer is not None and answer != "":
-        answer_obj = Answer(content=answer, user=user,
-                            question=question, approved=False)
-        db.session.add(answer_obj)
     db.session.add(question)
 
     db.session.commit()
 
-    flash("Your question has been submitted and is awaiting review", "success")
+    flash("Your question has been added!", "success")
     return render_template("main/add_question_succes.html",
                            question=question,
                            course=course,
