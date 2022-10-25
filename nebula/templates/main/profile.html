@@ -60,10 +60,7 @@
                     <p>Password: ***********</p>
                     <p>Comments created: {{ current_user.comments|count }}</p>
                     <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
-                    <p>Account access level: {{ "Guest" if current_user.access_level==0 else
-                        "User" if current_user.access_level==1 else "Moderator" if
-                        current_user.access_level==2
-                        else "Admin" }}</p>
+                    <p>Account access level: {{ access_levels[current_user.access_level].name}} </p>
 
                     <div class="d-flex justify-content-between">
                         <a class="button-accent on-primary" href="#">Edit Info</a>
