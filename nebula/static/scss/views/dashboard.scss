@@ -264,17 +264,9 @@
 		letter-spacing: 0.095rem;
 	}
 
-	.users-container {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-
+	.users-table {
+		width: 100%;
 		&__user {
-			display: flex;
-			flex-direction: row;
-			justify-content: flex-start;
-			align-items: center;
-
 			&__username {
 				font-size: 1rem;
 				font-weight: 200;
