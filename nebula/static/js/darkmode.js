@@ -30,14 +30,14 @@ function setDarkMode(mode) {
 	setDarkModeToggleState(mode);
 }
 
-window.onload = (event) => {
+window.onload = () => {
 	darkModeToggle = document.getElementById("dark-mode-toggler");
-	darkModeToggle.classList.add("animate-rotation");
-	setDarkModeToggleState(prefersDarkMode);
 
 	if (!darkModeToggle) {
 		return;
 	}
+	setDarkModeToggleState(prefersDarkMode);
+	darkModeToggle.classList.add("animate-rotation");
 	darkModeToggle.addEventListener("click", function () {
 		let currentDarkModePreference =
 			localStorage.getItem("prefersDarkMode") != "light"
