@@ -8,6 +8,7 @@ from wtforms import Form, SubmitField, HiddenField
 from flask_wtf import FlaskForm
 
 from nebula.models import User, Comment, Course, CourseLevel, Question, Answer, Notification
+from nebula.utilities import ACCESS_LEVELS
 from nebula import db
 
 bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -96,11 +97,53 @@ def question(question_uuid):
         return redirect(url_for('dashboard.index'))
 
 
-@bp.route('/users')
+@bp.route('/users', methods=['GET'])
 def users():
     if current_user.is_anonymous or current_user.access_level < 2:
         flash("You need to be a KLC or Cosmic Web Member to access this page.", 'warning')
         return redirect(url_for('main.index'))
 
     users = User.query.all()
-    return render_template('dashboard/users.html', users=users)
+
+    return render_template('dashboard/users.html', users=users, access_levels=ACCESS_LEVELS)
+
+
+@bp.route('/user/<user_uuid>/access_level', methods=['POST'])
+def user_access_level(user_uuid):
+    if current_user.is_anonymous or current_user.access_level < 3:
+        flash("You need to be a Cosmic Web Member to perform this action.", 'warning')
+        return redirect(url_for('main.index'))
+
+    user = User.query.filter_by(uuid=user_uuid).first()
+    if not user:
+        flash("User not found.", 'warning')
+        return redirect(url_for('dashboard.users'))
+
+    if request.method != 'POST':
+        flash("Invalid request method.", 'warning')
+        return redirect(url_for('dashboard.users'))
+
+    if not request.form.get('access_level'):
+        flash("No access level provided.", 'warning')
+        return redirect(url_for('dashboard.index'))
+
+    access_level = int(request.form.get('access_level'))
+
+    if access_level not in [0, 1, 2, 3, 4]:
+        flash("Invalid access level provided.", 'warning')
+        return redirect(url_for('dashboard.index'))
+
+    if access_level >= current_user.access_level and current_user.access_level != 4:
+        flash("You cannot set a user's access level to be equal to or higher than your own.", 'warning')
+        return redirect(url_for('dashboard.users'))
+
+    if user.access_level >= current_user.access_level and current_user.access_level != 4:
+        flash("You cannot change a user's access level with an access level equal to or higher than your own.", 'warning')
+        return redirect(url_for('dashboard.users'))
+
+    old_access_level = user.access_level
+    user.access_level = access_level
+    db.session.commit()
+    flash(
+        f"Changed {user.first_name} {user.last_name}'s access level from {ACCESS_LEVELS[old_access_level]['name']} to {ACCESS_LEVELS[access_level]['name']}.", 'success')
+    return redirect(url_for('dashboard.users'))

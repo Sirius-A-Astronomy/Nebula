@@ -210,7 +210,8 @@ users = [
                 access_level=3, first_name="Test", last_name="Admin"),
 
     create_user("pieterh", "unsafe", email="pieterh@nebula.com",
-                access_level=3, first_name="Pieter", last_name="Huizenga"),
+                access_level=4, first_name="Pieter", last_name="Huizenga"),
+
 ]
 
 subject_tags = {
@@ -226,7 +227,6 @@ subject_tags = {
 }
 
 
-print(users)
 questions = [
     Question(title="What is the answer to life, the universe and everything?",
              content="How do you know?",

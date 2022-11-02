@@ -97,12 +97,8 @@ class User(Base):
         :type is_anonymous: bool
 
     """
-    ACCESS_LEVELS = {
-        "guest": 0,
-        "user": 1,
-        "moderator": 2,
-        "admin": 3
-    }
+
+    # access_levels are defined in nebula/utilities.py
 
     first_name = db.Column(db.String(128))
     last_name = db.Column(db.String(128))

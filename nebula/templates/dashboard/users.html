@@ -9,31 +9,64 @@
     <div class="user-list-card__title">
         Users
     </div>
-    <div class="users-container">
-        {% for user in users %}
-        <div class="users-container__user">
-            <div class="users-container__user__username">
-                {{ user.username }}
-            </div>
-            <div class="users-container__user__full-name">
-                {{ user.first_name }} {{ user.last_name }}
-            </div>
-            <div class="users-container__user__email">
-                {{ user.email }}
-            </div>
-            <div class="users-container__user__role">
-                {{ user.access_level }}
-            </div>
-            <div class="users-container__user__actions">
-                <a href="#">
-                    <button class="button button--primary">
-                        View
-                    </button>
-                </a>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+    <table class="users-table">
+        <tbody>
+
+            {% for user in users %}
+            <tr class="users-table__user">
+                <td class="users-table__user__username">
+                    {{ user.username }}
+                </td>
+                <td class="users-table__user__full-name">
+                    {{ user.first_name }} {{ user.last_name }}
+                </td>
+                <td class="users-table__user__email">
+                    {{ user.email }}
+                </td>
+                <td class="users-table__user__role">
+                    <form action="{{ url_for('dashboard.user_access_level', user_uuid=user.uuid) }}"
+                        method="post">
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+                        {% if (not current_user.uuid == user.uuid ) and (user.access_level <
+                            current_user.access_level or current_user.access_level==4)%} <select
+                            name="access_level" class="users-table__user__role__select form-select"
+                            onchange="this.form.submit()">
+
+                            {% for access_level in access_levels %}
+                            {% if access_level.value < current_user.access_level or
+                                current_user.access_level==4 %} <option
+                                value="{{ access_level.value }}" {% if
+                                user.access_level==access_level.value %}selected{% endif %}>
+                                {{ access_level.name }}
+                                </option>
+                                {% endif %}
+                                {% endfor %}
+                                </select>
+
+                                <noscript>
+                                    <input type="submit" value="save">
+                                </noscript>
+
+                                {% else %}
+                                <span class="users-table__user__role__select">
+                                    {{ access_levels[user.access_level].name }}
+                                </span>
+                                {% endif %}
+                    </form>
+                </td>
+                <td class="users-table__user__actions">
+                    <a href="#">
+                        <button class="button button--primary">
+                            View
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </div>
 

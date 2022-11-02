@@ -355,6 +355,7 @@ def profile():
             flash("Password changed successfully!", "success")
             return redirect(url_for("user.profile"))
 
+    from nebula.utilities import ACCESS_LEVELS
     return render_template("main/profile.html", change_password_form=change_password_form,
                            change_username_form=change_username_form,
-                           edit_profile_form=edit_profile_form)
+                           edit_profile_form=edit_profile_form, access_levels=ACCESS_LEVELS)
