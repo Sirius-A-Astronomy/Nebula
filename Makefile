@@ -1,102 +1,93 @@
 # Define locations of critical directories
-SITE_DIR=/Public_html/users/sirius/site
 APP_NAME=nebula
-STATIC_DIR=$(SITE_DIR)/static
 STATIC_SOURCE=$(APP_NAME)/static
 
 # Arguments to external tools
-PY_FILES=nebula/*.py nebula/views/*.py *.py 
-BLACK_ARGS=-l 79
-ISORT_ARGS=--multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=79
+# PY_FILES=$(APP_NAME)/*.py $(APP_NAME)/**/*.py *.py
+BLACK_ARGS=
+ISORT_ARGS=--multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses
 FLAKE_ARGS=
 
 # Arguments for flask
-FLASK_APP=nebula
+FLASK_APP=$(APP_NAME)
 FLASK_ENV_DEV=development
+DEV_ENV=FLASK_DEBUG=1 FLASK_APP=$(FLASK_APP) FLASK_ENV=$(FLASK_ENV_DEV)
+
+# List all scss files in the nebula/static/scss directory & create a : separated list from them
+SCSS_FILES=$(shell find ./nebula/static/scss -name '*.scss' | xargs echo | sed 's/ /:/g')
 
 
-## Run this by using `make` or `make server`
-# Steps which are taken by this command:
-# 1. Ensure the user is in a virtual environment
-# 2. Install the flask app in the virtual environment using pip
-# 3. Copy the contents in the app static directory, to the open static directory
-# 4. Update the last modified timestamp on the wsgi file to restart server
-# 5. Clean up files which are no longer needed.
-# 6. Add write permissions to all group users
-server: install copy-static update-wsgi clean update-group-permissions
-
-# Quick version of 'server', it will not copy all the static content & permissions
-quick-update: install update-wsgi clean
+default: help
 
 
-db-migrate-fresh: 
-	@echo "Creating development database"
-	@rm -f nebula/site.db
-	@touch nebula/site.db
-	@pip install -e .
-	@python3 database-setup/db_init.py
+## Running and Installing
+dev-server:  ## Start the development version of the website
+	FLASK_RUN_EXTRA_FILES="$(SCSS_FILES)" $(DEV_ENV) flask run
 
-db-seed: 
-	@python3 database-setup/db_seed.py
-
-db-migrate-fresh-seed: db-migrate-fresh db-seed
-
-build:
-	@echo "Compiling SASS"
-	@npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
-
-# Start/Start the development version of the website
-# find all scss files and add them to the extra files that flask will watch
-dev-server: 
-	@export search_dir="./nebula/static/scss"/* ; \
-	export FLASK_RUN_EXTRA_FILES="" ; \
-	\
-	for i in $$(find $$search_dir -name "*.scss") ; \
-	do  \
-		export FLASK_RUN_EXTRA_FILES="$$FLASK_RUN_EXTRA_FILES$$i:" ; \
-	done ; \
-	export FLASK_RUN_EXTRA_FILES=$${FLASK_RUN_EXTRA_FILES%?} ; \
-	\
-	FLASK_RUN_EXTRA_FILES=$${FLASK_RUN_EXTRA_FILES} \
-	FLASK_APP=$(FLASK_APP) \
-	FLASK_ENV=$(FLASK_ENV_DEV) \
-	flask run ;
-
-
-# Installs the flask app (siriusaweb) in the environment
-install: check-in-venv
+install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	python3 setup.py sdist bdist_wheel
 	pip install dist/$(APP_NAME)-*.tar.gz
 
-copy-static:
-	cp -r $(STATIC_SOURCE) $(SITE_DIR)
 
-# Add write permissions to the group in the site directory 
-# Currently pretty slow.
-update-group-permissions:
-	-chmod g+w -R $(SITE_DIR)/* $(SITE_DIR)/.env $(SITE_DIR)/.git $(SITE_DIR)/.gitignore
+## Database stuff
+db-migrate-fresh:  ## Remove current database & initialize fresh database
+	-rm -f nebula/site.db
+	touch nebula/site.db
+	pip install -e .
+	python3 database-setup/db_init.py
 
-update-wsgi:
-	touch $(SITE_DIR)/main.wsgi
+db-seed:  ## Populate the database with test data
+	python3 database-setup/db_seed.py
 
-# Will error and stop the pipeline if this check fails
-check-in-venv:
-	env | grep 'VIRTUAL_ENV'
+db-migrate-fresh-seed: db-migrate-fresh db-seed  ## Reload and seed
 
-# Cleans up some files made by python.
-clean:
-	-rm -rf $(APP_NAME).egg-info
-	-rm -rf dist
-	-rm -rf build
+compile-sass:  ## Compile SCSS files into CSS files
+	npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
+
 
 ## Formatting and linting
-format:
+# TODO: Black, Isort & flake8 are not yet setup.
+format:  ## Format the project (black & isort)
 	black $(BLACK_ARGS) $(PY_FILES)
 	isort $(ISORT_ARGS) $(PY_FILES)
 
-check-format:
+check-format:  ## Check if the formatter is satisfied, error on an issue
 	black --check $(BLACK_ARGS) $(PY_FILES)
 	isort --check-only $(ISORT_ARGS) $(PY_FILES)
 
-lint:
+lint:  ## Run the linter (flake8)
 	flake8 $(FLAKE_ARGS) $(PY_FILES)
+
+
+## Testing
+# TODO: Cypress tests do not work atm, since the dev-server needs to be running
+test: test-py  ## Run all tests for the package
+
+test-py:
+	pytest
+test-js:
+	npx cypress run
+
+## Dependencies
+deps_dev: deps_pkg  ## Install development dependencies
+	pip install -r requirements.dev.txt
+
+deps_pkg: deps_misc  ## Install development dependencies
+	pip install -r requirements.txt
+
+deps_misc: ## Install dependencies not in the requirement file, but still required for package management
+	pip install wheel
+
+
+## Other
+help: ## Prints help for targets with comments
+	@cat $(MAKEFILE_LIST) | grep -E '^[a-zA-Z_-]+:.*?## .*$$' | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+# Will error and stop the pipeline if this check fails
+check-in-venv:  ## Check if the current shell is in a virtual environment
+	env | grep 'VIRTUAL_ENV'
+
+clean: ## Cleans up some files made by python.
+	-rm -rf $(APP_NAME).egg-info
+	-rm -rf dist
+	-rm -rf build
