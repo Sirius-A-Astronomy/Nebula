@@ -3,7 +3,7 @@ APP_NAME=nebula
 STATIC_SOURCE=$(APP_NAME)/static
 
 # Arguments to external tools
-# PY_FILES=$(APP_NAME)/*.py $(APP_NAME)/**/*.py *.py
+PY_FILES=$(shell find $(APP_NAME) database-setup tests -name '*.py' | xargs echo) *.py
 BLACK_ARGS=
 ISORT_ARGS=--multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses
 FLAKE_ARGS=
@@ -69,18 +69,23 @@ test-js:
 	npx cypress run
 
 ## Dependencies
-deps_dev: deps_pkg  ## Install development dependencies
-	#pip install -r requirements.dev.txt
+deps-dev: deps-pkg  ## Install development dependencies
+	pip install -r requirements.dev.txt
 
-deps_js:  ## Install javascript dependencies
-	npm install
-
-deps_pkg: deps_misc deps_js  ## Install package dependencies
+deps-pkg: deps-misc deps-js  ## Install package dependencies
 	pip install -r requirements.txt
 
-deps_misc: ## Install dependencies not in the requirement file, but still required for package management
+deps-misc: ## Install dependencies not in the requirement file, but still required for package management
 	pip install wheel
+	pip install setuptools
+	pip install pip-tools
 
+deps-js:  ## Install javascript dependencies
+	npm install
+
+deps-upgrade:
+	pip-compile requirements.in --upgrade
+	pip-compile requirements.dev.in --upgrade
 
 ## Other
 help: ## Prints help for targets with comments
