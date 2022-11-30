@@ -1,5 +1,6 @@
 import datetime
-from nebula.models import CourseLevel, Course, Question, User, Comment
+
+from nebula.models import Comment, Course, CourseLevel, Question, User
 
 course_levels = [
     CourseLevel(name="First Year", study_type="Bachelor", code="bsc-yr1"),
@@ -31,25 +32,31 @@ users = [
 ]
 
 questions = [
-    Question(title="How to solve an equation",
-             content="Solve for x: 2x + 1 = 0",
-             answer="""First subtract one on both sides: 2x = -1,
+    Question(
+        title="How to solve an equation",
+        content="Solve for x: 2x + 1 = 0",
+        answer="""First subtract one on both sides: 2x = -1,
              then divide by 2 to get the answer: x = -1/2""",
-             user=users[0],
-             course=courses[1]),
-    Question(title="Is it possible to create a question with a date",
-             content="I guess we see what happens",
-             answer="""If implemented correctly, it is possible to specify
+        user=users[0],
+        course=courses[1],
+    ),
+    Question(
+        title="Is it possible to create a question with a date",
+        content="I guess we see what happens",
+        answer="""If implemented correctly, it is possible to specify
              an arbitrary creation date, by passing it as an argument to the
              question.""",
-             created_at=datetime.date(1970, 1, 1),
-             user=users[1],
-             course=courses[0])
+        created_at=datetime.date(1970, 1, 1),
+        user=users[1],
+        course=courses[0],
+    ),
 ]
 
 comments = [
-    Comment(content="""This is an awefull question, as it is not related to
+    Comment(
+        content="""This is an awefull question, as it is not related to
     Linear Algebra at all!""",
-            user=users[2],
-            question=questions[1])
+        user=users[2],
+        question=questions[1],
+    )
 ]

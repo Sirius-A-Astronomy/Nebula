@@ -1,8 +1,8 @@
-from flask import render_template, request, Blueprint
+from flask import Blueprint, render_template, request
 
-bp = Blueprint('documentation', __name__, url_prefix="/docs")
+bp = Blueprint("documentation", __name__, url_prefix="/docs")
 
 
-@bp.route('/')
+@bp.route("/")
 def documentation():
-    return render_template('main/documentation.html')
+    return render_template("main/documentation.html")

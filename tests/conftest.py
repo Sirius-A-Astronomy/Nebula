@@ -1,7 +1,7 @@
 import pytest
-from nebula import create_app
-from nebula import db
-from data import course_levels, courses, questions, users, comments
+from data import comments, course_levels, courses, questions, users
+
+from nebula import create_app, db
 
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def app():
     usefull to test the front end of the website, without having to specify
     data in each test.
     """
-    app = create_app(config_environment='testing')
+    app = create_app(config_environment="testing")
 
     with app.app_context():
         db.drop_all()  # to avoid table duplication exceptions
@@ -39,7 +39,7 @@ def empty_app():
     TODO: there is probably some refactoring oppertunity for app/empty_app, as
           they have a lot of similar/overlapping steps.
     """
-    app = create_app(config_environment='testing')
+    app = create_app(config_environment="testing")
 
     with app.app_context():
         db.drop_all()  # to avoid table duplication exceptions

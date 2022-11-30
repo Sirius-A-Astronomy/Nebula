@@ -16,13 +16,13 @@
 
     The app is returned.
 """
-from urllib.parse import urlparse, urljoin
 import subprocess
+from urllib.parse import urljoin, urlparse
 
-from flask import Flask, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, redirect, request, url_for
 from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect, CSRFError
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFError, CSRFProtect
 
 from config import configs
 
@@ -31,12 +31,12 @@ login_manager = LoginManager()
 csrf = CSRFProtect()
 
 
-def create_app(config_environment='default'):
+def create_app(config_environment="default"):
     """
-        Creates the app.
+    Creates the app.
 
-        :param config_environment: The environment to use for the app.
-        :type config_environment: str
+    :param config_environment: The environment to use for the app.
+    :type config_environment: str
     """
     app = Flask(__name__)
 
@@ -47,7 +47,7 @@ def create_app(config_environment='default'):
     app.config.from_object(configs[config_environment])
 
     # set the session expiration date
-    app.permanent_session_lifetime = app.config['PERMAMENT_SESSION_LIFETIME']
+    app.permanent_session_lifetime = app.config["PERMAMENT_SESSION_LIFETIME"]
 
     # Initialize the database for this app (this does not create tables)
     #  this is required when multiple app 'contexts' are used
@@ -57,10 +57,20 @@ def create_app(config_environment='default'):
 
     # Register all the views within an app context
     with app.app_context():
-        from nebula.views import main, level, course, all_courses, \
-            question, add_question, user, search, dashboard, \
-            documentation
         from nebula.api import api
+        from nebula.views import (
+            add_question,
+            all_courses,
+            course,
+            dashboard,
+            documentation,
+            level,
+            main,
+            question,
+            search,
+            user,
+        )
+
         app.register_blueprint(main.bp)
         app.register_blueprint(level.bp)
         app.register_blueprint(course.bp)
@@ -77,7 +87,8 @@ def create_app(config_environment='default'):
 
     app.context_processor(context_processor)
 
-    from nebula.views.errors import pagenotfound, internalerror, badrequest
+    from nebula.views.errors import badrequest, internalerror, pagenotfound
+
     app.register_error_handler(404, pagenotfound)
     app.register_error_handler(500, internalerror)
     app.register_error_handler(400, badrequest)
@@ -91,20 +102,23 @@ def create_app(config_environment='default'):
     login_manager.login_message_category = "warning"
 
     from nebula.utilities import unauthorized_handler
+
     login_manager.unauthorized_handler(unauthorized_handler)
 
     # Compile the sass files, TODO find another way to compile sass outside of the app
     from os import environ
-    if (app.env == "development" or app.env == "testing"):
+
+    if app.env == "development" or app.env == "testing":
         compile_sass()
 
     return app
 
 
-@ login_manager.user_loader
+@login_manager.user_loader
 def load_user(user_uuid):
     """Returns the user object to flask-login. So it can be used in templates with current_user."""
     from nebula.models import User
+
     print(f"Flask login got user {user_uuid}")
     return User.query.filter_by(uuid=user_uuid).one_or_none()
 
@@ -113,16 +127,14 @@ def is_safe_url(target, request):
     """Returns True if the target url is safe to redirect to."""
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ('http', 'https') and \
-        ref_url.netloc == test_url.netloc
+    return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
 
 
 def compile_sass():
     """Compiles the sass files."""
     print(" * Compiling sass files...")
     try:
-        subprocess.run(
-            ["npx", "sass", "./nebula/static/scss/:./nebula/static/css"])
+        subprocess.run(["npx", "sass", "./nebula/static/scss/:./nebula/static/css"])
     except Exception as e:
         print(" * Error compiling sass files. Did you run 'npm install'?")
         print(e)
