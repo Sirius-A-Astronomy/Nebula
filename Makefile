@@ -70,9 +70,12 @@ test-js:
 
 ## Dependencies
 deps_dev: deps_pkg  ## Install development dependencies
-	pip install -r requirements.dev.txt
+	#pip install -r requirements.dev.txt
 
-deps_pkg: deps_misc  ## Install development dependencies
+deps_js:  ## Install javascript dependencies
+	npm install
+
+deps_pkg: deps_misc deps_js  ## Install package dependencies
 	pip install -r requirements.txt
 
 deps_misc: ## Install dependencies not in the requirement file, but still required for package management
