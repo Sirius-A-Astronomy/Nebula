@@ -17,6 +17,7 @@ def pretty_date(time=False):
     :type time: datetime or int
     """
     from datetime import datetime
+
     now = datetime.now().astimezone(tz=None)
     if type(time) is int:
         diff = now - datetime.fromtimestamp(utc_to_local(time))
@@ -28,7 +29,7 @@ def pretty_date(time=False):
     day_diff = diff.days
 
     if day_diff < 0:
-        return 'In the future?'
+        return "In the future?"
 
     if day_diff == 0:
         if second_diff < 10:
@@ -70,18 +71,18 @@ def context_processor():
         """Returns the current year."""
         return datetime.now().year
 
-    from nebula.models import CourseLevel, Course
+    from nebula.models import Course, CourseLevel
 
     nav = {
-        "CourseLevels":
-            {"Bachelor": CourseLevel.query.filter_by(study_type='Bachelor').all(),
-                "Master": CourseLevel.query.filter_by(study_type='Master').all()
-             }
-
+        "CourseLevels": {
+            "Bachelor": CourseLevel.query.filter_by(study_type="Bachelor").all(),
+            "Master": CourseLevel.query.filter_by(study_type="Master").all(),
+        }
     }
 
     return dict(
         current_year=get_current_year(),
         nav=nav,
         utc_to_local=utc_to_local,
-        pretty_date=pretty_date)
+        pretty_date=pretty_date,
+    )

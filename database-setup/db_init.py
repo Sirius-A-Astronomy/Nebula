@@ -1,4 +1,4 @@
-from nebula import db, create_app
+from nebula import create_app, db
 
 app = create_app()
 

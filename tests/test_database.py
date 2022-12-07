@@ -1,7 +1,7 @@
-from nebula import db, create_app
-from data import course_levels, courses, questions, users, comments
+from data import comments, course_levels, courses, questions, users
 
-from nebula.models import User, Question, Comment, Course, CourseLevel
+from nebula import create_app, db
+from nebula.models import Comment, Course, CourseLevel, Question, User
 
 
 def test_creation():
@@ -9,7 +9,7 @@ def test_creation():
     A Test to see if the creation of the database happens without
     exceptions and is actually empty.
     """
-    app = create_app(config_environment='testing')
+    app = create_app(config_environment="testing")
 
     with app.app_context():
         db.create_all()
@@ -29,7 +29,7 @@ def test_data():
     Tests if the data specified in data.py is all being inserted into
     the database.
     """
-    app = create_app(config_environment='testing')
+    app = create_app(config_environment="testing")
 
     with app.app_context():
         db.create_all()
@@ -52,7 +52,6 @@ def test_data():
         assert CourseLevel.query.filter_by(id=3).first().name == "Third Year"
         assert CourseLevel.query.filter_by(id=4).first().name == "General"
 
-        assert Course.query.filter_by(
-            code="WILA1-06").first().name == "Linear Algebra"
+        assert Course.query.filter_by(code="WILA1-06").first().name == "Linear Algebra"
 
         db.drop_all()

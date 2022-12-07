@@ -1,5 +1,7 @@
 venv/
 nebula-venv/
+.env/
+nebulaenv/
 
 *.pyc
 __pycache__/

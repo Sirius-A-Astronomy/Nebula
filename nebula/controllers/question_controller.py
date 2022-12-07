@@ -1,7 +1,16 @@
 from flask import abort, url_for
 
-from nebula.models import Question, User, Comment, Answer, SubjectTag, Course, Subscription, Notification
 from nebula import db
+from nebula.models import (
+    Answer,
+    Comment,
+    Course,
+    Notification,
+    Question,
+    SubjectTag,
+    Subscription,
+    User,
+)
 
 
 class QuestionController:
@@ -49,20 +58,26 @@ class QuestionController:
                 if subscription.user == self.question.user:
                     notification = Notification(
                         user=subscription.user,
-                        content=f'{user.name} commented on your question: {self.question.title}',
-                        link=url_for('question.question', course_code=self.question.course.code,
-                                     course_level_code=self.question.course_level.code,
-                                     question_uuid=self.question.uuid)
+                        content=f"{user.name} commented on your question: {self.question.title}",
+                        link=url_for(
+                            "question.question",
+                            course_code=self.question.course.code,
+                            course_level_code=self.question.course_level.code,
+                            question_uuid=self.question.uuid,
+                        ),
                     )
                     db.session.add(notification)
                     db.session.commit()
                 else:
                     notification = Notification(
                         user=subscription.user,
-                        content=f'{user.name} commented on a question you subscribed to: {self.question.title}',
-                        link=url_for('question.question', course_code=self.question.course.code,
-                                     course_level_code=self.question.course_level.code,
-                                     question_uuid=self.question.uuid)
+                        content=f"{user.name} commented on a question you subscribed to: {self.question.title}",
+                        link=url_for(
+                            "question.question",
+                            course_code=self.question.course.code,
+                            course_level_code=self.question.course_level.code,
+                            question_uuid=self.question.uuid,
+                        ),
                     )
                     db.session.add(notification)
                     db.session.commit()
