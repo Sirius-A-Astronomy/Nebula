@@ -1,7 +1,7 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, render_template, request
 from flask_login import current_user
 
-from nebula.models import Question, SubjectTag, User, Course
+from nebula.models import Course, Question, SubjectTag, User
 
 bp = Blueprint("search", __name__)
 
