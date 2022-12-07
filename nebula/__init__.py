@@ -44,7 +44,7 @@ def create_app(config_environment="default"):
     #  see config.py for specific options.
     # When you want to create an app for testing, just set the
     #  config_environment paramater to 'testing'
-    app.config.from_object(configs[config_environment])
+    app.config.from_object(configs[config_environment]())
 
     # set the session expiration date
     app.permanent_session_lifetime = app.config["PERMAMENT_SESSION_LIFETIME"]
