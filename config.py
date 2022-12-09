@@ -3,6 +3,7 @@
 """
 
 from datetime import timedelta
+from os import environ
 
 
 class Config:
@@ -12,7 +13,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # TODO: create proper key and place it somewhere else
-    SECRET_KEY = "VERY_SECRET_KEY_PLEASE_CHANGE_LATER_3e6fGh2"
+    SECRET_KEY = "SECRET KEY"
     SQLALCHEMY_DATABASE_URI = "sqlite:///site.db"  # '///' means relative path
     PERMAMENT_SESSION_LIFETIME = timedelta(hours=2)
 
@@ -27,14 +28,22 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Config to be used by the app in production mode. Inherits from Config."""
 
+    def __init__(self) -> None:
+        try:
+            self.SECRET_KEY = environ["FLASK_SECRET_KEY"]
+        except KeyError:
+            print(
+                "No secret key found in the environment. Please specify the variable"
+                " 'FLASK_SECRET_KEY'. Exiting for now..."
+            )
+            exit(1)
+
     pass
 
 
 class TestingConfig(Config):
     """Config to be used by the app in testing mode. Inherits from Config."""
 
-    # Not sure if this works, but the idea is to create a
-    # separate database when the application is (automatically) being tested
     SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
     TESTING = True
 
