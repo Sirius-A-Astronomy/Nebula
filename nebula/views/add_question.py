@@ -2,7 +2,7 @@ import json
 import re
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import (
     HiddenField,
@@ -24,7 +24,7 @@ class QuestionForm(FlaskForm):
 
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Question", validators=[DataRequired()])
-    answer = TextAreaField("Answer (optional)", validators=[Optional()])
+    answers = HiddenField("Answers", validators=[Optional()])
     course = SelectField("Course", coerce=int)
     subject_tags = HiddenField("Subject Tags (optional)", validators=[Optional()])
     difficulty = SelectField(
@@ -52,7 +52,7 @@ def add_question(success=False, course_code=None):
     course_code = request.args.get("course_code")
 
     # Set the default course if a course code is provided
-    if course_code != None:
+    if course_code:
         course = Course.query.filter_by(code=course_code).first()
         course_id = course.id
         question_form.course.default = course_id
@@ -95,17 +95,17 @@ def add_question(success=False, course_code=None):
             if i % 2 == 0:
                 try:
                     cleaned_title += (
-                        r"$" + title[index + 2 : block_equations[i + 1]] + r"$"
+                        r"$" + title[index + 2: block_equations[i + 1]] + r"$"
                     )
                 except IndexError:
                     # if there is not another $$, just add the rest of the string
-                    cleaned_title += title[index + 2 :]
+                    cleaned_title += title[index + 2:]
             else:
                 try:
-                    cleaned_title += title[index + 2 : block_equations[i + 1]]
+                    cleaned_title += title[index + 2: block_equations[i + 1]]
                 except IndexError:
                     # if there is not another $$, just add the rest of the string
-                    cleaned_title += title[index + 2 :]
+                    cleaned_title += title[index + 2:]
         title = cleaned_title
 
     subject_tags = []
@@ -125,8 +125,15 @@ def add_question(success=False, course_code=None):
                 SubjectTag.query.filter(SubjectTag.name.ilike(tag)).one()
             )
 
+    answers = []
+    if question_form.answers.data:
+        for answer in json.loads(question_form.answers.data):
+            answer = answer.content.strip()
+            if not answer:
+                continue
+            answers.append(Answer(content=answer, user=current_user))
+
     content = question_form.content.data.strip()
-    answer = question_form.answer.data.strip()
     course_id = question_form.course.data
     difficulty = question_form.difficulty.data
     difficulty = "Easy" if difficulty == 1 else "Medium" if difficulty == 2 else "Hard"
@@ -140,6 +147,8 @@ def add_question(success=False, course_code=None):
         difficulty=difficulty,
         subject_tags=subject_tags,
     )
+
+    question.answers.extend(answers)
 
     db.session.add(question)
 
