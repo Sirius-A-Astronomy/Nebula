@@ -14,9 +14,9 @@
         </div>
 
         <div class="summary-card__bar">
-            <div class="summary-card__bar__progress" style="--progress: {{ reviewed_questions / total_questions * 100 }}%;
+            <div class="summary-card__bar__progress" style="--progress: {{ reviewed_questions / total_questions * 100 if total_questions != 0 else 0 }}%;
                        --color: var(--color-alert-error);"></div>
-            <div class="summary-card__bar__progress" style="--progress: {{ approved_questions / total_questions * 100 }}%;
+            <div class="summary-card__bar__progress" style="--progress: {{ approved_questions / total_questions * 100  if total_questions != 0 else 0}}%;
                        --color: var(--color-alert-success);"></div>
 
         </div>
@@ -41,7 +41,7 @@
 
         <div class="summary-card__pie">
             <div class="summary-card__pie__progress"
-                style="--progress: {{ answered_questions / answers * 100 }}%">
+                style="--progress: {{ answered_questions / answers * 100 if answers != 0 else 0}}%">
             </div>
         </div>
         <div class="summary-card__secondary-info">
@@ -51,7 +51,8 @@
         </div>
         <div class="summary-card__secondary-info__value">
             <span class="summary-card__secondary-info__value__text"> {{
-                (answered_questions / total_questions * 100)|round|int }}%</span>
+                (answered_questions / total_questions * 100 if total_questions != 0 else
+                0)|round|int }}%</span>
         </div>
     </div>
 
