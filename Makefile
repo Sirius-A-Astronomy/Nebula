@@ -28,19 +28,6 @@ install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	python3 setup.py sdist bdist_wheel
 	pip install dist/$(APP_NAME)-*.tar.gz
 
-
-## Database stuff
-db-migrate-fresh:  ## Remove current database & initialize fresh database
-	-rm -f nebula/site.db
-	touch nebula/site.db
-	pip install -e .
-	python3 database-setup/db_init.py
-
-db-seed:  ## Populate the database with test data
-	python3 database-setup/db_seed.py
-
-db-migrate-fresh-seed: db-migrate-fresh db-seed  ## Reload and seed
-
 compile-sass:  ## Compile SCSS files into CSS files
 	npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
 

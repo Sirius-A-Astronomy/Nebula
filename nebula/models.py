@@ -4,6 +4,7 @@ from sqlalchemy import DateTime, ForeignKey, PickleType, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.types import CHAR, TypeDecorator
+from passlib.hash import sha256_crypt
 
 from nebula import db
 
@@ -15,6 +16,7 @@ class GUID(TypeDecorator):
     """
 
     impl = CHAR
+    cache_ok = True
 
     def load_dialect_impl(self, dialect):
         if dialect.name == "postgresql":
@@ -111,6 +113,10 @@ class User(Base):
 
     def get_id(self):
         return self.uuid
+
+    def set_password(self, password):
+        self.password = sha256_crypt.encrypt(password)
+        db.session.commit()
 
     # email should just be: username@astro.rug.nl, no need to store it ?
     # storing email anyway in case user wants to use a different email address

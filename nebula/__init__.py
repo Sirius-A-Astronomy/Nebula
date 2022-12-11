@@ -71,17 +71,19 @@ def create_app(config_environment="default"):
             user,
         )
 
-        app.register_blueprint(main.bp)
-        app.register_blueprint(level.bp)
-        app.register_blueprint(course.bp)
-        app.register_blueprint(all_courses.bp)
-        app.register_blueprint(question.bp)
-        app.register_blueprint(add_question.bp)
-        app.register_blueprint(user.bp)
-        app.register_blueprint(search.bp)
-        app.register_blueprint(api.apibp)
-        app.register_blueprint(dashboard.bp)
-        app.register_blueprint(documentation.bp)
+        from nebula.cli import (
+            user as user_cli,
+            db as db_cli,
+        )
+
+        blueprints = [
+            main.bp, level.bp, course.bp, all_courses.bp, question.bp,
+            add_question.bp, user.bp, search.bp, api.apibp, dashboard.bp,
+            documentation.bp, user_cli.bp, db_cli.bp
+        ]
+
+        for blueprint in blueprints:
+            app.register_blueprint(blueprint)
 
     from nebula.context_functions import context_processor
 

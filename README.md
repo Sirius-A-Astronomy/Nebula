@@ -3,6 +3,13 @@
 This is the Nebula Database by the Kapteyn Learning Community.
 It is a repository of user-submitted practice questions.
 
+## Table of Contents
+[[_TOC_]]
+
+_Other documentation:_
+- [CLI Documentation](docs/cli/index.md)
+- [How does Nebula work?](docs/how-does-nebula-work.md)
+
 ## Installation & Setup
 
 _Note: This guide assumes you're using linux or [wsl.](https://docs.microsoft.com/en-us/windows/wsl/install)_
@@ -99,6 +106,9 @@ _Note: to close the flask local webserver: ctrl+c_
 8. It should be available at [localhost:5000](localhost:5000/) in your browser, or via a link in the command prompt.
 
 Now you should be good to go!
+
+
+
 
 ## Testing
 
