@@ -46,7 +46,6 @@ def create_user(username, password, **kwargs):
     """
     hashed_password = sha256_crypt.encrypt(password)
     user = User(username=username, password=hashed_password, **kwargs)
-    print(f"Created user {user.username}")
     return user
 
 

@@ -7,10 +7,22 @@ def unauthorized_handler():
     return redirect(url_for("user.login_register", next=request.full_path))
 
 
-ACCESS_LEVELS = [
-    {"name": "Guest", "value": 0},
-    {"name": "Student", "value": 1},
-    {"name": "Moderator", "value": 2},
-    {"name": "Admin", "value": 3},
-    {"name": "Maintainer", "value": 4},
-]
+ACCESS_LEVELS_PROTO = {
+    "guest": { "level": 0, "name": "Guest" },
+    "student": { "level": 1, "name": "Student" },
+    "moderator": { "level": 2, "name": "Moderator" },
+    "admin": { "level": 3, "name": "Admin" },
+    "maintainer": { "level": 4, "name": "Maintainer" },
+}
+
+ACCESS_LEVELS = {
+    "ByLevel": {},
+    "ByName": {},
+}
+
+for access_level in ACCESS_LEVELS_PROTO.values():
+    ACCESS_LEVELS["ByLevel"][access_level["level"]] = access_level
+    ACCESS_LEVELS["ByName"][access_level["name"]] = access_level
+
+
+

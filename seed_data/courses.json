@@ -1,0 +1,59 @@
+{
+	"course_levels": [
+		{
+			"name": "First Year",
+			"study_type": "Bachelor",
+			"code": "bsc-yr1",
+			"courses": [
+				{
+					"name": "Mechanics and Relativity",
+					"code": "WBPH001-10",
+					"description": "This course addresses topics in special relativity and mechanics at varying levels of mathematical complexity.",
+					"semester": "1"
+				}
+			]
+		},
+
+		{
+			"name": "Second Year",
+			"study_type": "Bachelor",
+			"code": "bsc-yr2",
+			"courses": [
+				{
+					"name": "Quantum Physics 1",
+					"code": "WBPH014-05",
+					"description": "",
+					"semester": "1a"
+				}
+			]
+		},
+
+		{
+			"name": "Third Year",
+			"study_type": "Bachelor",
+			"code": "bsc-yr3",
+			"courses": [
+				{
+					"name": "Astropartical Physics",
+					"code": "WBPH036-05",
+					"description": "",
+					"semester": "2a"
+				}
+			]
+		},
+
+		{
+			"name": "General",
+			"study_type": "Master",
+			"code": "msc",
+			"courses": [
+				{
+					"name": "General Relativity",
+					"code": "WMPH009-05",
+					"description": "",
+					"semester": "1a"
+				}
+			]
+		}
+	]
+}

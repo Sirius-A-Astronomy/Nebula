@@ -34,11 +34,11 @@
                             name="access_level" class="users-table__user__role__select form-select"
                             onchange="this.form.submit()">
 
-                            {% for access_level in access_levels %}
-                            {% if access_level.value < current_user.access_level or
+                            {% for access_level in access_levels["ByLevel"].values() %}
+                            {% if access_level.level < current_user.access_level or
                                 current_user.access_level==4 %} <option
-                                value="{{ access_level.value }}" {% if
-                                user.access_level==access_level.value %}selected{% endif %}>
+                                value="{{ access_level.level }}" {% if
+                                user.access_level==access_level.level %}selected{% endif %}>
                                 {{ access_level.name }}
                                 </option>
                                 {% endif %}
@@ -51,7 +51,7 @@
 
                                 {% else %}
                                 <span class="users-table__user__role__select">
-                                    {{ access_levels[user.access_level].name }}
+                                    {{ access_levels["ByLevel"][user.access_level].name}}
                                 </span>
                                 {% endif %}
                     </form>
