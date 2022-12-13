@@ -57,10 +57,10 @@
                         Username: {{ current_user.username }}
                     </p>
                     <p>Email: {{ current_user.email }}</p>
-                    <p>Password: ***********</p>
                     <p>Comments created: {{ current_user.comments|count }}</p>
                     <p>Account created: {{ pretty_date(current_user.created_at) }}</p>
-                    <p>Account access level: {{ access_levels[current_user.access_level].name}} </p>
+                    <p>Account access level: {{
+                        access_levels["ByLevel"][current_user.access_level].name }} </p>
 
                     <div class="d-flex justify-content-between">
                         <a class="button-accent on-primary" href="#">Edit Info</a>

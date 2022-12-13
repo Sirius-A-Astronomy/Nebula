@@ -141,8 +141,8 @@ def users():
 
 @bp.route("/user/<user_uuid>/access_level", methods=["POST"])
 def user_access_level(user_uuid):
-    if current_user.is_anonymous or current_user.access_level < 3:
-        flash("You need to be a Cosmic Web Member to perform this action.", "warning")
+    if current_user.is_anonymous:
+        flash("You do not have permission to perform this action.", "warning")
         return redirect(url_for("main.index"))
 
     user = User.query.filter_by(uuid=user_uuid).first()
@@ -160,11 +160,11 @@ def user_access_level(user_uuid):
 
     access_level = int(request.form.get("access_level"))
 
-    if access_level not in [0, 1, 2, 3, 4]:
+    if access_level not in ACCESS_LEVELS["ByLevel"].keys():
         flash("Invalid access level provided.", "warning")
         return redirect(url_for("dashboard.index"))
 
-    if access_level >= current_user.access_level and current_user.access_level != 4:
+    if access_level >= current_user.access_level and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]:
         flash(
             "You cannot set a user's access level to be equal to or higher than your own.",
             "warning",
@@ -173,7 +173,7 @@ def user_access_level(user_uuid):
 
     if (
         user.access_level >= current_user.access_level
-        and current_user.access_level != 4
+        and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]
     ):
         flash(
             "You cannot change a user's access level with an access level equal to or higher than your own.",
@@ -185,7 +185,7 @@ def user_access_level(user_uuid):
     user.access_level = access_level
     db.session.commit()
     flash(
-        f"Changed {user.first_name} {user.last_name}'s access level from {ACCESS_LEVELS[old_access_level]['name']} to {ACCESS_LEVELS[access_level]['name']}.",
+        f"Changed {user.first_name} {user.last_name}'s access level from {ACCESS_LEVELS['ByLevel'][old_access_level]['name']} to {ACCESS_LEVELS['ByLevel'][access_level]['name']}.",
         "success",
     )
     return redirect(url_for("dashboard.users"))

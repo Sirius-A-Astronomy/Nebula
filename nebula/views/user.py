@@ -28,8 +28,7 @@ from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 
 from nebula import db, is_safe_url
 from nebula.models import User
-
-ACCESS_LEVELS = [(0, "Guest"), (1, "User"), (2, "Moderator"), (3, "Admin")]
+from nebula.utilities import ACCESS_LEVELS
 
 bp = Blueprint("user", __name__)
 
@@ -364,6 +363,7 @@ def profile():
                     change_password_form=change_password_form,
                     change_username_form=change_username_form,
                     edit_profile_form=edit_profile_form,
+                    access_levels=ACCESS_LEVELS
                 )
 
             current_password = change_password_form.current_password.data
@@ -378,6 +378,7 @@ def profile():
                     change_password_form=change_password_form,
                     change_username_form=change_username_form,
                     edit_profile_form=edit_profile_form,
+                    access_levels=ACCESS_LEVELS
                 )
 
             new_password = change_password_form.new_password.data
@@ -387,7 +388,6 @@ def profile():
             flash("Password changed successfully!", "success")
             return redirect(url_for("user.profile"))
 
-    from nebula.utilities import ACCESS_LEVELS
 
     return render_template(
         "main/profile.html",
