@@ -158,23 +158,3 @@ coverage run -m pytest
 4. In the UI click on one of the tests to start it.
 
 To learn more check out: [Writing your first test](https://docs.cypress.io/guides/getting-started/writing-your-first-test)
-
-## To-do
-
-1. Move original website over to Flask
-    - [ ] Implement updated database structure
-    - [ ] PHP code -> Flask
-2. Ensure the current database gets moved over properly
-3. Implement accounts (Just Kapteyn intranet, or external accounts with linkage?)
-    - [ ] Superusers
-    - [ ] KLC members (Referees)
-    - [ ] Professors/staff
-    - [ ] Regular users
-    - [ ] Limited guest accounts (pre-prognum)?
-4. Implement stretch goaals
-    - [ ] NebuLaTeX + Markdown
-    - [ ] Like
-    - [ ] Comment (issue reporting, changelog, but single author)
-    - [ ] Subscribe?
-    - [ ] Difficult-o-meter
-    - [ ] Aeaesthetics
