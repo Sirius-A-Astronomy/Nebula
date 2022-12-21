@@ -74,24 +74,27 @@ if (notificationToggle) {
 
 async function markNotificationAsRead(notificationUUID, read) {
 	let success, readConfirm;
-	await $.ajax({
-		url: "/api/mark_notification_as_read",
-		type: "POST",
-		data: JSON.stringify({
-			notification_uuid: notificationUUID,
-			read: read,
-		}),
-		contentType: "application/json",
-		dataType: "json",
-		success: function (data) {
-			readConfirm = data.read;
-			success = data.success;
-		},
-		error: function (data) {
-			console.log(data);
-			success = false;
-		},
-	});
+	try {
+		const response = await fetch("/api/mark_notification_as_read", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-CSRFToken": window.CSRF_TOKEN,
+			},
+			body: JSON.stringify({
+				notification_uuid: notificationUUID,
+				read: read,
+			}),
+		});
+
+		const data = await response.json();
+		readConfirm = data.read;
+		success = data.success;
+	} catch (error) {
+		console.error("Error:", error);
+		success = false;
+	}
+
 	return { success, readConfirm };
 }
 

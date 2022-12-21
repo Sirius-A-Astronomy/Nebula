@@ -217,6 +217,7 @@ class Comment(Base):
 
 
 class Answer(Base):
+    title = db.Column(db.String(256), nullable=False)
     content = db.Column(db.Text, nullable=False)
     approved = db.Column(db.Boolean, nullable=False, default=False)
     sources = db.Column(MutableList.as_mutable(PickleType), default=[])

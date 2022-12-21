@@ -9,7 +9,6 @@
 """
 
 import re
-from email import message
 
 from flask import (
     Blueprint,

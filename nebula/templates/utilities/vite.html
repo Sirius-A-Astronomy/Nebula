@@ -1,0 +1,17 @@
+{% macro vite_script(source) -%}
+{% if development %}
+<script type="module" src="{{'http://localhost:5173/' + source }}"></script>
+{% else %}
+<script type="module"
+    src="{{ url_for('static', filename=('dist/' + manifest[source]['file'])) }}"></script>
+{% endif %}
+{% endmacro %}
+
+{% macro vite_style(source) -%}
+{% if development %}
+<link rel="stylesheet" href={{'http://localhost:5173/' + source}}>
+{% else %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename=('dist/' + manifest[source]['file'])) }}">
+{% endif %}
+{% endmacro %}

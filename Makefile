@@ -28,9 +28,9 @@ install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	python3 setup.py sdist bdist_wheel
 	pip install dist/$(APP_NAME)-*.tar.gz
 
-compile-sass:  ## Compile SCSS files into CSS files
+build:
 	npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
-
+	npm run build
 
 ## Formatting and linting
 # TODO: Black, Isort & flake8 are not yet setup.
@@ -86,3 +86,7 @@ clean: ## Cleans up some files made by python.
 	-rm -rf $(APP_NAME).egg-info
 	-rm -rf dist
 	-rm -rf build
+
+
+# [SERVER STUFF]
+server-update: check-in-venv deps-pkg build

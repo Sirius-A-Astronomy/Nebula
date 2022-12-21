@@ -3,5 +3,6 @@ Flask-SQLAlchemy
 Flask-WTF
 flask-login
 WTForms
-
 passlib
+
+gunicorn
