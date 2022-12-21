@@ -125,14 +125,6 @@ def add_question(success=False, course_code=None):
                 SubjectTag.query.filter(SubjectTag.name.ilike(tag)).one()
             )
 
-    answers = []
-    if question_form.answers.data:
-        for answer in json.loads(question_form.answers.data):
-            answer = answer.content.strip()
-            if not answer:
-                continue
-            answers.append(Answer(content=answer, user=current_user))
-
     content = question_form.content.data.strip()
     course_id = question_form.course.data
     difficulty = question_form.difficulty.data
@@ -147,8 +139,14 @@ def add_question(success=False, course_code=None):
         difficulty=difficulty,
         subject_tags=subject_tags,
     )
+    if question_form.answers.data:
+        for answer in json.loads(question_form.answers.data):
+            if not answer:
+                continue
+            content = answer["content"].strip()
+            title = answer["title"].strip()
+            question.answers.append(Answer(content=content, title=title, user=current_user, question=question))
 
-    question.answers.extend(answers)
 
     db.session.add(question)
 

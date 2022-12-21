@@ -5,22 +5,39 @@
 */
 
 async function isUsernameAvailable(username) {
-	let valid_username;
-	await $.ajax({
-		url: "/api/is_username_available",
-		type: "POST",
-		data: JSON.stringify({
-			username: username,
-		}),
-		contentType: "application/json",
-		dataType: "json",
-		success: function (data) {
-			valid_username = data.available;
-		},
-		error: function (data) {
-			console.log(data);
-		},
-	});
+	let valid_username = true;
+	// await $.ajax({
+	// 	url: "/api/is_username_available",
+	// 	type: "POST",
+	// 	data: JSON.stringify({
+	// 		username: username,
+	// 	}),
+	// 	contentType: "application/json",
+	// 	dataType: "json",
+	// 	success: function (data) {
+	// 		valid_username = data.available;
+	// 	},
+	// 	error: function (data) {
+	// 		console.log(data);
+	// 	},
+	// });
+	try {
+		const response = await fetch("/api/is_username_available", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-CSRFToken": window.CSRF_TOKEN,
+			},
+			body: JSON.stringify({
+				username: username,
+			}),
+		});
+		const data = await response.json();
+		valid_username = data.available;
+	} catch (error) {
+		console.log(error);
+	}
+
 	return valid_username;
 }
 
@@ -35,15 +52,34 @@ function debounce(callback, wait) {
 }
 
 async function startFormValidation() {
-	$("#username-input-field").on("input", debounce(validateUsername, 500));
-	$("#password-confirmation-input-field").on(
-		"input",
-		debounce(validatePasswordConfirmation, 500)
-	);
-	$("#password-input-field").on("input", debounce(validatePassword, 500));
-	$("#first-name-input-field").on("input", debounce(validateFirstName, 500));
-	$("#last-name-input-field").on("input", debounce(validateLastName, 500));
-	$("#email-input-field").on("input", debounce(validateEmail, 900));
+	// $("#username-input-field").on("input", debounce(validateUsername, 500));
+	// $("#password-confirmation-input-field").on(
+	// 	"input",
+	// 	debounce(validatePasswordConfirmation, 500)
+	// );
+	// $("#password-input-field").on("input", debounce(validatePassword, 500));
+	// $("#first-name-input-field").on("input", debounce(validateFirstName, 500));
+	// $("#last-name-input-field").on("input", debounce(validateLastName, 500));
+	// $("#email-input-field").on("input", debounce(validateEmail, 900));
+
+	document
+		.getElementById("username-input-field")
+		.addEventListener("input", debounce(validateUsername, 500));
+	document
+		.getElementById("password-confirmation-input-field")
+		.addEventListener("input", debounce(validatePasswordConfirmation, 500));
+	document
+		.getElementById("password-input-field")
+		.addEventListener("input", debounce(validatePassword, 500));
+	document
+		.getElementById("first-name-input-field")
+		.addEventListener("input", debounce(validateFirstName, 500));
+	document
+		.getElementById("last-name-input-field")
+		.addEventListener("input", debounce(validateLastName, 500));
+	document
+		.getElementById("email-input-field")
+		.addEventListener("input", debounce(validateEmail, 900));
 }
 
 async function validateUsername() {
@@ -203,52 +239,89 @@ function validateEmail() {
 }
 
 function addInvalidFeedback(element, feedbackMessage) {
-	$(element).addClass("is-invalid");
-	$(element).removeClass("is-valid");
-	$(element).removeClass("is-validating");
-	$(element).parent().addClass("is-invalid");
-	$(element).parent().removeClass("is-valid");
-	$(element).parent().removeClass("is-validating");
+	// $(element).addClass("is-invalid");
+	// $(element).removeClass("is-valid");
+	// $(element).removeClass("is-validating");
+	// $(element).parent().addClass("is-invalid");
+	// $(element).parent().removeClass("is-valid");
+	// $(element).parent().removeClass("is-validating");
 
-	$(`#${element.id}-feedback`).addClass("invalid-feedback");
-	$(`#${element.id}-feedback`).removeClass("valid-feedback");
-	$(`#${element.id}-feedback`).removeClass("validating-feedback");
-	$(`#${element.id}-feedback`).text(feedbackMessage);
+	// $(`#${element.id}-feedback`).addClass("invalid-feedback");
+	// $(`#${element.id}-feedback`).removeClass("valid-feedback");
+	// $(`#${element.id}-feedback`).removeClass("validating-feedback");
+	// $(`#${element.id}-feedback`).text(feedbackMessage);
+
+	// // Disable the submit button
+	// $("#register-form-submit-button").prop("disabled", true);
+
+	element.classList.add("is-invalid");
+	element.classList.remove("is-valid");
+	element.classList.remove("is-validating");
+
+	element.parentElement.classList.add("is-invalid");
+	element.parentElement.classList.remove("is-valid");
+	element.parentElement.classList.remove("is-validating");
+
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.add("invalid-feedback");
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.remove("valid-feedback");
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.remove("validating-feedback");
+	document.getElementById(`${element.id}-feedback`).textContent =
+		feedbackMessage;
 
 	// Disable the submit button
-	$("#register-form-submit-button").prop("disabled", true);
+	document.getElementById("register-form-submit-button").disabled = true;
 }
 
 function addValidatingFeedback(element, feedbackMessage) {
-	$(element).addClass("is-validating");
-	$(element).removeClass("is-invalid");
-	$(element).removeClass("is-valid");
-	$(element).parent().addClass("is-validating");
 
-	$(element).parent().removeClass("is-invalid");
-	$(element).parent().removeClass("is-valid");
+	element.classList.add("is-validating");
+	element.classList.remove("is-invalid");
+	element.classList.remove("is-valid");
+	element.parentElement.classList.add("is-validating");
+	element.parentElement.classList.remove("is-invalid");
+	element.parentElement.classList.remove("is-valid");
 
-	$(`#${element.id}-feedback`).addClass("validating-feedback");
-	$(`#${element.id}-feedback`).removeClass("invalid-feedback");
-	$(`#${element.id}-feedback`).removeClass("valid-feedback");
-	$(`#${element.id}-feedback`).text(feedbackMessage);
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.add("validating-feedback");
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.remove("invalid-feedback");
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.remove("valid-feedback");
+	document.getElementById(`${element.id}-feedback`).textContent =
+		feedbackMessage;
 }
 
 function addValidFeedback(element, feedbackMessage) {
-	$(element).addClass("is-valid");
-	$(element).removeClass("is-invalid");
-	$(element).removeClass("is-validating");
-	$(element).parent().addClass("is-valid");
-	$(element).parent().removeClass("is-invalid");
-	$(element).parent().removeClass("is-validating");
+	element.classList.add("is-valid");
+	element.classList.remove("is-invalid");
+	element.classList.remove("is-validating");
+	element.parentElement.classList.add("is-valid");
+	element.parentElement.classList.remove("is-invalid");
+	element.parentElement.classList.remove("is-validating");
 
-	$(`#${element.id}-feedback`).addClass("valid-feedback");
-	$(`#${element.id}-feedback`).removeClass("invalid-feedback");
-	$(`#${element.id}-feedback`).removeClass("validating-feedback");
-	$(`#${element.id}-feedback`).text(feedbackMessage);
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.add("valid-feedback");
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.remove("invalid-feedback");
+	document
+		.getElementById(`${element.id}-feedback`)
+		.classList.remove("validating-feedback");
+	document.getElementById(`${element.id}-feedback`).textContent =
+		feedbackMessage;
 
 	// Enable the submit button
-	$("#register-form-submit-button").prop("disabled", false);
+	document.getElementById("register-form-submit-button").disabled = false;
 }
 
 const signInBtn = document.querySelector("#sign-in-btn");
