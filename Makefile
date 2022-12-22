@@ -13,10 +13,6 @@ FLASK_APP=$(APP_NAME)
 FLASK_ENV_DEV=development
 DEV_ENV=FLASK_DEBUG=1 FLASK_APP=$(FLASK_APP) FLASK_ENV=$(FLASK_ENV_DEV)
 
-# List all scss files in the nebula/static/scss directory & create a : separated list from them
-# SCSS_FILES=$(shell find ./nebula/static/scss -name '*.scss' | xargs echo | sed 's/ /:/g')
-
-
 default: help
 
 
@@ -29,7 +25,6 @@ install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	pip install dist/$(APP_NAME)-*.tar.gz
 
 build:
-	npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
 	npm run build
 
 ## Formatting and linting
