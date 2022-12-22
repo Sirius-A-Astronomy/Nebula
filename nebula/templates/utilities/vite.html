@@ -4,6 +4,12 @@
 {% else %}
 <script type="module"
     src="{{ url_for('static', filename=(manifest['nebula/src/' + source]['file'])) }}"></script>
+
+{% if manifest['nebula/src/' + source]['css'] %}
+{% for css in manifest['nebula/src/' + source]['css'] %}
+<link rel="stylesheet" href="{{ url_for('static', filename=css) }}">
+{% endfor %}
+{% endif %}
 {% endif %}
 {% endmacro %}
 
