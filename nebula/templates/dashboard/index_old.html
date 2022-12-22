@@ -1,0 +1,79 @@
+{% extends "dashboard/base.html" %}
+{% set active_page = "index" %}
+
+{% from "dashboard/macros.html" import dashboard_question_view with context %}
+{% block content %}
+
+<div class="summary-cards-container">
+    <div class="summary-card">
+        <div class="summary-card__title">
+            <span class="summary-card__title__text">user questions</span>
+        </div>
+        <div class="summary-card__value">
+            <span class="summary-card__value__text">{{ total_questions }}</span>
+        </div>
+
+        <div class="summary-card__bar">
+            <div class="summary-card__bar__progress" style="--progress: {{ reviewed_questions / total_questions * 100 if total_questions != 0 else 0 }}%;
+                       --color: var(--color-alert-error);"></div>
+            <div class="summary-card__bar__progress" style="--progress: {{ approved_questions / total_questions * 100  if total_questions != 0 else 0}}%;
+                       --color: var(--color-alert-success);"></div>
+
+        </div>
+        <div class="summary-card__secondary-info">
+            <span class="summary-card__secondary-info__text">User Questions
+                Reviewed</span>
+
+        </div>
+        <div class="summary-card__secondary-info__value">
+            <span class="summary-card__secondary-info__value__text">{{
+                reviewed_questions }}</span>
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-card__title">
+            <span class="summary-card__title__text">user answers</span>
+        </div>
+        <div class="summary-card__value">
+            <span class="summary-card__value__text">{{ answers}}</span>
+        </div>
+
+        <div class="summary-card__pie">
+            <div class="summary-card__pie__progress"
+                style="--progress: {{ answered_questions / answers * 100 if answers != 0 else 0}}%">
+            </div>
+        </div>
+        <div class="summary-card__secondary-info">
+            <span class="summary-card__secondary-info__text">User Questions
+                Answer Rate</span>
+
+        </div>
+        <div class="summary-card__secondary-info__value">
+            <span class="summary-card__secondary-info__value__text"> {{
+                (answered_questions / total_questions * 100 if total_questions != 0 else
+                0)|round|int }}%</span>
+        </div>
+    </div>
+
+</div>
+
+<div class="recent-questions-container background-card">
+    <div class="recent-questions__title">user questions for review</div>
+    {% if questions_for_review|count > 0 %}
+    <div class="recent-questions__questions">
+        {% for question in questions_for_review|reverse %}
+        {{ dashboard_question_view(question) }}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="recent-questions__no-questions">
+        <div class="recent-questions__no-questions__text">
+            No questions to review!
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock content %}
