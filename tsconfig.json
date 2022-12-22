@@ -11,7 +11,16 @@
         "paths": {
             "@/*": [
                 "nebula/src/js/*"
-            ]
+            ],
+            "@scss/*": [
+                "nebula/src/scss/*"
+            ],
+            "@views/*": [
+                "nebula/src/views/*"
+            ],
+            "@components/*": [
+                "nebula/src/components/*"
+            ],
         }
     },
     "references": [

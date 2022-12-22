@@ -39,10 +39,7 @@ def create_app(config_environment="default"):
     :type config_environment: str
     """
 
-    app = Flask(__name__, static_url_path="")
-
-    if app.debug:
-        app = Flask(__name__, static_folder="src/public")
+    app = Flask(__name__)
 
     # Create the configuration based on the environment
     #  see config.py for specific options.
@@ -112,12 +109,6 @@ def create_app(config_environment="default"):
 
     login_manager.unauthorized_handler(unauthorized_handler)
 
-    # Compile the sass files, TODO find another way to compile sass outside of the app
-    from os import environ
-
-    if app.env == "development" or app.env == "testing":
-        compile_sass()
-
     return app
 
 
@@ -135,19 +126,6 @@ def is_safe_url(target, request):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
-
-
-def compile_sass():
-    """Compiles the sass files."""
-    print(" * Compiling sass files...")
-    try:
-        subprocess.run(["npx", "sass", "./nebula/src/public/scss/:./nebula/src/public/css"])
-    except Exception as e:
-        print(" * Error compiling sass files. Did you run 'npm install'?")
-        print(e)
-        return
-    print(" * Sass files compiled.")
-
 
 if __name__ == "__main__":
     app = create_app()

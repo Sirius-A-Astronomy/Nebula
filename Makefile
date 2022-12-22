@@ -14,7 +14,7 @@ FLASK_ENV_DEV=development
 DEV_ENV=FLASK_DEBUG=1 FLASK_APP=$(FLASK_APP) FLASK_ENV=$(FLASK_ENV_DEV)
 
 # List all scss files in the nebula/static/scss directory & create a : separated list from them
-SCSS_FILES=$(shell find ./nebula/static/scss -name '*.scss' | xargs echo | sed 's/ /:/g')
+# SCSS_FILES=$(shell find ./nebula/static/scss -name '*.scss' | xargs echo | sed 's/ /:/g')
 
 
 default: help
@@ -22,7 +22,7 @@ default: help
 
 ## Running and Installing
 dev-server:  ## Start the development version of the website
-	FLASK_RUN_EXTRA_FILES="$(SCSS_FILES)" $(DEV_ENV) flask run
+	$(DEV_ENV) flask run
 
 install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	python3 setup.py sdist bdist_wheel

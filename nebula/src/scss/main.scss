@@ -495,7 +495,7 @@ a {
 // pointer-events: none;
 
 .stars {
-	background: black url("../public/images/stars.webp") repeat;
+	background: black url("/images/stars.webp") repeat;
 	position: fixed;
 	background-position: center;
 	height: 100%;
@@ -510,7 +510,7 @@ a {
 .twinkling {
 	width: 10000px;
 	height: 100%;
-	background: transparent url("../public/images/twinkling.webp") repeat;
+	background: transparent url("/images/twinkling.webp") repeat;
 	background-size: 1000px 1000px;
 	position: fixed;
 	right: 0;

@@ -6,13 +6,12 @@ import { resolve } from "node:path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	server: {
-		origin: "http://localhost:5000",
-	},
 	publicDir: "nebula/src/public",
+	base: "/static/",
 	build: {
 		manifest: true,
 		copyPublicDir: true,
+
 		rollupOptions: {
 			input: {
 				add_question: resolve(
@@ -20,6 +19,11 @@ export default defineConfig({
 					"nebula/src/js/add_question/add_question.ts"
 				),
 				main_scss: resolve(__dirname, "nebula/src/scss/main.scss"),
+
+				dashboard: resolve(
+					__dirname,
+					"nebula/src/js/dashboard/dashboardMain.ts"
+				),
 
 				// SCSS VIEWS
 				course_scss: resolve(
@@ -51,6 +55,15 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./nebula/src/js", import.meta.url)),
+			"@scss": fileURLToPath(
+				new URL("./nebula/src/scss", import.meta.url)
+			),
+			"@views": fileURLToPath(
+				new URL("./nebula/src/js/views", import.meta.url)
+			),
+			"@components": fileURLToPath(
+				new URL("./nebula/src/js/components", import.meta.url)
+			),
 		},
 	},
 });
