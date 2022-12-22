@@ -10,7 +10,7 @@
         "module": "esnext",
         "paths": {
             "@/*": [
-                "nebula/src/*"
+                "nebula/src/js/*"
             ]
         }
     },

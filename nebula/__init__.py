@@ -38,7 +38,11 @@ def create_app(config_environment="default"):
     :param config_environment: The environment to use for the app.
     :type config_environment: str
     """
+
     app = Flask(__name__)
+
+    if app.debug:
+        app = Flask(__name__, static_folder="src/public")
 
     # Create the configuration based on the environment
     #  see config.py for specific options.
@@ -48,6 +52,7 @@ def create_app(config_environment="default"):
 
     # set the session expiration date
     app.permanent_session_lifetime = app.config["PERMAMENT_SESSION_LIFETIME"]
+
 
     # Initialize the database for this app (this does not create tables)
     #  this is required when multiple app 'contexts' are used
@@ -136,7 +141,7 @@ def compile_sass():
     """Compiles the sass files."""
     print(" * Compiling sass files...")
     try:
-        subprocess.run(["npx", "sass", "./nebula/static/scss/:./nebula/static/css"])
+        subprocess.run(["npx", "sass", "./nebula/src/public/scss/:./nebula/src/public/css"])
     except Exception as e:
         print(" * Error compiling sass files. Did you run 'npm install'?")
         print(e)

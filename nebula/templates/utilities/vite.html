@@ -2,8 +2,7 @@
 {% if development %}
 <script type="module" src="{{'http://localhost:5173/' + source }}"></script>
 {% else %}
-<script type="module"
-    src="{{ url_for('static', filename=('dist/' + manifest[source]['file'])) }}"></script>
+<script type="module" src="{{ url_for('static', filename=(manifest[source]['file'])) }}"></script>
 {% endif %}
 {% endmacro %}
 
@@ -11,7 +10,6 @@
 {% if development %}
 <link rel="stylesheet" href={{'http://localhost:5173/' + source}}>
 {% else %}
-<link rel="stylesheet"
-    href="{{ url_for('static', filename=('dist/' + manifest[source]['file'])) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename=(manifest[source]['file'])) }}">
 {% endif %}
 {% endmacro %}

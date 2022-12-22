@@ -23,7 +23,6 @@ const answersJson: Computed<Answer[]> = computed(() => {
 
 const removeAnswer = (answerId: number) => {
 	answers.value = answers.value.filter((a) => a.id != answerId);
-	console.log("removeAnswer", answerId, answers.value);
 };
 
 const addAnswer = () => {

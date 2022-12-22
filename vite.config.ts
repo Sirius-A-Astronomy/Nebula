@@ -9,17 +9,18 @@ export default defineConfig({
 	server: {
 		origin: "http://localhost:5000",
 	},
+	root: "nebula/src",
 	build: {
 		manifest: true,
 		rollupOptions: {
 			input: {
 				add_question: resolve(
 					__dirname,
-					"nebula/src/add_question/add_question.ts"
+					"nebula/src/js/add_question/add_question.ts"
 				),
 			},
 			output: {
-				dir: "nebula/static/dist",
+				dir: "nebula/static",
 				entryFileNames: "[name].js",
 				chunkFileNames: "[name].js",
 				assetFileNames: "[name].[ext]",
@@ -29,7 +30,7 @@ export default defineConfig({
 	plugins: [vue()],
 	resolve: {
 		alias: {
-			"@": fileURLToPath(new URL("./nebula/src", import.meta.url)),
+			"@": fileURLToPath(new URL("./nebula/src/js", import.meta.url)),
 		},
 	},
 });
