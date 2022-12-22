@@ -9,14 +9,34 @@ export default defineConfig({
 	server: {
 		origin: "http://localhost:5000",
 	},
-	root: "nebula/src",
+	publicDir: "nebula/src/public",
 	build: {
 		manifest: true,
+		copyPublicDir: true,
 		rollupOptions: {
 			input: {
 				add_question: resolve(
 					__dirname,
 					"nebula/src/js/add_question/add_question.ts"
+				),
+				main_scss: resolve(__dirname, "nebula/src/scss/main.scss"),
+
+				// SCSS VIEWS
+				course_scss: resolve(
+					__dirname,
+					"nebula/src/scss/views/course.scss"
+				),
+				login_register_scss: resolve(
+					__dirname,
+					"nebula/src/scss/views/login_register.scss"
+				),
+				question_scss: resolve(
+					__dirname,
+					"nebula/src/scss/views/question.scss"
+				),
+				profile_scss: resolve(
+					__dirname,
+					"nebula/src/scss/views/profile.scss"
 				),
 			},
 			output: {

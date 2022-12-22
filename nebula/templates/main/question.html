@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ question.title }} - {{ course.name }}- Nebula{% endblock %}
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/question.css') }}">
+{{ vite_style('scss/views/question.scss') }}
 {% endblock %}
 
 {% macro linebreaks( string ) -%}

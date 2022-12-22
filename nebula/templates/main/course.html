@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ course.name }}- Nebula{% endblock %}
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/course.css') }}">
+{{ vite_style('scss/views/course.scss') }}
 {% endblock %}
 {% from "utilities/macros.html" import question_view with context %}
 {% block body %}

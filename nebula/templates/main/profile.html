@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Profile - Nebula{% endblock %}
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/profile.css') }}">
+{{ vite_style('scss/views/profile.scss') }}
 {% endblock %}
 
 {% from 'utilities/macros.html' import question_view with context %}

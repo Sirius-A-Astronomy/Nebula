@@ -84,7 +84,7 @@ def context_processor():
 
     manifest_json = None
     if (not current_app.debug):
-        manifest_file = open("nebula/static/dist/manifest.json", "r")
+        manifest_file = open("nebula/static/manifest.json", "r")
         manifest_json = json.load(manifest_file)
         manifest_file.close()
 

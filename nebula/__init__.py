@@ -39,7 +39,7 @@ def create_app(config_environment="default"):
     :type config_environment: str
     """
 
-    app = Flask(__name__)
+    app = Flask(__name__, static_url_path="")
 
     if app.debug:
         app = Flask(__name__, static_folder="src/public")

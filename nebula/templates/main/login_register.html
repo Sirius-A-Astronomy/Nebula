@@ -15,7 +15,7 @@ Login - Nebula
 {% endblock %}
 
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/login_register.css') }}">
+{{ vite_style('scss/views/login_register.scss') }}
 {% endblock %}
 {% block body %}
 <main class="no-header-margin">

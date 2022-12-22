@@ -16,7 +16,7 @@ htmlcov/
 yarn.lock
 settings.json
 
-nebula/static/css/
+nebula/static/
 
 dist/
 build/
