@@ -3,27 +3,9 @@ import { RouterLink } from "vue-router";
 </script>
 
 <template>
-	<div class="w-full navbar">
-		<div class="container flex flex-row justify-between items-center py-2">
-			<a class="flex flex-row items-center navbar-brand" href="/">
-				<span class="site-name">Nebula</span>
-			</a>
-
-			<nav class="flex flex-row items-center">
-				<RouterLink
-					to="/dashboard"
-					class="px-2 py-2 nav-link"
-					active-class="active"
-					>Dashboard</RouterLink
-				>
-				<RouterLink
-					to="/dashboard/test"
-					class="px-2 py-2 nav-link"
-					active-class="active"
-					>Test</RouterLink
-				>
-			</nav>
-		</div>
+	<div class="w-full bg-secondary shadow-md h-16">
+		<div
+			class="container flex flex-row justify-between items-center py-2"></div>
 	</div>
 </template>
 
