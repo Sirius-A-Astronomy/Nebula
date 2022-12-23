@@ -17,7 +17,10 @@
 	},
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.1.4",
+		"@types/dompurify": "^2.4.0",
+		"@types/markdown-it": "^12.2.3",
 		"@types/node": "^18.11.12",
+		"@types/throttle-debounce": "^5.0.0",
 		"@vitejs/plugin-vue": "^4.0.0",
 		"@vue/eslint-config-prettier": "^7.0.0",
 		"@vue/eslint-config-typescript": "^11.0.0",

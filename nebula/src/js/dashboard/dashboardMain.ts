@@ -1,4 +1,4 @@
-import Dashboard from "./Dashboard.vue";
+import Dashboard from "@/dashboard/Dashboard.vue";
 
 import { createApp } from "vue";
 

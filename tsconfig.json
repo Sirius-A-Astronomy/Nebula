@@ -2,8 +2,10 @@
     "extends": "@vue/tsconfig/tsconfig.web.json",
     "include": [
         "env.d.ts",
-        "src/**/*",
-        "src/**/*.vue"
+        "nebula/src/**/*",
+        "nebula/src/**/*.vue",
+        "nebula/src/**/*.ts",
+        "nebula/src/**/*.d.ts",
     ],
     "compilerOptions": {
         "baseUrl": ".",
@@ -16,12 +18,19 @@
                 "nebula/src/scss/*"
             ],
             "@views/*": [
-                "nebula/src/views/*"
+                "nebula/src/js/views/*"
             ],
             "@components/*": [
-                "nebula/src/components/*"
+                "nebula/src/js/components/*"
             ],
-        }
+            "types/*": [
+                "nebula/src/js/types/*"
+            ],
+        },
+        "typeRoots": [
+            "node_modules/@types",
+            "nebula/src/js/types"
+        ],
     },
     "references": [
         {
