@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import type { Answer } from "@/add_question/add_question";
 
-import DOMPurify from "dompurify";
-
-import useMarkdown from "markdown-it";
-import { throttle } from "throttle-debounce";
 import { ref, type Ref } from "vue";
 
-import MarkdownVue from "@/components/Markdown.vue";
+import MarkdownVue from "@components/Markdown.vue";
 
 defineProps<{
 	answer: Answer;

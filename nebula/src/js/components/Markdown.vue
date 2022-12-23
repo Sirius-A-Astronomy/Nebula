@@ -10,6 +10,9 @@ const props = defineProps<{
 	content: string;
 }>();
 
+const markdown = useMarkdown();
+
+// @ts-ignore
 let mathjax = window.MathJax;
 
 const markdownElement: Ref<HTMLDivElement | null> = ref(null);
@@ -36,8 +39,6 @@ onMounted(() => {
 });
 
 const sanitizedMarkdown: Ref<string> = ref("");
-
-const markdown = useMarkdown();
 </script>
 
 <template>
