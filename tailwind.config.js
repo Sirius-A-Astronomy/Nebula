@@ -10,11 +10,12 @@ module.exports = {
 				"accent-clr": "var(--color-accent)",
 				"primary-active": "var(--color-primary-active)",
 
-				"primary-text": "var(--color-primary-text)",
-				"secondary-text": "var(--color-secondary-text)",
-				"tertiary-text": "var(--color-tertiary-text)",
+				"primary-text": "var(--color-text-primary)",
+				"secondary-text": "var(--color-text-secondary)",
+				"tertiary-text": "var(--color-text-tertiary)",
 
 				"on-primary-text": "var(--color-text-on-primary)",
+				"on-accent-text": "var(--color-text-on-accent)",
 
 				"primary-bg": "var(--color-background)",
 				"secondary-bg": "var(--color-background-secondary)",
