@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"dompurify": "^2.4.1",
+		"epic-spinners": "^2.0.0",
 		"markdown-it": "^13.0.1",
 		"sass": "^1.55.0",
 		"throttle-debounce": "^5.0.0",
