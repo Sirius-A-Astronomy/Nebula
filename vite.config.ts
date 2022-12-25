@@ -64,6 +64,12 @@ export default defineConfig({
 			"@components": fileURLToPath(
 				new URL("./nebula/src/js/components", import.meta.url)
 			),
+			"@stores": fileURLToPath(
+				new URL("./nebula/src/js/stores", import.meta.url)
+			),
+			"@http": fileURLToPath(
+				new URL("./nebula/src/js/http", import.meta.url)
+			),
 		},
 	},
 });
