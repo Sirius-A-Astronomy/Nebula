@@ -50,7 +50,6 @@ def create_app(config_environment="default"):
     # set the session expiration date
     app.permanent_session_lifetime = app.config["PERMAMENT_SESSION_LIFETIME"]
 
-
     # Initialize the database for this app (this does not create tables)
     #  this is required when multiple app 'contexts' are used
     db.init_app(app)
@@ -59,7 +58,7 @@ def create_app(config_environment="default"):
 
     # Register all the views within an app context
     with app.app_context():
-        from nebula.api import api
+        from nebula.api import api, user_api, search_api
         from nebula.views import (
             add_question,
             all_courses,
@@ -79,9 +78,21 @@ def create_app(config_environment="default"):
         )
 
         blueprints = [
-            main.bp, level.bp, course.bp, all_courses.bp, question.bp,
-            add_question.bp, user.bp, search.bp, api.apibp, dashboard.bp,
-            documentation.bp, user_cli.bp, db_cli.bp
+            main.bp,
+            level.bp,
+            course.bp,
+            all_courses.bp,
+            question.bp,
+            add_question.bp,
+            user.bp,
+            search.bp,
+            api.bp,
+            dashboard.bp,
+            documentation.bp,
+            user_cli.bp,
+            db_cli.bp,
+            user_api.bp,
+            search_api.bp,
         ]
 
         for blueprint in blueprints:
@@ -126,6 +137,7 @@ def is_safe_url(target, request):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
+
 
 if __name__ == "__main__":
     app = create_app()

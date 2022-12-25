@@ -23,8 +23,14 @@
             "@components/*": [
                 "nebula/src/js/components/*"
             ],
+            "@stores/*": [
+                "nebula/src/js/stores/*"
+            ],
             "types/*": [
                 "nebula/src/js/types/*"
+            ],
+            "@http/*": [
+                "nebula/src/js/http/*"
             ],
         },
         "typeRoots": [

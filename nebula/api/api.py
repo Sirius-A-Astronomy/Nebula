@@ -4,10 +4,10 @@ from flask_login import current_user
 from nebula.context_functions import pretty_date
 from nebula.models import Course, Notification, Question, SubjectTag, User, db
 
-apibp = Blueprint("api", __name__, url_prefix="/api")
+bp = Blueprint("api", __name__, url_prefix="/api")
 
 
-@apibp.route("/is_username_available", methods=["post"])
+@bp.route("/is_username_available", methods=["post"])
 def is_username_available():
     """Returns true if the username is available."""
     if request.method == "POST":
@@ -19,7 +19,7 @@ def is_username_available():
     return "Not a valid request"
 
 
-@apibp.route("/get_questions", methods=["post", "GET"])
+@bp.route("/get_questions", methods=["post", "GET"])
 def getQuestions():
     """Returns a list of all questions"""
 
@@ -95,7 +95,7 @@ def getQuestions():
     return jsonify({"questions": questions_json, "courses": courses_json})
 
 
-@apibp.route("/get_course_questions", methods=["post", "GET"])
+@bp.route("/get_course_questions", methods=["post", "GET"])
 def get_course_questions(course_code=None):
     """Returns a json object with all the questions from the requested course"""
     course_code = request.args.get("course_code")
@@ -160,7 +160,7 @@ def get_course_questions(course_code=None):
     return jsonify({"questions": questions_json})
 
 
-@apibp.route("/get_subject_tags", methods=["post", "GET"])
+@bp.route("/get_subject_tags", methods=["post", "GET"])
 def get_subject_tags():
     """Returns a list of all subject tags"""
     subject_tags = SubjectTag.query.all()
@@ -174,7 +174,7 @@ def get_subject_tags():
     return jsonify({"subject_tags": subject_tags_json})
 
 
-@apibp.route("mark_notification_as_read", methods=["post"])
+@bp.route("mark_notification_as_read", methods=["post"])
 def mark_notification_as_read():
     """Marks a notification as read"""
     request_data = request.get_json()
