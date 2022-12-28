@@ -1,14 +1,13 @@
-from flask import Blueprint, render_template, request, url_for
-from sqlalchemy import and_
+from flask import Blueprint, render_template
 
 from nebula.models import Course, CourseLevel, Question
+from nebula.routes.web import bp as web_bp
 
 # Does a course need to be a sublevel of courseLevel?
 # level dependent blueprint:
 bp = Blueprint("course", __name__, url_prefix="/q/<course_level_code>")
 
-# level independent blueprint
-# bp = Blueprint('course', __name__, url_prefix='/courses')
+web_bp.register_blueprint(bp)
 
 
 @bp.route("/<course_code>")

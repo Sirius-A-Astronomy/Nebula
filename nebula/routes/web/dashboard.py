@@ -17,11 +17,15 @@ from nebula.models import (
     Question,
     User,
 )
+from nebula.routes.web import bp as web_bp
 from nebula.utilities import ACCESS_LEVELS
 
 bp = Blueprint("dashboard", __name__)
 
-@bp.route("/dashboard", defaults = {"path": ""})
+web_bp.register_blueprint(bp)
+
+
+@bp.route("/dashboard", defaults={"path": ""})
 @bp.route("/dashboard/<path:path>")
 def index(path):
     return render_template("dashboard/index.html")

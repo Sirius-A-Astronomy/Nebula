@@ -27,9 +27,12 @@ from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 
 from nebula import db, is_safe_url
 from nebula.models import User
+from nebula.routes.web import bp as web_bp
 from nebula.utilities import ACCESS_LEVELS
 
 bp = Blueprint("user", __name__)
+
+web_bp.register_blueprint(bp)
 
 
 def create_user(username, password, **kwargs):
@@ -178,8 +181,8 @@ def login_register(next=None, register=None):
             flash(
                 "Tried to redirect to an unsafe url, redirecting to homepage", "warning"
             )
-            return redirect(url_for("main.index"))
-        return redirect(next or url_for("main.index"))
+            return redirect(url_for("web.main.index"))
+        return redirect(next or url_for("web.main.index"))
 
     login_form = LoginForm(request.form)
     register_form = RegisterForm(request.form)
@@ -274,15 +277,15 @@ def login_register(next=None, register=None):
     # redirect to next url if it is safe
     if not is_safe_url(next, request):
         flash("Tried to redirect to an unsafe url, redirecting to homepage", "warning")
-        return redirect(url_for("main.index"))
-    return redirect(next or url_for("main.index"))
+        return redirect(url_for("web.main.index"))
+    return redirect(next or url_for("web.main.index"))
 
 
 @bp.route("/logout", methods=["POST"])
 def logout():
     """Logs out the current user."""
     if current_user.is_anonymous:
-        return redirect(url_for("main.index"))
+        return redirect(url_for("web.main.index"))
     user_uuid = current_user.uuid
 
     user = User.query.filter_by(uuid=user_uuid).first()
@@ -290,7 +293,7 @@ def logout():
     if user.is_authenticated:
         user.is_authenticated = False
         db.session.commit()
-    return redirect(url_for("main.index"))
+    return redirect(url_for("web.main.index"))
 
 
 class EditProfileForm(FlaskForm):
@@ -362,7 +365,7 @@ def profile():
                     change_password_form=change_password_form,
                     change_username_form=change_username_form,
                     edit_profile_form=edit_profile_form,
-                    access_levels=ACCESS_LEVELS
+                    access_levels=ACCESS_LEVELS,
                 )
 
             current_password = change_password_form.current_password.data
@@ -377,7 +380,7 @@ def profile():
                     change_password_form=change_password_form,
                     change_username_form=change_username_form,
                     edit_profile_form=edit_profile_form,
-                    access_levels=ACCESS_LEVELS
+                    access_levels=ACCESS_LEVELS,
                 )
 
             new_password = change_password_form.new_password.data
@@ -386,7 +389,6 @@ def profile():
             db.session.commit()
             flash("Password changed successfully!", "success")
             return redirect(url_for("user.profile"))
-
 
     return render_template(
         "main/profile.html",

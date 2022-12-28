@@ -1,6 +1,7 @@
-from datetime import datetime, timezone
-from flask import current_app
 import json
+from datetime import datetime, timezone
+
+from flask import current_app
 
 
 def utc_to_local(utc_dt):
@@ -83,7 +84,7 @@ def context_processor():
     }
 
     manifest_json = None
-    if (not current_app.debug):
+    if not current_app.debug:
         manifest_file = open("nebula/static/manifest.json", "r")
         manifest_json = json.load(manifest_file)
         manifest_file.close()

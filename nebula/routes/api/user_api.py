@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_login import current_user, login_required
 
-bp = Blueprint("user_api", __name__, url_prefix="/api")
+from nebula.routes.api import bp
 
 
 @login_required

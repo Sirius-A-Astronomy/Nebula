@@ -28,8 +28,11 @@ from wtforms.validators import DataRequired, Optional
 
 from nebula import db
 from nebula.models import Answer, Comment, Course, Question, SubjectTag, User
+from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("question", __name__, url_prefix="/q/<course_level_code>/<course_code>")
+
+web_bp.register_blueprint(bp)
 
 
 class CommentForm(FlaskForm):
@@ -131,7 +134,7 @@ def question(
     if comment_form.comment_submit.data == True and comment_form.validate():
         if current_user.is_anonymous:
             flash("You must be logged in to comment", "warning")
-            return redirect(url_for("main.login"))
+            return redirect(url_for("web.user.login_register"))
 
         content = comment_form.content.data.strip()
         is_suggestion = comment_form.is_suggestion.data
@@ -145,7 +148,7 @@ def question(
         flash("Comment added", "success")
         return redirect(
             url_for(
-                "question.question",
+                "web.question.question",
                 course_code=course_code,
                 course_level_code=course_level_code,
                 question_uuid=question_uuid,
@@ -163,7 +166,7 @@ def question(
             flash("You must be the owner of the question to edit it", "warning")
             return redirect(
                 url_for(
-                    "question.question",
+                    "web.question.question",
                     course_code=course_code,
                     course_level_code=course_level_code,
                     question_uuid=question_uuid,
@@ -199,7 +202,7 @@ def question(
         flash("Question edited successfully", "success")
         return redirect(
             url_for(
-                "question.question",
+                "web.question.question",
                 course_code=course_code,
                 course_level_code=course_level_code,
                 question_uuid=question_uuid,
@@ -209,7 +212,7 @@ def question(
     if add_answer_form.add_answer_submit.data == True and add_answer_form.validate():
         if current_user.is_anonymous:
             flash("You must be logged in to answer a question", "warning")
-            return redirect(url_for("main.login"))
+            return redirect(url_for("web.user.login_register"))
         content = add_answer_form.content.data.strip()
         sources = [
             urlparse(source, scheme="https", allow_fragments=True)
@@ -224,7 +227,7 @@ def question(
         flash("Your answer has been submitted and is awaiting review", "success")
         return redirect(
             url_for(
-                "question.question",
+                "web.question.question",
                 course_code=course_code,
                 course_level_code=course_level_code,
                 question_uuid=question_uuid,

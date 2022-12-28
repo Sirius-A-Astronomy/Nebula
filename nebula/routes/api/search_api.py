@@ -1,8 +1,8 @@
-from flask import jsonify, request, url_for, Blueprint
-from nebula.models import Course, User, Question, SubjectTag, Answer
+from flask import Blueprint, jsonify, request, url_for
 from sqlalchemy import or_
 
 from nebula.context_functions import pretty_date
+from nebula.models import Answer, Course, Question, SubjectTag, User
 
 bp = Blueprint("search_api", __name__, url_prefix="/api")
 
@@ -23,6 +23,7 @@ def search():
     try:
         results["courses"] = search_courses(query)
         results["questions"] = search_questions(query)
+        results["users"] = search_users(query)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -56,7 +57,7 @@ def search_courses(query: str) -> list:
                 "study_type": course.course_level.study_type,
             },
             "url": url_for(
-                "course.course",
+                "web.course.course",
                 course_code=course.code,
                 course_level_code=course.course_level.code,
             ),
@@ -80,6 +81,9 @@ def search_questions(query: str) -> list:
             Question.content.ilike(f"%{query}%"),
             Question.answers.any(Answer.content.ilike(f"%{query}%")),
             Question.answers.any(Answer.title.ilike(f"%{query}%")),
+            Question.course.has(Course.name.ilike(f"%{query}%")),
+            Question.course.has(Course.code.ilike(f"%{query}%")),
+            Question.user.has(User.first_name.ilike(f"%{query}%")),
         )
     ).all()
 
@@ -90,7 +94,7 @@ def search_questions(query: str) -> list:
             "content": question.content,
             "created_at": pretty_date(question.created_at),
             "url": url_for(
-                "question.question",
+                "web.question.question",
                 question_uuid=question.uuid,
                 course_code=question.course.code,
                 course_level_code=question.course.course_level.code,
@@ -108,7 +112,7 @@ def search_questions(query: str) -> list:
                 {
                     "name": subject_tag.name,
                     "id": subject_tag.uuid,
-                    "url": url_for("search.search", query=subject_tag.name),
+                    "url": url_for("web.search.search", query=subject_tag.name),
                 }
                 for subject_tag in question.subject_tags
             ],
@@ -117,3 +121,7 @@ def search_questions(query: str) -> list:
     ]
 
     return questions_json
+
+
+def search_users(query: str) -> list:
+    return []

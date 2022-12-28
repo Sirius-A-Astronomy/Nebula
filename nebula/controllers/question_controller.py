@@ -60,7 +60,7 @@ class QuestionController:
                         user=subscription.user,
                         content=f"{user.name} commented on your question: {self.question.title}",
                         link=url_for(
-                            "question.question",
+                            "web.question.question",
                             course_code=self.question.course.code,
                             course_level_code=self.question.course_level.code,
                             question_uuid=self.question.uuid,
@@ -73,7 +73,7 @@ class QuestionController:
                         user=subscription.user,
                         content=f"{user.name} commented on a question you subscribed to: {self.question.title}",
                         link=url_for(
-                            "question.question",
+                            "web.question.question",
                             course_code=self.question.course.code,
                             course_level_code=self.question.course_level.code,
                             question_uuid=self.question.uuid,

@@ -4,7 +4,7 @@
 {% macro level_list_item(course_level) -%}
 <p>
     <a class="button-accent on-dark"
-        href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{
+        href="{{ url_for('web.level.level', course_level_code=course_level.code)}}">{{
         course_level.name
         }}</a>
 </p>
@@ -45,7 +45,7 @@
                     <h2>Browse the Nebula</h2>
                     <p>
                         <a class="button-accent on-dark"
-                            href="{{ url_for('courses.all_courses')}}">All
+                            href="{{ url_for('web.courses.all_courses')}}">All
                             Courses</a>
                     </p>
                     <h3>Bachelor</h3>
@@ -58,7 +58,7 @@
                 <section class="container-add-question">
                     <h2>Have a question?</h2>
                     <a class="btn btn-primary"
-                        href="{{ url_for('add_question.add_question')}}">Submit a
+                        href="{{ url_for('web.add_question.add_question')}}">Submit a
                         question</a>
                 </section>
             </div>

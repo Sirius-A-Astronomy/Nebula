@@ -29,7 +29,7 @@ Login - Nebula
 
         <div class="forms-container">
             <div class="signin-signup">
-                <form action="{{ url_for('user.login_register', next=next) }}" method="post"
+                <form action="{{ url_for('web.user.login_register', next=next) }}" method="post"
                     class="sign-in-form">
                     <h2 class="title">Login</h2>
                     {{ login_form.csrf_token }}
@@ -65,8 +65,8 @@ Login - Nebula
 
                     {{ login_form.login_submit(class="btn" ) }}
                 </form>
-                <form action="{{ url_for('user.login_register', next=next) }}" id="register-form"
-                    method="post" class="sign-up-form">
+                <form action="{{ url_for('web.user.login_register', next=next) }}"
+                    id="register-form" method="post" class="sign-up-form">
 
                     <h2 class="title">Register</h2>
                     {{ register_form.csrf_token }}

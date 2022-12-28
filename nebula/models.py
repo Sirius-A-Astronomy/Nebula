@@ -1,10 +1,10 @@
 import uuid
 
+from passlib.hash import sha256_crypt
 from sqlalchemy import DateTime, ForeignKey, PickleType, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.types import CHAR, TypeDecorator
-from passlib.hash import sha256_crypt
 
 from nebula import db
 
@@ -114,6 +114,9 @@ class User(Base):
     def get_id(self):
         return self.uuid
 
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
     def set_password(self, password):
         self.password = sha256_crypt.encrypt(password)
         db.session.commit()
@@ -169,7 +172,6 @@ class Question(Base):
     reviewed_by = db.relationship("User", foreign_keys=[reviewed_by_uuid])
 
     sources = db.Column(db.Text)
-
     # relation one-to-many: one course, many questions
     course_uuid = db.Column(GUID(), db.ForeignKey("course.uuid"), nullable=False)
     course = db.relationship("Course", backref=db.backref("questions", lazy=True))

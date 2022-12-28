@@ -22,7 +22,8 @@
             <div class="documentation__list">
                 {% for item in documentation_list %}
                 <div class="documentation__list__item">
-                    <a href="{{ url_for('documentation.item', uuid = item.uuid) }}">{{ item.title
+                    <a href="{{ url_for('web.documentation.item', uuid = item.uuid) }}">{{
+                        item.title
                         }}</a>
 
 

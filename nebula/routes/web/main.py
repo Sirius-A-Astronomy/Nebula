@@ -1,8 +1,11 @@
 from flask import Blueprint, render_template
 
 from nebula.models import CourseLevel
+from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("main", __name__)
+
+web_bp.register_blueprint(bp)
 
 
 @bp.route("/")

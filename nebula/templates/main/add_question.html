@@ -26,7 +26,7 @@
                     question or add subject tags to your question.
                 </p>
             </noscript>
-            <form method='POST' action="{{ url_for('add_question.add_question')}}"
+            <form method='POST' action="{{ url_for('web.add_question.add_question')}}"
                 id="add-question-form">
                 {{ question_form.csrf_token }}
                 <div class="input-field">
@@ -176,7 +176,7 @@
                     {{ question_form.submit(class="btn btn-primary",
                     value="Submit as %s %s" % (current_user.first_name, current_user.last_name)) }}
                     {% if course is not none %}
-                    <a href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
+                    <a href="{{ url_for('web.course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
                         class="btn btn-primary">
                         Back to {{ course.name }}
                     </a>

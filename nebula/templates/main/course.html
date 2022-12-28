@@ -8,9 +8,10 @@
 <main>
     <div class="container-lg">
         <div class="path-container">
-            <a class="path-container__link" href="{{ url_for('courses.all_courses') }}">Courses</a>
             <a class="path-container__link"
-                href="{{ url_for('level.level', course_level_code=course.course_level.code) }}">{{
+                href="{{ url_for('web.courses.all_courses') }}">Courses</a>
+            <a class="path-container__link"
+                href="{{ url_for('web.level.level', course_level_code=course.course_level.code) }}">{{
                 course.course_level.name }}</a>
             <a class="path-container__link" href="#">{{ course.name }}</a>
         </div>
@@ -39,7 +40,7 @@
                     </svg>
                 </div>
                 {% if not current_user.is_anonymous and current_user.access_level >= 2 %}
-                <a href="{{ url_for('add_question.add_question', course_code=course.code)}}"
+                <a href="{{ url_for('web.add_question.add_question', course_code=course.code)}}"
                     class="btn btn-outline add-question-button">Add a
                     question</a>
                 {% endif %}

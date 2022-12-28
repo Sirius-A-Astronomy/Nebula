@@ -1,5 +1,4 @@
 import json
-import re
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user
@@ -15,8 +14,10 @@ from wtforms.validators import DataRequired, Optional
 
 from nebula import db
 from nebula.models import Answer, Course, Question, SubjectTag
+from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("add_question", __name__)
+web_bp.register_blueprint(bp)
 
 
 class QuestionForm(FlaskForm):
@@ -42,7 +43,7 @@ def add_question(success=False, course_code=None):
     # Only admins or moderators can add questions
     if not current_user.is_authenticated or current_user.access_level < 2:
         flash("Only KLC or Cosmic Web members can create questions.", "warning")
-        return redirect(url_for("main.index"))
+        return redirect(url_for("web.main.index"))
 
     # Add courses to the form
     question_form = QuestionForm(request.form)
@@ -95,17 +96,17 @@ def add_question(success=False, course_code=None):
             if i % 2 == 0:
                 try:
                     cleaned_title += (
-                        r"$" + title[index + 2: block_equations[i + 1]] + r"$"
+                        r"$" + title[index + 2 : block_equations[i + 1]] + r"$"
                     )
                 except IndexError:
                     # if there is not another $$, just add the rest of the string
-                    cleaned_title += title[index + 2:]
+                    cleaned_title += title[index + 2 :]
             else:
                 try:
-                    cleaned_title += title[index + 2: block_equations[i + 1]]
+                    cleaned_title += title[index + 2 : block_equations[i + 1]]
                 except IndexError:
                     # if there is not another $$, just add the rest of the string
-                    cleaned_title += title[index + 2:]
+                    cleaned_title += title[index + 2 :]
         title = cleaned_title
 
     subject_tags = []
@@ -145,8 +146,11 @@ def add_question(success=False, course_code=None):
                 continue
             content = answer["content"].strip()
             title = answer["title"].strip()
-            question.answers.append(Answer(content=content, title=title, user=current_user, question=question))
-
+            question.answers.append(
+                Answer(
+                    content=content, title=title, user=current_user, question=question
+                )
+            )
 
     db.session.add(question)
 

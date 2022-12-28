@@ -70,7 +70,7 @@
 
         <div class="navigation">
             <div class="navigation__logo">
-                <a class="navigation__logo__title" href="{{ url_for('main.index') }}">Nebula</a>
+                <a class="navigation__logo__title" href="{{ url_for('web.main.index') }}">Nebula</a>
                 <div class="navigation__logo__subtitle">
                     {% if (not current_user.is_anonymous) and current_user.access_level > 2 %}
                     &lt;Admin Panel&gt;
@@ -82,7 +82,7 @@
             <div class="navigation__links">
                 <a {% if active_page|lower=="index" %} class="navigation__links__link active" {%
                     else %} class="navigation__links__link" {% endif %}
-                    href="{{ url_for('dashboard.index') }}">Dashboard</a>
+                    href="{{ url_for('web.dashboard.index') }}">Dashboard</a>
                 <a {% if active_page|lower=="users" %} class="navigation__links__link active" {%
                     else %} class="navigation__links__link" {% endif %}
                     href="{{ url_for('dashboard.users') }}">Users</a>

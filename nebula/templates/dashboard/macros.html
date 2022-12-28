@@ -6,14 +6,15 @@
     <div class="question-list-item__header">
         {% if "username" not in hide_elements %}
         <div class="question-list-item__header__username">
-            <a href="{{ url_for('search.search', query=question.user.username) }}">{{
+            <a href="{{ url_for('web.search.search', query=question.user.username) }}">{{
                 question.user.username }}</a>
         </div>
         {% endif %}
         {% if "subject-tags" not in hide_elements %}
         <div class="question-list-item__header__subject-tags">
             {% for subject_tag in question.subject_tags %}
-            <a class="subject-tag" href="{{ url_for('search.search', query=subject_tag.name) }}">{{
+            <a class="subject-tag"
+                href="{{ url_for('web.search.search', query=subject_tag.name) }}">{{
                 subject_tag.name }}</a>
             {% endfor %}
         </div>
@@ -21,7 +22,7 @@
         {% if "course" not in hide_elements %}
         <div class="question-list-item__header__course">
             <a
-                href="{{ url_for('course.course', course_code=question.course.code, course_level_code=question.course.course_level.code) }}">{{
+                href="{{ url_for('web.course.course', course_code=question.course.code, course_level_code=question.course.course_level.code) }}">{{
                 question.course.name }}</a>
         </div>
         {% endif %}
@@ -29,7 +30,7 @@
 
     <div class="question-list-item__body">
         <div class="question-list-item__body__title">
-            <a href="{{ url_for('question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}"
+            <a href="{{ url_for('web.question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}"
                 class="question-list-item__body__title__link latex-view">
                 {{ question.title }}
             </a>
@@ -43,7 +44,7 @@
 
     <div class="question-list-item__footer">
         {% if question.reviewed == 0 %}
-        <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Review</a>
+        <a href="{{ url_for('web.dashboard.question', question_uuid=question.uuid) }}">Review</a>
         {% endif %}
         {% if question.reviewed == 1 %}
         <a href="{{ url_for('dashboard.question', question_uuid=question.uuid) }}">Approved by {{

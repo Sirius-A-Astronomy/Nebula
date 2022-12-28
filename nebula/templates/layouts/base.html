@@ -66,7 +66,7 @@
 <li>
     <a {% if course.code in request.path %} class="dropdown-item active" {% else %}
         class="dropdown-item" {% endif %}
-        href="{{ url_for('course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{
+        href="{{ url_for('web.course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{
         course.name }}</a>
 </li>
 {%- endmacro %}
@@ -74,7 +74,7 @@
 <li class="caret-hover">
     <a {% if course_level.code in request.path %} class="dropdown-item dropdown-toggle active" {%
         else %} class="dropdown-item dropdown-toggle" {% endif %}
-        href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{
+        href="{{ url_for('web.level.level', course_level_code=course_level.code)}}">{{
         course_level.name }}</a>
     <ul class="dropdown-submenu">
         {% for course in course_level.courses %}{{ nav_course_list_item(course) }}{% endfor %}
@@ -157,7 +157,7 @@
         <div class="nebula-nav">
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <div class="container-lg">
-                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                    <a class="navbar-brand" href="{{ url_for('web.main.index') }}">
                         <div>
                             <span class="site-name">Nebula</span>
                         </div>
@@ -239,13 +239,13 @@
                                     <a {% if ('login' in request.path and request.args['register']
                                         !='True' ) %} class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
-                                        href="{{ url_for('user.login_register', next=request.path) }}">Login</a>
+                                        href="{{ url_for('web.user.login_register', next=request.path) }}">Login</a>
                                 </li>
                                 <li>
                                     <a {% if request.args['register']=='True' or '/register' in
                                         request.path %} class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
-                                        href="{{ url_for('user.login_register', register=true, next=request.path) }}">Register</a>
+                                        href="{{ url_for('web.user.login_register', register=true, next=request.path) }}">Register</a>
                                 </li>
 
 
@@ -254,14 +254,14 @@
                                     <a {% if 'profile' in request.path %}
                                         class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
-                                        href="{{ url_for('user.profile') }}">Profile</a>
+                                        href="{{ url_for('web.user.profile') }}">Profile</a>
                                     {% if current_user.access_level >= 2 %}
                                     <a class="dropdown-item"
-                                        href="{{ url_for('dashboard.index') }}">Dashboard</a>
+                                        href="{{ url_for('web.dashboard.index') }}">Dashboard</a>
                                     {% endif %}
                                 </li>
                                 <li>
-                                    <form action="{{ url_for('user.logout') }}" method="post">
+                                    <form action="{{ url_for('web.user.logout') }}" method="post">
                                         <input type="hidden" name="csrf_token"
                                             value="{{ csrf_token() }}" />
                                         <button class="dropdown-item" type="submit">Logout</button>
@@ -285,9 +285,9 @@
                     <div class="collapse navbar-collapse justify-content-start" id="navbarText">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a {% if request.path==url_for('main.index') %}
+                                <a {% if request.path==url_for('web.main.index') %}
                                     class="nav-link active" {% else %} class="nav-link" {% endif %}
-                                    href="{{ url_for('main.index') }}">Home</a>
+                                    href="{{ url_for('web.main.index') }}">Home</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -312,9 +312,9 @@
                             {% if not current_user.is_anonymous and current_user.access_level >= 2
                             %}
                             <li class="nav-item">
-                                <a {% if request.path==url_for('add_question.add_question') %}
+                                <a {% if request.path==url_for('web.add_question.add_question') %}
                                     class="nav-link active" {% else %} class="nav-link" {% endif %}
-                                    href="{{ url_for('add_question.add_question')}}">Submit a
+                                    href="{{ url_for('web.add_question.add_question')}}">Submit a
                                     question</a>
                             </li>
                             {% endif %}

@@ -7,8 +7,10 @@ It is a repository of user-submitted practice questions.
 [[_TOC_]]
 
 _Other documentation:_
-- [CLI Documentation](docs/cli/index.md)
+- #### Project Structure
+    - [Routes](docs/project_structure/routes.md)
 - [How does Nebula work?](docs/how-does-nebula-work.md)
+- [CLI Documentation](docs/cli/index.md)
 
 ## Installation & Setup
 
