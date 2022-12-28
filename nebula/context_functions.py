@@ -74,7 +74,7 @@ def context_processor():
         """Returns the current year."""
         return datetime.now().year
 
-    from nebula.models import Course, CourseLevel
+    from nebula.models.course_level import CourseLevel
 
     nav = {
         "CourseLevels": {

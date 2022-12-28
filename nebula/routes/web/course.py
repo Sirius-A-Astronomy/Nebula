@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template
 
-from nebula.models import Course, CourseLevel, Question
+from nebula.models.course import Course
+from nebula.models.course_level import CourseLevel
+from nebula.models.question import Question
 from nebula.routes.web import bp as web_bp
 
 # Does a course need to be a sublevel of courseLevel?

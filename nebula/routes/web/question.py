@@ -27,7 +27,12 @@ from wtforms import (
 from wtforms.validators import DataRequired, Optional
 
 from nebula import db
-from nebula.models import Answer, Comment, Course, Question, SubjectTag, User
+from nebula.models.answer import Answer
+from nebula.models.comment import Comment
+from nebula.models.course import Course
+from nebula.models.question import Question
+from nebula.models.subject_tag import SubjectTag
+from nebula.models.user import User
 from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("question", __name__, url_prefix="/q/<course_level_code>/<course_code>")

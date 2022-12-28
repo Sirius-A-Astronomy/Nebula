@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from nebula import csrf
-from nebula.models import Course
+from nebula.models.course import Course
 from nebula.routes.api import bp as api_bp
 
 bp = Blueprint("course_api", __name__, url_prefix="/courses")

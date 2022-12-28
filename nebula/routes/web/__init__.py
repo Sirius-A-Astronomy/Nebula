@@ -1,5 +1,4 @@
 import glob
-from importlib import __import__
 from os.path import basename, dirname, isfile, join
 
 from flask import Blueprint

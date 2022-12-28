@@ -2,7 +2,12 @@ from flask import Blueprint, jsonify, request, url_for
 from flask_login import current_user
 
 from nebula.context_functions import pretty_date
-from nebula.models import Course, Notification, Question, SubjectTag, User, db
+from nebula.models import db
+from nebula.models.course import Course
+from nebula.models.notification import Notification
+from nebula.models.question import Question
+from nebula.models.subject_tag import SubjectTag
+from nebula.models.user import User
 from nebula.routes.api import bp
 
 

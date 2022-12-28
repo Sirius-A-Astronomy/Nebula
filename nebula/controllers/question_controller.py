@@ -1,16 +1,14 @@
 from flask import abort, url_for
 
 from nebula import db
-from nebula.models import (
-    Answer,
-    Comment,
-    Course,
-    Notification,
-    Question,
-    SubjectTag,
-    Subscription,
-    User,
-)
+from nebula.models.answer import Answer
+from nebula.models.comment import Comment
+from nebula.models.course import Course
+from nebula.models.notification import Notification
+from nebula.models.question import Question
+from nebula.models.subject_tag import SubjectTag
+from nebula.models.subscription import Subscription
+from nebula.models.user import User
 
 
 class QuestionController:

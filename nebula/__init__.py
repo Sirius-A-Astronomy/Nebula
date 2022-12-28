@@ -104,7 +104,7 @@ def create_app(config_environment="default"):
 @login_manager.user_loader
 def load_user(user_uuid):
     """Returns the user object to flask-login. So it can be used in templates with current_user."""
-    from nebula.models import User
+    from nebula.models.user import User
 
     print(f"Flask login got user {user_uuid}")
     return User.query.filter_by(uuid=user_uuid).one_or_none()

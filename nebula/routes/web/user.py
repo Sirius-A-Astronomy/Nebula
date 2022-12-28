@@ -26,28 +26,13 @@ from wtforms import PasswordField, StringField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 
 from nebula import db, is_safe_url
-from nebula.models import User
+from nebula.models.user import User, create_user
 from nebula.routes.web import bp as web_bp
 from nebula.utilities import ACCESS_LEVELS
 
 bp = Blueprint("user", __name__)
 
 web_bp.register_blueprint(bp)
-
-
-def create_user(username, password, **kwargs):
-    """
-    Returns the created user object.
-
-    :param username: The username of the to be created user.
-    :type username: str
-    :param password: The password of the to be created user.
-    :type password: str
-    :param kwargs: The additional arguments to pass to the user object.
-    """
-    hashed_password = sha256_crypt.encrypt(password)
-    user = User(username=username, password=hashed_password, **kwargs)
-    return user
 
 
 def authenticate(username, password):

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from nebula.models import CourseLevel
+from nebula.models.course_level import CourseLevel
 from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("main", __name__)

@@ -2,7 +2,11 @@ from flask import Blueprint, jsonify, request, url_for
 from sqlalchemy import or_
 
 from nebula.context_functions import pretty_date
-from nebula.models import Answer, Course, Question, SubjectTag, User
+from nebula.models.answer import Answer
+from nebula.models.course import Course
+from nebula.models.question import Question
+from nebula.models.subject_tag import SubjectTag
+from nebula.models.user import User
 
 bp = Blueprint("search_api", __name__, url_prefix="/api")
 
