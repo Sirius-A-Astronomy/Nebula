@@ -3,7 +3,7 @@ APP_NAME=nebula
 STATIC_SOURCE=$(APP_NAME)/static
 
 # Arguments to external tools
-PY_FILES=$(shell find $(APP_NAME) database-setup tests -name '*.py' | xargs echo) *.py
+PY_FILES=$(shell find $(APP_NAME) tests -name '*.py' | xargs echo) *.py
 BLACK_ARGS=
 ISORT_ARGS=--multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses
 FLAKE_ARGS=
