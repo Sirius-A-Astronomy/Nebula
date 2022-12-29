@@ -5,14 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nebula admins and moderators can manage nebula here">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard - Nebula</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {% from "utilities/vite.html" import vite_style, vite_script with context %}
     {{ vite_script('js/dashboard/dashboardMain.ts')}}
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
 </head>
 
 <body>
     <div id="app"></div>
+
 </body>
 
 </html>
