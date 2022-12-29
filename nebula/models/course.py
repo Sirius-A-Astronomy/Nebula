@@ -17,3 +17,13 @@ class Course(Base):
 
     def __repr__(self):
         return f'Course("{self.name}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "name": self.name,
+            "code": self.code,
+            "course_level": self.course_level.expose(),
+            "description": self.description,
+            "semester": self.semester,
+        }

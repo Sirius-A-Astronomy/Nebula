@@ -11,3 +11,11 @@ class CourseLevel(Base):
 
     def __repr__(self):
         return f'CourseLevel("{self.study_type}", "{self.name}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "name": self.name,
+            "code": self.code,
+            "study_type": self.study_type,
+        }
