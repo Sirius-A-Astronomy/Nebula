@@ -8,7 +8,8 @@ from nebula.models.question import Question
 from nebula.models.subject_tag import SubjectTag
 from nebula.models.user import User
 
-bp = Blueprint("search_api", __name__, url_prefix="/api")
+from nebula.routes.api import bp
+
 
 
 @bp.route("/search", methods=["GET"])
