@@ -1,5 +1,3 @@
-[Back to the main page](/README.md)
-
 # This is the user CLI documentation.
 
 Nebula has a few commands that can be used to manage users.
@@ -23,7 +21,7 @@ flask user create <username?> <password?> <access_level?> <create_instantly?>
 ### arguments
 - `username`: String (optional): The username of the user. This is the name that will be used to log in. If not provided, the user will be prompted to enter a username.
 - `password`: String (optional): The password of the user. This is the password that will be used to log in. If not provided, the user will be prompted to enter a password.
-- `access_level`: String (optional) | Number (optional): The access level of the user. This is the level of access that the user will have. If not provided, the user will be prompted to enter an access level. To learn more about access levels, see [this page](/docs/how-does-nebula-work.md#user-roles-and-permissions).
+- `access_level`: String (optional) | Number (optional): The access level of the user. This is the level of access that the user will have. If not provided, the user will be prompted to enter an access level. To learn more about access levels, see [this page](/how-does-nebula-work.md#user-roles-and-permissions).
 - `create_instantly`: ('y' | 'n') (optional): Whether or not the user should be created instantly. If 'y' the user will not be prompted to confirm any details, nor will they be prompted for additional details. 
 ## Delete a user
 

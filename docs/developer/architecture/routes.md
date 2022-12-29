@@ -12,7 +12,7 @@ The `__init__.py` file handles registering the blueprint with the Flask applicat
 
 ## Web Routes
 
-```python
+```python {4,7,10}
 # your_route.py
 
 # import the web blueprint
@@ -35,7 +35,7 @@ def your_route_with_id(id):
 ```
 
 ## API Routes
-```python
+```python {4,7,10}
 # your_route.py
 
 # import the api blueprint
@@ -64,7 +64,7 @@ def your_route_with_id(id):
 For api routes it is not always necessary to extend the api blueprint. 
 Routes can be directly added to the blueprint of the API. This is useful if a route does not need to be prefixed with the name of the blueprint.
 
-```python
+```python {4}
 # your_route.py
 
 # import the api blueprint

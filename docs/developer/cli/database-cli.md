@@ -1,6 +1,3 @@
-
-[Back to the main page](/README.md)
-
 # This is the database CLI Documentation.
 
 Nebula has a few commands that can be used to manage the database.

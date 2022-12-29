@@ -20,11 +20,15 @@ default: help
 dev-server:  ## Start the development version of the website
 	$(DEV_ENV) flask run
 
+prod-server:  ## Start the production version of the website
+	FLASK_APP=$(FLASK_APP) flask run
+
 install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	python3 setup.py sdist bdist_wheel
 	pip install dist/$(APP_NAME)-*.tar.gz
 
 build:
+	npm run docs:build
 	npm run build
 
 ## Formatting and linting
