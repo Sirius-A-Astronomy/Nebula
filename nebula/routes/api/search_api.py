@@ -7,9 +7,7 @@ from nebula.models.course import Course
 from nebula.models.question import Question
 from nebula.models.subject_tag import SubjectTag
 from nebula.models.user import User
-
 from nebula.routes.api import bp
-
 
 
 @bp.route("/search", methods=["GET"])

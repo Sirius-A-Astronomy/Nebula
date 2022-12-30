@@ -1,7 +1,7 @@
-from nebula.routes.api import bp as api_bp
-from nebula.models.course_level import CourseLevel
-
 from flask import Blueprint, jsonify
+
+from nebula.models.course_level import CourseLevel
+from nebula.routes.api import bp as api_bp
 
 bp = Blueprint("course_level_api", __name__, url_prefix="/course_levels")
 
