@@ -1,30 +1,60 @@
 import { nextTick } from "vue";
-import { createRouter, createWebHistory } from "vue-router";
+import {
+	createRouter,
+	createWebHistory,
+	type RouteLocationNormalized,
+} from "vue-router";
 import { isAuthenticated } from "./stores/sessionStore";
 
-import CoursesView from "./views/dashboard/CoursesView.vue";
+import CoursesView from "@views/dashboard/courses/CourseIndex.vue";
 
 const router = createRouter({
 	history: createWebHistory(),
 	routes: [
 		{
 			path: "/dashboard",
-			component: CoursesView,
+			redirect: "/dashboard/courses",
 			name: "dashboard",
 			meta: {
 				title: "Dashboard - Courses",
+				description: "View all courses in nebula",
 				requiredAccessLevel: 3,
 			},
 		},
 
 		{
-			path: "/dashboard/test",
-			component: () => import("./views/dashboard/TestView.vue"),
+			path: "/dashboard/courses/",
+			component: CoursesView,
+			name: "dashboard-course-index",
+			meta: {
+				title: "Dashboard - Courses",
+				description: "View all courses in nebula",
+				requiredAccessLevel: 3,
+			},
+		},
+
+		{
+			path: "/dashboard/courses/create",
+			component: () =>
+				import("@/views/dashboard/courses/CourseCreate.vue"),
 			name: "test",
 			meta: {
 				title: "Dashboard - Test",
+				description: "Create a new course in nebula",
 				requiredAccessLevel: 3,
 			},
+		},
+
+		{
+			path: "/dashboard/course/:id",
+			component: () => import("@views/dashboard/courses/CourseShow.vue"),
+			name: "dashboard-course-show",
+			meta: {
+				title: "Dashboard - Course",
+				description: "View a nebula course",
+				requiredAccessLevel: 3,
+			},
+			props: true,
 		},
 
 		{
@@ -45,7 +75,7 @@ router.afterEach((to) => {
 	});
 });
 const excludedRoutes: string[] = [];
-const authGuard = (to, from) => {
+const authGuard = (to: RouteLocationNormalized): boolean => {
 	if (
 		!(isAuthenticated.value || excludedRoutes.includes(to.name as string))
 	) {
