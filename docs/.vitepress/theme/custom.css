@@ -5,3 +5,7 @@
 
 	--vp-c-brand-lighter: #2762c2;
 }
+
+.VPSkipLink {
+	color: var(--vp-c-brand) !important;
+}
