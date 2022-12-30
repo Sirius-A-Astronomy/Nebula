@@ -32,6 +32,10 @@ def your_route():
 @bp.route('/your_route/<id>')
 def your_route_with_id(id):
     return 'Hello World with id: ' + id
+
+# These routes can be linked to with the url_for function
+# url_for('web.your_route.your_route')
+# url_for('web.your_route.your_route_with_id', id=1)
 ```
 
 ## API Routes
