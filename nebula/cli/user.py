@@ -5,8 +5,7 @@ import click
 from flask import Blueprint
 
 from nebula import db
-from nebula.models.user import User
-from nebula.routes.web.user import create_user
+from nebula.models.user import User, create_user
 from nebula.utilities import ACCESS_LEVELS
 
 bp = Blueprint("cli_users", __name__, cli_group="user")
