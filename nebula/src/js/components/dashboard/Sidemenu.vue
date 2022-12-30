@@ -6,12 +6,8 @@ import router from "@/router";
 
 const menuLinks = [
 	{
-		name: "Dashboard",
-		path: "/dashboard",
-	},
-	{
-		name: "Test",
-		path: "/dashboard/test",
+		name: "Courses",
+		path: { name: "dashboard-course-index" },
 	},
 ];
 </script>
