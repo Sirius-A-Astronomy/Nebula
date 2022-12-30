@@ -1,5 +1,9 @@
 const API_URL = "";
 
+const CSRF_TOKEN =
+	document.querySelector("meta[name=csrf-token]")?.getAttribute("content") ||
+	"";
+
 type SendRequestResponse = {
 	status: number;
 	data?: unknown;
@@ -25,7 +29,11 @@ const sendRequest = async (
 	const fetchOptions: {
 		method: string;
 		credentials?: RequestCredentials;
-		headers: { Authorization?: string; "Content-Type": string };
+		headers: {
+			Authorization?: string;
+			"Content-Type": string;
+			"X-CSRF-Token"?: string;
+		};
 		body?: string;
 	} = {
 		method,
@@ -38,6 +46,7 @@ const sendRequest = async (
 
 	if (body) {
 		fetchOptions.body = JSON.stringify(body);
+		fetchOptions.headers["X-CSRF-Token"] = CSRF_TOKEN;
 	}
 
 	try {
@@ -47,6 +56,7 @@ const sendRequest = async (
 			const json = await response.json();
 			return {
 				status: response.status,
+				message: json.message,
 				data: json,
 			};
 		} catch (e) {
