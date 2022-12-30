@@ -20,6 +20,16 @@ module.exports = {
 				"primary-bg": "var(--color-background)",
 				"secondary-bg": "var(--color-background-secondary)",
 				"tertiary-bg": "var(--color-background-tertiary)",
+
+				"alert-error": "var(--color-alert-error)",
+				"alert-warning": "var(--color-alert-warning)",
+				"alert-success": "var(--color-alert-success)",
+				"alert-info": "var(--color-alert-info)",
+
+				"alert-error-text": "var(--color-alert-error-text)",
+				"alert-warning-text": "var(--color-alert-warning-text)",
+				"alert-success-text": "var(--color-alert-success-text)",
+				"alert-info-text": "var(--color-alert-info-text)",
 			},
 		},
 		container: {
