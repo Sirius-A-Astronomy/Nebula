@@ -1,7 +1,11 @@
 from data import comments, course_levels, courses, questions, users
 
 from nebula import create_app, db
-from nebula.models import Comment, Course, CourseLevel, Question, User
+from nebula.models.comment import Comment
+from nebula.models.course import Course
+from nebula.models.course_level import CourseLevel
+from nebula.models.question import Question
+from nebula.models.user import User
 
 
 def test_creation():

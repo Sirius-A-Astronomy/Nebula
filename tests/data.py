@@ -1,6 +1,10 @@
 import datetime
 
-from nebula.models import Comment, Course, CourseLevel, Question, User
+from nebula.models.comment import Comment
+from nebula.models.course import Course
+from nebula.models.course_level import CourseLevel
+from nebula.models.question import Question
+from nebula.models.user import User
 
 course_levels = [
     CourseLevel(name="First Year", study_type="Bachelor", code="bsc-yr1"),
