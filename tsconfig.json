@@ -10,6 +10,11 @@
     "compilerOptions": {
         "baseUrl": ".",
         "module": "esnext",
+        "target": "esnext",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
         "paths": {
             "@/*": [
                 "nebula/src/js/*"
