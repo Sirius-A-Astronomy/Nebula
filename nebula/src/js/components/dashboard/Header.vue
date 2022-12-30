@@ -21,7 +21,7 @@ const withSearch = true;
 </script>
 
 <template>
-	<div class="w-full bg-secondary-bg shadow-md h-16 z-10 relative">
+	<div class="w-full bg-secondary-bg shadow-md z-10 relative">
 		<div class="container flex flex-row justify-between items-center py-4">
 			<button
 				id="nav-mobile-hamburger"
@@ -40,10 +40,10 @@ const withSearch = true;
 				</svg>
 			</button>
 
-			<Search v-if="withSearch" />
+			<Search v-if="withSearch" :dashboard="true" />
 
 			<div
-				class="flex flex-row justify-end ml-auto"
+				class="flex flex-row justify-end ml-auto items-center"
 				:class="withSearch ? '' : 'w-full ml-auto'">
 				<ul>
 					<li class="relative">

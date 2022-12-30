@@ -27,6 +27,7 @@ export type SearchCourse = {
 	description: string;
 	semester: string;
 	course_level: {
+		id: string;
 		code: string;
 		name: string;
 		study_type: string;
@@ -60,13 +61,22 @@ const search = () => {
 	getSearchResults();
 };
 
-const getSearchResults = throttle(1000, async () => {
-	const searchResponse = await api.get("/search", {
-		query: searchQuery.value,
-	});
+const props = defineProps<{
+	placeholder?: string;
+	dashboard: boolean;
+}>();
 
-	searchResults.value = searchResponse.data as SearchResults;
-	openResults.value = true;
+const getSearchResults = throttle(1000, async () => {
+	try {
+		const searchResponse = await api.get("/search", {
+			query: searchQuery.value,
+		});
+
+		searchResults.value = searchResponse.data as SearchResults;
+		openResults.value = true;
+	} catch (error) {
+		console.error(error);
+	}
 	loading.value = false;
 });
 
@@ -86,7 +96,11 @@ const close = () => {
 <template>
 	<div
 		class="flex justify-center flex-1"
-		v-click-outside="close"
+		v-click-outside="{
+			handler: close,
+			exclude: ['search'],
+		}"
+		id="search"
 		v-keydown-escape="close">
 		<div class="relative w-full max-w-xl mr-6">
 			<div class="absolute inset-y-0 flex items-center pl-2">
@@ -106,6 +120,7 @@ const close = () => {
 				type="text"
 				placeholder="Search through Nebula..."
 				v-model="searchQuery"
+				@focus="openResults = true"
 				@input="search"
 				aria-label="Search" />
 
@@ -115,6 +130,8 @@ const close = () => {
 					v-if="openResults"
 					:loading="loading"
 					:search-results="searchResults"
+					:dashboard="dashboard"
+					@close="close"
 					:search-query="searchQuery" />
 			</Transition>
 		</div>

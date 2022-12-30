@@ -1,13 +1,26 @@
 <script setup lang="ts">
 import type { SearchResults } from "./Search.vue";
-import { ref, type Ref, computed } from "vue";
+import { ref, type Ref, computed, watch } from "vue";
 import { OrbitSpinner } from "epic-spinners";
+import { RouterLink } from "vue-router";
 
 const props = defineProps<{
 	searchQuery: string;
 	loading: boolean;
 	searchResults: SearchResults;
+	dashboard: boolean;
 }>();
+
+const emit = defineEmits<{
+	(event: "close"): void;
+}>();
+
+watch(
+	() => props.searchQuery,
+	() => {
+		expanded.value = "none";
+	}
+);
 
 const courses = computed(() => {
 	if (expanded.value === "courses") {
@@ -74,8 +87,29 @@ const expanded: Ref<"none" | "questions" | "courses"> = ref("none");
 						Courses ({{ searchResults.courses.length }})
 					</div>
 					<div v-for="course in courses" :key="course.id">
+						<RouterLink
+							v-if="dashboard"
+							:to="{
+								name: 'dashboard-course-show',
+								params: {
+									id: course.id,
+								},
+							}"
+							@click="emit('close')"
+							class="flex items-center justify-between px-4 py-2 text-sm leading-5 transition-colors duration-150 hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
+							<span>{{ course.name }}</span>
+							<span
+								v-if="course.questions_count > 0"
+								class="hidden sm:block text-xs text-on-accent-text bg-accent-clr rounded-full px-2"
+								>{{ course.questions_count }} Questions</span
+							>
+						</RouterLink>
+
+						<!-- Using an anchor tag until the entire app is converted to vue + vue-router -->
 						<a
-							:href="course.url"
+							v-else
+							:href="`/q/${course.course_level.code}/${course.code}`"
+							@click="emit('close')"
 							class="flex items-center justify-between px-4 py-2 text-sm leading-5 transition-colors duration-150 hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
 							<span>{{ course.name }}</span>
 							<span
@@ -87,9 +121,10 @@ const expanded: Ref<"none" | "questions" | "courses"> = ref("none");
 					</div>
 
 					<div
-						v-if="
+						v-show="
 							searchResults.courses.length > 3 &&
 							expanded !== 'courses'
+							// use v-show so the button stays in the dom for vClickOutside
 						"
 						class="flex items-center justify-center px-4 py-2 text-sm leading-5 transition-colors duration-150 hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
 						<button
@@ -129,7 +164,7 @@ const expanded: Ref<"none" | "questions" | "courses"> = ref("none");
 								<div class="flex flex-row">
 									<span
 										v-if="question.subject_tags.length > 0"
-										class="text-xs text-on-accent-text bg-accent-clr rounded-full px-2 mr-4"
+										class="text-xs text-on-accent-text bg-accent-clr rounded-full px-2 mr-4 overflow-hidden max-w-32 whitespace-nowrap"
 										v-for="tag in question.subject_tags"
 										:key="tag.id"
 										>{{ tag.name }}</span
@@ -140,7 +175,11 @@ const expanded: Ref<"none" | "questions" | "courses"> = ref("none");
 					</div>
 
 					<div
-						v-if="searchResults.questions.length > 3"
+						v-show="
+							searchResults.questions.length > 3 &&
+							expanded !== 'questions'
+							// use v-show so the button stays in the dom for vClickOutside
+						"
 						class="px-4 py-2 text-sm leading-5 transition-colors duration-150 hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
 						<button
 							@click="expanded = 'questions'"
