@@ -18,6 +18,7 @@ settings.json
 
 nebula/static/
 
+.vitepress/cache/
 dist/
 build/
 *.egg-info/
