@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_login import current_user
 
 from nebula import csrf, db
 from nebula.models.course import Course
@@ -27,6 +28,9 @@ def get_course(uuid):
 
 @bp.route("/<uuid>", methods=["PUT"])
 def update_course(uuid):
+    if not current_user.is_authenticated or not current_user.access_level >= 3:
+        return jsonify({"message": "Unauthorized"}), 401
+
     course = Course.query.filter_by(uuid=uuid).one_or_none()
     if course is None:
         return jsonify({"message": "Course not found"}), 404
@@ -70,6 +74,9 @@ def update_course(uuid):
 
 @bp.route("/", methods=["POST"])
 def create_course():
+    if not current_user.is_authenticated or not current_user.access_level >= 3:
+        return jsonify({"message": "Unauthorized"}), 401
+
     data = request.get_json()
 
     name = data.get("name")
@@ -110,6 +117,9 @@ def create_course():
 @bp.route("/<uuid>", methods=["DELETE"])
 @csrf.exempt
 def delete_course(uuid):
+    if not current_user.is_authenticated or not current_user.access_level >= 3:
+        return jsonify({"message": "Unauthorized"}), 401
+
     course = Course.query.filter_by(uuid=uuid).one_or_none()
     if course is None:
         return jsonify({"message": "Course not found"}), 404
@@ -119,8 +129,3 @@ def delete_course(uuid):
     db.session.commit()
 
     return jsonify(data), 200
-
-
-@bp.route("/ping", methods=["post", "GET"])
-def ping():
-    return jsonify({"message": "pong"})
