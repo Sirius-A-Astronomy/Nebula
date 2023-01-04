@@ -8,6 +8,7 @@ module.exports = {
 				"secondary-clr": "var(--color-secondary)",
 				"tertiary-clr": "var(--color-tertiary)",
 				"accent-clr": "var(--color-accent)",
+				"accent-focus": "var(--color-accent-focus)",
 				"primary-active": "var(--color-primary-active)",
 
 				"primary-text": "var(--color-text-primary)",
@@ -37,5 +38,5 @@ module.exports = {
 			padding: "1rem",
 		},
 	},
-	plugins: [],
+	plugins: [require("@tailwindcss/forms")],
 };

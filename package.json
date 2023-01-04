@@ -13,6 +13,7 @@
 	"dependencies": {
 		"dompurify": "^2.4.1",
 		"epic-spinners": "^2.0.0",
+		"fuzzysort": "^2.0.4",
 		"markdown-it": "^13.0.1",
 		"sass": "^1.55.0",
 		"throttle-debounce": "^5.0.0",
@@ -21,6 +22,7 @@
 	},
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.1.4",
+		"@tailwindcss/forms": "^0.5.3",
 		"@types/dompurify": "^2.4.0",
 		"@types/markdown-it": "^12.2.3",
 		"@types/node": "^18.11.12",
