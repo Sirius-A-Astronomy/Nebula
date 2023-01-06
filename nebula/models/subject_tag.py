@@ -6,3 +6,9 @@ class SubjectTag(Base):
 
     def __repr__(self):
         return f'SubjectTag("{self.name}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "name": self.name,
+        }

@@ -15,3 +15,12 @@ class Comment(Base):
 
     def __repr__(self):
         return f'Comment("{self.content}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "content": self.content,
+            "is_suggestion": self.is_suggestion,
+            "user": self.user.expose(),
+            "question_id": self.question_uuid,
+        }

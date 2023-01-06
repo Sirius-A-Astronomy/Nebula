@@ -38,3 +38,15 @@ class Question(Base):
 
     def __repr__(self):
         return f'Question("{self.title}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "title": self.title,
+            "content": self.content,
+            "course": self.course.expose(),
+            "user": self.user.expose(),
+            "subject_tags": [subject_tag.expose() for subject_tag in self.subject_tags],
+            "answers": [answer.expose() for answer in self.answers],
+            "comments": [comment.expose() for comment in self.comments],
+        }

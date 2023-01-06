@@ -20,3 +20,13 @@ class Answer(Base):
 
     def __repr__(self):
         return f'Answer("{self.content}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "title": self.title,
+            "content": self.content,
+            "sources": self.sources,
+            "user": self.user.expose(),
+            "question_id": self.question_uuid,
+        }
