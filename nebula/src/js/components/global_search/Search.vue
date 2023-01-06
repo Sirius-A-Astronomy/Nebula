@@ -36,12 +36,15 @@ export type SearchCourse = {
 	questions_count: number;
 };
 
+export type SearchUser = {
+	id: string;
+	name: string;
+	email: string;
+};
+
 export type SearchResults = {
 	questions: SearchQuestion[];
-	users: {
-		id: string;
-		name: string;
-	}[];
+	users: SearchUser[];
 	courses: SearchCourse[];
 };
 
@@ -61,12 +64,18 @@ const search = () => {
 	getSearchResults();
 };
 
-const props = defineProps<{
+const searchInputElement = ref<HTMLElement | null>(null);
+
+defineProps<{
 	placeholder?: string;
 	dashboard: boolean;
 }>();
 
 const getSearchResults = throttle(1000, async () => {
+	if (searchQuery.value.length === 0) {
+		loading.value = false;
+		return;
+	}
 	try {
 		const searchResponse = await api.get("/search", {
 			query: searchQuery.value,
@@ -100,6 +109,7 @@ const close = () => {
 			handler: close,
 			exclude: ['search'],
 		}"
+		@click="searchInputElement?.focus()"
 		id="search"
 		v-keydown-escape="close">
 		<div class="relative w-full max-w-xl mr-6">
@@ -116,18 +126,36 @@ const close = () => {
 				</svg>
 			</div>
 			<input
-				class="w-full pl-8 pr-2 py-2 text-sm border-0 rounded-md input"
+				class="w-full pl-8 pr-2 py-2 text-sm border-0 rounded-md bg-primary-bg focus:bg-tertiary-bg focus:ring-primary-active"
 				type="text"
-				placeholder="Search through Nebula..."
+				:placeholder="placeholder ?? 'Search through Nebula...'"
 				v-model="searchQuery"
 				@focus="openResults = true"
 				@input="search"
+				ref="searchInputElement"
 				aria-label="Search" />
+
+			<!-- Clear button -->
+			<button
+				class="absolute inset-y-0 right-0 flex items-center pr-2"
+				v-if="searchQuery.length > 0"
+				@click="searchQuery = ''">
+				<svg
+					class="w-4 h-4 hover:text-accent-focus"
+					aria-hidden="true"
+					fill="currentColor"
+					viewBox="0 0 20 20">
+					<path
+						fill-rule="evenodd"
+						d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.536-11.464a1 1 0 00-1.414 0L10 8.586 8.464 7.05a1 1 0 00-1.414 1.414l1.536 1.536-1.536 1.536a1 1 0 101.414 1.414L10 11.414l1.536 1.536a1 1 0 001.414-1.414L11.414 10l1.536-1.536a1 1 0 000-1.414z"
+						clip-rule="evenodd" />
+				</svg>
+			</button>
 
 			<!-- Show search results in a dropdown -->
 			<Transition name="fade">
 				<Results
-					v-if="openResults"
+					v-show="openResults"
 					:loading="loading"
 					:search-results="searchResults"
 					:dashboard="dashboard"
