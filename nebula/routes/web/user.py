@@ -373,7 +373,7 @@ def profile():
             authenticated_user.password = new_password_hashed
             db.session.commit()
             flash("Password changed successfully!", "success")
-            return redirect(url_for("user.profile"))
+            return redirect(url_for("web.user.profile"))
 
     return render_template(
         "main/profile.html",
