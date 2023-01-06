@@ -1,5 +1,9 @@
-from flask import Blueprint, jsonify, request, url_for
-from sqlalchemy import or_
+from flask import jsonify, request, url_for
+from sqlalchemy import or_, select
+from sqlalchemy.sql.operators import ilike_op
+from flask_login import current_user
+from nebula.utilities import ACCESS_LEVELS
+from nebula import db
 
 from nebula.context_functions import pretty_date
 from nebula.models.answer import Answer
@@ -8,6 +12,7 @@ from nebula.models.question import Question
 from nebula.models.subject_tag import SubjectTag
 from nebula.models.user import User
 from nebula.routes.api import bp
+
 
 
 @bp.route("/search", methods=["GET"])
@@ -44,8 +49,6 @@ def search_courses(query: str) -> list:
             Course.code.ilike(f"%{query}%"),
         )
     ).all()
-
-    print(courses)
 
     course_json = [
         {
@@ -87,6 +90,7 @@ def search_questions(query: str) -> list:
             Question.course.has(Course.name.ilike(f"%{query}%")),
             Question.course.has(Course.code.ilike(f"%{query}%")),
             Question.user.has(User.first_name.ilike(f"%{query}%")),
+            Question.user.has(User.last_name.ilike(f"%{query}%")),
         )
     ).all()
 
@@ -127,4 +131,36 @@ def search_questions(query: str) -> list:
 
 
 def search_users(query: str) -> list:
-    return []
+    """Searches for users by name or email"""
+
+    if not query:
+        return []
+
+    if (current_user.is_anonymous or not current_user.access_level >= ACCESS_LEVELS["ByName"]["moderator"]["level"]):
+        return []
+    
+    users = db.session.execute(
+        db.select(User).where(
+            or_(
+                User.first_name.ilike(f"%{query}%"),
+                User.last_name.ilike(f"%{query}%"),
+                User.email.ilike(f"%{query}%"),
+            )
+        )
+    ).scalars()
+
+
+    users_json = [
+        {
+            "id": user.uuid,
+            "name": f"{user.first_name} {user.last_name}",
+            "email": user.email,
+        }
+        for user in users
+    ]
+
+    return users_json
+
+
+
+
