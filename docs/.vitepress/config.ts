@@ -10,7 +10,14 @@ const config = defineConfig({
 	cleanUrls: "without-subfolders",
 	markdown: {
 		typographer: true,
+		theme: {
+			light: "material-ocean",
+			dark: "material-palenight",
+		},
 	},
+
+	head: [["link", { rel: "icon", href: "/assets/mark.svg" }]],
+	lang: "en-US",
 
 	themeConfig: {
 		logo: {
@@ -20,7 +27,7 @@ const config = defineConfig({
 
 		siteTitle: "Nebula Documentation",
 
-		outline: 2,
+		outline: [2, 3],
 
 		socialLinks: [
 			{
@@ -33,17 +40,17 @@ const config = defineConfig({
 			{ text: "Home", link: "/" },
 			{
 				text: "User Guide",
-				link: "/user/",
+				link: "/user/getting-started",
 				activeMatch: "/user/",
 			},
 			{
 				text: "Moderator Guide",
-				link: "/moderator/",
+				link: "/moderator/getting-started",
 				activeMatch: "/moderator/",
 			},
 			{
 				text: "Developer Guide",
-				link: "/developer/",
+				link: "/developer/getting-started",
 				activeMatch: "/developer/",
 			},
 		],
@@ -66,35 +73,28 @@ const config = defineConfig({
 function useUserGuideSidebar() {
 	return [
 		{
-			text: "User Guide",
+			text: "Introduction",
 			items: [
 				{
-					text: "Introduction",
-					link: "/user/",
-					items: [
-						{
-							text: "Getting Started",
-							link: "/user/getting-started",
-						},
-					],
+					text: "Getting Started",
+					link: "/user/getting-started",
+				},
+			],
+		},
+		{
+			text: "Writing",
+			items: [
+				{
+					text: "Markdown",
+					link: "/user/writing/markdown",
 				},
 				{
-					text: "Writing",
-					link: "/user/writing/",
-					items: [
-						{
-							text: "Markdown",
-							link: "/user/writing/markdown",
-						},
-						{
-							text: "LaTeX",
-							link: "/user/writing/latex",
-						},
-						{
-							text: "Code",
-							link: "/user/writing/code",
-						},
-					],
+					text: "LaTeX",
+					link: "/user/writing/latex",
+				},
+				{
+					text: "Code",
+					link: "/user/writing/code",
 				},
 			],
 		},
@@ -104,25 +104,28 @@ function useUserGuideSidebar() {
 function useModeratorGuideSidebar() {
 	return [
 		{
-			text: "Moderator Guide",
+			text: "Introduction",
 			items: [
-				{ text: "Introduction", link: "/moderator/" },
 				{
-					text: "Dashboard",
-					items: [
-						{
-							text: "Course Management",
-							link: "/moderator/dashboard/course-management",
-						},
-						{
-							text: "Question Management",
-							link: "/moderator/dashboard/question-management",
-						},
-						{
-							text: "User Management",
-							link: "/moderator/dashboard/user-management",
-						},
-					],
+					text: "Getting started",
+					link: "/moderator/getting-started",
+				},
+			],
+		},
+		{
+			text: "Dashboard",
+			items: [
+				{
+					text: "Course Management",
+					link: "/moderator/dashboard/course-management",
+				},
+				{
+					text: "Question Management",
+					link: "/moderator/dashboard/question-management",
+				},
+				{
+					text: "User Management",
+					link: "/moderator/dashboard/user-management",
 				},
 			],
 		},
@@ -132,56 +135,109 @@ function useModeratorGuideSidebar() {
 function useDeveloperGuideSidebar() {
 	return [
 		{
-			text: "Developer Guide",
+			text: "Introduction",
 			items: [
 				{
-					text: "Introduction",
-					link: "/developer/",
-					items: [
-						{
-							text: "Getting started",
-							link: "/developer/getting-started",
-						},
-					],
+					text: "Getting started",
+					link: "/developer/getting-started",
 				},
+			],
+		},
 
+		{
+			text: "Architecture",
+			collapsible: true,
+			items: [
 				{
-					text: "Architecture",
-					link: "/developer/architecture/",
+					text: "Project Structure",
+					link: "/developer/architecture/project-structure/",
+				},
+			],
+		},
+		{
+			text: "Frontend",
+			collapsible: true,
 
-					items: [
-						{
-							text: "Project Structure",
-							link: "/developer/architecture/project-structure",
-							items: [
-								{
-									text: "Frontend",
-									link: "/developer/architecture/frontend",
-								},
-								{
-									text: "Routes",
-									link: "/developer/architecture/routes",
-								},
-							],
-						},
-					],
+			items: [
+				{
+					text: "Importing Assets",
+					link: "/developer/frontend/importing-assets",
 				},
 				{
-					text: "Command Line Interfaces",
-					items: [
-						{
-							text: "User CLI",
-							link: "/developer/cli/user-cli",
-						},
-						{
-							text: "Database CLI",
-							link: "/developer/cli/database-cli",
-						},
-					],
+					text: "Vue",
+					link: "/developer/frontend/vue",
 				},
-				{ text: "Frontend", link: "/developer/frontend" },
-				{ text: "Backend", link: "/developer/backend" },
-				{ text: "Testing", link: "/developer/testing" },
+			],
+		},
+		{
+			text: "Backend",
+			collapsible: true,
+			items: [
+				{
+					text: "Routes",
+					link: "/developer/architecture/project-structure/routes",
+				},
+				{
+					text: "Models",
+					link: "/developer/architecture/project-structure/models",
+				},
+			],
+		},
+		{
+			text: "Command Line Interfaces",
+			collapsible: true,
+			collapsed: true,
+			items: [
+				{
+					text: "User CLI",
+					link: "/developer/cli/user-cli",
+				},
+				{
+					text: "Database CLI",
+					link: "/developer/cli/database-cli",
+				},
+			],
+		},
+		{
+			text: "Testing",
+			collapsible: true,
+			collapsed: true,
+			items: [
+				{
+					text: "Unit Testing",
+					link: "/developer/testing/unit-testing",
+				},
+				{
+					text: "Integration Testing",
+					link: "/developer/testing/integration-testing",
+				},
+			],
+		},
+		{
+			text: "Documentation",
+			collapsible: true,
+			collapsed: true,
+			items: [
+				{
+					text: "Writing Documentation",
+					link: "/developer/documentation/writing-documentation",
+				},
+			],
+		},
+		{
+			text: "Deployment",
+			collapsible: true,
+			collapsed: true,
+			items: [
+				{
+					text: "Building",
+					link: "/developer/deployment/building",
+				},
+			],
+		},
+		{
+			text: "Other",
+			items: [
 				{
 					text: "Contributing",
 					link: "/developer/contributing",

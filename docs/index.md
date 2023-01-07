@@ -11,7 +11,7 @@ hero:
     actions:
         - text: Get started
           theme: brand
-          link: /user/
+          link: /developer/getting-started
         - text: View on Gitlab
           theme: alt
           link: https://gitlab.astro.rug.nl/sirius-a/nebula

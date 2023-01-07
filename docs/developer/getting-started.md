@@ -74,19 +74,36 @@ flask db seed
 For more information on the database CLI commands, see [here](/developer/cli/database-cli.md)
 :::
 
-## Step 5. Run the development server
+## Step 5. Run the development servers
 
+Run both the `flask` and `Vite` development servers in separate terminals.
+
+To run the `flask` development server:
 ```bash
 make dev-server
 ```
 
+This will run the flask development server on [localhost:5000](localhost:5000) which will serve the web pages and the API.
+
+---
+
+To run the `Vite` development server:
+```bash
+npm run dev
+```
+
+This will run the Vite development server on [localhost:3000](localhost:3000) which will serve the frontend assets.
+
 ::: info
-To close the flask local webserver: ctrl+c
+To close either of the webservers: ctrl+c
 :::
 
 The development server should now be running on [localhost:5000](localhost:5000)
 
-## Next Steps
+## Building for production
 
--   [Contributing](/developer/contributing.md)
--   [Architecture](/developer/architecture/)
+```bash
+make build
+```
+
+This will build all the assets and put them in the `nebula/static` directory and build the documentation.
