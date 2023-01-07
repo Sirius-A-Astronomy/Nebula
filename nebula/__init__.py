@@ -58,6 +58,8 @@ def create_app(config_environment="default"):
     # Register all the views within an app context
     with app.app_context():
 
+        import nebula.models # import models to create tables
+
         from nebula.cli import db as db_cli
         from nebula.cli import user as user_cli
         from nebula.routes import api, web
@@ -72,7 +74,7 @@ def create_app(config_environment="default"):
         for blueprint in blueprints:
             app.register_blueprint(blueprint)
 
-    from nebula.context_functions import context_processor
+    from nebula.helpers.global_functions import context_processor
 
     app.context_processor(context_processor)
 
@@ -87,14 +89,11 @@ def create_app(config_environment="default"):
     app.register_error_handler(400, badrequest)
     app.register_error_handler(CSRFError, lambda e: (e.description, 400))
 
-    # from nebula.utilities import before_request
-    # app.before_request(before_request)
-
     login_manager.login_view = "user.login_register"
     login_manager.login_message = "Please log in to access this page."
     login_manager.login_message_category = "warning"
 
-    from nebula.utilities import unauthorized_handler
+    from nebula.helpers.unauthorized_handler import unauthorized_handler
 
     login_manager.unauthorized_handler(unauthorized_handler)
 

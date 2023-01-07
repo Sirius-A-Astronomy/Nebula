@@ -9,7 +9,7 @@ from nebula.routes.api import bp as api_bp
 
 from nebula import db
 
-from nebula.utilities import ACCESS_LEVELS
+from nebula.helpers.access_levels import ACCESS_LEVELS
 
 bp = Blueprint("question_api", __name__, url_prefix="/questions")
 

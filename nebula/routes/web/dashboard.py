@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 
 from nebula.routes.web import bp as web_bp
-from nebula.utilities import ACCESS_LEVELS
+from nebula.helpers.access_levels import ACCESS_LEVELS
 
 bp = Blueprint("dashboard", __name__)
 

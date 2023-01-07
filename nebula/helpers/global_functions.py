@@ -19,8 +19,6 @@ def pretty_date(time=False):
     :param time: The datetime object or Epoch timestamp to convert.
     :type time: datetime or int
     """
-    from datetime import datetime
-
     now = datetime.now().astimezone(tz=None)
     if type(time) is int:
         diff = now - datetime.fromtimestamp(utc_to_local(time))

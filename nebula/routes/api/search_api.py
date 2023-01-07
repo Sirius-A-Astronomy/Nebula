@@ -2,10 +2,10 @@ from flask import jsonify, request, url_for
 from sqlalchemy import or_, select
 from sqlalchemy.sql.operators import ilike_op
 from flask_login import current_user
-from nebula.utilities import ACCESS_LEVELS
+from nebula.helpers.access_levels import ACCESS_LEVELS
 from nebula import db
 
-from nebula.context_functions import pretty_date
+from nebula.helpers.global_functions import pretty_date
 from nebula.models.answer import Answer
 from nebula.models.course import Course
 from nebula.models.question import Question

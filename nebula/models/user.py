@@ -37,7 +37,7 @@ class User(Base):
 
     """
 
-    # access_levels are defined in nebula/utilities.py
+    # access_levels are defined in nebula/helpers/access_levels.py
 
     first_name = db.Column(db.String(128))
     last_name = db.Column(db.String(128))

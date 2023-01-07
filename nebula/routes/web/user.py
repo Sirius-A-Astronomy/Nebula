@@ -23,12 +23,12 @@ from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from passlib.hash import sha256_crypt
 from wtforms import PasswordField, StringField, SubmitField, ValidationError
-from wtforms.validators import DataRequired, EqualTo, Length, Regexp
+from wtforms.validators import DataRequired, EqualTo, Length
 
 from nebula import db, is_safe_url
 from nebula.models.user import User, create_user
 from nebula.routes.web import bp as web_bp
-from nebula.utilities import ACCESS_LEVELS
+from nebula.helpers.access_levels import ACCESS_LEVELS
 
 bp = Blueprint("user", __name__)
 

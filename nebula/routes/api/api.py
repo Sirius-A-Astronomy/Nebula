@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, url_for
 from flask_login import current_user
 
-from nebula.context_functions import pretty_date
+from nebula.helpers.global_functions import pretty_date
 from nebula.models import db
 from nebula.models.course import Course
 from nebula.models.notification import Notification

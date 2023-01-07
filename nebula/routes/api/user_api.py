@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 import os
 
-from nebula.utilities import ACCESS_LEVELS
+from nebula.helpers.access_levels import ACCESS_LEVELS
 
 from nebula import db
 
