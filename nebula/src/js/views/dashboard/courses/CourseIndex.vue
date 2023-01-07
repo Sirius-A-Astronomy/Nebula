@@ -71,7 +71,7 @@ onMounted(async () => {
 
 <template>
 	<div>
-		<div class="flex flex-row items-center gap-2">
+		<div class="flex flex-row items-center gap-2 py-2">
 			<h1 class="text-3xl">Courses</h1>
 			<div class="ml-auto relative">
 				<input
@@ -106,7 +106,7 @@ onMounted(async () => {
 			>
 		</div>
 
-		<ul class="flex flex-col gap-2">
+		<ul class="flex flex-col gap-2 py-2">
 			<CourseLevel
 				v-for="level in courseLevels"
 				:key="level.id"
