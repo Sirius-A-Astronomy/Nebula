@@ -1,4 +1,7 @@
 from passlib.hash import sha256_crypt
+from sqlalchemy.ext.hybrid import hybrid_property
+
+import re
 
 from nebula.models import GUID, Base, db
 
@@ -54,12 +57,14 @@ class User(Base):
     def get_id(self):
         return self.uuid
 
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
     def set_password(self, password):
         self.password = sha256_crypt.encrypt(password)
         db.session.commit()
+
+    @hybrid_property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     # email should just be: username@astro.rug.nl, no need to store it ?
     # storing email anyway in case user wants to use a different email address
@@ -70,6 +75,17 @@ class User(Base):
 
     def __repr__(self):
         return f'User("{self.username}")'
+
+    def expose(self):
+        return {
+            "id": self.uuid,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "username": self.username,
+            "access_level": self.access_level,
+            "email": self.email,
+            "created_at": self.created_at,
+        }
 
 
 def create_user(username, password, **kwargs):
@@ -85,3 +101,45 @@ def create_user(username, password, **kwargs):
     hashed_password = sha256_crypt.encrypt(password)
     user = User(username=username, password=hashed_password, **kwargs)
     return user
+
+def validate_username(username, user=None):
+    """
+    Validates the username to be unique.
+
+    :param form: The form to validate.
+    :type form: Form
+    :param field: The field to validate.
+    :type field: StringField
+    """
+    username = username.lower()
+    if re.findall(r"\s", username):
+        return False, "Please enter a username without any spaces"
+
+    if re.match(r"[ @()+=\[\]{};\':\"\\|,.<>\/\?]", username):
+        return False, "Please enter a username without any special characters"
+
+    user_with_username = User.query.filter_by(username=username).one_or_none()
+    if user_with_username is not None and user_with_username != user:
+        return False, "It looks like we already know someone with that username, do you want to try another one?"
+
+    return True, ""
+
+
+def validate_email(email: str, user=None):
+    """
+    Validates the email to be unique. Also checks if the email is valid according to rfc2822.
+
+    :param form: The form to validate.
+    :type form: Form
+    :param field: The field to validate.
+    :type field: StringField
+    """
+    email_regex = r"""(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"""
+    if not re.match(email_regex, email):
+        return False, "We can't recognize that as an email address, please double check it"
+
+    user_with_email = User.query.filter_by(email=email).one_or_none()
+    if user_with_email is not None and user_with_email != user:
+        return False, "It looks like we already know someone with that email address, do you want to try another one?"
+    
+    return True, ""

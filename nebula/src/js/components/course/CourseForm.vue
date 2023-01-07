@@ -86,7 +86,7 @@ const submit = async () => {
 					type="text"
 					name="name"
 					id="name"
-					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors"
+					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors bg-secondary-bg focus:bg-tertiary-bg focus:ring-primary-active"
 					v-model="values.name" />
 				<p v-if="errors.name" class="text-red-500 text-sm">
 					{{ errors.name }}
@@ -99,7 +99,7 @@ const submit = async () => {
 					type="text"
 					name="code"
 					id="code"
-					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors"
+					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors bg-secondary-bg focus:bg-tertiary-bg focus:ring-primary-active"
 					v-model="values.code" />
 				<p v-if="errors.code" class="text-red-500 text-sm">
 					{{ errors.code }}
@@ -115,7 +115,7 @@ const submit = async () => {
 					name="description"
 					id="description"
 					rows="5"
-					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors"
+					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors bg-secondary-bg focus:bg-tertiary-bg focus:ring-primary-active"
 					v-model="values.description" />
 				<p v-if="errors.description" class="text-red-500 text-sm">
 					{{ errors.description }}
@@ -127,7 +127,7 @@ const submit = async () => {
 				<select
 					name="semester"
 					id="semester"
-					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors"
+					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors bg-secondary-bg focus:bg-tertiary-bg focus:ring-primary-active"
 					v-model="values.semester">
 					<option value="" disabled selected>
 						Select a semester
@@ -147,7 +147,7 @@ const submit = async () => {
 				<select
 					name="course_level_id"
 					id="course_level_id"
-					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors"
+					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors bg-secondary-bg focus:bg-tertiary-bg focus:ring-primary-active"
 					v-model="values.course_level!.id">
 					<option value="" disabled selected>
 						Select a course level

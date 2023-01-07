@@ -7,8 +7,11 @@ import CourseForm from "@components/course/CourseForm.vue";
 import useFlashStore from "@/stores/flashStore";
 
 import { useRouter } from "vue-router";
+import useModalStore from "@/stores/modalStore";
 
 const flash = useFlashStore();
+
+const modal = useModalStore();
 
 const props = defineProps<{
 	id: string;
@@ -51,16 +54,25 @@ const updateCourse = async (course: Updatable<Course>) => {
 	editting.value = false;
 };
 
-const confirmDelete = ref(false);
+const onDeleteClicked = () => {
+	modal.add({
+		title: "Delete Course",
+		body: `Are you sure you want to delete course '${course.value?.name}'?`,
+		actions: [
+			{
+				text: "Cancel",
+				type: "neutral",
+			},
+			{
+				text: "Delete",
+				type: "danger",
+				action: deleteCourse,
+			},
+		],
+	});
+};
 
 const deleteCourse = async () => {
-	if (!confirmDelete.value) {
-		confirmDelete.value = true;
-		setTimeout(() => {
-			confirmDelete.value = false;
-		}, 5000);
-		return;
-	}
 	awaitingResponse.value = true;
 	const response = await courseStore.actions.delete(props.id);
 	awaitingResponse.value = false;
@@ -72,7 +84,7 @@ const deleteCourse = async () => {
 		);
 		return;
 	}
-	router.push({ name: "dashboard-course-index" });
+	router.push({ name: "dashboard.course.index" });
 	const data = response.data as Course;
 	flash.add(`Course '${data.name}' deleted successfully`, "success");
 };
@@ -86,7 +98,7 @@ onMounted(loadData);
 	<div v-if="loading">Loading...</div>
 
 	<template v-else>
-		<template v-if="!editting">
+		<template v-if="!editting && course">
 			<div class="flex flex-row justify-between items-baseline">
 				<h1 class="text-3xl">{{ course.name }}</h1>
 
@@ -98,9 +110,9 @@ onMounted(loadData);
 					</button>
 
 					<button
-						@click="deleteCourse"
+						@click="onDeleteClicked"
 						class="px-4 py-2 bg-alert-warning text-alert-warning-text rounded-md font-bold">
-						{{ confirmDelete ? "Confirm delete" : "Delete" }}
+						Delete
 					</button>
 				</div>
 			</div>

@@ -2,13 +2,7 @@ import { computed, ref } from "vue";
 
 import api from "@http/api";
 
-export type User = {
-	id: string;
-	name: string;
-	username: string;
-	email: string;
-	access_level: number;
-};
+import type { User } from "@stores/userStore";
 
 export const authenticatedUser = ref({} as User);
 

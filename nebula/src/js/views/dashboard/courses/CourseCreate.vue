@@ -26,7 +26,7 @@ const submitCourse = async (course: Updatable<Course>) => {
 	const data = response.data as Course;
 
 	router.push({
-		name: "dashboard-course-show",
+		name: "dashboard.course.show",
 		params: { id: data.id },
 	});
 
