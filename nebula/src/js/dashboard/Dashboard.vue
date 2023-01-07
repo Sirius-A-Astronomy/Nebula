@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import { isSideMenuOpen, closeSideMenu } from "@/stores/dashboardStore";
 import { vClickOutside } from "@/vue-services/directives/clickOutside";
 import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
@@ -7,15 +7,16 @@ import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
 import useFlash from "@stores/flashStore";
 
 import "@scss/views/dashboard.scss";
-import "@scss/main.scss";
 
 import Header from "@components/dashboard/Header.vue";
 import Sidemenu from "@components/dashboard/Sidemenu.vue";
+import ModalContainer from "@components/ui/modals/ModalContainer.vue";
 
 const flash = useFlash();
 </script>
 
 <template>
+	<ModalContainer />
 	<div class="w-full min-h-screen flex flex-col">
 		<template v-if="flash.messages.value.length">
 			<div class="absolute top-0 right-0 m-4 flex flex-col gap-4 z-50">
@@ -71,7 +72,7 @@ const flash = useFlash();
 
 		<div class="md:ml-64">
 			<Header />
-			<div class="container">
+			<div class="container py-4">
 				<RouterView />
 			</div>
 		</div>
