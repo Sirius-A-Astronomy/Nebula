@@ -52,3 +52,27 @@ def update_course_level(uuid):
 
     db.session.commit()
     return jsonify(course_level.expose())
+
+@bp.route("/", methods=["POST"])
+def create_course_level():
+    if not current_user.is_authenticated or not current_user.access_level >= 3:
+        return jsonify({"message": "unauthorized"}), 401
+
+    data = request.get_json(silent=True)
+
+    name = data.get("name")
+    if name is None:
+        return jsonify({"message": "name is required"}), 400
+
+    code = data.get("code")
+    if code is None:
+        return jsonify({"message": "code is required"}), 400
+
+    study_type = data.get("study_type")
+    if study_type is None:
+        return jsonify({"message": "study_type is required"}), 400
+
+    course_level = CourseLevel(name=name, code=code, study_type=study_type)
+    db.session.add(course_level)
+    db.session.commit()
+    return jsonify(course_level.expose())
