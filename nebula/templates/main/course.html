@@ -58,5 +58,5 @@
 {% endblock body %}
 {% block include_js %}
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
-<script src="{{ url_for('static', filename='js/search_through_course.js') }}" defer></script>
+<script src="{{ vite_public_asset('js/search_through_course.js') }}" defer></script>
 {% endblock include_js %}

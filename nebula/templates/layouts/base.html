@@ -14,10 +14,8 @@ context %}
     <link rel="icon" type="image/png" href="{{ vite_public_asset('images/mark.svg') }}" />
 
     <!-- Load darkmode script first so it loads the fastest -->
-    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+    <script src="{{ vite_public_asset('js/darkmode.js') }}"></script>
 
-    <!-- Show loading animation while everything gets loaded -->
-    <!-- <script src="{{ url_for('static', filename='js/pageloadanim.js') }}"></script> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
@@ -40,12 +38,12 @@ context %}
 
     <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script src="{{ url_for('static', filename='js/mathjax-config.js') }}" defer></script>
+    <script src="{{ vite_public_asset('js/mathjax-config.js') }}" defer></script>
     <script id="MathJax-script"
         src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-mml-chtml.js" defer></script>
 
     <!-- Markdown -->
-    <script src="{{ url_for('static', filename='js/markdown-it.min.js') }}"></script>
+    <script src="{{ vite_public_asset('js/markdown-it.min.js') }}"></script>
 
     <!-- jquery -->
 
@@ -353,17 +351,15 @@ context %}
         crossorigin="anonymous">
         </script>
     <!--- Scripts -->
-    <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
-    <script type="text/javascript"
-        src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
-    <script type="module" src="{{url_for('static', filename='js/notifications.js')}}"></script>
-    <script defer type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
+    <script src="{{ vite_public_asset('js/navbar_submenu.js') }}"></script>
+    <script type="text/javascript" src="{{ vite_public_asset('js/purify.min.js') }}"></script>
+    <script type="module" src="{{vite_public_asset('js/notifications.js')}}"></script>
+    <script defer type="module" src="{{vite_public_asset('js/views.js')}}"></script>
 
 
     {% block include_js %}
     {% endblock include_js %}
 
 </body>
-<!-- <script src="{{ url_for('static', filename='js/stoppageloadanim.js') }}" defer></script> -->
 
 </html>
