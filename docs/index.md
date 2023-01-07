@@ -3,10 +3,10 @@ layout: home
 
 hero:
     name: Nebula
-    text: A database of practice questions for astronomy students
-    tagline: The Kapteyn Learning Community's database of practice questions
+    text: Prepare for your exams with Nebula
+    tagline: Brought to you by the Kapteyn Learning Committee and Sirius A
     image:
-        src: /assets/logo.png
+        src: /assets/logo.svg
         alt: Nebula logo
     actions:
         - text: Get started

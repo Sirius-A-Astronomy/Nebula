@@ -8,10 +8,26 @@ const config = defineConfig({
 
 	lastUpdated: true,
 	cleanUrls: "without-subfolders",
+	markdown: {
+		typographer: true,
+	},
 
 	themeConfig: {
-		logo: "/assets/logo.png",
+		logo: {
+			src: "/assets/mark.svg",
+			alt: "Nebula Logo",
+		},
+
 		siteTitle: "Nebula Documentation",
+
+		outline: 2,
+
+		socialLinks: [
+			{
+				icon: "github",
+				link: "https://gitlab.astro.rug.nl/sirius-a/nebula",
+			},
+		],
 
 		nav: [
 			{ text: "Home", link: "/" },
@@ -52,26 +68,31 @@ function useUserGuideSidebar() {
 		{
 			text: "User Guide",
 			items: [
-				{ text: "Introduction", link: "/user/" },
 				{
-					text: "Getting Started",
-					link: "/user/getting-started",
+					text: "Introduction",
+					link: "/user/",
+					items: [
+						{
+							text: "Getting Started",
+							link: "/user/getting-started",
+						},
+					],
 				},
 				{
-					text: "Creating Questions",
-					link: "/user/creating-questions/",
+					text: "Writing",
+					link: "/user/writing/",
 					items: [
 						{
 							text: "Markdown",
-							link: "/user/creating-questions/markdown",
+							link: "/user/writing/markdown",
 						},
 						{
 							text: "LaTeX",
-							link: "/user/creating-questions/latex",
+							link: "/user/writing/latex",
 						},
 						{
 							text: "Code",
-							link: "/user/creating-questions/code",
+							link: "/user/writing/code",
 						},
 					],
 				},
@@ -113,27 +134,38 @@ function useDeveloperGuideSidebar() {
 		{
 			text: "Developer Guide",
 			items: [
-				{ text: "Introduction", link: "/developer/" },
 				{
-					text: "Getting Started",
-					link: "/developer/getting-started",
+					text: "Introduction",
+					link: "/developer/",
+					items: [
+						{
+							text: "Getting started",
+							link: "/developer/getting-started",
+						},
+					],
 				},
 
 				{
 					text: "Architecture",
 					link: "/developer/architecture/",
+
 					items: [
 						{
-							text: "Frontend",
-							link: "/developer/architecture/frontend",
-						},
-						{
-							text: "Routes",
-							link: "/developer/architecture/routes",
+							text: "Project Structure",
+							link: "/developer/architecture/project-structure",
+							items: [
+								{
+									text: "Frontend",
+									link: "/developer/architecture/frontend",
+								},
+								{
+									text: "Routes",
+									link: "/developer/architecture/routes",
+								},
+							],
 						},
 					],
 				},
-				{ text: "API", link: "/developer/api" },
 				{
 					text: "Command Line Interfaces",
 					items: [
@@ -150,6 +182,10 @@ function useDeveloperGuideSidebar() {
 				{ text: "Frontend", link: "/developer/frontend" },
 				{ text: "Backend", link: "/developer/backend" },
 				{ text: "Testing", link: "/developer/testing" },
+				{
+					text: "Contributing",
+					link: "/developer/contributing",
+				},
 			],
 		},
 	];

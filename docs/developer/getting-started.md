@@ -1,31 +1,30 @@
 # Getting Started
 
-## Installation & Setup
+This guide will help you get Nebula up and running on your local machine.
 
 ::: info
  This guide assumes you're using linux or [wsl](https://docs.microsoft.com/en-us/windows/wsl/install)
 :::
 
-Setting up the project should be possible via the following: (all from the project root directory).
-
-<details> 
-<summary>1. Clone or pull the project (expand for more info)</summary>
+## Step 1. Clone or pull the project
 
 ```bash
 git clone https://gitlab.astro.rug.nl/sirius-a/nebula.git
 ```
 
-</details>
-<details><summary>2. Git checkout to the correct branch</summary>
 
-_Note: in this guide the branch 'dev' was used as it was the most recently used._
+::: tip
+To learn more about contributing to Nebula, see [Contributing](/developer/contributing.md)
+:::
+
+Checkout to the `branch` you want to work on. For example, if you want to work on the `dev` branch:
 
 ```bash
 git checkout dev
 ```
 
-</details>
-<details><summary>3. Create a virtual environment for the project inside the project directory. </summary>
+## Step 2. Create a virtual environment
+
 This makes sure you do not 'contaminate' your global Python dependencies with the dependencies for Nebula and vice versa.
 
 -   Go to the nebula directory
@@ -34,36 +33,34 @@ This makes sure you do not 'contaminate' your global Python dependencies with th
 cd nebula
 ```
 
--   Create the directory for the virtual environment
-
-```bash
-mkdir venv
-```
-
 -   Create the python virtual environment
 
 ```bash
 python3 -m venv venv
 ```
 
-</details>
-<details><summary>4. Activate your virtual environment</summary>
+::: info
+In this command the second `venv` is the name of the virtual environment. You can name it whatever you want, but it is recommended to keep it as `venv` for consistency.
+:::
+
+- Activate your virtual environment
 
 ```bash
 . venv/bin/activate
 ```
 
-_Note: to deactivate the virtual environment symply run `deactivate`_
+::: tip
+To deactivate the virtual environment, run `deactivate`
+:::
 
-</details>
 
-5. Install dependencies
+## Step 3. Install dependencies
 
 ```bash
 make deps-dev
 ```
 
-<details><summary>6. Create and seed the database</summary>
+## Step 4. Database creation and seeding
 
 ```bash
 export FLASK_APP=nebula
@@ -71,17 +68,13 @@ export FLASK_APP=nebula
 flask db init
 
 flask db seed
-
-# or `flask db seed_dev`
 ```
 
 :::tip Learn More
 For more information on the database CLI commands, see [here](/developer/cli/database-cli.md)
 :::
 
-</details>
-
-1. It should be possible to run Nebula via the following command:
+## Step 5. Run the development server
 
 ```bash
 make dev-server
@@ -91,6 +84,9 @@ make dev-server
 To close the flask local webserver: ctrl+c
 :::
 
-8. It should be available at [localhost:5000](localhost:5000/) in your browser, or via a link in the command prompt.
+The development server should now be running on [localhost:5000](localhost:5000)
 
-Now you should be good to go!
+## Next Steps
+
+-   [Contributing](/developer/contributing.md)
+-   [Architecture](/developer/architecture/)
