@@ -84,10 +84,11 @@ def create_app(config_environment="default"):
         pagenotfound,
     )
 
+    from nebula.helpers.csrf_error_handler import csrf_error_handler
     app.register_error_handler(404, pagenotfound)
     app.register_error_handler(500, internalerror)
     app.register_error_handler(400, badrequest)
-    app.register_error_handler(CSRFError, lambda e: (e.description, 400))
+    app.register_error_handler(CSRFError, csrf_error_handler)
 
     login_manager.login_view = "user.login_register"
     login_manager.login_message = "Please log in to access this page."
