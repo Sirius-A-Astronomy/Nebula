@@ -13,3 +13,13 @@ def me():
     user = current_user
 
     return jsonify(user.expose()), 200
+
+@bp.route("/logout", methods=["POST"])
+def logout():
+    from flask_login import logout_user
+
+    logout_user()
+
+    return jsonify({
+        "message": "Successfully logged out."
+    }), 200

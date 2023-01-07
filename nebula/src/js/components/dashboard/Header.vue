@@ -6,16 +6,35 @@ import {
 	closeProfileMenu,
 } from "@/stores/dashboardStore";
 
-import { authenticatedUser } from "@/stores/sessionStore";
+import {
+	authenticatedUser,
+	logout as logoutStore,
+} from "@/stores/sessionStore";
 
 import { vClickOutside } from "@/vue-services/directives/clickOutside";
 import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
+import useFlashStore from "@/stores/flashStore";
 
 import Search from "@components/global_search/Search.vue";
 
 const user = authenticatedUser;
+const flash = useFlashStore();
 
 const withSearch = true;
+
+const logout = async () => {
+	const response = await logoutStore();
+	if (response.status !== 200) {
+		flash.add(
+			`Something went wrong while logging out. Please try again later. ${response.message}`,
+			"error"
+		);
+		return;
+	}
+
+	flash.add("You have been logged out.", "success");
+	location.href = "/";
+};
 </script>
 
 <template>
@@ -115,7 +134,8 @@ const withSearch = true;
 							</li>
 							<li class="flex">
 								<button
-									class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-200">
+									class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-slate-100 hover:text-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+									@click="logout">
 									<svg
 										class="w-4 h-4 mr-3"
 										aria-hidden="true"

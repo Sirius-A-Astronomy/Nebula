@@ -31,3 +31,9 @@ export class FetchUserFailedError extends Error {
 		super("Failed to fetch user");
 	}
 }
+
+export const logout = async () => {
+	const response = await api.post("/logout", {});
+	authenticatedUser.value = {} as User;
+	return response;
+};
