@@ -6,21 +6,6 @@
 
 async function isUsernameAvailable(username) {
 	let valid_username = true;
-	// await $.ajax({
-	// 	url: "/api/is_username_available",
-	// 	type: "POST",
-	// 	data: JSON.stringify({
-	// 		username: username,
-	// 	}),
-	// 	contentType: "application/json",
-	// 	dataType: "json",
-	// 	success: function (data) {
-	// 		valid_username = data.available;
-	// 	},
-	// 	error: function (data) {
-	// 		console.log(data);
-	// 	},
-	// });
 	try {
 		const response = await fetch("/api/is_username_available", {
 			method: "POST",
@@ -84,7 +69,7 @@ async function startFormValidation() {
 
 async function validateUsername() {
 	let usernameInputField = document.getElementById("username-input-field");
-	let username = $(usernameInputField).val();
+	let username = usernameInputField.value;
 
 	if (username.length < 3) {
 		addInvalidFeedback(
@@ -136,11 +121,11 @@ async function validateUsername() {
 
 function validatePassword() {
 	let passwordInputField = document.getElementById("password-input-field");
-	let password = $(passwordInputField).val();
+	let password = passwordInputField.value;
 	let passwordConfirmationInputField = document.getElementById(
 		"password-confirmation-input-field"
 	);
-	let passwordConfirmation = $(passwordConfirmationInputField).val();
+	let passwordConfirmation = passwordConfirmationInputField.value;
 
 	if (password.length < 12) {
 		addInvalidFeedback(
@@ -279,7 +264,6 @@ function addInvalidFeedback(element, feedbackMessage) {
 }
 
 function addValidatingFeedback(element, feedbackMessage) {
-
 	element.classList.add("is-validating");
 	element.classList.remove("is-invalid");
 	element.classList.remove("is-valid");

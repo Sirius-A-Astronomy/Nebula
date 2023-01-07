@@ -187,7 +187,6 @@ class Question {
 
 		questionListItem__Body.append(
 			questionListItem__Body__Title,
-
 			questionListItem__Body__PostedAt
 		);
 
@@ -202,7 +201,7 @@ class Question {
 		);
 		questionListItem__Footer__Answers.textContent = `
                     ${this.answersCount} ${
-			this.answersCount == 1 ? "answer" : "answers"
+			this.answersCount == 1 ? "Answer" : "Answers"
 		}`;
 
 		//      COMMENTS
@@ -212,7 +211,7 @@ class Question {
 		);
 		questionListItem__Footer__Comments.textContent = `${
 			this.commentsCount
-		} ${this.commentsCount == 1 ? "comment" : "comments"}`;
+		} ${this.commentsCount == 1 ? "Comment" : "Comments"}`;
 
 		questionListItem__Footer.append(
 			questionListItem__Footer__Answers,
