@@ -21,3 +21,19 @@
     href="{{ url_for('static', filename=(manifest['nebula/src/' + source]['file'])) }}">
 {% endif %}
 {% endmacro %}
+
+{% macro vite_asset(source) -%}
+{% if development %}
+{{'http://localhost:5173/nebula/src/' + source }}
+{% else %}
+{{ url_for('static', filename=(manifest['nebula/src/' + source]['file'])) }}
+{% endif %}
+{% endmacro %}
+
+{% macro vite_public_asset(source) -%}
+{% if development %}
+{{'http://localhost:5173/' + source }}
+{% else %}
+{{ url_for('static', filename=source) }}
+{% endif %}
+{% endmacro %}

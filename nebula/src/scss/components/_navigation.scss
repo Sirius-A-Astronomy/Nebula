@@ -108,6 +108,13 @@
 		max-height: 3.125rem;
 	}
 
+	.logo {
+		color: var(--color-primary-active);
+		height: 4rem;
+		width: 4rem;
+		background: url("/images/mark.svg") no-repeat center center;
+	}
+
 	div {
 		display: inline-block;
 		vertical-align: middle;

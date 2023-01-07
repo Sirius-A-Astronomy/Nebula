@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<!--  UNFINISHED -->
 <html lang="en" class="dark-mode">
+{% from "utilities/vite.html" import vite_script, vite_style, vite_asset, vite_public_asset with
+context %}
 
 <head>
     <title>
@@ -10,8 +11,7 @@
     <meta name="description"
         content=" This is the Nebula Database by the Kapteyn Learning Community. It is a repository of user-submitted practice questions. ">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" type="image/png"
-        href="{{ url_for('static', filename='images/siriuswebheader.png') }}" />
+    <link rel="icon" type="image/png" href="{{ vite_public_asset('images/mark.svg') }}" />
 
     <!-- Load darkmode script first so it loads the fastest -->
     <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
@@ -54,7 +54,6 @@
     <script type="module" src="http://localhost:5173/@vite/client"></script>
     {% endif %}
 
-    {% from "utilities/vite.html" import vite_script, vite_style with context %}
     {{ vite_style('scss/main.scss') }}
 
 
@@ -159,6 +158,10 @@
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <div class="container-lg">
                     <a class="navbar-brand" href="{{ url_for('web.main.index') }}">
+                        <div class="logo">
+
+                        </div>
+
                         <div>
                             <span class="site-name">Nebula</span>
                         </div>
