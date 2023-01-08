@@ -9,3 +9,7 @@
 .VPSkipLink {
 	color: var(--vp-c-brand) !important;
 }
+
+.vp-code-group .tabs label::after {
+	z-index: 1; /* fix collision with navbar */
+}
