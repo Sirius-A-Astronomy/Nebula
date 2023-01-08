@@ -37,6 +37,9 @@
             "@http/*": [
                 "nebula/src/js/http/*"
             ],
+            "@public/*": [
+                "nebula/src/public/*"
+            ],
         },
         "typeRoots": [
             "node_modules/@types",

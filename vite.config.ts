@@ -70,6 +70,9 @@ export default defineConfig({
 			"@http": fileURLToPath(
 				new URL("./nebula/src/js/http", import.meta.url)
 			),
+			// public files are copied to the root of the build directory and dev server
+			// so the vite alias differs from the tsconfig alias
+			"@public": fileURLToPath(new URL("./", import.meta.url)),
 		},
 	},
 });
