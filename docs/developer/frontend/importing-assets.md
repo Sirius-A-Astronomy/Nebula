@@ -98,3 +98,57 @@ http://localhost:5174/images/logo.svg
 ## Importing assets in `TypeScript` and `Vue`
 
 Assets in `TypeScript` and `Vue` files can just be imported the same way as in any other `TypeScript` or `Vue` project. Vite will handle the import depending on the environment.
+
+```ts
+// Import a script
+import { createApp } from 'vue';
+
+// Import a style
+import '@scss/main.scss';
+
+// Import an asset
+import logo from '@public/images/logo.svg';
+```
+
+
+### Aliases
+
+A few aliases are available to make it easier to import assets. The aliases are defined in `nebula/src/js/vite.config.ts`.
+
+Creating a new alias is as simple as adding a new entry to the `resolve.alias` object in `vite.config.ts` and adding it to `"compilerOptions"."paths"` in `tsconfig.json`.
+
+Adding the alias to `vite.config.ts` ensures that the alias will work in `TypeScript` and `Vue` files.
+
+Adding the alias to `tsconfig.json` will allow editors to resolve the alias.
+
+```ts
+// vite.config.ts // [!code focus:4]
+export default defineConfig({
+  resolve: {
+    alias: {
+      // ...
+      '@': path.resolve(__dirname, 'js'), // [!code focus:3]
+      '@public': path.resolve(__dirname, 'public'),
+      '@scss': path.resolve(__dirname, 'scss'),
+      // ...
+    },
+  },
+});
+```
+
+```json
+// tsconfig.json // [!code focus:1]
+{
+  "compilerOptions": { // [!code focus]
+    // ...
+    "paths": { // [!code focus]
+      // ...
+      "@/*": ["js/*"], // [!code focus:3]
+      "@public/*": ["public/*"],
+      "@scss/*": ["scss/*"],
+      // ...
+    },
+    // ...
+  }
+}
+```
