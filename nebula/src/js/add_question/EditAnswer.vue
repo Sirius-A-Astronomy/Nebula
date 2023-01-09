@@ -3,7 +3,7 @@ import type { Answer } from "@/add_question/add_question";
 
 import { ref, type Ref } from "vue";
 
-import MarkdownVue from "@components/Markdown.vue";
+import MarkdownEditor from "@/components/MarkdownEditor.vue";
 
 defineProps<{
 	answer: Answer;
@@ -23,58 +23,36 @@ const showPreviews = ref({
 
 <template>
 	<div ref="answerElement">
-		<div class="form-group input-field">
-			<label for="answer-title">Answer Title</label>
-			<input
-				type="text"
-				class="form-control"
-				id="answer-title"
-				name="answer-title"
-				v-model="answer.title" />
-			<button
-				class="button-accent"
-				@click.prevent="
-					showPreviews['answer-title'] = !showPreviews['answer-title']
-				">
-				{{
-					showPreviews["answer-title"]
-						? "Hide Preview"
-						: "Show Preview"
-				}}
-			</button>
-		</div>
+		<MarkdownEditor
+			v-model="answer.title"
+			default-tab="source"
+			placeholder="Enter answer title here"
+			title="Answer Title"
+			:custom-text="{
+				renderedLabel: 'Preview',
+				sourceLabel: 'Edit',
+				sideBySideLabel: 'Edit & Preview',
+			}"
+			:options="{
+				maxRows: 1,
+				sourceFirst: true,
+				disableMarkdown: true,
+			}" />
 
-		<h4 v-if="showPreviews['answer-title']">Title Preview</h4>
-		<MarkdownVue
-			v-if="showPreviews['answer-title']"
-			:content="answer.title" />
-
-		<div class="form-group input-field mt-2">
-			<label for="answer-content">Answer Content</label>
-			<textarea
-				class="form-control"
-				id="answer-content"
-				name="answer-content"
-				rows="3"
-				v-model="answer.content"></textarea>
-			<button
-				class="button-accent"
-				@click.prevent="
-					showPreviews['answer-content'] =
-						!showPreviews['answer-content']
-				">
-				{{
-					showPreviews["answer-content"]
-						? "Hide Preview"
-						: "Show Preview"
-				}}
-			</button>
-		</div>
-
-		<h4 v-if="showPreviews['answer-content']">Answer Preview</h4>
-		<MarkdownVue
-			v-if="showPreviews['answer-content']"
-			:content="answer.content" />
+		<MarkdownEditor
+			v-model="answer.content"
+			default-tab="source"
+			placeholder="Enter answer content here"
+			title="Answer Content"
+			:custom-text="{
+				renderedLabel: 'Preview',
+				sourceLabel: 'Edit',
+				sideBySideLabel: 'Edit & Preview',
+			}"
+			:options="{
+				sourceFirst: true,
+				tabToIndentToggle: true,
+			}" />
 
 		<button
 			type="button"
