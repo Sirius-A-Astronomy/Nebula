@@ -85,16 +85,8 @@ function useUserGuideSidebar() {
 			text: "Writing",
 			items: [
 				{
-					text: "Markdown",
+					text: "Markdown and LaTeX",
 					link: "/user/writing/markdown",
-				},
-				{
-					text: "LaTeX",
-					link: "/user/writing/latex",
-				},
-				{
-					text: "Code",
-					link: "/user/writing/code",
 				},
 			],
 		},
@@ -175,11 +167,11 @@ function useDeveloperGuideSidebar() {
 			items: [
 				{
 					text: "Routes",
-					link: "/developer/architecture/project-structure/routes",
+					link: "/developer/backend/routes",
 				},
 				{
 					text: "Models",
-					link: "/developer/architecture/project-structure/models",
+					link: "/developer/backend/models",
 				},
 			],
 		},

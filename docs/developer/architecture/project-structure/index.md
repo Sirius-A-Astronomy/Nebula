@@ -53,7 +53,7 @@ The routes are split into two categories: API and Web. The API routes are used f
 ```
 
 ::: tip More Information
-For more information on the routes, see the [Routes](/developer/architecture/project-structure/routes) section.
+For more information on the routes, see the [Routes](/developer/backend/routes) section.
 :::
 
 ### Models
@@ -72,7 +72,7 @@ Models are defined in the `models` directory. Each model is defined in its own f
  ```
 
 ::: tip More Information
-For more information on the models, see the [Models](/developer/architecture/project-structure/models) section.
+For more information on the models, see the [Models](/developer/backend/models) section.
 :::
 
 ## Frontend
