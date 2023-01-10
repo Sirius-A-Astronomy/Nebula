@@ -29,19 +29,35 @@ export const addMathJaxScrips = () => {
 };
 
 let attempts = 0;
+let mathjax: any;
 
-export const useMathJax = async () => {
-	if ((window as any).MathJax?.version) {
-		return (window as any).MathJax;
-	}
+let moduleState: "uninitialised" | "initialising" | "initialised" =
+	"uninitialised";
 
-	if (attempts > 10) {
-		console.error("MathJax failed to load");
+export const initMathJax = async () => {
+	if (moduleState === "initialised") {
 		return;
 	}
+	if (moduleState === "initialising") {
+		if (!(window as any).MathJax?.version) {
+			await new Promise((resolve) => setTimeout(resolve, 100));
+			return await initMathJax();
+		}
+		if ((window as any).MathJax?.version) {
+			mathjax = (window as any).MathJax;
+			moduleState = "initialised";
+		}
+		return;
+	}
+	moduleState = "initialising";
 	addMathJaxScrips();
-
-	attempts++;
 	await new Promise((resolve) => setTimeout(resolve, 100));
-	return await useMathJax();
+	return await initMathJax();
+};
+
+export const useMathJax = async () => {
+	if (!mathjax) {
+		await initMathJax();
+	}
+	return mathjax;
 };
