@@ -32,7 +32,7 @@ Inline math is written between dollar signs. For example:
 $ x^2 + y^2 = z^2 $
 ```
 
-will render as:
+... will render as:
 <MarkdownEditor 
     :content="`$ x^2 + y^2 = z^2 $`"/>
 
@@ -46,7 +46,7 @@ For example:
 $$ x^2 + y^2 = z^2 $$
 ```
 
-will render as:
+... will render as:
 
 <MarkdownEditor 
     :content="`$$ x^2 + y^2 = z^2 $$`"/>
@@ -65,7 +65,7 @@ Headers are written with the `#` symbol. The number of `#` symbols determines th
 ### Subsubheader
 ```
 
-will render as:
+... will render as:
 
 <MarkdownEditor 
     :content="`# Header
