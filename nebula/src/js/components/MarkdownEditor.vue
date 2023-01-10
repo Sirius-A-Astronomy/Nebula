@@ -136,23 +136,19 @@ const keyDownHandler = (event: KeyboardEvent) => {
 			:class="{
 				'side-by-side': selectedTab === 'side-by-side',
 			}">
-			<textarea
-				:rows="
-					options?.maxRows
-						? Math.min(
-								options.maxRows,
-								contentEditable.split('\n').length + 1
-						  )
-						: contentEditable.split('\n').length + 1
-				"
-				:placeholder="placeholder ?? 'Enter your markdown here...'"
-				v-show="
+			<div
+				class="textarea-wrapper"
+				:data-replicated-value="contentEditable"
+				v-if="
 					selectedTab === 'source' || selectedTab === 'side-by-side'
-				"
-				@keydown="keyDownHandler"
-				ref="markdownEditElement"
-				@input="emit('update:modelValue', contentEditable)"
-				v-model="contentEditable" />
+				">
+				<textarea
+					:placeholder="placeholder ?? 'Enter your markdown here...'"
+					@keydown="keyDownHandler"
+					ref="markdownEditElement"
+					@input="emit('update:modelValue', contentEditable)"
+					v-model="contentEditable" />
+			</div>
 			<Markdown
 				class="vp-markdown-preview"
 				v-show="
@@ -172,8 +168,12 @@ const keyDownHandler = (event: KeyboardEvent) => {
 	margin-top: 16px;
 	margin-bottom: 12px;
 	padding-top: 12px;
+	padding-inline: 24px;
 	background-color: var(--color-background, var(--vp-c-black-mute));
 	border-radius: 12px;
+
+	margin-left: -24px;
+	margin-right: -24px;
 }
 
 .editor-actions {
@@ -231,20 +231,44 @@ const keyDownHandler = (event: KeyboardEvent) => {
 .markdown-editor-content {
 	margin-right: -24px;
 	margin-left: -24px;
-	padding: 8px 12px;
+	padding: 8px 24px;
 	color: var(--color-text-primary, var(--vp-code-block-color));
 	overflow: auto;
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 0.5rem;
 	overflow-y: hidden;
 	tab-size: 4;
 
 	&.side-by-side {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	textarea {
+	// text-area wrapper provides auto resizing to the text-area
+	.textarea-wrapper {
+		display: grid;
+
+		&::after {
+			// wrapper::after needs to have exactly the same styles as the text-area
+			// and the same content
+
+			// this causes it to be exactly the same size as the text-area should be
+			// causing the parent to resize to fit the text-area
+			content: attr(data-replicated-value) "\n \n ";
+
+			white-space: pre-wrap;
+			font-family: monospace;
+			padding: 12px;
+
+			visibility: hidden;
+		}
+	}
+
+	// wrapper::after needs to have exactly the same styles as the text-area
+	textarea,
+	.textarea-wrapper::after {
+		grid-area: 1/ 1 / 2 / 2;
+
 		height: 100%;
 		border-radius: 8px;
 		border: none;
@@ -252,9 +276,11 @@ const keyDownHandler = (event: KeyboardEvent) => {
 		font-size: 14px;
 		line-height: 1.5;
 		background-color: var(--color-code-bg, var(--vp-code-tab-bg));
-		color: var(--color-code-text);
-		resize: vertical;
-		overflow-y: auto;
+		color: var(--color-code-text, var(--vp-code-tab-text-color));
+		resize: none;
+		overflow-y: hidden;
+		tab-size: 4;
+		word-wrap: break-word;
 
 		&::placeholder {
 			color: var(--color-neutral-400, var(--vp-code-tab-placeholder));
@@ -281,6 +307,11 @@ const keyDownHandler = (event: KeyboardEvent) => {
 }
 
 @media (min-width: 640px) {
+	.markdown-editor {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
 	.markdown-editor-header .tabs {
 		margin-right: 0;
 		margin-left: 0;
@@ -291,12 +322,16 @@ const keyDownHandler = (event: KeyboardEvent) => {
 		border-radius: 0 0 8px 8px;
 		margin-right: 0;
 		margin-left: 0;
+		padding: 8px 12px;
 	}
 }
 
 .markdown-editor-header .tabs input {
 	position: absolute;
 	opacity: 0;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	pointer-events: none;
 }
 
