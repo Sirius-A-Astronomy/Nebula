@@ -27,30 +27,11 @@ const props = defineProps<{
 	};
 }>();
 
-// const markdown = useMarkdown({
-// 	highlight: function (str, lang) {
-// 		if (lang && highlightjs.getLanguage(lang)) {
-// 			try {
-// 				return (
-// 					`<div class="language-${lang}"><pre><code>` +
-// 					highlightjs.highlight(str, {
-// 						language: lang,
-// 						ignoreIllegals: true,
-// 					}).value +
-// 					"</code></pre></div>"
-// 				);
-// 			} catch (__) {}
-// 		}
+let highlighter: any; // initialised in onMounted
+let mathjax: any; // initialised in onMounted
 
-// 		return (
-// 			'<pre class="hljs"><code>' +
-// 			markdown.utils.escapeHtml(str) +
-// 			"</code></pre>"
-// 		);
-// 	},
-// });
-
-let highlighter: any;
+const markdownElement: Ref<HTMLDivElement | null> = ref(null);
+const sanitizedMarkdown: Ref<string> = ref("");
 
 const markdown: any = useMarkdown({
 	highlight: (str, lang) => {
@@ -84,25 +65,27 @@ const markdown: any = useMarkdown({
 	},
 });
 
-let mathjax: any;
-
-const markdownElement: Ref<HTMLDivElement | null> = ref(null);
 const renderMarkdown = throttle(1000, (value) => {
-	const sanitizedValue = DOMPurify.sanitize(value.trim(), {
-		ALLOWED_TAGS: [],
-	});
+	let workingValue = value;
 	try {
 		// Try to render markdown
-		sanitizedMarkdown.value = !props.options?.disableMarkdown
-			? markdown.render(sanitizedValue)
-			: sanitizedValue;
+		workingValue = !props.options?.disableMarkdown
+			? markdown.render(value)
+			: value;
 	} catch (e) {
 		// If it fails, just display the raw markdown
-		sanitizedMarkdown.value = sanitizedValue;
+		workingValue = value;
 	}
+
+	// Sanitize the markdown and set it to the ref
+	sanitizedMarkdown.value = DOMPurify.sanitize(workingValue, {
+		KEEP_CONTENT: true,
+	});
+
 	// Start MathJax typesetting asynchronously
 	if (props.options?.disableMathJax) return;
 	if (!mathjax) {
+		// if mathjax is not loaded yet, try again in 1 sec (throttle)
 		renderMarkdown(value);
 		return;
 	}
@@ -123,8 +106,6 @@ onMounted(async () => {
 	highlighter = await getShikiHighlighter();
 	renderMarkdown(props.content);
 });
-
-const sanitizedMarkdown: Ref<string> = ref("");
 </script>
 
 <template>
@@ -142,6 +123,26 @@ const sanitizedMarkdown: Ref<string> = ref("");
 
 	font-family: "Lato", "Roboto", "Arial", sans-serif;
 	font-weight: 300;
+	word-break: break-word;
+
+	mjx-container {
+		min-width: 0 !important;
+		overflow-y: hidden;
+		overflow-x: auto;
+		height: 100%;
+
+		&[display="true"] {
+			overflow-x: auto;
+			& > mjx-math {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 4px 0;
+			}
+		}
+	}
 
 	mjx-merror {
 		background-color: var(
