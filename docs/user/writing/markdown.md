@@ -28,7 +28,7 @@ For more information on Mathjax, see [here](https://www.mathjax.org/).
 ### Inline math
 Inline math is written between dollar signs. For example:
 
-```
+```md
 $ x^2 + y^2 = z^2 $
 ```
 
@@ -43,7 +43,7 @@ Display math is written between double dollar signs. Display math is centered an
 
 For example:
 
-```
+```md
 $$ x^2 + y^2 = z^2 $$
 ```
 
@@ -59,7 +59,7 @@ $$ x^2 + y^2 = z^2 $$
 
 Headers are written with the `#` symbol. The number of `#` symbols determines the size of the header. 
 
-```
+```md
 # Header
 
 ## Subheader
@@ -85,7 +85,7 @@ Headers are written with the `#` symbol. The number of `#` symbols determines th
 
 Unordered lists are written with the `-` symbol.
 
-```
+```md
 - Item 1
 - Item 2
 - Item 3
@@ -105,7 +105,7 @@ Unordered lists are written with the `-` symbol.
 
 To create an ordered list use `1.` for each item.
 
-```
+```md
 1. Item 1
 1. Item 2
 1. Item 3
@@ -124,7 +124,7 @@ To create an ordered list use `1.` for each item.
 
 Images are written with the following syntax:
 
-```
+```md
 ![Image description](https://example.com/image.png)
 ```
 
@@ -139,7 +139,7 @@ Images are written with the following syntax:
 
 Links are written with the following syntax:
 
-```
+```md
 [Link description](https://example.com)
 ```
 
@@ -154,7 +154,7 @@ Links are written with the following syntax:
 
 Tables are written with the following syntax:
 
-```
+```md
 | Header 1 | Header 2 | Header 3 |
 | -------- | -------- | -------- |
 | Item 1   | Item 2   | Item 3   |
@@ -183,7 +183,7 @@ More information on tables can be found [here](https://www.markdownguide.org/ext
 
 Inline code is written between backticks.
 
-```
+```md
 This is a line with `inline code`!
 ```
 
@@ -197,7 +197,7 @@ This is a line with `inline code`!
 
 Code blocks are written between triple backticks.
 
-````
+````md
 ```
 def function():
     print("This is a code block!")
@@ -208,7 +208,7 @@ def function():
 A language can be specified after the first set of backticks. This will enable syntax highlighting.
 
 
-````
+````md
 ```python
 def function():
     print("This is a code block!")
