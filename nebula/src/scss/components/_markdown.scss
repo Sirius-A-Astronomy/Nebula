@@ -1,0 +1,90 @@
+@use "../abstracts/mixins" as *;
+
+.markdown-view pre code {
+	display: block;
+	padding: 0.5em;
+	background-color: var(--color-background);
+	color: var(--color-text-primary);
+	border-radius: 0.5rem;
+	overflow-x: auto;
+}
+
+mjx-container {
+	overflow-x: auto;
+	min-width: 0 !important;
+}
+
+.markdown-view {
+	display: flex;
+	flex-direction: column;
+
+	& > * {
+		word-break: normal;
+	}
+
+	img {
+		max-width: 100%;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: "Lato", "Roboto", "Arial", sans-serif;
+		// font-weight: 500;
+	}
+
+	h1 {
+		font-size: 1.6rem;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	h3 {
+		font-size: 1.2rem;
+	}
+
+	h4 {
+		font-size: 1.1rem;
+	}
+
+	h5 {
+		font-size: 1.05rem;
+	}
+
+	h6 {
+		font-size: 1rem;
+	}
+
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		width: 100%;
+		border: 1px solid var(--color-text-primary);
+
+		th {
+			padding: 8px;
+			font-weight: 700;
+			font-size: 0.9rem;
+			border: 1px solid var(--color-text-primary);
+			background-color: var(--color-background-tertiary);
+		}
+
+		td {
+			padding: 8px;
+			border: 1px solid var(--color-text-primary);
+		}
+
+		tr:nth-child(odd) {
+			background-color: var(--color-background-secondary);
+		}
+
+		tr:nth-child(even) {
+			background-color: var(--color-background-tertiary);
+		}
+	}
+}

@@ -1,0 +1,44 @@
+{
+    "course_levels": [
+        {
+            "name": "First Year",
+            "id": 0
+        },
+        {
+            "name": "Second Year",
+            "id": 1
+        },
+        {
+            "name": "Third Year",
+            "id": 2
+        },
+        {
+            "name": "General",
+            "id": 3
+        }
+    ],
+    "courses": [
+        {
+            "id": 0,
+            "subcourses": [
+                {
+                    "name": "Linear Algebra (for Physics"
+                },
+                {
+                    "name": "Calculus 1"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "subcourses": [
+                {
+                    "name": "Thermal Physics"
+                },
+                {
+                    "name": "Quantum Physics 2"
+                }
+            ]
+        }
+    ]
+}

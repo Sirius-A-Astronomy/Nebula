@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Added your question to {{ course.name }} - Nebula{% endblock %}
+{% from 'utilities/macros.html' import question_view with context %}
+{% block body %}
+<main>
+    <div class="container-lg">
+        <h2>Question added to {{ course.name }}</h2>
+        <p class="text-tertiary">
+            Preview:
+        </p>
+        <div class="question-preview">
+            {{ question_view(question) }}
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+            <a href="{{ url_for('web.add_question.add_question', course_code=question.course.code)}}"
+                class="button-accent">
+                Add another question
+            </a>
+            <a href="{{ url_for('web.course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
+                class="button-accent">
+                {% if course_code is not none %}
+                Back
+                {% else %}
+                Go
+                {% endif %}
+                to {{ course.name }}
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

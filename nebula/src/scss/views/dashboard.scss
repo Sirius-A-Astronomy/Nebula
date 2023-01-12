@@ -1,0 +1,11 @@
+@use "../abstracts/colors" as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	@apply bg-primary-bg;
+
+	@apply text-primary-text;
+}
