@@ -62,6 +62,8 @@ make deps-dev
 
 ## Step 4. Database creation and seeding
 
+Initialize the database and seed it with some data.
+
 ```bash
 export FLASK_APP=nebula
 
@@ -92,7 +94,7 @@ To run the `Vite` development server:
 npm run dev
 ```
 
-This will run the Vite development server on [localhost:3000](localhost:3000) which will serve the frontend assets.
+This will run the Vite development server on [localhost:5173](localhost:5173) which will serve the frontend assets.
 
 ::: info
 To close either of the webservers: ctrl+c
