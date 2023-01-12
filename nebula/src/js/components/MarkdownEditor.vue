@@ -4,7 +4,6 @@ import Markdown from "./Markdown.vue";
 
 const props = defineProps<{
 	content?: string;
-	defaultTab?: string;
 	modelValue?: string;
 	customText?: {
 		renderedLabel?: string;
@@ -13,9 +12,11 @@ const props = defineProps<{
 	};
 	placeholder?: string;
 	title?: string;
+	preset?: "docs";
 	options?: {
+		defaultTab?: string;
 		maxRows?: number;
-		sourceFirst?: boolean;
+		renderedFirst?: boolean;
 		disableMarkdown?: boolean;
 		disableMathJax?: boolean;
 		tabToIndentToggle?: boolean;
@@ -24,6 +25,53 @@ const props = defineProps<{
 
 const contentEditable = ref(props.modelValue ?? props.content ?? "");
 
+const presets = {
+	docs: {
+		options: {
+			defaultTab: "rendered",
+			renderedFirst: true,
+			disableMarkdown: false,
+			disableMathJax: false,
+			tabToIndentToggle: false,
+		},
+		customText: {
+			renderedLabel: "Rendered",
+			sourceLabel: "Source",
+			sideBySideLabel: "Side-by-side",
+		},
+	},
+};
+
+const options = computed(() => {
+	if (props.preset && presets[props.preset!]) {
+		return Object.entries(presets[props.preset!].options).reduce(
+			(acc, [key, value]) => {
+				if (props.options?.[key] === undefined) {
+					acc[key] = value;
+				}
+				return acc;
+			},
+			props.options ?? {}
+		);
+	}
+	return props.options;
+});
+
+const customText = computed(() => {
+	if (props.preset) {
+		return Object.entries(presets[props.preset!].customText).reduce(
+			(acc, [key, value]) => {
+				if (props.customText?.[key] === undefined) {
+					acc[key] = value;
+				}
+				return acc;
+			},
+			props.customText ?? {}
+		);
+	}
+	return props.customText;
+});
+
 watch(
 	[() => props.modelValue, () => props.content],
 	([modelValue, content]) => {
@@ -31,7 +79,7 @@ watch(
 	}
 );
 
-const selectedTab = ref(props.defaultTab || "rendered");
+const selectedTab = ref(options.value?.defaultTab || "source");
 
 const emit = defineEmits<{
 	(e: "update:modelValue", value: string): void;
@@ -41,19 +89,19 @@ const tabs = computed(() => {
 	const tabs = [
 		{
 			name: "rendered",
-			label: props.customText?.renderedLabel ?? "Rendered",
+			label: customText.value?.renderedLabel ?? "Rendered",
 		},
 		{
 			name: "source",
-			label: props.customText?.sourceLabel ?? "Source",
+			label: customText.value?.sourceLabel ?? "Source",
 		},
 		{
 			name: "side-by-side",
-			label: props.customText?.sideBySideLabel ?? "Side-by-side",
+			label: customText.value?.sideBySideLabel ?? "Side-by-side",
 		},
 	];
 
-	if (props.options?.sourceFirst) {
+	if (!options.value?.renderedFirst) {
 		// swap the first two elements
 		[tabs[0], tabs[1]] = [tabs[1], tabs[0]];
 	}
@@ -95,7 +143,7 @@ const keyDownHandler = (event: KeyboardEvent) => {
 </script>
 
 <template>
-	<div class="markdown-editor">
+	<div class="markdown-editor" :class="`preset-${preset}`">
 		<div class="markdown-editor-header">
 			<h4 class="title" v-if="title">{{ title }}</h4>
 			<div class="tabs">
@@ -168,12 +216,13 @@ const keyDownHandler = (event: KeyboardEvent) => {
 	margin-top: 16px;
 	margin-bottom: 12px;
 	padding-top: 12px;
-	padding-inline: 24px;
 	background-color: var(--color-background, var(--vp-c-black-mute));
-	border-radius: 12px;
 
-	margin-left: -24px;
-	margin-right: -24px;
+	&.preset-docs {
+		padding-inline: 24px;
+		margin-left: -24px;
+		margin-right: -24px;
+	}
 }
 
 .editor-actions {
@@ -217,14 +266,8 @@ const keyDownHandler = (event: KeyboardEvent) => {
 	.tabs {
 		position: relative;
 		display: flex;
-		margin-right: -24px;
-		margin-left: -24px;
 		overflow-x: hidden;
 		padding: 0 12px;
-	}
-
-	.side-by-side {
-		margin-left: auto;
 	}
 }
 
@@ -308,8 +351,11 @@ const keyDownHandler = (event: KeyboardEvent) => {
 
 @media (min-width: 640px) {
 	.markdown-editor {
-		margin-left: 0;
-		margin-right: 0;
+		&.preset-docs {
+			margin-left: 0;
+			margin-right: 0;
+			border-radius: 12px;
+		}
 	}
 
 	.markdown-editor-header .tabs {
@@ -339,7 +385,6 @@ const keyDownHandler = (event: KeyboardEvent) => {
 	position: relative;
 	display: inline-block;
 	border-bottom: 1px solid transparent;
-	padding: 0 12px;
 	line-height: 48px;
 	font-size: 14px;
 	font-weight: 500;
@@ -347,13 +392,21 @@ const keyDownHandler = (event: KeyboardEvent) => {
 	white-space: nowrap;
 	cursor: pointer;
 	transition: color 0.25s;
+
+	& + label {
+		margin-left: 24px;
+	}
+
+	&.side-by-side {
+		margin-left: auto;
+	}
 }
 
 .markdown-editor-header .tabs label::after {
 	position: absolute;
-	right: 8px;
+	right: 0px;
 	bottom: -1px;
-	left: 8px;
+	left: 0px;
 	z-index: 1;
 	height: 1px;
 	content: "";

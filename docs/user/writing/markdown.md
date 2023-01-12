@@ -34,6 +34,7 @@ $ x^2 + y^2 = z^2 $
 
 ... will render as:
 <MarkdownEditor 
+    preset="docs"
     :content="`$ x^2 + y^2 = z^2 $`"/>
 
 ### Display math
@@ -49,6 +50,7 @@ $$ x^2 + y^2 = z^2 $$
 ... will render as:
 
 <MarkdownEditor 
+    preset="docs"
     :content="`$$ x^2 + y^2 = z^2 $$`"/>
 
 ## Formatting text with markdown
@@ -68,6 +70,7 @@ Headers are written with the `#` symbol. The number of `#` symbols determines th
 ... will render as:
 
 <MarkdownEditor 
+    preset="docs"
     :content="`# Header
 \n
 ## Subheader
@@ -91,6 +94,7 @@ Unordered lists are written with the `-` symbol.
 ... will render as:
 
 <MarkdownEditor 
+    preset="docs"
     :content="`- Item 1
 - Item 2
 - Item 3`"
@@ -110,6 +114,7 @@ To create an ordered list use `1.` for each item.
 ... will render as:
 
 <MarkdownEditor 
+    preset="docs"
     :content="`1. Item 1
 1. Item 2
 1. Item 3`"/>
@@ -125,6 +130,7 @@ Images are written with the following syntax:
 
 ::: details Example
 <MarkdownEditor 
+    preset="docs"
     :content="`![A neutron star](https://upload.wikimedia.org/wikipedia/commons/1/1d/Neutron_Star_simulation.png)`"
 />
 :::
@@ -139,6 +145,7 @@ Links are written with the following syntax:
 
 ::: details Example
 <MarkdownEditor 
+    preset="docs"
     :content="`[Sirius A](https://siriusa.nl)`"
 />
 :::
@@ -157,6 +164,7 @@ Tables are written with the following syntax:
 ... will render as:
 
 <MarkdownEditor 
+    preset="docs"
     :content="`\
 | Header 1 | Header 2 | Header 3 |
 | -------- | -------- | -------- |
@@ -182,6 +190,7 @@ This is a line with `inline code`!
 ... will render as:
 
 <MarkdownEditor
+    preset="docs"
     :content="`This is a line with \`inline code\`!`" />
 
 #### Code blocks
@@ -209,6 +218,7 @@ def function():
 ... will render as:
 
 <MarkdownEditor
+    preset="docs"
     :options="{
         tabToIndentToggle: true,
         }"
@@ -226,6 +236,7 @@ A list of supported languages can be found [here](https://github.com/shikijs/shi
 ## Some examples of using markdown and LaTeX in Nebula
 
 <MarkdownEditor 
+    preset="docs"
     :content="`# This is an example of markdown and latex in Nebula
 \n
 As a test we're going to find the mass of a neutron star using the following equation:
