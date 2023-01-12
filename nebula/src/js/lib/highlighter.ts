@@ -3,15 +3,16 @@ import {
 	getHighlighter,
 	BUNDLED_LANGUAGES,
 	BUNDLED_THEMES,
+	type Highlighter,
 } from "shiki";
 import type { Lang, Theme } from "shiki/dist/index";
 
 setCDN("https://cdn.jsdelivr.net/npm/shiki/");
 
-const preloadLanguages: Lang[] = ["python"];
-const preloadThemes: Theme[] = ["material-palenight"];
+const preloadLanguages: Lang[] = ["python", "markdown"];
+const preloadThemes: Theme[] = ["material-palenight", "material-darker"];
 
-let highlighter;
+let highlighter: Highlighter;
 let moduleState: "uninitialised" | "initialising" | "initialised" =
 	"uninitialised";
 
