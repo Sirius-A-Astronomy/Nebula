@@ -224,15 +224,9 @@ def function():
         }"
     content="```python
 def function():
-    print('This is a python code block!')
+    print('This is a code block!')
 ```
-```c
-#include<stdio.h>
-int main() {
-	printf('Hello World with C!\');
-	return 0;
-}
-```" />
+" />
 
 ::: details Supported languages
 A list of supported languages can be found [here](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/languages.ts).
