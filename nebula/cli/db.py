@@ -189,7 +189,7 @@ def seed_questions():
 
     for _ in range(random.randint(5, 15)):
         question = {
-            "title": fake.sentence(),
+            "title": fake.sentence() + "?",
             "content": fake.text(),
             "subject_tags": random.sample(
                 subject_tags, random.randint(0, min(3, len(subject_tags)))

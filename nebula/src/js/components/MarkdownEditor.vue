@@ -83,17 +83,23 @@ watch(
 );
 
 let highlighter: Highlighter;
-const highlightedContent = computed(() => {
-	if (!highlighter) return contentEditable;
-	return DOMPurify.sanitize(
-		highlighter.codeToHtml(
-			contentEditable.value,
-			"markdown",
-			"material-palenight"
-		),
-		{ KEEP_CONTENT: true }
-	);
-});
+const highlightedContent = ref(contentEditable.value);
+
+const highlightContent = () => {
+	if (!highlighter)
+		return (highlightedContent.value = contentEditable.value) + " ";
+	highlightedContent.value =
+		DOMPurify.sanitize(
+			highlighter.codeToHtml(
+				contentEditable.value,
+				"markdown",
+				"material-palenight"
+			),
+			{ KEEP_CONTENT: true }
+		) + " ";
+};
+
+watch(contentEditable, highlightContent);
 
 const selectedTab = ref(options.value?.defaultTab || "source");
 
@@ -159,6 +165,7 @@ const keyDownHandler = (event: KeyboardEvent) => {
 
 onMounted(async () => {
 	highlighter = await getShikiHighlighter();
+	highlightContent();
 });
 </script>
 
@@ -321,7 +328,6 @@ onMounted(async () => {
 			// this causes it to be exactly the same size as the text-area should be
 			// causing the parent to resize to fit the text-area
 			white-space: pre-wrap;
-			font-family: monospace;
 			padding: 12px;
 			pointer-events: none;
 
@@ -358,6 +364,7 @@ onMounted(async () => {
 		grid-area: 1/ 1 / 2 / 2;
 		height: 100%;
 		border-radius: 8px;
+		font-family: monospace;
 		border: none;
 		padding: 12px;
 		font-size: 14px;

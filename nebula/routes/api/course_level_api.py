@@ -76,3 +76,9 @@ def create_course_level():
     db.session.add(course_level)
     db.session.commit()
     return jsonify(course_level.expose())
+
+@bp.route("/<uuid>", methods=["DELETE"])
+def delete_course_level(uuid):
+    return jsonify(
+        {"message": "not implemented"}
+    )
