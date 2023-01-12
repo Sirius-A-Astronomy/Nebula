@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { getShikiHighlighter } from "../lib/highlighter";
-import { getHighlighter, type Highlighter } from "shiki";
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed } from "vue";
 import Markdown from "./Markdown.vue";
-import DOMPurify from "dompurify";
 
 const props = defineProps<{
 	content?: string;
@@ -82,19 +79,6 @@ watch(
 	}
 );
 
-let highlighter: Highlighter;
-const highlightedContent = computed(() => {
-	if (!highlighter) return contentEditable;
-	return DOMPurify.sanitize(
-		highlighter.codeToHtml(
-			contentEditable.value,
-			"markdown",
-			"material-palenight"
-		),
-		{ KEEP_CONTENT: true }
-	);
-});
-
 const selectedTab = ref(options.value?.defaultTab || "source");
 
 const emit = defineEmits<{
@@ -156,10 +140,6 @@ const keyDownHandler = (event: KeyboardEvent) => {
 		markdownEditElement.value.setSelectionRange(start + 1, end + 1);
 	}
 };
-
-onMounted(async () => {
-	highlighter = await getShikiHighlighter();
-});
 </script>
 
 <template>
@@ -206,6 +186,7 @@ onMounted(async () => {
 			}">
 			<div
 				class="textarea-wrapper"
+				:data-replicated-value="contentEditable"
 				v-if="
 					selectedTab === 'source' || selectedTab === 'side-by-side'
 				">
@@ -215,9 +196,6 @@ onMounted(async () => {
 					ref="markdownEditElement"
 					@input="emit('update:modelValue', contentEditable)"
 					v-model="contentEditable" />
-				<div
-					class="syntax-highlighted"
-					v-html="highlightedContent"></div>
 			</div>
 			<Markdown
 				class="vp-markdown-preview"
@@ -312,36 +290,40 @@ onMounted(async () => {
 	// text-area wrapper provides auto resizing to the text-area
 	.textarea-wrapper {
 		display: grid;
-		background-color: var(--color-code-bg, var(--vp-code-tab-bg));
 
-		.syntax-highlighted {
+		&::after {
 			// wrapper::after needs to have exactly the same styles as the text-area
 			// and the same content
 
 			// this causes it to be exactly the same size as the text-area should be
 			// causing the parent to resize to fit the text-area
+			content: attr(data-replicated-value) "\n \n ";
+
 			white-space: pre-wrap;
 			font-family: monospace;
 			padding: 12px;
-			pointer-events: none;
 
-			:deep(pre) {
-				background-color: var(
-					--color-code-bg,
-					var(--vp-code-tab-bg)
-				) !important;
-				margin: 0;
-				font-family: monospace;
-				white-space: pre-wrap;
-			}
+			visibility: hidden;
 		}
 	}
 
-	textarea {
-		caret-color: var(--color-code-text, var(--vp-code-tab-text-color));
-		color: #0000;
-		background-color: #0000;
-		z-index: 1;
+	// wrapper::after needs to have exactly the same styles as the text-area
+	textarea,
+	.textarea-wrapper::after {
+		grid-area: 1/ 1 / 2 / 2;
+
+		height: 100%;
+		border-radius: 8px;
+		border: none;
+		padding: 12px;
+		font-size: 14px;
+		line-height: 1.5;
+		background-color: var(--color-code-bg, var(--vp-code-tab-bg));
+		color: var(--color-code-text, var(--vp-code-tab-text-color));
+		resize: none;
+		overflow-y: hidden;
+		tab-size: 4;
+		word-wrap: break-word;
 
 		&::placeholder {
 			color: var(--color-neutral-400, var(--vp-code-tab-placeholder));
@@ -351,21 +333,6 @@ onMounted(async () => {
 			outline: var(--color-primary-active, var(--vp-code-tab-focus)) auto
 				1px;
 		}
-	}
-
-	textarea,
-	.syntax-highlighted {
-		grid-area: 1/ 1 / 2 / 2;
-		height: 100%;
-		border-radius: 8px;
-		border: none;
-		padding: 12px;
-		font-size: 14px;
-		line-height: 1.5;
-		resize: none;
-		overflow-y: hidden;
-		tab-size: 4;
-		word-wrap: break-word;
 	}
 }
 
