@@ -1,3 +1,5 @@
+[![Deploy](https://github.com/Dutch-Raptor/nebula/actions/workflows/deploy.yml/badge.svg)](https://github.com/Dutch-Raptor/nebula/actions/workflows/deploy.yml)
+
 # Nebula
 
 This is the Nebula Database by the Kapteyn Learning Community.
