@@ -4,7 +4,7 @@ const config = defineConfig({
 	title: "Nebula",
 	description: "Nebula Documentation",
 
-	base: "https://dutch-raptor.github.io/docs/",
+	base: "https://dutch-raptor.github.io/nebula/",
 
 	lastUpdated: true,
 	cleanUrls: "without-subfolders",
