@@ -464,7 +464,7 @@ const markdownEditorId = ref(
 
 	&:has(input:focus) {
 		color: var(--color-text-primary, var(--vp-code-tab-active-text-color));
-		box-shadow: inset 0 -4px 0 var(--color-primary-active, var(--vp-code-tab-active-text-color));
+		box-shadow: inset 0 -4px 0 var(--color-primary-active, var(--vp-code-tab-active-bar-color));
 	}
 }
 
