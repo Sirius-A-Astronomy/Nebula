@@ -191,9 +191,12 @@ onMounted(async () => {
 		</div>
 		<div
 			class="editor-actions"
-			v-if="selectedTab === 'source' || selectedTab === 'side-by-side'">
+			v-if="
+				(selectedTab === 'source' || selectedTab === 'side-by-side') &&
+				options?.tabToIndentToggle
+			">
 			<label
-				v-if="props.options?.tabToIndentToggle"
+				v-if="options.tabToIndentToggle"
 				class="tab-indent-toggle"
 				:class="{
 					checked: useTabIndent,
@@ -258,7 +261,7 @@ onMounted(async () => {
 	display: flex;
 	align-items: center;
 	padding: 0 12px;
-	margin-top: 12px;
+	margin-top: 8px;
 	.tab-indent-toggle {
 		display: flex;
 		align-items: center;
@@ -332,47 +335,44 @@ onMounted(async () => {
 			pointer-events: none;
 
 			:deep(pre) {
-				background-color: var(
-					--color-code-bg,
-					var(--vp-code-tab-bg)
-				) !important;
+				background-color: transparent !important;
 				margin: 0;
 				font-family: monospace;
 				white-space: pre-wrap;
 			}
 		}
-	}
 
-	textarea {
-		caret-color: var(--color-code-text, var(--vp-code-tab-text-color));
-		color: #0000;
-		background-color: #0000;
-		z-index: 1;
+		textarea {
+			caret-color: var(--color-code-text, var(--vp-code-tab-text-color));
+			color: #0000;
+			background-color: #0000;
+			z-index: 1;
 
-		&::placeholder {
-			color: var(--color-neutral-400, var(--vp-code-tab-placeholder));
+			&::placeholder {
+				color: var(--color-neutral-400, var(--vp-code-tab-placeholder));
+			}
+
+			&:focus {
+				outline: var(--color-primary-active, var(--vp-code-tab-focus))
+					auto 1px;
+			}
 		}
 
-		&:focus {
-			outline: var(--color-primary-active, var(--vp-code-tab-focus)) auto
-				1px;
+		textarea,
+		.syntax-highlighted {
+			grid-area: 1/ 1 / 2 / 2;
+			height: 100%;
+			border-radius: 8px;
+			font-family: monospace;
+			border: none;
+			padding: 12px;
+			font-size: 14px;
+			line-height: 1.5;
+			resize: none;
+			overflow-y: hidden;
+			tab-size: 4;
+			word-wrap: break-word;
 		}
-	}
-
-	textarea,
-	.syntax-highlighted {
-		grid-area: 1/ 1 / 2 / 2;
-		height: 100%;
-		border-radius: 8px;
-		font-family: monospace;
-		border: none;
-		padding: 12px;
-		font-size: 14px;
-		line-height: 1.5;
-		resize: none;
-		overflow-y: hidden;
-		tab-size: 4;
-		word-wrap: break-word;
 	}
 }
 
@@ -408,7 +408,11 @@ onMounted(async () => {
 		border-radius: 0 0 8px 8px;
 		margin-right: 0;
 		margin-left: 0;
-		padding: 8px 12px;
+		padding: 8px 0px;
+
+		.textarea-wrapper {
+			border-radius: 8px;
+		}
 	}
 }
 
