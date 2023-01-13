@@ -10,7 +10,7 @@ import type { Lang, Theme } from "shiki/dist/index";
 setCDN("https://cdn.jsdelivr.net/npm/shiki/");
 
 const preloadLanguages: Lang[] = ["python", "markdown"];
-const preloadThemes: Theme[] = ["material-palenight", "material-darker"];
+const preloadThemes: Theme[] = ["material-palenight"];
 
 let highlighter: Highlighter;
 let moduleState: "uninitialised" | "initialising" | "initialised" =
