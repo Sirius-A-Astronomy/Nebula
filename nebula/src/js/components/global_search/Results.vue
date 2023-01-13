@@ -92,6 +92,10 @@ const users = computed(() => {
 	return sortedResults.slice(0, 3);
 });
 
+const navigate = (url: string) => {
+	location.href = url;
+};
+
 const accentColor = computed(() => {
 	return getComputedStyle(document.documentElement).getPropertyValue(
 		"--color-accent"
@@ -149,16 +153,20 @@ const expanded: Ref<"none" | "questions" | "courses" | "users"> = ref("none");
 					<div
 						v-for="course in courses"
 						:key="`${course.obj.id}${searchQuery}`">
-						<!-- Routerlink for when the user is on the dashboard -->
 						<RouterLink
-							v-if="dashboard"
 							:to="{
 								name: 'dashboard.course.show',
 								params: {
 									id: course.obj.id,
 								},
 							}"
-							@click="emit('close')"
+							@click="(e: Event) => {
+                                emit('close')
+                                if (!dashboard) {
+                                    e.preventDefault()
+                                    navigate(course.obj.url)
+                                }
+                            }"
 							class="flex items-center justify-between px-4 py-2 text-sm leading-5 transition-colors duration-150 text-primary-text hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
 							<HighlightResult
 								:result="course[0]"
@@ -173,26 +181,6 @@ const expanded: Ref<"none" | "questions" | "courses" | "users"> = ref("none");
 								Questions</span
 							>
 						</RouterLink>
-
-						<!-- Using an anchor tag until the entire app is converted to vue + vue-router -->
-						<a
-							v-else
-							:href="`/q/${course.obj.course_level.code}/${course.obj.code}`"
-							@click="emit('close')"
-							class="flex items-center justify-between px-4 py-2 text-sm leading-5 transition-colors duration-150 hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
-							<HighlightResult
-								:result="course[0]"
-								:fallback="course.obj.name"
-								highlight-class="font-bold" />
-							<span
-								v-if="course.obj.questions_count > 0"
-								class="hidden sm:block text-xs text-on-accent-text bg-accent-clr rounded-full px-2"
-								>{{
-									course.obj.questions_count
-								}}
-								Questions</span
-							>
-						</a>
 					</div>
 
 					<button
@@ -226,9 +214,23 @@ const expanded: Ref<"none" | "questions" | "courses" | "users"> = ref("none");
 					<div
 						v-for="question in questions"
 						:key="`${question.obj.id}${searchQuery}`">
-						<a
+						<RouterLink
 							:href="question.obj.url"
-							@click="emit('close')"
+							:to="{
+								name: 'dashboard.question.show',
+								params: {
+									id: question.obj.id,
+								},
+							}"
+							@click="
+								(e: Event) => {
+									emit('close');
+									if (!dashboard) {
+										e.preventDefault();
+                                        navigate(question.obj.url)
+									}
+								}
+							"
 							class="flex items-center justify-between px-4 py-2 text-sm leading-5 transition-colors duration-150 hover:text-primary-text hover:bg-tertiary-bg focus:outline-none focus:bg-tertiary-bg relative">
 							<div class="flex flex-col w-full">
 								<div
@@ -258,7 +260,7 @@ const expanded: Ref<"none" | "questions" | "courses" | "users"> = ref("none");
 									>
 								</div>
 							</div>
-						</a>
+						</RouterLink>
 					</div>
 
 					<button
