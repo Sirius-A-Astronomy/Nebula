@@ -4,8 +4,6 @@ const config = defineConfig({
 	title: "Nebula",
 	description: "Nebula Documentation",
 
-	base: "/nebula/",
-
 	lastUpdated: true,
 	cleanUrls: "without-subfolders",
 	markdown: {
