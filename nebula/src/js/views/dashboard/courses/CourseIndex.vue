@@ -1,60 +1,40 @@
 <script setup lang="ts">
-import { courseStore } from "@stores/courseStore";
+import type { Course } from "@stores/courseStore";
 import { computed, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 
-import type { CourseLevelWithCourses } from "@/stores/courseLevelStore";
+import { courseStore } from "@stores/courseStore";
+import { courseLevelStore } from "@/stores/courseLevelStore";
 
 import CourseLevel from "./components/courseLevel.vue";
 
 const filterCoursesInput = ref<HTMLInputElement | null>(null);
 
-const courses = computed(() => {
-	const courses = courseStore.getters.all.value;
+const courseLevels = courseLevelStore.getters.all;
 
-	if (courseFilter.value) {
-		return courses.filter((course) => {
-			const filter = courseFilter.value.toLowerCase();
-			if (course.name.toLowerCase().includes(filter)) return true;
+const courseLevelsWithCourses = computed(() => {
+	return courseLevels.value.map((courseLevel) => {
+		const filter = courseFilter.value.toLowerCase();
+		let courses: Course[];
+		if (courseLevel.name.toLowerCase().includes(filter) || filter == "")
+			courses = courseStore.getters.byCourseLevelId(courseLevel.id).value;
+		else {
+			courses = courseStore.getters
+				.byCourseLevelId(courseLevel.id)
+				.value.filter((course: Course) => {
+					if (course.name.toLowerCase().includes(filter)) return true;
 
-			if (course.code.toLowerCase().includes(filter)) return true;
+					if (course.description.toLowerCase().includes(filter))
+						return true;
 
-			if (course.course_level.name.toLowerCase().includes(filter))
-				return true;
-
-			if (course.course_level.study_type.toLowerCase().includes(filter))
-				return true;
-
-			return false;
-		});
-	}
-	return courses;
-});
-
-const courseLevels = computed(() => {
-	const levels: CourseLevelWithCourses[] = [];
-	for (const course of courses.value) {
-		const level = levels.find(
-			(level) => level.id === course.course_level.id
-		);
-
-		if (!level) {
-			levels.push({
-				...course.course_level,
-				courses: [course],
-			});
-		} else {
-			if (!level.courses) {
-				level.courses = [];
-			}
-			level.courses.push(course);
+					if (course.code.toLowerCase().includes(filter)) return true;
+				});
 		}
-	}
-
-	// sort by study type
-	levels.sort((a, b) => a.study_type.localeCompare(b.study_type));
-
-	return levels;
+		return {
+			...courseLevel,
+			courses,
+		};
+	});
 });
 
 const courseFilter = ref("");
@@ -65,7 +45,10 @@ const clearFilter = () => {
 };
 
 onMounted(async () => {
-	await courseStore.actions.getAll();
+	await Promise.all([
+		courseLevelStore.actions.getAll(),
+		courseStore.actions.getAll(),
+	]);
 });
 </script>
 
@@ -81,7 +64,7 @@ onMounted(async () => {
 					id="filter_courses"
 					ref="filterCoursesInput"
 					v-model="courseFilter"
-					:placeholder="`Filter courses (${courses.length})`" />
+					:placeholder="`Filter courses (${courseStore.getters.all.value?.length})`" />
 				<!-- Clear button -->
 				<button
 					class="absolute inset-y-0 right-0 flex items-center pr-2"
@@ -108,7 +91,7 @@ onMounted(async () => {
 
 		<ul class="flex flex-col gap-2 py-2">
 			<CourseLevel
-				v-for="level in courseLevels"
+				v-for="level in courseLevelsWithCourses"
 				:key="level.id"
 				:level="level"></CourseLevel>
 		</ul>
