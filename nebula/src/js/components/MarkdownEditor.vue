@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getShikiHighlighter } from "../lib/highlighter";
-import { getHighlighter, type Highlighter } from "shiki";
+import type { Highlighter } from "shiki";
 import { ref, watch, computed, onMounted } from "vue";
 import Markdown from "./Markdown.vue";
 import DOMPurify from "dompurify";
@@ -167,12 +167,18 @@ onMounted(async () => {
 	highlighter = await getShikiHighlighter();
 	highlightContent();
 });
+
+const markdownEditorId = ref(
+	`markdown-editor-${Math.random().toString(36).slice(8)}`
+);
 </script>
 
 <template>
 	<div class="markdown-editor" :class="`preset-${preset}`">
 		<div class="markdown-editor-header">
-			<h4 class="title" v-if="title">{{ title }}</h4>
+			<label :for="markdownEditorId" class="title" v-if="title">{{
+				title
+			}}</label>
 			<div class="tabs">
 				<template v-for="tab in tabs" :key="tab.name">
 					<label
@@ -184,6 +190,15 @@ onMounted(async () => {
 						<input
 							:checked="tab.name === selectedTab"
 							@change="selectedTab = tab.name"
+							:name="markdownEditorId"
+							@keydown="
+								(e) => {
+									if (e.key === 'Enter') {
+										selectedTab = tab.name;
+										e.preventDefault();
+									}
+								}
+							"
 							type="radio" />
 					</label>
 				</template>
@@ -223,6 +238,7 @@ onMounted(async () => {
 					:placeholder="placeholder ?? 'Enter your markdown here...'"
 					@keydown="keyDownHandler"
 					ref="markdownEditElement"
+					:id="markdownEditorId"
 					@input="emit('update:modelValue', contentEditable)"
 					v-model="contentEditable" />
 				<div
@@ -288,7 +304,7 @@ onMounted(async () => {
 .markdown-editor-header {
 	.title {
 		font-size: 16px;
-		font-weight: 600;
+		font-weight: 400;
 		line-height: 1.5;
 		margin-bottom: 4px;
 		color: var(--color-text-primary, var(--vp-code-block-color));
@@ -353,8 +369,8 @@ onMounted(async () => {
 			}
 
 			&:focus {
-				outline: var(--color-primary-active, var(--vp-code-tab-focus))
-					auto 1px;
+				outline: none;
+				box-shadow: none;
 			}
 		}
 
@@ -391,10 +407,10 @@ onMounted(async () => {
 
 @media (min-width: 640px) {
 	.markdown-editor {
+		border-radius: 12px;
 		&.preset-docs {
 			margin-left: 0;
 			margin-right: 0;
-			border-radius: 12px;
 		}
 	}
 
@@ -434,8 +450,9 @@ onMounted(async () => {
 	font-weight: 500;
 	color: var(--color-text-secondary, var(--vp-code-tab-text-color));
 	white-space: nowrap;
+	box-shadow: none;
 	cursor: pointer;
-	transition: color 0.25s;
+	transition: color 0.25s, box-shadow 0.25s;
 
 	& + label {
 		margin-left: 24px;
@@ -443,6 +460,11 @@ onMounted(async () => {
 
 	&.side-by-side {
 		margin-left: auto;
+	}
+
+	&:has(input:focus) {
+		color: var(--color-text-primary, var(--vp-code-tab-active-text-color));
+		box-shadow: inset 0 -4px 0 var(--color-primary-active, var(--vp-code-tab-active-text-color));
 	}
 }
 
@@ -464,15 +486,6 @@ onMounted(async () => {
 
 .markdown-editor-header label.active {
 	color: var(--color-text-primary, var(--vp-code-tab-active-text-color));
-}
-
-.markdown-editor-header label.checked {
-	color: var(--color-text-primary, var(--vp-code-tab-active-text-color));
-	background-color: var(
-		--color-primary-active,
-		var(--vp-code-tab-active-bar-color)
-	);
-	border-radius: 8px 8px 0 0;
 }
 
 .markdown-editor-header label.active::after {
