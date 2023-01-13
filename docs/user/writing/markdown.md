@@ -10,6 +10,12 @@ Nebula uses [Markdown](https://www.markdownguide.org/) to format text. Markdown 
 
 Nebula uses [Mathjax](https://www.mathjax.org/) to render LaTeX math. This means that you can write LaTeX math in your markdown.
 
+::: tip Interactive examples
+All examples in this page are interactive. Feel free to play around with them!
+
+Just click on 'Source' to see or edit the markdown.
+:::
+
 #### Table of contents
 [[toc]]
 
