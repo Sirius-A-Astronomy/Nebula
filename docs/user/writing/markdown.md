@@ -211,7 +211,16 @@ A language can be specified after the first set of backticks. This will enable s
 ````md
 ```python
 def function():
-    print("This is a code block!")
+    print("This is a python code block!")
+```
+
+```c
+#include<stdio.h>
+
+int main() {
+    printf("Hello World with C!");
+    return 0;
+}
 ```
 ````
 
@@ -222,17 +231,17 @@ def function():
     :options="{
         tabToIndentToggle: true,
         }"
-    content="```python
+    :content="`\`\`\`python
 def function():
     print('This is a python code block!')
-```
-```c
-#include<stdio.h>
+\`\`\`\n
+\`\`\`c
+#include<stdio.h>\n
 int main() {
-	printf('Hello World with C!\');
+	printf('Hello World with C!');
 	return 0;
 }
-```" />
+\`\`\``" />
 
 ::: details Supported languages
 A list of supported languages can be found [here](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/languages.ts).

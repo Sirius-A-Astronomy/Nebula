@@ -16,6 +16,9 @@ const flash = useFlash();
 </script>
 
 <template>
+	<a href="#content" id="skip-link" class="skip-link sr-only"
+		>Skip to content</a
+	>
 	<ModalContainer />
 	<div class="w-full min-h-screen flex flex-col">
 		<template v-if="flash.messages.value.length">
@@ -72,11 +75,35 @@ const flash = useFlash();
 
 		<div class="md:ml-64">
 			<Header />
-			<div class="container py-4">
+			<div class="container py-4" id="content">
 				<RouterView />
 			</div>
 		</div>
 	</div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.skip-link,
+#skip-link {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	padding: 8px 16px;
+	z-index: 999;
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: bold;
+	text-decoration: none;
+	color: var(--color-primary-active);
+	box-shadow: var(--box-shadow);
+	background-color: var(--color-background);
+
+	&:focus {
+		height: auto;
+		width: auto;
+		clip: auto;
+		-webkit-clip-path: none;
+		clip-path: none;
+	}
+}
+</style>

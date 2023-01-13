@@ -16,7 +16,22 @@ const navigate = (url: string) => {
 <template>
 	<li>
 		<div class="flex justify-between items center">
-			<h2 class="text-2xl">{{ level.study_type }} - {{ level.name }}</h2>
+			<div class="flex flex-col">
+				<h2 class="text-2xl">
+					{{ level.study_type }} - {{ level.name }}
+				</h2>
+
+				<RouterLink
+					:to="{
+						name: 'dashboard.courseLevel.show',
+						params: {
+							id: level.id,
+						},
+					}"
+					class="text-accent-clr hover:text-accent-focus hover:underline text-sm">
+					<span>Show course level</span>
+				</RouterLink>
+			</div>
 
 			<button
 				@click="expanded = !expanded"

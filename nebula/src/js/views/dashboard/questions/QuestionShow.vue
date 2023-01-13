@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted, watch, computed } from "vue";
-import { courseStore, type Course } from "@stores/courseStore";
+import { questionStore } from "@/stores/questionStore";
+import type { Question } from "@/stores/questionStore";
 
 import type { Updatable } from "@stores/factory/storeFactory";
-import CourseForm from "@components/course/CourseForm.vue";
+import QuestionForm from "@/components/question/QuestionForm.vue";
 import useFlashStore from "@/stores/flashStore";
 
 import { useRouter } from "vue-router";
 import useModalStore from "@/stores/modalStore";
+import Markdown from "@/components/Markdown.vue";
 
 const flash = useFlashStore();
 
@@ -17,7 +19,7 @@ const props = defineProps<{
 	id: string;
 }>();
 
-const course = computed(() => courseStore.getters.byId(props.id).value);
+const question = computed(() => questionStore.getters.byId(props.id).value);
 
 const router = useRouter();
 
@@ -29,8 +31,8 @@ watch(props, (value) => {
 const loading = ref(true);
 
 const loadData = async () => {
-	if (!course.value) {
-		await courseStore.actions.getById(props.id);
+	if (!question.value) {
+		await questionStore.actions.getById(props.id);
 	}
 
 	loading.value = false;
@@ -38,26 +40,26 @@ const loadData = async () => {
 
 const awaitingResponse = ref(false);
 
-const updateCourse = async (course: Updatable<Course>) => {
+const updateCourse = async (question: Updatable<Question>) => {
 	awaitingResponse.value = true;
-	const response = await courseStore.actions.update(course);
+	const response = await questionStore.actions.update(question);
 	awaitingResponse.value = false;
 
 	if (response.status !== 200) {
 		flash.add(
-			`Failed to update course '${course.name}': ${response.message}`,
+			`Failed to update question '${question.title}': ${response.message}`,
 			"error"
 		);
 		return;
 	}
-	flash.add(`Course '${course.name}' updated successfully`, "success");
+	flash.add(`question '${question.title}' updated successfully`, "success");
 	editting.value = false;
 };
 
 const onDeleteClicked = () => {
 	modal.add({
 		title: "Delete Course",
-		body: `Are you sure you want to delete course '${course.value?.name}'?`,
+		body: `Are you sure you want to delete course '${question.value?.title}'?`,
 		actions: [
 			{
 				text: "Cancel",
@@ -74,19 +76,19 @@ const onDeleteClicked = () => {
 
 const deleteCourse = async () => {
 	awaitingResponse.value = true;
-	const response = await courseStore.actions.delete(props.id);
+	const response = await questionStore.actions.delete(props.id);
 	awaitingResponse.value = false;
 
 	if (response.status !== 200) {
 		flash.add(
-			`Failed to delete course '${course.value?.name}': ${response.message}`,
+			`Failed to delete course '${question.value?.title}': ${response.message}`,
 			"error"
 		);
 		return;
 	}
 	router.push({ name: "dashboard.course.index" });
-	const data = response.data as Course;
-	flash.add(`Course '${data.name}' deleted successfully`, "success");
+	const data = response.data as Question;
+	flash.add(`Course '${data.title}' deleted successfully`, "success");
 };
 
 const editting = ref(false);
@@ -98,9 +100,9 @@ onMounted(loadData);
 	<div v-if="loading">Loading...</div>
 
 	<template v-else>
-		<template v-if="!editting && course">
+		<template v-if="!editting && question">
 			<div class="flex flex-row justify-between items-baseline">
-				<h1 class="text-3xl">{{ course.name }}</h1>
+				<h1 class="text-3xl">{{ question.title }}</h1>
 
 				<div class="flex flex-row gap-1">
 					<button
@@ -119,33 +121,37 @@ onMounted(loadData);
 
 			<div class="flex flex-col">
 				<div class="flex flex-row items-center gap-1">
-					<span class="font-bold">Code: </span>
-					<span>{{ course.code }}</span>
+					<span class="font-bold">Course: </span>
+					<span>{{ question.course.name }}</span>
 				</div>
 
-				<div class="flex flex-row items-center gap-1">
-					<span class="font-bold">Semester: </span>
-					<span>{{ course.semester }}</span>
-				</div>
-
-				<div class="flex flex-row items-center gap-1">
-					<span class="font-bold">Course Level: </span>
+				<div class="flex flex-row items-baseline gap-1">
+					<span class="font-bold">Subject tags: </span>
 					<span
-						>{{ course.course_level.name }} -
-						{{ course.course_level.study_type }}</span
+						v-for="tag in question.subject_tags"
+						class="bg-accent-clr text-on-accent-text rounded-full px-2 text-xs">
+						{{ tag.name }}
+					</span>
+
+					<span
+						v-if="
+							!question.subject_tags ||
+							question.subject_tags?.length === 0
+						"
+						>None</span
 					>
 				</div>
 
-				<div class="flex flex-col items-start">
-					<span class="font-bold">Description: </span>
-					<span>{{ course.description }}</span>
+				<div class="flex flex-col items-baseline">
+					<h3 class="font-bold text-xl">Content:</h3>
+					<Markdown :content="question.content" />
 				</div>
 			</div>
 		</template>
 
-		<CourseForm
+		<QuestionForm
 			v-if="editting"
-			:course="course"
+			:question="question"
 			submitText="Update"
 			@cancel="editting = false"
 			:awaiting-response="awaitingResponse"

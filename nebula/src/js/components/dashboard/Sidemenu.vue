@@ -21,6 +21,14 @@ const menuLinks = [
 			startsWith: "dashboard.user",
 		},
 	},
+
+	{
+		name: "Questions",
+		path: { name: "dashboard.question.index" },
+		active: {
+			startsWith: "dashboard.question",
+		},
+	},
 ];
 </script>
 

@@ -105,6 +105,56 @@ const router = createRouter({
 			},
 			props: true,
 		},
+
+		{
+			path: "/dashboard/course-level/:id",
+			name: "dashboard.courseLevel.show",
+			component: () =>
+				import("@/views/dashboard/courseLevels/CourseLevelShow.vue"),
+			props: true,
+			meta: {
+				title: "Course Level",
+				description: "View a course level",
+				requiredAccessLevel: 3,
+			},
+		},
+
+		{
+			path: "/dashboard/questions",
+			name: "dashboard.question.index",
+			component: () =>
+				import("@/views/dashboard/questions/QuestionIndex.vue"),
+			meta: {
+				title: "Questions",
+				description: "View all questions in nebula",
+				requiredAccessLevel: 3,
+			},
+		},
+
+		{
+			path: "/dashboard/question/:id",
+			name: "dashboard.question.show",
+			component: () =>
+				import("@/views/dashboard/questions/QuestionShow.vue"),
+			props: true,
+			meta: {
+				title: "Question",
+				description: "View a question",
+				requiredAccessLevel: 3,
+			},
+		},
+
+		{
+			path: "/dashboard/question/create",
+			name: "dashboard.question.create",
+			component: () =>
+				import("@views/dashboard/questions/QuestionCreate.vue"),
+			meta: {
+				title: "Create Question",
+				description: "Create a new question in nebula",
+				requiredAccessLevel: 1,
+			},
+		},
 	],
 });
 

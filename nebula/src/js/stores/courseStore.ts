@@ -1,3 +1,5 @@
+import { computed } from "vue";
+import type { StudyType } from "./courseLevelStore";
 import { storeModuleFactory } from "./factory/storeFactory";
 
 export type Course = {
@@ -10,8 +12,29 @@ export type Course = {
 		id: string;
 		code: string;
 		name: string;
-		study_type: string;
+		study_type: StudyType;
 	};
 };
 
-export const courseStore = storeModuleFactory<Course>("courses");
+const courseStoreBase = storeModuleFactory<Course>("courses");
+
+export const courseStore = {
+	getters: {
+		...courseStoreBase.getters,
+		byCourseLevelId: (id: string) =>
+			computed(() => {
+				return courseStoreBase.getters.all.value.filter(
+					(course) => course.course_level.id === id
+				);
+			}),
+	},
+	setters: {
+		...courseStoreBase.setters,
+	},
+	actions: {
+		...courseStoreBase.actions,
+	},
+	state: {
+		...courseStoreBase.state,
+	},
+};
