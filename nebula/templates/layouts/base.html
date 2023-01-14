@@ -53,6 +53,7 @@ context %}
     {% endif %}
 
     {{ vite_style('scss/main.scss') }}
+    {{ vite_script('js/app.ts') }}
 
 
 
@@ -81,6 +82,7 @@ context %}
 {%- endmacro %}
 
 <body>
+    <div id="app"></div>
     {% if get_flashed_messages() %}
     <div class="alerts-container">
 
