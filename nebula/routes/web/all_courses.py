@@ -6,7 +6,6 @@ from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("courses", __name__)
 
-web_bp.register_blueprint(bp)
 
 
 @bp.route("/courses")

@@ -20,7 +20,6 @@ from nebula.models.subject_tag import SubjectTag
 from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("add_question", __name__)
-web_bp.register_blueprint(bp)
 
 
 class QuestionForm(FlaskForm):

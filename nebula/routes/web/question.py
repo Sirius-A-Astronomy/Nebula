@@ -37,7 +37,6 @@ from nebula.routes.web import bp as web_bp
 
 bp = Blueprint("question", __name__, url_prefix="/q/<course_level_code>/<course_code>")
 
-web_bp.register_blueprint(bp)
 
 
 class CommentForm(FlaskForm):

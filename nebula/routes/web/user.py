@@ -32,7 +32,6 @@ from nebula.helpers.access_levels import ACCESS_LEVELS
 
 bp = Blueprint("user", __name__)
 
-web_bp.register_blueprint(bp)
 
 
 def authenticate(username, password):

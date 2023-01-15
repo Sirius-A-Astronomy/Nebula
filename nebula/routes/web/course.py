@@ -9,7 +9,6 @@ from nebula.routes.web import bp as web_bp
 # level dependent blueprint:
 bp = Blueprint("course", __name__, url_prefix="/q/<course_level_code>")
 
-web_bp.register_blueprint(bp)
 
 
 @bp.route("/<course_code>")

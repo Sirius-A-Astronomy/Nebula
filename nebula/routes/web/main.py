@@ -8,8 +8,7 @@ bp = Blueprint("main", __name__)
 web_bp.register_blueprint(bp)
 
 
-@bp.route("/")
-def index():
-    bsc = CourseLevel.query.filter_by(study_type="Bachelor").all()
-    msc = CourseLevel.query.filter_by(study_type="Master").all()
-    return render_template("main/index.html", bsc_levels=bsc, msc_levels=msc)
+@bp.route("/", defaults={"path": ""})
+@bp.route("/<path:path>")
+def index(path = None):
+    return render_template("main/index.html")
