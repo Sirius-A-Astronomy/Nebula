@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-mode">
 
 <head>
     <meta charset="UTF-8">
@@ -7,11 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nebula</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+        rel="stylesheet">
     {% from "utilities/vite.html" import vite_script with context %}
+    {% if development %}
+    <script type="module" src="http://localhost:5173/@vite/client"></script>
+    {% endif %}
     {{ vite_script("js/app.ts") }}
 </head>
 
 <body>
+    <noscript>
+        <div style="background-color: var(--color-background, #f5f5f5);
+                            text-align: center;
+                            color: var(--color-text-primary, #1e1e1e);">
+            This site requires javascript. Please enable JavaScript if it is disabled, or refresh
+            the page.</div>
+    </noscript>
     <div id="app"></div>
 </body>
 
