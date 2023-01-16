@@ -124,7 +124,8 @@ $colors: (
 	--color-code-bg-muted: #444;
 	--color-code-text: #f1f1f1;
 
-	&.dark-mode {
+	&.dark-mode,
+	&:has(.dark-mode) {
 		--color-scheme: dark;
 
 		--color-background: var(--color-neutral-900);
