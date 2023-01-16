@@ -1,7 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ["./index.html", "./nebula/src/**/*.{vue,js,ts,jsx,tsx}"],
+	content: [
+		"nebula/templates/**/*.html",
+		"./nebula/src/**/*.{vue,js,ts,jsx,tsx}",
+	],
 	theme: {
+		FontFace: {
+			"font-family": {
+				primary: ["Poppins", "sans-serif"],
+				secondary: ["Lato", "sans-serif"],
+			},
+		},
 		extend: {
 			colors: {
 				"primary-clr": "var(--color-primary)",
