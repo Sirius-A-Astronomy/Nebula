@@ -4,18 +4,23 @@ import {
 	createWebHistory,
 	type RouteLocationNormalized,
 } from "vue-router";
-import { isAuthenticated, authenticatedUser } from "./stores/sessionStore";
+import { isAuthenticated, authenticatedUser } from "@stores/sessionStore";
 
 import { accessLevels } from "@stores/userStore";
 
 import CoursesView from "@views/dashboard/courses/CourseIndex.vue";
 import useFlashStore from "@stores/flashStore";
 
+import baseRoutes from "./baseRoutes";
+import courseRoutes from "./courseRoutes";
+
 const flash = useFlashStore();
 
 const router = createRouter({
 	history: createWebHistory(),
 	routes: [
+		...baseRoutes,
+		...courseRoutes,
 		{
 			path: "/dashboard",
 			redirect: "/dashboard/courses",
@@ -60,16 +65,6 @@ const router = createRouter({
 				requiredAccessLevel: 3,
 			},
 			props: true,
-		},
-
-		{
-			// Change the window location here to do a full page reload
-			path: "/login",
-			name: "login",
-			component: () => null,
-			beforeEnter: () => {
-				window.location.href = "/login";
-			},
 		},
 
 		{
@@ -163,13 +158,23 @@ router.afterEach((to) => {
 		document.title = (to.meta.title as string) || "Nebula";
 	});
 });
-const excludedRoutes: string[] = [];
+const protectedRoutes: string[] = [];
+
+// protect all routes that start with name 'dashboard'
+const protectedRoutesStartsWith: string[] = ["dashboard"];
+
 const authGuard = (to: RouteLocationNormalized): boolean => {
 	if (
-		!(isAuthenticated.value || excludedRoutes.includes(to.name as string))
+		to.name &&
+		(protectedRoutes.includes(to.name as string) ||
+			protectedRoutesStartsWith.some((route) =>
+				(to.name as string).startsWith(route)
+			)) &&
+		!isAuthenticated.value
 	) {
-		// flash.add("You must be logged in to view this page", "danger", 5000);
+		flash.add("You must be logged in to view this page", "danger");
 		document.location.href = "/login";
+		return false;
 	}
 
 	if (to.meta.requiredAccessLevel) {
