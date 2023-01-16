@@ -33,7 +33,12 @@ To help with this difference, the `vite` template is used to import assets. The 
 
 ### Usage
 
-The `vite` template provides the following functions:
+
+The `vite` template provides the following functions: `vite_script`, `vite_style`, `vite_asset` and `vite_public_asset`. They can be imported as follows:
+
+```html
+{% from 'utilities/vite.html' import vite_script with context %}
+```
 
 #### `vite_script`
 
@@ -104,7 +109,7 @@ http://localhost:5173/js/main.js
 #### `vite_public_asset`
 
 Imports a public asset. The asset will be imported as is.
-When importing a public asset, this function should be used instead of `vite_asset`. This is because vite serves plublic assets from the root directory.
+When importing a public asset, this function should be used instead of `vite_asset`. This is because public assets are served from a different location.
 
 param: `source` - The path to the asset relative to the `nebula/src/public` directory.
 
@@ -134,8 +139,11 @@ http://localhost:5173/images/logo.svg
 Assets in `TypeScript` and `Vue` files can just be imported the same way as in any other `TypeScript` or `Vue` project. Vite will handle the import depending on the environment.
 
 ```ts
-// Import a script
+// Import a script from a node module
 import { createApp } from 'vue';
+
+// Import a local script
+import App from '@/App.vue';
 
 // Import a style
 import '@scss/main.scss';
@@ -161,9 +169,9 @@ export default defineConfig({
   resolve: {
     alias: {
       // ...
-      '@': path.resolve(__dirname, 'js'), // [!code focus:3]
-      '@public': path.resolve(__dirname, 'public'),
-      '@scss': path.resolve(__dirname, 'scss'),
+      '@': path.resolve(__dirname, './nebula/src/js'), // [!code focus:3]
+      '@public': path.resolve(__dirname, './nebula/src/public'),
+      '@scss': path.resolve(__dirname, './nebula/src/scss'),
       // ...
     },
   },
@@ -177,9 +185,9 @@ export default defineConfig({
     // ...
     "paths": { // [!code focus]
       // ...
-      "@/*": ["js/*"], // [!code focus:3]
-      "@public/*": ["public/*"],
-      "@scss/*": ["scss/*"],
+      "@/*": ["nebula/src/js/*"], // [!code focus:3]
+      "@public/*": ["nebula/src/public/*"],
+      "@scss/*": ["nebula/src/scss/*"],
       // ...
     },
     // ...
