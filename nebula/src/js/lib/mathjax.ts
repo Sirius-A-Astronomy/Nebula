@@ -34,7 +34,7 @@ let mathjax: any;
 let moduleState: "uninitialised" | "initialising" | "initialised" =
 	"uninitialised";
 
-export const initMathJax = async () => {
+export const initMathJax = async (): Promise<void> => {
 	if (moduleState === "initialised") {
 		return;
 	}

@@ -17,7 +17,7 @@ let moduleState: "uninitialised" | "initialising" | "initialised" =
 	"uninitialised";
 
 // ensure shiki is only loaded once
-const init = async () => {
+const init = async (): Promise<void> => {
 	if (moduleState === "initialised") {
 		return;
 	}

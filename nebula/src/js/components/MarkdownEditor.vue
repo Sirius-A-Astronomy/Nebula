@@ -49,12 +49,15 @@ const options = computed(() => {
 	if (props.preset && presets[props.preset!]) {
 		return Object.entries(presets[props.preset!].options).reduce(
 			(acc, [key, value]) => {
-				if (props.options?.[key] === undefined) {
+				if (
+					props.options?.[key as keyof typeof props.options] ===
+					undefined
+				) {
 					acc[key] = value;
 				}
 				return acc;
 			},
-			props.options ?? {}
+			props.options ?? ({} as Record<string, unknown>)
 		);
 	}
 	return props.options;
@@ -64,12 +67,15 @@ const customText = computed(() => {
 	if (props.preset) {
 		return Object.entries(presets[props.preset!].customText).reduce(
 			(acc, [key, value]) => {
-				if (props.customText?.[key] === undefined) {
+				if (
+					props.customText?.[key as keyof typeof props.options] ===
+					undefined
+				) {
 					acc[key] = value;
 				}
 				return acc;
 			},
-			props.customText ?? {}
+			props.customText ?? ({} as Record<string, unknown>)
 		);
 	}
 	return props.customText;

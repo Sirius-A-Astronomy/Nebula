@@ -33,59 +33,93 @@ To help with this difference, the `vite` template is used to import assets. The 
 
 ### Usage
 
-The `vite` template is used to import assets in `html` and `jinja` files.
+The `vite` template provides the following functions:
 
-Behind the scenes, the `vite` template will import the asset from either the webserver or the `nebula/static` directory depending on the environment.
+#### `vite_script`
 
-This is done by using the `vite_script`, `vite_style`, `vite_asset` and `vite_public_asset` functions.
+Imports a script. If the script imports any other assets, they will be imported as well.
 
-Input: 
+param: `source` - The path to the script relative to the `nebula/src` directory.
+
+Input:
 ```html
-{% from "utilities/vite.html" import vite_script, vite_style, vite_asset, vite_public_asset with context %}
-
-# Import a script
 {{ vite_script('js/main.ts') }}
+```
 
-# Import a style
+Output:
+::: code-group
+```html [Development]
+<script type="module" src="http://localhost:5173/js/main.ts"></script>
+```
+
+```html [Production]
+<script type="module" src="/static/js/main.js"></script>
+<link rel="stylesheet" href="/static/main.css"></link>
+```
+:::
+
+#### `vite_style`
+
+Imports a style.
+
+param: `source` - The path to the style relative to the `nebula/src` directory.
+
+Input:
+```html
 {{ vite_style('scss/main.scss') }}
+```
 
-# Import an asset
+Output:
+::: code-group
+```html [Development]
+<link rel="stylesheet" href="http://localhost:5173/scss/main.scss">
+```
+
+```html [Production]
+<link rel="stylesheet" href="/static/main.css"></link>
+```
+:::
+
+#### `vite_asset`
+
+Imports an asset. The asset will be imported as is.
+
+param: `source` - The path to the asset relative to the `nebula/src` directory.
+
+Input:
+```html
 {{ vite_asset('js/main.js') }}
+```
 
-# Import a public asset
+Output:
+::: code-group
+```html [Development]
+http://localhost:5173/js/main.js
+```
+
+```html [Production]
+/static/js/main.js
+```
+:::
+#### `vite_public_asset`
+
+Imports a public asset. The asset will be imported as is.
+When importing a public asset, this function should be used instead of `vite_asset`. This is because vite serves plublic assets from the root directory.
+
+param: `source` - The path to the asset relative to the `nebula/src/public` directory.
+
+Input:
+```html
 {{ vite_public_asset('images/logo.svg') }}
 ```
 
 Output:
 ::: code-group
 ```html [Development]
-# Import a script
-<scrip type="module" src="http://localhost:5174/js/main.ts"></script>
-
-# Import a style
-<link rel="stylesheet" href="http://localhost:5174/scss/main.scss">
-
-# Import an asset
-http://localhost:5174/js/main.js
-
-# Import a public asset
-http://localhost:5174/images/logo.svg
+http://localhost:5173/images/logo.svg
 ```
 
 ```html [Production]
-# Import a script
-<scrip type="module" src="/static/js/main.js"></script>
-
-# if main.js imported any other assets, they will be imported as well
-<link rel="stylesheet" src="/static/main.css"></link>
-
-# Import a style
-<link rel="stylesheet" href="/static/main.css">
-
-# Import an asset
-/static/js/main.js
-
-# Import a public asset
 /static/images/logo.svg
 ```
 :::

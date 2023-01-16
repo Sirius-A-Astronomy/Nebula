@@ -35,7 +35,6 @@ const showPreviews = ref({
 			}"
 			:options="{
 				maxRows: 1,
-				sourceFirst: true,
 				disableMarkdown: true,
 			}" />
 
@@ -50,7 +49,6 @@ const showPreviews = ref({
 				sideBySideLabel: 'Edit & Preview',
 			}"
 			:options="{
-				sourceFirst: true,
 				tabToIndentToggle: true,
 			}" />
 
