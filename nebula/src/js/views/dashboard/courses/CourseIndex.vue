@@ -45,10 +45,14 @@ const clearFilter = () => {
 };
 
 onMounted(async () => {
-	await Promise.all([
-		courseLevelStore.actions.getAll(),
-		courseStore.actions.getAll(),
-	]);
+	const promises = [];
+	if (courseStore.state.shouldLoadAll()) {
+		promises.push(courseStore.actions.getAll());
+	}
+	if (courseLevelStore.state.shouldLoadAll()) {
+		promises.push(courseLevelStore.actions.getAll());
+	}
+	await Promise.all(promises);
 });
 </script>
 

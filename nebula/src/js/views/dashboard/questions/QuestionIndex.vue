@@ -13,7 +13,9 @@ const navigate = (url: string) => {
 };
 
 onMounted(async () => {
-	await questionStore.actions.getAll();
+	if (questionStore.state.shouldLoadAll()) {
+		await questionStore.actions.getAll();
+	}
 	loading.value = false;
 });
 </script>
