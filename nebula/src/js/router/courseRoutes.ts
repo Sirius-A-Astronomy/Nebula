@@ -4,7 +4,7 @@ export const courseRoutes: RouteRecordRaw[] = [
 	{
 		path: "/courses",
 		name: "course.index",
-		component: () => import("@views/course/Index.vue"),
+		component: () => import("@views/course/CourseIndex.vue"),
 		meta: {
 			title: "Courses",
 			description: "List of courses",
@@ -13,7 +13,7 @@ export const courseRoutes: RouteRecordRaw[] = [
 	{
 		path: "/courses/:id",
 		name: "course.show",
-		component: () => import("@views/course/Show.vue"),
+		component: () => import("@views/course/CourseShow.vue"),
 		meta: {
 			title: "Course",
 			description: "Course details",

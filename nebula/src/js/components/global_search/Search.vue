@@ -99,6 +99,7 @@ const openResults = ref(false);
 
 const close = () => {
 	openResults.value = false;
+	searchInputElement.value?.blur();
 };
 </script>
 
@@ -155,7 +156,7 @@ const close = () => {
 			<!-- Show search results in a dropdown -->
 			<Transition name="fade">
 				<Results
-					v-show="openResults"
+					v-if="openResults"
 					:loading="loading"
 					:search-results="searchResults"
 					:dashboard="dashboard"
