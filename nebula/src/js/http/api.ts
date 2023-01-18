@@ -39,6 +39,7 @@ const sendRequest = async (
 		method,
 		headers: {
 			"Content-Type": "application/json",
+			"X-CSRF-Token": CSRF_TOKEN,
 		},
 	};
 
@@ -46,7 +47,6 @@ const sendRequest = async (
 
 	if (body) {
 		fetchOptions.body = JSON.stringify(body);
-		fetchOptions.headers["X-CSRF-Token"] = CSRF_TOKEN;
 	}
 
 	try {
