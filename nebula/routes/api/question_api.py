@@ -75,7 +75,7 @@ def create_question():
 
     question = Question(
         title=title,
-        body=body,
+        content=content,
         user_uuid=current_user.uuid,
         course_uuid=course_id,
         subject_tags=subject_tags
