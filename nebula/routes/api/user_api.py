@@ -160,3 +160,17 @@ def update_user(uuid):
 
     db.session.commit()
     return jsonify(user.expose())
+
+@bp.route("/<uuid>", methods=["DELETE"])
+def delete_user(uuid):
+    if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
+        return jsonify({"message": "Unauthorized"}), 401
+
+    user = User.query.filter_by(uuid=uuid).one_or_none()
+    if user is None:
+        return jsonify({"message": "User not found"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": "User deleted"}), 200

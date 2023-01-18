@@ -79,6 +79,13 @@ def create_course_level():
 
 @bp.route("/<uuid>", methods=["DELETE"])
 def delete_course_level(uuid):
-    return jsonify(
-        {"message": "not implemented"}
-    )
+    if not current_user.is_authenticated or not current_user.access_level >= 3:
+        return jsonify({"message": "unauthorized"}), 401
+
+    course_level = CourseLevel.query.filter_by(uuid=uuid).one_or_none()
+    if course_level is None:
+        return jsonify({"message": "Course level not found"}), 404
+
+    db.session.delete(course_level)
+    db.session.commit()
+    return jsonify({"message": "Course level deleted successfully"})
