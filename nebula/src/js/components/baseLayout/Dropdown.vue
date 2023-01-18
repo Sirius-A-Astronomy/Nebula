@@ -34,7 +34,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
 				<button
 					v-if="!$slots.button"
 					class="dropdown__button"
-					@click="toggle"
+					@click.stop="toggle"
 					@keydown.escape="close"
 					v-click-outside="{
 						handler: close,
@@ -69,7 +69,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
         ${isOpen ? 'dropdown__menu--open' : ''}
         `">
 			<div
-				class="dropdown-menu__content text-secondary-text bg-secondary-bg rounded-md z-10">
+				class="dropdown-menu__content px-2 text-secondary-text bg-secondary-bg rounded-md z-10">
 				<slot
 					name="dropdown-content"
 					:toggle="toggle"
@@ -95,10 +95,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
 		& > .dropdown__menu {
 			opacity: 1;
 			pointer-events: auto;
-
-			&__content {
-				visibility: visible;
-			}
+			visibility: visible;
 
 			&--below,
 			&--above {
@@ -165,10 +162,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
 	pointer-events: none;
 	width: max-content;
 	max-width: 20rem;
-
-	&__content {
-		visibility: hidden;
-	}
+	visibility: hidden;
 
 	&--below {
 		top: 100%;
