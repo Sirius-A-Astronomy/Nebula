@@ -122,7 +122,7 @@ def reset_password():
 @bp.route("/<uuid>", methods=["PUT"])
 @login_required
 def update_user(uuid):
-    if current_user.uuid != uuid and not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
+    if str(current_user.uuid) != uuid and current_user.access_level < ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
 
 
@@ -130,7 +130,9 @@ def update_user(uuid):
     if user is None:
         return jsonify({"message": "User not found"}), 404
 
-    if user.access_level >= current_user.access_level and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]:
+    if user.access_level >= current_user.access_level \
+        and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"] \
+            and current_user.uuid != user.uuid:
         return jsonify({"message": "You are not allowed to update this user"}), 400
 
     data = request.get_json(silent=True)
