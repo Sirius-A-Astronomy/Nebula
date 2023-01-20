@@ -10,6 +10,16 @@ export type User = {
 	created_at: string;
 };
 
+export type NewUser = {
+	first_name: string;
+	last_name: string;
+	username: string;
+	email: string;
+	password: string;
+	password_confirmation: string;
+	access_level: number;
+};
+
 export type AccessLevel = {
 	value: number;
 	name: string;
@@ -37,5 +47,26 @@ export const accessLevels: AccessLevel[] = [
 		name: "Maintainer",
 	},
 ];
+
+export const getAccessLevelName = (accessLevel: number): string => {
+	const accessLevelObj = accessLevels.find(
+		(accessLevelObj) => accessLevelObj.value === accessLevel
+	);
+	if (accessLevelObj) {
+		return accessLevelObj.name;
+	}
+	return "Unknown";
+};
+
+export const getAccessLevelValue = (accessLevelName: string): number => {
+	const accessLevelObj = accessLevels.find(
+		(accessLevelObj) =>
+			accessLevelObj.name.toLowerCase() === accessLevelName.toLowerCase()
+	);
+	if (accessLevelObj) {
+		return accessLevelObj.value;
+	}
+	return 0;
+};
 
 export const userStore = storeModuleFactory<User>("users");

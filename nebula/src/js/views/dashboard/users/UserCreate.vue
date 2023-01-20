@@ -6,7 +6,7 @@ import { useRouter } from "vue-router";
 import useFlash from "@stores/flashStore";
 
 import { userStore } from "@stores/userStore";
-import type { User } from "@stores/userStore";
+import type { User, NewUser } from "@stores/userStore";
 import type { Updatable, New } from "@/stores/factory/storeFactory";
 
 const router = useRouter();
@@ -14,9 +14,9 @@ const flash = useFlash();
 
 const awaitingResponse = ref(false);
 
-const submitUser = async (user: Updatable<User>) => {
+const submitUser = async (user: NewUser) => {
 	awaitingResponse.value = true;
-	const response = await userStore.actions.create(user as New<User>);
+	const response = await userStore.actions.create(user);
 	awaitingResponse.value = false;
 
 	if (response.status !== 201) {

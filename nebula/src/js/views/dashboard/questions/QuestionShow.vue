@@ -58,8 +58,8 @@ const updateCourse = async (question: Updatable<Question>) => {
 
 const onDeleteClicked = () => {
 	modal.add({
-		title: "Delete Course",
-		body: `Are you sure you want to delete course '${question.value?.title}'?`,
+		title: "Delete Question",
+		body: `Are you sure you want to delete question '${question.value?.title}'?`,
 		actions: [
 			{
 				text: "Cancel",
@@ -68,27 +68,27 @@ const onDeleteClicked = () => {
 			{
 				text: "Delete",
 				type: "danger",
-				action: deleteCourse,
+				action: deleteQuestion,
 			},
 		],
 	});
 };
 
-const deleteCourse = async () => {
+const deleteQuestion = async () => {
 	awaitingResponse.value = true;
+	const question = { ...questionStore.getters.byId(props.id).value };
 	const response = await questionStore.actions.delete(props.id);
 	awaitingResponse.value = false;
 
 	if (response.status !== 200) {
 		flash.add(
-			`Failed to delete course '${question.value?.title}': ${response.message}`,
+			`Failed to delete question '${question.title}': ${response.message}`,
 			"error"
 		);
 		return;
 	}
-	router.push({ name: "dashboard.course.index" });
-	const data = response.data as Question;
-	flash.add(`Course '${data.title}' deleted successfully`, "success");
+	flash.add(`Question '${question.title}' deleted successfully`, "success");
+	router.push({ name: "dashboard.question.index" });
 };
 
 const editting = ref(false);

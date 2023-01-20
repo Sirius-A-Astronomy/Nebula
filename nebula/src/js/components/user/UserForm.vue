@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted, watch, computed, reactive } from "vue";
 
-import type { User } from "@stores/userStore";
+import {
+	type User,
+	type NewUser,
+	getAccessLevelValue,
+} from "@stores/userStore";
 
 import {
 	validateUsername,
@@ -26,7 +30,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
 	(event: "cancel"): void;
-	(event: "submit", user: Updatable<User>): void;
+	(event: "submit", user: Updatable<User | NewUser>): void;
 }>();
 
 const values: Updatable<User> = reactive(
@@ -83,6 +87,14 @@ const submit = () => {
 		if (!validPassword.valid) {
 			errors.password = validPassword.message;
 		}
+
+		emit("submit", {
+			...values,
+			password: password.value,
+			password_confirmation: password.confirmation,
+		});
+
+		return;
 	}
 
 	emit("submit", values);
@@ -203,6 +215,12 @@ const submit = () => {
 					name="access_level"
 					id="access_level"
 					class="border-2 focus:border-primary-active border-primary-bg px-2 py-1 rounded-md focus:outline-none transition-colors bg-secondary-bg focus:bg-tertiary-bg focus:ring-primary-active"
+					:disabled="
+						(user?.access_level ?? 0) >=
+							authenticatedUser.access_level &&
+						authenticatedUser.access_level !==
+							getAccessLevelValue('maintainer')
+					"
 					v-model="values.access_level">
 					<option value="" disabled selected>
 						Select an access level
@@ -214,10 +232,7 @@ const submit = () => {
 							(accessLevel.value >=
 								authenticatedUser.access_level &&
 								authenticatedUser.access_level !==
-									accessLevels.find(
-										(accessLevel) =>
-											accessLevel.name === 'Maintainer'
-									)?.value) ||
+									getAccessLevelValue('maintainer')) ||
 							user?.id === authenticatedUser.id
 						"
 						:key="accessLevel.value">
@@ -229,6 +244,18 @@ const submit = () => {
 					v-if="user?.id === authenticatedUser.id"
 					class="text-tertiary-text text-sm">
 					Note: You cannot change your own access level.
+				</p>
+				<p
+					v-else
+					v-if="
+						(user?.access_level ?? 0) >=
+							authenticatedUser.access_level &&
+						authenticatedUser.access_level !==
+							getAccessLevelValue('maintainer')
+					"
+					class="text-tertiary-text text-sm">
+					Note: You cannot change the access level of a user with an
+					access level equal to or higher than your own.
 				</p>
 			</div>
 		</div>

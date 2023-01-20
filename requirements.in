@@ -4,5 +4,6 @@ Flask-WTF
 flask-login
 WTForms
 passlib
+faker
 
 gunicorn

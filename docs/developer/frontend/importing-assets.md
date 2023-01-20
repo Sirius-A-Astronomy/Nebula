@@ -33,59 +33,98 @@ To help with this difference, the `vite` template is used to import assets. The 
 
 ### Usage
 
-The `vite` template is used to import assets in `html` and `jinja` files.
 
-Behind the scenes, the `vite` template will import the asset from either the webserver or the `nebula/static` directory depending on the environment.
+The `vite` template provides the following functions: `vite_script`, `vite_style`, `vite_asset` and `vite_public_asset`. They can be imported as follows:
 
-This is done by using the `vite_script`, `vite_style`, `vite_asset` and `vite_public_asset` functions.
-
-Input: 
 ```html
-{% from "utilities/vite.html" import vite_script, vite_style, vite_asset, vite_public_asset with context %}
+{% from 'utilities/vite.html' import vite_script with context %}
+```
 
-# Import a script
+#### `vite_script`
+
+Imports a script. If the script imports any other assets, they will be imported as well.
+
+param: `source` - The path to the script relative to the `nebula/src` directory.
+
+Input:
+```html
 {{ vite_script('js/main.ts') }}
+```
 
-# Import a style
+Output:
+::: code-group
+```html [Development]
+<script type="module" src="http://localhost:5173/js/main.ts"></script>
+```
+
+```html [Production]
+<script type="module" src="/static/js/main.js"></script>
+<link rel="stylesheet" href="/static/main.css"></link>
+```
+:::
+
+#### `vite_style`
+
+Imports a style.
+
+param: `source` - The path to the style relative to the `nebula/src` directory.
+
+Input:
+```html
 {{ vite_style('scss/main.scss') }}
+```
 
-# Import an asset
+Output:
+::: code-group
+```html [Development]
+<link rel="stylesheet" href="http://localhost:5173/scss/main.scss">
+```
+
+```html [Production]
+<link rel="stylesheet" href="/static/main.css"></link>
+```
+:::
+
+#### `vite_asset`
+
+Imports an asset. The asset will be imported as is.
+
+param: `source` - The path to the asset relative to the `nebula/src` directory.
+
+Input:
+```html
 {{ vite_asset('js/main.js') }}
+```
 
-# Import a public asset
+Output:
+::: code-group
+```html [Development]
+http://localhost:5173/js/main.js
+```
+
+```html [Production]
+/static/js/main.js
+```
+:::
+#### `vite_public_asset`
+
+Imports a public asset. The asset will be imported as is.
+When importing a public asset, this function should be used instead of `vite_asset`. This is because public assets are served from a different location.
+
+param: `source` - The path to the asset relative to the `nebula/src/public` directory.
+
+Input:
+```html
 {{ vite_public_asset('images/logo.svg') }}
 ```
 
 Output:
 ::: code-group
 ```html [Development]
-# Import a script
-<scrip type="module" src="http://localhost:5174/js/main.ts"></script>
-
-# Import a style
-<link rel="stylesheet" href="http://localhost:5174/scss/main.scss">
-
-# Import an asset
-http://localhost:5174/js/main.js
-
-# Import a public asset
-http://localhost:5174/images/logo.svg
+http://localhost:5173/images/logo.svg
 ```
 
 ```html [Production]
-# Import a script
-<scrip type="module" src="/static/js/main.js"></script>
-
-# if main.js imported any other assets, they will be imported as well
-<link rel="stylesheet" src="/static/main.css"></link>
-
-# Import a style
-<link rel="stylesheet" href="/static/main.css">
-
-# Import an asset
-/static/js/main.js
-
-# Import a public asset
 /static/images/logo.svg
 ```
 :::
@@ -100,8 +139,11 @@ http://localhost:5174/images/logo.svg
 Assets in `TypeScript` and `Vue` files can just be imported the same way as in any other `TypeScript` or `Vue` project. Vite will handle the import depending on the environment.
 
 ```ts
-// Import a script
+// Import a script from a node module
 import { createApp } from 'vue';
+
+// Import a local script
+import App from '@/App.vue';
 
 // Import a style
 import '@scss/main.scss';
@@ -127,9 +169,9 @@ export default defineConfig({
   resolve: {
     alias: {
       // ...
-      '@': path.resolve(__dirname, 'js'), // [!code focus:3]
-      '@public': path.resolve(__dirname, 'public'),
-      '@scss': path.resolve(__dirname, 'scss'),
+      '@': path.resolve(__dirname, './nebula/src/js'), // [!code focus:3]
+      '@public': path.resolve(__dirname, './nebula/src/public'),
+      '@scss': path.resolve(__dirname, './nebula/src/scss'),
       // ...
     },
   },
@@ -143,9 +185,9 @@ export default defineConfig({
     // ...
     "paths": { // [!code focus]
       // ...
-      "@/*": ["js/*"], // [!code focus:3]
-      "@public/*": ["public/*"],
-      "@scss/*": ["scss/*"],
+      "@/*": ["nebula/src/js/*"], // [!code focus:3]
+      "@public/*": ["nebula/src/public/*"],
+      "@scss/*": ["nebula/src/scss/*"],
       // ...
     },
     // ...

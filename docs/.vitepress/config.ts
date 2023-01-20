@@ -37,19 +37,18 @@ const config = defineConfig({
 		],
 
 		nav: [
-			{ text: "Home", link: "/" },
 			{
-				text: "User Guide",
+				text: "User",
 				link: "/user/getting-started",
 				activeMatch: "/user/",
 			},
 			{
-				text: "Moderator Guide",
+				text: "Moderator",
 				link: "/moderator/getting-started",
 				activeMatch: "/moderator/",
 			},
 			{
-				text: "Developer Guide",
+				text: "Developer",
 				link: "/developer/getting-started",
 				activeMatch: "/developer/",
 			},

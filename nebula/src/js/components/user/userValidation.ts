@@ -69,7 +69,6 @@ export const validatePassword = (
 	valid: boolean;
 	message: string;
 } => {
-	console.log("password", password);
 	if (password.length < 12) {
 		return {
 			valid: false,
@@ -100,7 +99,6 @@ export const validatePasswordConfirmation = (
 	valid: boolean;
 	message: string;
 } => {
-	console.log("passwordConfirmation", passwordConfirmation);
 	if (!validatePassword(password, passwordConfirmation).valid) {
 		return {
 			valid: false,

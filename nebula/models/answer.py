@@ -16,7 +16,7 @@ class Answer(Base):
 
     # relation one-to-many: one: question, many: answers
     question_uuid = db.Column(GUID(), db.ForeignKey("question.uuid"), nullable=False)
-    question = db.relationship("Question", backref=db.backref("answers", lazy=True))
+    question = db.relationship("Question", backref=db.backref("answers", lazy=True, cascade="all, delete-orphan"))
 
     def __repr__(self):
         return f'Answer("{self.content}")'

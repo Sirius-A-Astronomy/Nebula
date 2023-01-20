@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted, watch, computed } from "vue";
-import { userStore, type User, accessLevels } from "@/stores/userStore";
+import {
+	userStore,
+	accessLevels,
+	getAccessLevelValue,
+} from "@stores/userStore";
+import type { User } from "@stores/userStore";
 import UserForm from "@/components/user/UserForm.vue";
 
 import type { Updatable } from "@stores/factory/storeFactory";
-import useFlashStore from "@/stores/flashStore";
+import useFlashStore from "@stores/flashStore";
 
 import { useRouter } from "vue-router";
 import api from "@/http/api";
 import useModalStore from "@/stores/modalStore";
+import { authenticatedUser } from "@/stores/sessionStore";
 
 const flash = useFlashStore();
 const modal = useModalStore();
@@ -57,8 +63,6 @@ const updateUser = async (user: Updatable<User>) => {
 	editting.value = false;
 };
 
-const confirmDelete = ref(false);
-
 const onDeleteClicked = () => {
 	modal.add({
 		title: "Delete User",
@@ -84,7 +88,7 @@ const deleteUser = async () => {
 
 	if (response.status !== 200) {
 		flash.add(
-			`Failed to delete uesr '${user.value.first_name} ${user.value.last_name}': ${response.message}`,
+			`Failed to delete user '${user.value.first_name} ${user.value.last_name}': ${response.message}`,
 			"error"
 		);
 		return;
@@ -152,6 +156,27 @@ const resetPassword = async () => {
 
 const editting = ref(false);
 
+const canEdit = computed(() => {
+	if (!user.value) {
+		return false;
+	}
+
+	if (!authenticatedUser.value) {
+		return false;
+	}
+
+	const isMaintainer =
+		authenticatedUser.value.access_level ===
+		getAccessLevelValue("maintainer");
+
+	const hasHigherAccessLevel =
+		authenticatedUser.value.access_level > user.value.access_level;
+
+	const isSameUser = authenticatedUser.value.id === user.value.id;
+
+	return isMaintainer || hasHigherAccessLevel || isSameUser;
+});
+
 onMounted(loadData);
 </script>
 
@@ -167,12 +192,17 @@ onMounted(loadData);
 
 				<div class="flex flex-row gap-1">
 					<button
+						v-if="canEdit"
 						@click="editting = true"
 						class="px-4 py-2 bg-primary-active text-primary-bg rounded-md font-bold">
 						Edit
 					</button>
 
 					<button
+						v-if="
+							canEdit &&
+							user.access_level >= getAccessLevelValue('admin')
+						"
 						@click="onDeleteClicked"
 						class="px-4 py-2 bg-alert-warning text-alert-warning-text rounded-md font-bold">
 						Delete
@@ -202,6 +232,9 @@ onMounted(loadData);
 			</div>
 
 			<button
+				v-if="
+					canEdit && user.access_level >= getAccessLevelValue('admin')
+				"
 				@click="onResetPasswordClicked"
 				class="rounded-md bg-alert-warning text-alert-warning-text px-4 py-2">
 				Reset Password

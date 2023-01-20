@@ -17,16 +17,13 @@ hero:
           link: https://gitlab.astro.rug.nl/sirius-a/nebula
 
 features:
-    -   icon: 
-        title: For students
+    -   title: For students
         details: Learn how to use Nebula as a student. Learn how to create and format questions, answers and comments.
         link: /user/getting-started
-    -   icon:
-        title: For Nebula moderators
+    -   title: For Nebula moderators
         details: Learn how to use Nebula as a moderator. Learn how to moderate questions, answers and comments. Learn how to managage users, courses and questions.
         link: /moderator/getting-started
-    -   icon:
-        title: For Nebula developers
+    -   title: For Nebula developers
         details: Learn how to use Nebula as a developer. Learn the project structure, how to set up a development environment and how to contribute to the project.
         link: /developer/getting-started
 ---

@@ -13,7 +13,7 @@ export type DeepPartial<T> = T extends object
 	  }
 	: T;
 
-export type New<T extends { id: string }> = Omit<T, "id">;
+export type New<T extends { id: string }> = Omit<T, "id" | "created_at">;
 
 export type Updatable<T extends { id: string }> = DeepPartial<T>;
 
@@ -92,7 +92,7 @@ export const storeModuleFactory = <T extends { id: string }>(
 			return response;
 		},
 
-		create: async (newItem: New<T>) => {
+		create: async <K extends New<T>>(newItem: K) => {
 			const response = await api.post(`${moduleName}/`, newItem);
 
 			if (response.status === 201) {
