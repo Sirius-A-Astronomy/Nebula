@@ -8,8 +8,18 @@ import BaseLayout from "@/BaseLayout.vue";
 
 import ModalContainer from "@components/ui/modals/ModalContainer.vue";
 import FlashContainer from "@components/ui/FlashContainer.vue";
+import { setCSRFToken } from "./http/api";
+import { onMounted } from "vue";
 
 const route = useRoute();
+
+onMounted(() => {
+	setCSRFToken(
+		document
+			.querySelector("meta[name=csrf-token]")
+			?.getAttribute("content") || ""
+	);
+});
 </script>
 
 <template>

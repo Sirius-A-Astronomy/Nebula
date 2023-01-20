@@ -1,8 +1,10 @@
 const API_URL = "";
 
-const CSRF_TOKEN =
-	document.querySelector("meta[name=csrf-token]")?.getAttribute("content") ||
-	"";
+let CSRF_TOKEN = "";
+
+export const setCSRFToken = (token: string): void => {
+	CSRF_TOKEN = token;
+};
 
 type SendRequestResponse = {
 	status: number;
