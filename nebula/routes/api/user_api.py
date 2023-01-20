@@ -6,7 +6,7 @@ from nebula.helpers.access_levels import ACCESS_LEVELS
 
 from nebula import db
 
-from nebula.models.user import User, create_user, validate_email, validate_username
+from nebula.models.user import User, validate_email, validate_username
 
 from nebula.routes.api import bp as api_bp
 
@@ -37,7 +37,7 @@ def get_user(uuid):
 
 @bp.route("/", methods=["POST"])
 @login_required
-def create_user():
+def create_user_route():
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
 
@@ -63,6 +63,13 @@ def create_user():
     if password is None:
         return jsonify({"message": "Password is required"}), 400
 
+    password_confirmation = data.get("password_confirmation")
+    if password_confirmation is None:
+        return jsonify({"message": "Password confirmation is required"}), 400
+
+    if password != password_confirmation:
+        return jsonify({"message": "Passwords do not match"}), 400
+
     access_level = data.get("access_level")
     if access_level is None:
         return jsonify({"message": "Access level is required"}), 400
@@ -70,7 +77,10 @@ def create_user():
     if access_level not in ACCESS_LEVELS["ByLevel"].keys():
         return jsonify({"message": "Invalid access level"}), 400
 
-    user = create_user(
+    if access_level >= current_user.access_level and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]:
+        return jsonify({"message": "You are not allowed to create a user with this access level"}), 400
+
+    user = User(
         username=username,
         email=email,
         first_name=first_name,
@@ -115,9 +125,13 @@ def update_user(uuid):
     if current_user.uuid != uuid and not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
 
+
     user = User.query.filter_by(uuid=uuid).one_or_none()
     if user is None:
         return jsonify({"message": "User not found"}), 404
+
+    if user.access_level >= current_user.access_level and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]:
+        return jsonify({"message": "You are not allowed to update this user"}), 400
 
     data = request.get_json(silent=True)
 
