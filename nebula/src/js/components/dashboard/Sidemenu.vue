@@ -34,11 +34,13 @@ const menuLinks = [
 
 <template>
 	<div class="py-2 text-primary-text">
-		<a class="flex flex-row items-center px-4 py-2" href="/">
+		<RouterLink class="flex flex-row items-center px-4 py-2" :to="{
+            name: 'home'
+        }">
 			<span class="text-primary-active text-4xl tracking-wide"
 				>Nebula</span
 			>
-		</a>
+		</RouterLink>
 
 		<nav class="flex flex-col items-start">
 			<RouterLink
