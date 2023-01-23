@@ -8,7 +8,6 @@ import useFlash from "@stores/flashStore";
 
 import Header from "@components/dashboard/Header.vue";
 import Sidemenu from "@components/dashboard/Sidemenu.vue";
-import ModalContainer from "@components/ui/modals/ModalContainer.vue";
 
 const flash = useFlash();
 </script>

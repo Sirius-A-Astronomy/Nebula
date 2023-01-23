@@ -136,7 +136,11 @@ const onLoginSubmit = async () => {
             <div
               class="m-auto flex w-full max-w-xl flex-col items-center justify-center"
             >
-              <div v-for="i in 50" class="my-2 box-border h-4 w-4 bg-pink-500">
+              <div
+                v-for="i in 50"
+                class="my-2 box-border h-4 w-4 bg-pink-500"
+                :key="i"
+              >
                 {{ i }} aaaaaaaaaa
               </div>
             </div>

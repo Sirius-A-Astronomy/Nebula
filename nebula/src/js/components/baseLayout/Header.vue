@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 
 import { courseStore } from "@stores/courseStore";
 import { courseLevelStore } from "@stores/courseLevelStore";
-import { computed, ref } from "@vue/reactivity";
+import { computed, ref } from "vue";
 import type { Ref } from "vue";
 import Dropdown from "./Dropdown.vue";
 import { useRoute } from "vue-router";

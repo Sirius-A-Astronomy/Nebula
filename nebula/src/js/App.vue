@@ -14,50 +14,49 @@ import { onMounted } from "vue";
 const route = useRoute();
 
 onMounted(() => {
-	setCSRFToken(
-		document
-			.querySelector("meta[name=csrf-token]")
-			?.getAttribute("content") || ""
-	);
+  setCSRFToken(
+    document.querySelector("meta[name=csrf-token]")?.getAttribute("content") ||
+      ""
+  );
 });
 </script>
 
 <template>
-	<div>
-		<a href="#content" id="skip-link" class="skip-link sr-only"
-			>Skip to content</a
-		>
-		<CookieNotice />
-		<ModalContainer />
-		<FlashContainer />
+  <div>
+    <a href="#content" id="skip-link" class="skip-link sr-only"
+      >Skip to content</a
+    >
+    <CookieNotice />
+    <ModalContainer />
+    <FlashContainer />
 
-		<Dashboard v-if="route.name?.toString().startsWith('dashboard')" />
-		<BaseLayout v-else />
-	</div>
+    <Dashboard v-if="route.name?.toString().startsWith('dashboard')" />
+    <BaseLayout v-else />
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .skip-link,
 #skip-link {
-	position: absolute;
-	top: 8px;
-	left: 8px;
-	padding: 8px 16px;
-	z-index: 999;
-	border-radius: 8px;
-	font-size: 12px;
-	font-weight: bold;
-	text-decoration: none;
-	color: var(--color-primary-active);
-	box-shadow: var(--box-shadow);
-	background-color: var(--color-background);
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 8px 16px;
+  z-index: 999;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--color-primary-active);
+  box-shadow: var(--box-shadow);
+  background-color: var(--color-background);
 
-	&:focus {
-		height: auto;
-		width: auto;
-		clip: auto;
-		-webkit-clip-path: none;
-		clip-path: none;
-	}
+  &:focus {
+    height: auto;
+    width: auto;
+    clip: auto;
+    -webkit-clip-path: none;
+    clip-path: none;
+  }
 }
 </style>

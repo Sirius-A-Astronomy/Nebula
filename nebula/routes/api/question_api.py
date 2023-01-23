@@ -56,6 +56,14 @@ def create_question():
     if Course.query.filter_by(uuid=course_id).one_or_none() is None:
         return jsonify({"message": "Course does not exist"}), 400
 
+
+    question = Question(
+        title=title,
+        content=content,
+        user_uuid=current_user.uuid,
+        course_uuid=course_id,
+    )
+
     subject_tags_req = data.get("subject_tags")
     if subject_tags_req is not None:
         from nebula.models.subject_tag import SubjectTag
@@ -73,13 +81,6 @@ def create_question():
             question.subject_tags.append(subject_tag)
 
 
-    question = Question(
-        title=title,
-        content=content,
-        user_uuid=current_user.uuid,
-        course_uuid=course_id,
-        subject_tags=subject_tags
-    )
 
     db.session.add(question)
     db.session.commit()
