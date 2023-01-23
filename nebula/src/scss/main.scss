@@ -5,19 +5,19 @@
 @tailwind utilities;
 
 body {
-	@apply bg-primary-bg;
+  @apply bg-primary-bg;
 
-	@apply text-primary-text;
+  @apply text-primary-text;
 }
 
 footer {
-	padding: 1em 0;
-	margin: 60px auto 0 auto;
-	/* margin-top: 60px;
+  padding: 1em 0;
+  margin: 60px auto 0 auto;
+  /* margin-top: 60px;
 	margin-bottom: 0 !important; */
-	background-color: var(--grey, #666666) !important;
-	font-size: 90%;
-	color: #fff !important;
-	text-align: center;
-	width: 100%;
+  background-color: var(--grey, #666666) !important;
+  font-size: 90%;
+  color: #fff !important;
+  text-align: center;
+  width: 100%;
 }
