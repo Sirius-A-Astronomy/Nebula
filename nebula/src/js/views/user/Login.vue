@@ -3,7 +3,6 @@ import LoginImage from "/images/login.svg";
 import RegisterImage from "/images/register.svg";
 import { watch, ref } from "vue";
 import { useRouter } from "vue-router";
-import api from "@/http/api";
 import useFlashStore from "@stores/flashStore";
 import { login } from "@stores/sessionStore";
 
