@@ -14,7 +14,7 @@ export default defineConfig({
 
     rollupOptions: {
       input: {
-        app: resolve(__dirname, "nebula/src/js/app.ts"),
+        app: resolve(__dirname, "nebula/src/js/App.ts"),
       },
       output: {
         dir: "nebula/static",
