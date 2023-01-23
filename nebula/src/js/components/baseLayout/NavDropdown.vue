@@ -1,48 +1,56 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from "vue-router";
 import Dropdown from "@components/baseLayout/Dropdown.vue";
 
-export type MenuItem = {
-	name: string;
-	to?: RouteLocationRaw;
-	items?: MenuItem[];
-	active?: boolean;
-};
+import type { MenuItem } from "@/BaseLayout.vue";
 
 defineProps<{
-	items: MenuItem[];
-	direction?: "left" | "right" | "above" | "below";
+  menuItem: MenuItem;
+  direction?: "left" | "right" | "above" | "below";
+  align?: "start" | "end" | "center";
 }>();
 </script>
 
 <template>
-	<div class="flex flex-col" v-for="item in items" :key="item.name">
-		<span v-if="!item.to && !item.items" class="text-tertiary-text">{{
-			item.name
-		}}</span>
+  <RouterLink
+    :to="menuItem.to ?? ''"
+    v-if="!menuItem.items"
+    @click="(e: Event) => {
+            if (menuItem.to) {
+                return
+            }
 
-		<RouterLink
-			v-if="!item.items && item.to"
-			:to="item.to"
-			class="flex items-center text-primary-text">
-			<span class="py-1">{{ item.name }}</span>
-		</RouterLink>
+            if (menuItem.action)
+                menuItem.action();
+            e.preventDefault();
+        }"
+    class="flex text-primary-text"
+    :class="{
+      'cursor-default': !menuItem.to && !menuItem.action,
+    }"
+  >
+    <span class="py-1">{{ menuItem.name }}</span>
+  </RouterLink>
+  <Dropdown
+    v-if="menuItem.items"
+    :direction="direction ?? 'below'"
+    :align="align ?? 'start'"
+  >
+    <template #button-content>
+      <span class="py-1 text-primary-text">{{ menuItem.name }}</span>
+    </template>
 
-		<Dropdown
-			v-if="item.items"
-			:direction="direction ?? 'below'"
-			align="start">
-			<template #button-content>
-				<span class="text-primary-text py-1">{{ item.name }}</span>
-			</template>
-
-			<template #dropdown-content>
-				<div class="flex flex-col">
-					<NavDropdown :items="item.items" direction="left" />
-				</div>
-			</template>
-		</Dropdown>
-	</div>
+    <template #dropdown-content>
+      <div class="flex flex-col">
+        <NavDropdown
+          v-for="item in menuItem.items"
+          :key="item.name"
+          :menu-item="item"
+          direction="left"
+          align="start"
+        />
+      </div>
+    </template>
+  </Dropdown>
 </template>
 
 <style lang="scss" scoped></style>
