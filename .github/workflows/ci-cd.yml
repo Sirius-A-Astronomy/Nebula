@@ -2,7 +2,7 @@ name: Continiuous Integration and Deployment
 run-name: CI/CD
 on: [push, pull_request]
 jobs:
-  Build Python:
+  Build_Python:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +26,7 @@ jobs:
         run: |
           pip install pytest
           pytest
-  Build Node:
+  Build_Node:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
