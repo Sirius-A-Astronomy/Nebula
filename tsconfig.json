@@ -1,11 +1,11 @@
 {
     "extends": "@vue/tsconfig/tsconfig.web.json",
     "include": [
-        "env.d.ts",
         "nebula/src/**/*",
         "nebula/src/**/*.vue",
         "nebula/src/**/*.ts",
         "nebula/src/**/*.d.ts",
+        "tests/js/**/*",
     ],
     "compilerOptions": {
         "baseUrl": ".",
