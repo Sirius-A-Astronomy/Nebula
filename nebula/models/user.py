@@ -62,6 +62,9 @@ class User(Base):
         self.password = sha256_crypt.encrypt(password)
         db.session.commit()
 
+    def check_password(self, password):
+        return sha256_crypt.verify(password, self.password)
+
     @hybrid_property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
