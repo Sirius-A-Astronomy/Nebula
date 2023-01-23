@@ -62,11 +62,6 @@ def search_courses(query: str) -> list:
                 "name": course.course_level.name,
                 "study_type": course.course_level.study_type,
             },
-            "url": url_for(
-                "web.course.course",
-                course_code=course.code,
-                course_level_code=course.course_level.code,
-            ),
             "questions_count": len(course.questions),
         }
         for course in courses
@@ -100,12 +95,6 @@ def search_questions(query: str) -> list:
             "title": question.title,
             "content": question.content,
             "created_at": pretty_date(question.created_at),
-            "url": url_for(
-                "web.question.question",
-                question_uuid=question.uuid,
-                course_code=question.course.code,
-                course_level_code=question.course.course_level.code,
-            ),
             "user": {
                 "id": question.user.uuid,
                 "name": f"{question.user.first_name} {question.user.last_name}",
@@ -119,7 +108,6 @@ def search_questions(query: str) -> list:
                 {
                     "name": subject_tag.name,
                     "id": subject_tag.uuid,
-                    "url": url_for("web.search.search", query=subject_tag.name),
                 }
                 for subject_tag in question.subject_tags
             ],
