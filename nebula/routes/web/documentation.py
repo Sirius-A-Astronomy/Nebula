@@ -11,6 +11,8 @@ bp = Blueprint(
     static_url_path="/assets",
 )
 
+web_bp.register_blueprint(bp)
+
 
 
 @bp.route("/", defaults={"_path": ""})
