@@ -23,10 +23,12 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Format with black
+        if: success() || failure() # make sure to run this step even if the previous one fails
         run: |
           pip install black
           black --check .
       - name: Test with pytest
+        if: success() || failure() # make sure to run this step even if the previous one fails
         run: |
           pip install pytest
           pytest
