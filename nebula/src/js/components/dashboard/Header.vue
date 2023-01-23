@@ -38,7 +38,9 @@ const logout = async () => {
 </script>
 
 <template>
-  <div class="relative z-10 w-full bg-secondary-bg shadow-md">
+  <div
+    class="fixed left-0 right-0 top-0 z-10 flex h-20 flex-row justify-center bg-secondary-bg shadow-md md:left-64"
+  >
     <div class="container flex flex-row items-center justify-between py-4">
       <button
         id="nav-mobile-hamburger"
