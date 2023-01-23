@@ -2,14 +2,15 @@ name: Continiuous Integration and Deployment
 run-name: CI/CD
 on: [push, pull_request]
 jobs:
-  build:
+  Build Python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
+          cache: "pip"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -25,19 +26,27 @@ jobs:
         run: |
           pip install pytest
           pytest
-
+  Build Node:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
-      - name: Use Node.JS 18.x
+      - name: Set up Node 18
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
+          cache: "npm"
       - name: Install dependencies
-        run: npm ci
-      - name: Lint with ESLint
-        run: npm run lint
-      - name: Build nebula
-        run: npm run build
-      - name: Build Docs
-        run: npm run docs:build
+        run: |
+          npm ci
+      - name: Lint with eslint
+        run: |
+          npm run lint
       - name: Test with Vitest
-        run: npm run test
+        run: |
+          npm run test
+      - name: Build with Vite
+        run: |
+          npm run build
+      - name: Build Docs with Vitepress
+        run: |
+          npm run docs:build
