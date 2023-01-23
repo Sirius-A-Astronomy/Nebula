@@ -14,7 +14,6 @@ bp = Blueprint(
 web_bp.register_blueprint(bp)
 
 
-
 @bp.route("/", defaults={"_path": ""})
 @bp.route("/<path:_path>")
 def documentation(_path=None):

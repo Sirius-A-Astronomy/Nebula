@@ -1,5 +1,6 @@
 from nebula.models import GUID, Base, db
 
+
 class Course(Base):
     name = db.Column(db.String(128), nullable=False)
     code = db.Column(db.String(16), nullable=False, unique=True)
@@ -11,7 +12,8 @@ class Course(Base):
         GUID(), db.ForeignKey("course_level.uuid"), nullable=True
     )
     course_level = db.relationship(
-        "CourseLevel", backref=db.backref("courses", lazy=True, cascade="all, delete-orphan")
+        "CourseLevel",
+        backref=db.backref("courses", lazy=True, cascade="all, delete-orphan"),
     )
 
     def __repr__(self):

@@ -10,7 +10,6 @@ from nebula.routes.web import bp as web_bp
 bp = Blueprint("course", __name__, url_prefix="/q/<course_level_code>")
 
 
-
 @bp.route("/<course_code>")
 def course(course_code, course_level_code):
     course = Course.query.filter_by(code=course_code).first()

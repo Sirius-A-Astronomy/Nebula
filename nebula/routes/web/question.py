@@ -38,7 +38,6 @@ from nebula.routes.web import bp as web_bp
 bp = Blueprint("question", __name__, url_prefix="/q/<course_level_code>/<course_code>")
 
 
-
 class CommentForm(FlaskForm):
     class Meta:
         locales = ["en_US", "en"]

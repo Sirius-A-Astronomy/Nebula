@@ -1,10 +1,10 @@
 from flask import jsonify, request, url_for
+from flask_login import current_user
 from sqlalchemy import or_, select
 from sqlalchemy.sql.operators import ilike_op
-from flask_login import current_user
-from nebula.helpers.access_levels import ACCESS_LEVELS
-from nebula import db
 
+from nebula import db
+from nebula.helpers.access_levels import ACCESS_LEVELS
 from nebula.helpers.global_functions import pretty_date
 from nebula.models.answer import Answer
 from nebula.models.course import Course
@@ -12,7 +12,6 @@ from nebula.models.question import Question
 from nebula.models.subject_tag import SubjectTag
 from nebula.models.user import User
 from nebula.routes.api import bp
-
 
 
 @bp.route("/search", methods=["GET"])
@@ -124,9 +123,13 @@ def search_users(query: str) -> list:
     if not query:
         return []
 
-    if (current_user.is_anonymous or not current_user.access_level >= ACCESS_LEVELS["ByName"]["moderator"]["level"]):
+    if (
+        current_user.is_anonymous
+        or not current_user.access_level
+        >= ACCESS_LEVELS["ByName"]["moderator"]["level"]
+    ):
         return []
-    
+
     users = db.session.execute(
         db.select(User).where(
             or_(
@@ -136,7 +139,6 @@ def search_users(query: str) -> list:
             )
         )
     ).scalars()
-
 
     users_json = [
         {
@@ -148,7 +150,3 @@ def search_users(query: str) -> list:
     ]
 
     return users_json
-
-
-
-

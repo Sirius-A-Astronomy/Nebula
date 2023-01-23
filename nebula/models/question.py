@@ -19,12 +19,17 @@ class Question(Base):
     sources = db.Column(db.Text)
     # relation one-to-many: one course, many questions
     course_uuid = db.Column(GUID(), db.ForeignKey("course.uuid"), nullable=True)
-    course = db.relationship("Course", backref=db.backref("questions", lazy=True, cascade="all, delete-orphan"))
+    course = db.relationship(
+        "Course",
+        backref=db.backref("questions", lazy=True, cascade="all, delete-orphan"),
+    )
 
     # relation one-to-many: one user, many questions
     user_uuid = db.Column(GUID(), db.ForeignKey("user.uuid"), nullable=False)
     user = db.relationship(
-        "User", foreign_keys=[user_uuid], backref=db.backref("questions", lazy=True, cascade="all, delete-orphan")
+        "User",
+        foreign_keys=[user_uuid],
+        backref=db.backref("questions", lazy=True, cascade="all, delete-orphan"),
     )
 
     # the many-to-many relations requires an extra table:

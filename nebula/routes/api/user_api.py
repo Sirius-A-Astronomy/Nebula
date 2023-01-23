@@ -1,18 +1,17 @@
-from flask import Blueprint, request, jsonify
-from flask_login import login_required, current_user
 import os
 
-from nebula.helpers.access_levels import ACCESS_LEVELS
+from flask import Blueprint, jsonify, request
+from flask_login import current_user, login_required
 
 from nebula import db
-
+from nebula.helpers.access_levels import ACCESS_LEVELS
 from nebula.models.user import User, validate_email, validate_username
-
 from nebula.routes.api import bp as api_bp
 
 bp = Blueprint("user_api", __name__, url_prefix="/users")
 
 api_bp.register_blueprint(bp)
+
 
 @bp.route("/", methods=["GET"])
 @login_required
@@ -22,6 +21,7 @@ def get_users():
 
     users = User.query.all()
     return jsonify([user.expose() for user in users])
+
 
 @bp.route("/<uuid>", methods=["GET"])
 @login_required
@@ -34,6 +34,7 @@ def get_user(uuid):
         return jsonify({"message": "User not found"}), 404
 
     return jsonify(user.expose())
+
 
 @bp.route("/", methods=["POST"])
 @login_required
@@ -77,8 +78,18 @@ def create_user_route():
     if access_level not in ACCESS_LEVELS["ByLevel"].keys():
         return jsonify({"message": "Invalid access level"}), 400
 
-    if access_level >= current_user.access_level and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]:
-        return jsonify({"message": "You are not allowed to create a user with this access level"}), 400
+    if (
+        access_level >= current_user.access_level
+        and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]
+    ):
+        return (
+            jsonify(
+                {
+                    "message": "You are not allowed to create a user with this access level"
+                }
+            ),
+            400,
+        )
 
     user = User(
         username=username,
@@ -94,6 +105,7 @@ def create_user_route():
     db.session.commit()
 
     return jsonify(user.expose()), 201
+
 
 @bp.route("/reset_password", methods=["POST"])
 @login_required
@@ -119,20 +131,25 @@ def reset_password():
 
     return jsonify({"password": random_password}), 200
 
+
 @bp.route("/<uuid>", methods=["PUT"])
 @login_required
 def update_user(uuid):
-    if str(current_user.uuid) != uuid and current_user.access_level < ACCESS_LEVELS["ByName"]["admin"]["level"]:
+    if (
+        str(current_user.uuid) != uuid
+        and current_user.access_level < ACCESS_LEVELS["ByName"]["admin"]["level"]
+    ):
         return jsonify({"message": "Unauthorized"}), 401
-
 
     user = User.query.filter_by(uuid=uuid).one_or_none()
     if user is None:
         return jsonify({"message": "User not found"}), 404
 
-    if user.access_level >= current_user.access_level \
-        and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"] \
-            and current_user.uuid != user.uuid:
+    if (
+        user.access_level >= current_user.access_level
+        and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]
+        and current_user.uuid != user.uuid
+    ):
         return jsonify({"message": "You are not allowed to update this user"}), 400
 
     data = request.get_json(silent=True)
@@ -168,14 +185,29 @@ def update_user(uuid):
             return jsonify({"message": "You cannot change your own access_level"}), 400
 
         if current_user.access_level <= access_level:
-            return jsonify({"message": "You cannot change the access_level to a level equal to or higher than your own"}), 400
+            return (
+                jsonify(
+                    {
+                        "message": "You cannot change the access_level to a level equal to or higher than your own"
+                    }
+                ),
+                400,
+            )
 
         if current_user.access_level <= user.access_level:
-            return jsonify({"message": "You cannot change the access_level of a user equal to or higher than your own"}), 400
+            return (
+                jsonify(
+                    {
+                        "message": "You cannot change the access_level of a user equal to or higher than your own"
+                    }
+                ),
+                400,
+            )
         user.access_level = access_level
 
     db.session.commit()
     return jsonify(user.expose())
+
 
 @bp.route("/<uuid>", methods=["DELETE"])
 def delete_user(uuid):

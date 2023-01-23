@@ -13,11 +13,8 @@ api_bp.register_blueprint(bp)
 @bp.route("/", methods=["GET"])
 def get_course_levels():
     course_levels = CourseLevel.query.all()
-    return jsonify(
-        [
-            course_level.expose() for course_level in course_levels
-        ]
-    )
+    return jsonify([course_level.expose() for course_level in course_levels])
+
 
 @bp.route("/<uuid>", methods=["GET"])
 def get_course_level(uuid):
@@ -26,6 +23,7 @@ def get_course_level(uuid):
         return jsonify({"message": "course level not found"}), 404
 
     return jsonify(course_level.expose())
+
 
 @bp.route("/<uuid>", methods=["PUT"])
 def update_course_level(uuid):
@@ -53,6 +51,7 @@ def update_course_level(uuid):
     db.session.commit()
     return jsonify(course_level.expose())
 
+
 @bp.route("/", methods=["POST"])
 def create_course_level():
     if not current_user.is_authenticated or not current_user.access_level >= 3:
@@ -76,6 +75,7 @@ def create_course_level():
     db.session.add(course_level)
     db.session.commit()
     return jsonify(course_level.expose())
+
 
 @bp.route("/<uuid>", methods=["DELETE"])
 def delete_course_level(uuid):

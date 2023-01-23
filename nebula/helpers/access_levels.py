@@ -1,5 +1,3 @@
-
-
 ACCESS_LEVELS_PROTO = {
     "guest": {"level": 0, "name": "Guest"},
     "student": {"level": 1, "name": "Student"},

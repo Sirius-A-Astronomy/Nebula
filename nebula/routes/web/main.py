@@ -10,5 +10,5 @@ web_bp.register_blueprint(bp)
 
 @bp.route("/", defaults={"path": ""})
 @bp.route("/<path:path>")
-def index(path = None):
+def index(path=None):
     return render_template("main/index.html")

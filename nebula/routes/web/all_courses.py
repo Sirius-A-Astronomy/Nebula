@@ -7,7 +7,6 @@ from nebula.routes.web import bp as web_bp
 bp = Blueprint("courses", __name__)
 
 
-
 @bp.route("/courses")
 def all_courses():
     course_levels = CourseLevel.query.all()
