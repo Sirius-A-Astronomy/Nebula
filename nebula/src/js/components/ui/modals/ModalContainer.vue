@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import useModalStore from "@stores/modalStore";
-import CloseIcon from "@components/icons/Close.vue";
+import CloseIcon from "@/components/icons/CloseIcon.vue";
 
 const modal = useModalStore();
 
@@ -44,6 +44,7 @@ const executeAction = (action: any) => {
               v-for="action in currentModal.actions?.filter((action) =>
                 ['positive', 'danger', 'warning'].includes(action.type ?? '')
               )"
+              :key="action.text"
               class="rounded-md px-4 py-2 font-bold hover:font-bold"
               :class="{
                 'bg-alert-warning text-alert-warning-text':
@@ -62,6 +63,7 @@ const executeAction = (action: any) => {
               v-for="action in currentModal.actions?.filter((action) =>
                 ['negative', 'neutral'].includes(action.type ?? 'neutral')
               )"
+              :key="action.text"
               class="rounded-md px-4 py-2 font-bold hover:shadow-md"
               :class="{
                 'bg-alert-warning text-alert-warning-text':

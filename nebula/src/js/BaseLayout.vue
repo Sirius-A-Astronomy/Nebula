@@ -8,7 +8,7 @@ export type MenuItem = {
 };
 
 import { RouterView, useRouter, type RouteLocationRaw } from "vue-router";
-import Header from "@components/baseLayout/Header.vue";
+import Header from "@/components/baseLayout/BaseHeader.vue";
 import mobileNavMenu from "@components/baseLayout/mobileNavMenu.vue";
 
 import { onMounted, computed } from "vue";

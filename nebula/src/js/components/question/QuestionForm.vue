@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Question, Answer } from "@stores/questionStore";
-import type { New, Updatable } from "@stores/factory/storeFactory";
-import { ref, reactive, type Ref, onMounted, computed } from "vue";
+import type { Question } from "@stores/questionStore";
+import type { Updatable } from "@stores/factory/storeFactory";
+import { ref, reactive, onMounted, computed } from "vue";
 
 import MarkdownEditor from "../MarkdownEditor.vue";
 
@@ -28,6 +28,7 @@ const values = ref({
   subject_tags: props.question?.subject_tags ?? [],
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errors = reactive({
   title: "",
   content: "",
@@ -83,7 +84,7 @@ const submit = async () => {
           v-model="values.course.id"
         >
           <option value="" disabled selected>Select a course</option>
-          <option v-for="course in courses" :value="course.id">
+          <option v-for="course in courses" :value="course.id" :key="course.id">
             {{ course.name }}
           </option>
         </select>

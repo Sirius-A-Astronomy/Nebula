@@ -46,6 +46,7 @@ const menuLinks = [
     <nav class="flex flex-col items-start">
       <RouterLink
         v-for="link in menuLinks"
+        :key="link.name"
         :to="link.path"
         class="nav-link relative px-4 py-2 text-2xl font-medium tracking-wide hover:text-primary-active"
         active-class="active text-primary-active"

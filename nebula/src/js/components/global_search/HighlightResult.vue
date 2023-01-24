@@ -4,6 +4,7 @@ import fuzzysort from "fuzzysort";
 import { computed } from "vue";
 
 const props = defineProps<{
+  // eslint-disable-next-line no-undef -- Fuzzysort.Result is defined in the fuzzysort package
   result: Fuzzysort.Result;
   fallback?: string;
   highlightClass?: string;

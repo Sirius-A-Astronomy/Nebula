@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { courseStore, type Course } from "@stores/courseStore";
 
 import type { Updatable } from "@stores/factory/storeFactory";
@@ -21,7 +21,7 @@ const course = computed(() => courseStore.getters.byId(props.id).value);
 
 const router = useRouter();
 
-watch(props, (value) => {
+watch(props, () => {
   loading.value = true;
   loadData();
 });

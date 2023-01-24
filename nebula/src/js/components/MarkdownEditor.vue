@@ -2,7 +2,7 @@
 import { getShikiHighlighter } from "../lib/highlighter";
 import type { Highlighter } from "shiki";
 import { ref, watch, computed, onMounted } from "vue";
-import Markdown from "./Markdown.vue";
+import Markdown from "./MarkdownDisplay.vue";
 import DOMPurify from "dompurify";
 
 const props = defineProps<{

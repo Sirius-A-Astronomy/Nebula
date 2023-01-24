@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SearchResults } from "./Search.vue";
+import type { SearchResults } from "@components/global_search/GlobalSearch.vue";
 import { ref, type Ref, computed } from "vue";
 import { OrbitSpinner } from "epic-spinners";
 import { RouterLink } from "vue-router";
@@ -260,9 +260,11 @@ const expanded: Ref<"none" | "questions" | "courses" | "users"> = ref("none");
                   >
                 </div>
 
-                <div class="flex flex-row">
+                <div
+                  class="flex flex-row"
+                  v-if="question.obj.subject_tags?.length > 0"
+                >
                   <span
-                    v-if="question.obj.subject_tags?.length > 0"
                     class="max-w-32 mr-4 overflow-hidden whitespace-nowrap rounded-full bg-accent-clr px-2 text-xs text-on-accent-text"
                     v-for="tag in question.obj.subject_tags"
                     :key="tag.id"

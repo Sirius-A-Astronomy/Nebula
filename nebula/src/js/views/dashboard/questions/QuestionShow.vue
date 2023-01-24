@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { questionStore } from "@/stores/questionStore";
 import type { Question } from "@/stores/questionStore";
 
@@ -9,7 +9,7 @@ import useFlashStore from "@/stores/flashStore";
 
 import { useRouter } from "vue-router";
 import useModalStore from "@/stores/modalStore";
-import Markdown from "@/components/Markdown.vue";
+import Markdown from "@/components/MarkdownDisplay.vue";
 
 const flash = useFlashStore();
 

@@ -26,6 +26,11 @@ const answersJson: ComputedRef<string> = computed(() => {
   }
 });
 
+const updateAnswer = (answer: Answer) => {
+  const index = answers.value.findIndex((a) => a.id == answer.id);
+  if (index) answers.value[index] = answer;
+};
+
 const removeAnswer = (answerId: number) => {
   answers.value = answers.value.filter((a) => a.id != answerId);
 };
@@ -43,7 +48,11 @@ const addAnswer = () => {
       :key="answer.id"
       class="background-card my-2"
     >
-      <AnswerVue :answer="answer" @remove="removeAnswer" />
+      <AnswerVue
+        :answer="answer"
+        @remove="removeAnswer"
+        @update="updateAnswer"
+      />
     </div>
   </div>
 

@@ -52,11 +52,13 @@ const loginValues = ref({
   password: "",
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const loginErrors = ref({
   username: "",
   password: "",
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const registerValues = ref({
   username: "",
   password: "",

@@ -7,7 +7,6 @@ import useFlash from "@stores/flashStore";
 
 import { userStore } from "@stores/userStore";
 import type { User, NewUser } from "@stores/userStore";
-import type { Updatable, New } from "@/stores/factory/storeFactory";
 
 const router = useRouter();
 const flash = useFlash();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import {
   userStore,
   accessLevels,
@@ -27,7 +27,7 @@ const user = computed(() => userStore.getters.byId(props.id).value);
 
 const router = useRouter();
 
-watch(props, (value) => {
+watch(props, () => {
   loading.value = true;
   loadData();
 });

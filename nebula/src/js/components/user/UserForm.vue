@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, watch, computed, reactive } from "vue";
+import { reactive } from "vue";
 
 import {
   type User,
@@ -8,18 +8,14 @@ import {
 } from "@stores/userStore";
 
 import {
-  validateUsername,
   validatePassword,
   validatePasswordConfirmation,
-  validateEmail,
 } from "@components/user/userValidation";
 
 import { accessLevels } from "@stores/userStore";
 import { authenticatedUser } from "@/stores/sessionStore";
 
 import type { New, Updatable } from "@stores/factory/storeFactory";
-
-import useFlashStore from "@/stores/flashStore";
 
 const props = defineProps<{
   user?: User;
@@ -241,8 +237,7 @@ const submit = () => {
           Note: You cannot change your own access level.
         </p>
         <p
-          v-else
-          v-if="
+          v-else-if="
             (user?.access_level ?? 0) >= authenticatedUser.access_level &&
             authenticatedUser.access_level !== getAccessLevelValue('maintainer')
           "

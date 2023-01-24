@@ -52,7 +52,7 @@ import { ref, type Ref } from "vue";
 import { throttle } from "throttle-debounce";
 import api from "@http/api";
 
-import Results from "@components/global_search/Results.vue";
+import Results from "@/components/global_search/SearchResults.vue";
 import { vClickOutside } from "@/vue-services/directives/clickOutside";
 import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
 

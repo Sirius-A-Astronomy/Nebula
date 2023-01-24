@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { courseLevelStore, studyTypes } from "@stores/courseLevelStore";
-import type { CourseLevel, StudyType } from "@stores/courseLevelStore";
-import type { New, Updatable } from "@stores/factory/storeFactory";
+import type { CourseLevel } from "@stores/courseLevelStore";
+import type { Updatable } from "@stores/factory/storeFactory";
 import { ref, reactive, type Ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
@@ -73,7 +73,11 @@ const submit = async () => {
           class="rounded-md border-2 border-primary-bg bg-secondary-bg px-2 py-1 transition-colors focus:border-primary-active focus:bg-tertiary-bg focus:outline-none focus:ring-primary-active"
           v-model="values.study_type"
         >
-          <option v-for="studyType in studyTypes" :value="studyType">
+          <option
+            v-for="studyType in studyTypes"
+            :value="studyType"
+            :key="studyType"
+          >
             {{ studyType }}
           </option>
         </select>

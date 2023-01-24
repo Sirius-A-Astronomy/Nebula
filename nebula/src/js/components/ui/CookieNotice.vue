@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
 import InfoIcon from "@components/icons/InfoIcon.vue";
 
@@ -11,13 +11,6 @@ const showPurposeModal = ref(false);
 const acceptCookies = () => {
   localStorage.setItem("cookiesAccepted", "true");
   cookiesAccepted.value = true;
-  noticeVisible.value = false;
-  showPurposeModal.value = false;
-};
-
-const declineCookies = () => {
-  localStorage.setItem("cookiesAccepted", "false");
-  cookiesAccepted.value = false;
   noticeVisible.value = false;
   showPurposeModal.value = false;
 };

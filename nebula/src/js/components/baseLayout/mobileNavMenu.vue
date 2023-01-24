@@ -5,12 +5,7 @@ import type { MenuItem } from "@/BaseLayout.vue";
 
 import recursiveMobileNavDropdown from "@components/baseLayout/recursiveMobileNavDropdown.vue";
 
-import {
-  isSideMenuOpen,
-  closeSideMenu,
-  toggleSideMenu,
-} from "@stores/appState";
-import { onMounted } from "vue";
+import { isSideMenuOpen, closeSideMenu } from "@stores/appState";
 
 defineProps<{
   menuItems: Array<MenuItem & { expanded?: boolean }>;

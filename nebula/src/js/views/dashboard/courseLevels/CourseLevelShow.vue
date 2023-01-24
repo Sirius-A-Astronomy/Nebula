@@ -23,7 +23,7 @@ const courseLevel = computed(
 
 const router = useRouter();
 
-watch(props, (value) => {
+watch(props, () => {
   loading.value = true;
   loadData();
 });

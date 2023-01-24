@@ -58,7 +58,7 @@ const expanded = ref(false);
     class="recursive-item-list border-l border-secondary-bg pl-2"
     v-if="expanded"
   >
-    <li v-for="nestedItem in item.items" :key="item.name">
+    <li v-for="nestedItem in item.items" :key="nestedItem.name">
       <recursive-mobile-nav-dropdown :item="nestedItem" />
     </li>
   </ul>

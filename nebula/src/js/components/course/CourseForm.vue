@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { courseLevelStore, type CourseLevel } from "@stores/courseLevelStore";
+import { courseLevelStore } from "@stores/courseLevelStore";
 import type { Course } from "@stores/courseStore";
-import type { New, Updatable } from "@stores/factory/storeFactory";
+import type { Updatable } from "@stores/factory/storeFactory";
 import { ref, reactive, type Ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
@@ -131,7 +131,11 @@ const submit = async () => {
           v-model="values.semester"
         >
           <option value="" disabled selected>Select a semester</option>
-          <option v-for="semester in semesters" :value="semester.value">
+          <option
+            v-for="semester in semesters"
+            :value="semester.value"
+            :key="semester.value"
+          >
             {{ semester.text }}
           </option>
         </select>

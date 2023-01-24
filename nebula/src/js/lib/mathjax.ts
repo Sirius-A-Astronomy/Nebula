@@ -28,7 +28,6 @@ export const addMathJaxScrips = () => {
   document.head.appendChild(scriptMathjax);
 };
 
-const attempts = 0;
 let mathjax: any;
 
 let moduleState: "uninitialised" | "initialising" | "initialised" =
