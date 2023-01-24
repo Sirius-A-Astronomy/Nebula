@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Dropdown from "@components/baseLayout/Dropdown.vue";
+import DropdownMenu from "@components/baseLayout/DropdownMenu.vue";
 
 import type { MenuItem } from "@/BaseLayout.vue";
 
@@ -30,7 +30,7 @@ defineProps<{
   >
     <span class="py-1">{{ menuItem.name }}</span>
   </RouterLink>
-  <Dropdown
+  <DropdownMenu
     v-if="menuItem.items"
     :direction="direction ?? 'below'"
     :align="align ?? 'start'"
@@ -50,7 +50,7 @@ defineProps<{
         />
       </div>
     </template>
-  </Dropdown>
+  </DropdownMenu>
 </template>
 
 <style lang="scss" scoped></style>

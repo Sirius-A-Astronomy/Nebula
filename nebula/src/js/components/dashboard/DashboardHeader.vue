@@ -15,7 +15,7 @@ import { vClickOutside } from "@/vue-services/directives/clickOutside";
 import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
 import useFlashStore from "@/stores/flashStore";
 
-import Search from "@components/global_search/Search.vue";
+import GlobalSearch from "@components/global_search/GlobalSearch.vue";
 
 const user = authenticatedUser;
 const flash = useFlashStore();
@@ -62,7 +62,7 @@ const logout = async () => {
         </svg>
       </button>
 
-      <Search v-if="withSearch" :dashboard="true" />
+      <GlobalSearch v-if="withSearch" :dashboard="true" />
 
       <div
         class="ml-auto flex flex-row items-center justify-end"

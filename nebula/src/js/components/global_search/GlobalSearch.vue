@@ -52,7 +52,7 @@ import { ref, type Ref } from "vue";
 import { throttle } from "throttle-debounce";
 import api from "@http/api";
 
-import Results from "@/components/global_search/SearchResults.vue";
+import GlobalSearchResults from "@/components/global_search/GlobalSearchResults.vue";
 import { vClickOutside } from "@/vue-services/directives/clickOutside";
 import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
 
@@ -162,7 +162,7 @@ const close = () => {
 
       <!-- Show search results in a dropdown -->
       <Transition name="fade">
-        <Results
+        <GlobalSearchResults
           v-if="openResults"
           :loading="loading"
           :search-results="searchResults"
