@@ -1,4 +1,4 @@
-name: Continiuous Integration and Deployment
+name: Continuous Integration and Deployment
 run-name: Continuous Integration and Deployment
 on: [push, pull_request]
 jobs:
