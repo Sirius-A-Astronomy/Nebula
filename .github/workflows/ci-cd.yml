@@ -94,7 +94,6 @@ jobs:
         continue-on-error: true
         with:
           paths: "jtest-results/unit/**/*.xml"
-        if: always()
 
   Build:
     runs-on: ubuntu-latest
