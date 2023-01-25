@@ -47,12 +47,20 @@ lint:  ## Run the linter (flake8)
 
 ## Testing
 # TODO: Cypress tests do not work atm, since the dev-server needs to be running
-test: test-py  ## Run all tests for the package
+test: test-py test-js  ## Run all tests for the package
 
 test-py:
 	pytest
 test-js:
-	npx cypress run
+	npm run test
+
+test-cov: test-py-cov test-js-cov  ## Run all tests for the package with coverage
+
+test-py-cov:
+	pytest --cov=$(APP_NAME) tests/
+
+test-js-cov:
+	npm run test:cov
 
 ## Dependencies
 deps-dev: deps-pkg  ## Install development dependencies
