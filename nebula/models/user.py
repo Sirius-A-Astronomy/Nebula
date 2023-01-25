@@ -118,7 +118,7 @@ def validate_username(username, user=None):
     if re.findall(r"\s", username):
         return False, "Please enter a username without any spaces"
 
-    if re.match(r"[ @()+=\[\]{};\':\"\\|,.<>\/\?]", username):
+    if re.search(r"[ @()+=\[\]{};\':\"\\|,.<>\/\?]", username):
         return False, "Please enter a username without any special characters"
 
     user_with_username = User.query.filter_by(username=username).one_or_none()
