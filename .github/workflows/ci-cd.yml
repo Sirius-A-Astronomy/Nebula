@@ -80,6 +80,7 @@ jobs:
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
+        continue-on-error: true
         permissions:
           contents: read
           issues: read
@@ -89,6 +90,8 @@ jobs:
           comment_mode: off
       - name: Summary
         uses: test-summary/action@v2
+        if: always()
+        continue-on-error: true
         with:
           paths: "jtest-results/unit/**/*.xml"
         if: always()
