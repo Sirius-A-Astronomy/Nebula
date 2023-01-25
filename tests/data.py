@@ -1,5 +1,7 @@
 import datetime
 
+from passlib.hash import sha256_crypt
+
 from nebula.models.comment import Comment
 from nebula.models.course import Course
 from nebula.models.course_level import CourseLevel
@@ -34,6 +36,10 @@ users = [
     User(username="sipma", first_name="Sten", last_name="Sipma"),
     User(username="nameless"),
 ]
+
+for user in users:
+    hashed_password = sha256_crypt.hash("password")
+    user.password = hashed_password
 
 questions = [
     Question(
