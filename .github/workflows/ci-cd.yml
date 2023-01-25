@@ -80,8 +80,13 @@ jobs:
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
+        permissions:
+          contents: read
+          issues: read
+          checks: write
         with:
           junit_files: "test-results/junit/**/*.xml"
+          comment_mode: off
       - name: Summary
         uses: test-summary/action@v2
         with:
