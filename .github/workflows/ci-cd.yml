@@ -45,6 +45,10 @@ jobs:
 
   Test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      checks: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
@@ -81,10 +85,6 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
         continue-on-error: true
-        permissions:
-          contents: read
-          issues: read
-          checks: write
         with:
           junit_files: "test-results/junit/**/*.xml"
           comment_mode: off
