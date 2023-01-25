@@ -71,12 +71,22 @@ jobs:
       - name: Test with Vitest
         if: success() || failure() # make sure to run this step even if the previous one fails
         run: |
-          npm run test
+          npm run test -- --reporter=junit --reporter-options="outputDir=junit/vitest"
       - name: Test with pytest
         if: success() || failure() # make sure to run this step even if the previous one fails
         run: |
           pip install pytest
-          pytest
+          pytest --junitxml=junit/pytest/test-results.xml
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          junit_files: "test-results/junit/**/*.xml"
+      - name: Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "junit/**/*.xml"
+        if: always()
 
   Build:
     runs-on: ubuntu-latest
