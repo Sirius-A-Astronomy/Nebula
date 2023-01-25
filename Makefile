@@ -46,7 +46,6 @@ lint:  ## Run the linter (flake8)
 
 
 ## Testing
-# TODO: Cypress tests do not work atm, since the dev-server needs to be running
 test: test-py test-js  ## Run all tests for the package
 
 test-py:
