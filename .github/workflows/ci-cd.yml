@@ -1,5 +1,5 @@
 name: Continiuous Integration and Deployment
-run-name: CI/CD
+run-name: Continuous Integration and Deployment
 on: [push, pull_request]
 jobs:
   Lint:
