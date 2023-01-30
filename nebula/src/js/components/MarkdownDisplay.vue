@@ -1,23 +1,14 @@
 <script setup lang="ts">
-/*
-    This component is used directly in the documentation.
-
-    This is done to show how the current markdown would be rendered.
-
-    To keep this possible relative imports are used as the
-    docs don't have access to the aliases and have a different rootDir.
-*/
-
 import { onMounted, ref, watch, type Ref } from "vue";
 
 import DOMPurify from "dompurify";
 
 import { throttle } from "throttle-debounce";
 
-import { useMathJax } from "../lib/mathjax";
+import { useMathJax } from "@/lib/mathjax";
 import useMarkdown from "markdown-it";
 import { BUNDLED_LANGUAGES } from "shiki";
-import { getShikiHighlighter } from "../lib/highlighter";
+import { getShikiHighlighter } from "@/lib/highlighter";
 
 const props = defineProps<{
   content: string;

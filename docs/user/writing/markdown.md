@@ -1,7 +1,7 @@
 # Writing Markdown and LaTeX in Nebula
 
 <script setup lang="ts">
-    import MarkdownEditor from '../../../nebula/src/js/components/MarkdownEditor.vue'
+    import MarkdownEditor from '@components/MarkdownEditor.vue'
 </script>
 
 

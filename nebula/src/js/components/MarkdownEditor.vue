@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getShikiHighlighter } from "../lib/highlighter";
+import { getShikiHighlighter } from "@/lib/highlighter";
 import type { Highlighter } from "shiki";
 import { ref, watch, computed, onMounted } from "vue";
-import Markdown from "./MarkdownDisplay.vue";
+import Markdown from "@components/MarkdownDisplay.vue";
 import DOMPurify from "dompurify";
 
 const props = defineProps<{
