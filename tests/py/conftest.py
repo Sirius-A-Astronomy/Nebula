@@ -1,7 +1,10 @@
 import pytest
 from data import comments, course_levels, courses, questions, users
+from flask_login import FlaskLoginClient
+from passlib.hash import sha256_crypt
 
 from nebula import create_app, db
+from nebula.models.user import User
 
 
 @pytest.fixture
@@ -58,4 +61,48 @@ def client(app):
 
 @pytest.fixture
 def empty_client(empty_app):
-    return app.test_client()
+    return empty_app.test_client()
+
+
+@pytest.fixture
+def client_as_admin(app):
+    """
+    Returns a client with an admin user logged in.
+    """
+    admin_user = User(
+        username="admin",
+        email="admin@admin.com",
+        first_name="Admin",
+        last_name="User",
+        access_level=4,
+        password=sha256_crypt.hash("password"),
+    )
+    with app.app_context():
+        db.session.add(admin_user)
+        db.session.commit()
+
+        app.test_client_class = FlaskLoginClient
+        client = app.test_client(user=admin_user)
+    yield client
+
+
+@pytest.fixture
+def client_as_user(app):
+    """
+    Returns a client with a user logged in.
+    """
+    user = User(
+        username="user",
+        email="user@user.com",
+        first_name="User",
+        last_name="User",
+        access_level=1,
+        password=sha256_crypt.hash("password"),
+    )
+    with app.app_context():
+        db.session.add(user)
+        db.session.commit()
+
+        app.test_client_class = FlaskLoginClient
+        client = app.test_client(user=user)
+    yield client
