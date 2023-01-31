@@ -13,8 +13,8 @@ bp = Blueprint("user_api", __name__, url_prefix="/users")
 api_bp.register_blueprint(bp)
 
 
-@bp.route("/", methods=["GET"])
 @login_required
+@bp.route("/", methods=["GET"])
 def get_users():
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -23,8 +23,8 @@ def get_users():
     return jsonify([user.expose() for user in users])
 
 
-@bp.route("/<uuid>", methods=["GET"])
 @login_required
+@bp.route("/<uuid>", methods=["GET"])
 def get_user(uuid):
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -36,8 +36,8 @@ def get_user(uuid):
     return jsonify(user.expose())
 
 
-@bp.route("/", methods=["POST"])
 @login_required
+@bp.route("/", methods=["POST"])
 def create_user_route():
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -107,8 +107,8 @@ def create_user_route():
     return jsonify(user.expose()), 201
 
 
-@bp.route("/reset_password", methods=["POST"])
 @login_required
+@bp.route("/reset_password", methods=["POST"])
 def reset_password():
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -132,8 +132,8 @@ def reset_password():
     return jsonify({"password": random_password}), 200
 
 
-@bp.route("/<uuid>", methods=["PUT"])
 @login_required
+@bp.route("/<uuid>", methods=["PUT"])
 def update_user(uuid):
     if (
         str(current_user.uuid) != uuid
@@ -209,6 +209,7 @@ def update_user(uuid):
     return jsonify(user.expose())
 
 
+@login_required
 @bp.route("/<uuid>", methods=["DELETE"])
 def delete_user(uuid):
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
@@ -221,4 +222,4 @@ def delete_user(uuid):
     db.session.delete(user)
     db.session.commit()
 
-    return jsonify({"message": "User deleted"}), 200
+    return jsonify({"message": "User deleted"}), 204
