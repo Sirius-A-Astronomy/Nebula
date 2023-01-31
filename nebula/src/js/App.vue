@@ -3,13 +3,12 @@ import CookieNotice from "@components/ui/CookieNotice.vue";
 
 import "@scss/main.scss";
 import { useRoute } from "vue-router";
-import Dashboard from "@/DashboardLayout.vue";
-import BaseLayout from "@/BaseLayout.vue";
 
 import ModalContainer from "@components/ui/modals/ModalContainer.vue";
 import FlashContainer from "@components/ui/FlashContainer.vue";
 import { setCSRFToken } from "./http/api";
-import { onMounted } from "vue";
+import { onMounted, defineAsyncComponent } from "vue";
+import BaseLayout from "@/BaseLayout.vue";
 
 const route = useRoute();
 
@@ -19,6 +18,10 @@ onMounted(() => {
       ""
   );
 });
+
+const AsyncDashboardLayout = defineAsyncComponent(
+  () => import("@/DashboardLayout.vue")
+);
 </script>
 
 <template>
@@ -29,8 +32,7 @@ onMounted(() => {
     <CookieNotice />
     <ModalContainer />
     <FlashContainer />
-
-    <Dashboard v-if="route.name?.toString().startsWith('dashboard')" />
+    <AsyncDashboardLayout v-if="route.path.startsWith('/dashboard')" />
     <BaseLayout v-else />
   </div>
 </template>
