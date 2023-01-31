@@ -61,6 +61,7 @@ def create_app(config_environment="default"):
     with app.app_context():
 
         import nebula.models  # import models to create tables
+
         # import routes
         from nebula.cli import db as db_cli
         from nebula.cli import user as user_cli
