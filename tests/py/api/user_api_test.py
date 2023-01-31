@@ -6,6 +6,7 @@ from flask import jsonify
 from nebula import db
 from nebula.models.user import User
 
+
 def serializable_exposed_user(user):
     exposed_user = user.expose()
     exposed_user["id"] = str(exposed_user["id"])
@@ -32,6 +33,7 @@ def test_get_users(client_as_admin, app):
     assert response.status_code == 200
     assert user_exposed in response.json
 
+
 def test_get_user_by_id(client_as_admin, app):
     user = User(
         username="test_admin",
@@ -49,6 +51,7 @@ def test_get_user_by_id(client_as_admin, app):
     response = client_as_admin.get(f"/api/users/{user.uuid}")
     assert response.status_code == 200
     assert response.json == user_exposed
+
 
 def test_create_user(client_as_admin, app):
     response = client_as_admin.post(
@@ -82,6 +85,7 @@ def test_create_user(client_as_admin, app):
         assert user.first_name == "New"
         assert user.last_name == "User"
         assert user.access_level == 1
+
 
 def test_update_user(client_as_admin, app):
     user = User(
@@ -130,6 +134,7 @@ def test_update_user(client_as_admin, app):
         assert user.last_name == "User"
         assert user.access_level == 1
 
+
 def test_delete_user(client_as_admin, app):
     user = User(
         username="test_admin",
@@ -153,9 +158,11 @@ def test_delete_user(client_as_admin, app):
     with app.app_context():
         assert User.query.filter_by(username="test_admin").first() is None
 
+
 def test_unauthorized_get_users(client_as_user):
     response = client_as_user.get("/api/users/")
     assert response.status_code == 401
+
 
 def test_unauthorized_get_user_by_id(client_as_user, app):
     user = User(
@@ -175,6 +182,7 @@ def test_unauthorized_get_user_by_id(client_as_user, app):
     response = client_as_user.get(f"/api/users/{uuid}")
     assert response.status_code == 401
 
+
 def test_unauthorized_create_user(client_as_user):
     response = client_as_user.post(
         "/api/users/",
@@ -193,12 +201,3 @@ def test_unauthorized_create_user(client_as_user):
     )
 
     assert response.status_code == 401
-
-
-
-
-
-
-
-
-
