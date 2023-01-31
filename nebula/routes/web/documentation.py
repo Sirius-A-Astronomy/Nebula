@@ -23,4 +23,4 @@ def documentation(_path=None):
 
     if _path == None or _path == "":
         return render_template("index.html")
-    return redirect(url_for("web.documentation.documentation", path=_path))
+    return redirect(url_for("nebula.web.documentation.documentation", path=_path))

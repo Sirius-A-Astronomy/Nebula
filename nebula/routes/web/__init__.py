@@ -3,6 +3,8 @@ from os.path import basename, dirname, isfile, join
 
 from flask import Blueprint
 
+from nebula import bp as nebula_bp
+
 bp = Blueprint("web", __name__)
 
 modules = glob.glob(join(dirname(__file__), "*.py"))
@@ -11,3 +13,5 @@ __all__ = [
 ]
 
 from . import *  # import all the modules in the web folder
+
+nebula_bp.register_blueprint(bp)

@@ -18,7 +18,7 @@
 """
 from urllib.parse import urljoin, urlparse
 
-from flask import Flask
+from flask import Blueprint, Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFError, CSRFProtect
@@ -28,6 +28,8 @@ from config import configs
 db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+
+bp = Blueprint("nebula", __name__)
 
 
 def create_app(config_environment="default"):
@@ -59,19 +61,14 @@ def create_app(config_environment="default"):
     with app.app_context():
 
         import nebula.models  # import models to create tables
+        # import routes
         from nebula.cli import db as db_cli
         from nebula.cli import user as user_cli
         from nebula.routes import api, web
 
-        blueprints = [
-            user_cli.bp,
-            db_cli.bp,
-            api.bp,
-            web.bp,
-        ]
-
-        for blueprint in blueprints:
-            app.register_blueprint(blueprint)
+        app.register_blueprint(bp)
+        app.register_blueprint(db_cli.bp)
+        app.register_blueprint(user_cli.bp)
 
     from nebula.helpers.global_functions import context_processor
 
@@ -104,8 +101,6 @@ def create_app(config_environment="default"):
 def load_user(user_uuid):
     """Returns the user object to flask-login. So it can be used in templates with current_user."""
     from nebula.models.user import User
-
-    print(f"Flask login got user {user_uuid}")
     return User.query.filter_by(uuid=user_uuid).one_or_none()
 
 
