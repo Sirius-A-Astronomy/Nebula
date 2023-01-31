@@ -31,6 +31,7 @@ export const storeModuleFactory = <T extends { id: string }>(
   const lastLoad: Ref<number> = ref(0);
   const isValid: Ref<boolean> = ref(true);
   const loadedAll: Ref<boolean> = ref(false);
+  const isLoadingAll: Ref<boolean> = ref(false);
 
   const state = {
     storeContents,
@@ -39,7 +40,7 @@ export const storeModuleFactory = <T extends { id: string }>(
       const should = now - lastLoad.value > 1000 * 60 * 5 || !isValid.value;
       !loadedAll.value;
 
-      return should;
+      return should && !isLoadingAll.value;
     },
   };
 
@@ -67,6 +68,7 @@ export const storeModuleFactory = <T extends { id: string }>(
 
   const actions = {
     getAll: async () => {
+      isLoadingAll.value = true;
       const response = (await api.get(`${moduleName}/`)) as ApiResponse<T[]>;
 
       if (response.status === 200) {
@@ -74,6 +76,7 @@ export const storeModuleFactory = <T extends { id: string }>(
         loadedAll.value = true;
         lastLoad.value = Date.now();
         isValid.value = true;
+        isLoadingAll.value = false;
       }
 
       return response;
