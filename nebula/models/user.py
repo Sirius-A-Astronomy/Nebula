@@ -58,7 +58,7 @@ class User(Base):
         return self.uuid
 
     def set_password(self, password):
-        self.password = sha256_crypt.encrypt(password)
+        self.password = sha256_crypt.hash(password)
         db.session.commit()
 
     def check_password(self, password):
@@ -100,7 +100,7 @@ def create_user(username, password, **kwargs):
     :type password: str
     :param kwargs: The additional arguments to pass to the user object.
     """
-    hashed_password = sha256_crypt.encrypt(password)
+    hashed_password = sha256_crypt.hash(password)
     user = User(username=username, password=hashed_password, **kwargs)
     return user
 
