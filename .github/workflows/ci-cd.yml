@@ -93,7 +93,7 @@ jobs:
         if: always()
         continue-on-error: true
         with:
-          paths: "jtest-results/unit/**/*.xml"
+          paths: "test-results/junit/**/*.xml"
 
   Build:
     runs-on: ubuntu-latest
