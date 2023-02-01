@@ -110,7 +110,6 @@ jobs:
             - name: Install Node dependencies
               run: |
                   npm ci
-                  npm run build
             - name: Build Nebula as a package
               run: |
                   pip install -e .

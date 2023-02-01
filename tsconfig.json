@@ -5,7 +5,7 @@
         "nebula/src/**/*.vue",
         "nebula/src/**/*.ts",
         "nebula/src/**/*.d.ts",
-        "tests/js/**/*",
+        "tests/js/**/*"
     ],
     "compilerOptions": {
         "baseUrl": ".",
