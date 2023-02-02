@@ -2,8 +2,6 @@
 import NavDropdown from "./NavDropdown.vue";
 import { isSideMenuOpen, toggleSideMenu } from "@/stores/appState";
 import type { MenuItem } from "@/BaseLayout.vue";
-import { authenticatedUser } from "@/stores/sessionStore";
-import { getAccessLevelValue } from "@/stores/userStore";
 
 defineProps<{
     primaryNavItems?: MenuItem[];

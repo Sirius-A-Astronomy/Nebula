@@ -15,7 +15,7 @@ import { onMounted, computed } from "vue";
 
 import { courseStore } from "@stores/courseStore";
 import { courseLevelStore } from "@stores/courseLevelStore";
-import type { Ref, ComputedRef } from "vue";
+import type { ComputedRef } from "vue";
 import { authenticatedUser, isAuthenticated } from "./stores/sessionStore";
 import { logout } from "@stores/sessionStore";
 import useFlashStore from "@stores/flashStore";

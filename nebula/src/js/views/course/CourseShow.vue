@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { courseStore } from "@/stores/courseStore";
 import { computed, watch, onMounted, ref } from "vue";
-import { useRouter, RouterLink } from "vue-router";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import { questionStore } from "@/stores/questionStore";
 
@@ -13,8 +12,6 @@ const course = computed(() => courseStore.getters.byId(props.id).value);
 const questions = computed(
     () => questionStore.getters.byCourseId(props.id).value
 );
-
-const router = useRouter();
 
 watch(props, () => {
     loading.value = true;
