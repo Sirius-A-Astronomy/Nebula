@@ -41,10 +41,10 @@ const courseLevels = courseLevelStore.getters.all;
           <section class="container-index-browse" id="content">
             <h2>Browse the Nebula</h2>
             <p>
-              <a
+              <RouterLink
                 class="button-accent on-dark"
-                href="{{ url_for('web.courses.all_courses')}}"
-                >All Courses</a
+                :to="{ name: 'course.index' }"
+                >All Courses</RouterLink
               >
             </p>
             <h3>Bachelor</h3>
