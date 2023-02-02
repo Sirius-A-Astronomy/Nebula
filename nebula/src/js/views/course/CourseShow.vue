@@ -5,8 +5,6 @@ import { useRouter, RouterLink } from "vue-router";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import { questionStore } from "@/stores/questionStore";
 
-import "@scss/components/_cards.scss";
-
 const props = defineProps<{
     id: string;
 }>();
