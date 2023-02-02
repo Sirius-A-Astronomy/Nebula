@@ -8,12 +8,12 @@ import { isAuthenticated, authenticatedUser } from "@stores/sessionStore";
 
 import { accessLevels } from "@stores/userStore";
 
-import CoursesView from "@views/dashboard/courses/CourseIndex.vue";
 import useFlashStore from "@stores/flashStore";
 
-import baseRoutes from "./baseRoutes";
-import courseRoutes from "./courseRoutes";
-import userRoutes from "./userRoutes";
+import baseRoutes from "@/router/baseRoutes";
+import courseRoutes from "@/router/courseRoutes";
+import userRoutes from "@/router/userRoutes";
+import questionRoutes from "@/router/questionRoutes";
 
 const flash = useFlashStore();
 
@@ -23,6 +23,7 @@ const router = createRouter({
     ...baseRoutes,
     ...courseRoutes,
     ...userRoutes,
+    ...questionRoutes,
     {
       path: "/dashboard",
       redirect: "/dashboard/courses",
@@ -36,7 +37,7 @@ const router = createRouter({
 
     {
       path: "/dashboard/courses/",
-      component: CoursesView,
+      component: () => import("@/views/dashboard/courses/CourseIndex.vue"),
       name: "dashboard.course.index",
       meta: {
         title: "Dashboard - Courses",
