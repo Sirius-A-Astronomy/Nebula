@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Course } from "@stores/courseStore";
 import { computed, onMounted, ref } from "vue";
-import { RouterLink } from "vue-router";
 
 import { courseStore } from "@stores/courseStore";
 import { courseLevelStore } from "@/stores/courseLevelStore";
