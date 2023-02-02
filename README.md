@@ -1,6 +1,6 @@
 # Nebula
 
-[![Continiuous Integration and Deployment](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml)
+[![Continuous Integration and Deployment](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml)
 
 This is the Nebula Database by the Kapteyn Learning Community.
 It is a repository of user-submitted practice questions.
