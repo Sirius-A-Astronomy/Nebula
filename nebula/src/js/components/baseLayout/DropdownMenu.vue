@@ -1,16 +1,43 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { vClickOutside } from "@/vue-services/directives/clickOutside";
 
-defineProps<{
+const props = defineProps<{
   direction?: "below" | "above" | "left" | "right";
   align?: "start" | "end" | "center";
   openOnHover?: boolean;
+  shouldClose?: boolean;
 }>();
 const isOpen = ref(false);
 
+watch(
+  () => props.shouldClose,
+  (shouldClose) => {
+    if (shouldClose) {
+      close();
+    }
+  }
+);
+
 const toggle = () => {
+  if (!isOpen.value) emit("closeSiblings");
   isOpen.value = !isOpen.value;
+};
+
+const forceCloseRef = ref(false);
+
+const emit = defineEmits<{
+  (event: "close", ...args: any[]): void;
+  (event: "closeSiblings", ...args: any[]): void;
+}>();
+
+const closeParent = () => {
+  isOpen.value = false;
+  forceCloseRef.value = true;
+  setTimeout(() => {
+    forceCloseRef.value = false;
+  }, 100);
+  emit("close");
 };
 
 const close = () => {
@@ -63,6 +90,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
         dropdown__menu--${direction ?? 'below'} dropdown__menu--${
         align ?? 'start'
       }
+      ${forceCloseRef ? 'dropdown__menu--force-close' : ''}
         ${isOpen ? 'dropdown__menu--open' : ''}
         `"
     >
@@ -73,6 +101,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
           name="dropdown-content"
           :toggle="toggle"
           :close="close"
+          :closeParent="closeParent"
           :isOpen="isOpen"
         >
         </slot>
@@ -167,6 +196,13 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
   visibility: hidden;
   overflow: hidden;
   z-index: 10;
+
+  &--force-close {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+  }
 
   &--below {
     top: 100%;

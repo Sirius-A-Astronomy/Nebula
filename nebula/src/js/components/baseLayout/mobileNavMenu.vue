@@ -8,7 +8,8 @@ import recursiveMobileNavDropdown from "@components/baseLayout/recursiveMobileNa
 import { isSideMenuOpen, closeSideMenu } from "@stores/appState";
 
 defineProps<{
-  menuItems: Array<MenuItem & { expanded?: boolean }>;
+  primaryNavItems: MenuItem[];
+  secondaryNavItems: MenuItem[];
 }>();
 </script>
 
@@ -32,8 +33,20 @@ defineProps<{
     >
       <div class="flex h-full flex-col">
         <ul>
-          <li v-for="item in menuItems" :key="item.name">
-            <recursive-mobile-nav-dropdown :item="item" />
+          <li
+            v-for="primaryItem in primaryNavItems"
+            :key="primaryItem.name"
+            class="flex flex-col"
+          >
+            <recursive-mobile-nav-dropdown :item="primaryItem" />
+          </li>
+
+          <li
+            v-for="secondaryItem in secondaryNavItems"
+            :key="secondaryItem.name"
+            class="flex flex-col"
+          >
+            <recursive-mobile-nav-dropdown :item="secondaryItem" />
           </li>
         </ul>
       </div>
