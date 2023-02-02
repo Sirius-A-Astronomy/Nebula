@@ -14,6 +14,7 @@ export type Course = {
     name: string;
     study_type: StudyType;
   };
+  meta: Record<string, unknown>;
 };
 
 const courseStoreBase = storeModuleFactory<Course>("courses");
