@@ -152,13 +152,11 @@ const keyDownHandler = (event: KeyboardEvent) => {
     !(event.ctrlKey || event.metaKey || event.altKey || event.shiftKey)
   ) {
     event.preventDefault();
-    console.log("tabbing");
     if (!markdownEditElement.value) return;
     const start = markdownEditElement.value.selectionStart;
     const end = markdownEditElement.value.selectionEnd;
     const value = markdownEditElement.value.value;
-    markdownEditElement.value.value =
-      value.slice(0, start) + "\t" + value.slice(end);
+        contentEditable.value = value.slice(0, start) + "\t" + value.slice(end);
     markdownEditElement.value.setSelectionRange(start, end);
     markdownEditElement.value.setRangeText("\t", start, end, "end");
     markdownEditElement.value.setSelectionRange(start + 1, end + 1);
