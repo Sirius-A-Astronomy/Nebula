@@ -27,4 +27,9 @@ class Course(Base):
             "course_level": self.course_level.expose(),
             "description": self.description,
             "semester": self.semester,
+            "meta": {
+                "created_at": self.created_at,
+                "updated_at": self.updated_at,
+                "questions_count": len(self.questions),
+            },
         }

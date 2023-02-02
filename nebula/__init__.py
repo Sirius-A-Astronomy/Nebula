@@ -61,6 +61,7 @@ def create_app(config_environment="default"):
     with app.app_context():
 
         import nebula.models  # import models to create tables
+
         # import routes
         from nebula.cli import db as db_cli
         from nebula.cli import user as user_cli
@@ -75,11 +76,7 @@ def create_app(config_environment="default"):
     app.context_processor(context_processor)
 
     from nebula.helpers.csrf_error_handler import csrf_error_handler
-    from nebula.routes.web.errors import (
-        badrequest,
-        internalerror,
-        pagenotfound,
-    )
+    from nebula.routes.web.errors import badrequest, internalerror, pagenotfound
 
     app.register_error_handler(404, pagenotfound)
     app.register_error_handler(500, internalerror)
