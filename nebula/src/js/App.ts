@@ -6,15 +6,15 @@ import router from "@/router";
 // try to login, start as early as possible
 // using IIFE to have "top level" await
 (async () => {
-  try {
-    await fetchUser();
-  } catch (e) {
-    console.log("Not logged in", e);
-  }
+    try {
+        await fetchUser();
+    } catch (e) {
+        console.log("Not logged in", e);
+    }
 
-  const app = createApp(App);
+    const app = createApp(App);
 
-  app.use(router);
+    app.use(router);
 
-  app.mount("#app");
+    app.mount("#app");
 })();

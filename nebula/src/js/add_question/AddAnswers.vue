@@ -7,58 +7,62 @@ import AnswerVue from "./EditAnswer.vue";
 let nextId = 0;
 
 type Answer = {
-  title: string;
-  content: string;
-  id: number;
+    title: string;
+    content: string;
+    id: number;
 };
 
 const answers = ref([] as Answer[]);
 const answersJson: ComputedRef<string> = computed(() => {
-  // remove empty answers
-  const answersWithoutEmpty = answers.value.filter((answer) => {
-    return answer.title != "" && answer.content != "";
-  });
-  try {
-    return JSON.stringify(answersWithoutEmpty);
-  } catch (e) {
-    console.log(e);
-    return "";
-  }
+    // remove empty answers
+    const answersWithoutEmpty = answers.value.filter((answer) => {
+        return answer.title != "" && answer.content != "";
+    });
+    try {
+        return JSON.stringify(answersWithoutEmpty);
+    } catch (e) {
+        console.log(e);
+        return "";
+    }
 });
 
 const updateAnswer = (answer: Answer) => {
-  const index = answers.value.findIndex((a) => a.id == answer.id);
-  if (index) answers.value[index] = answer;
+    const index = answers.value.findIndex((a) => a.id == answer.id);
+    if (index) answers.value[index] = answer;
 };
 
 const removeAnswer = (answerId: number) => {
-  answers.value = answers.value.filter((a) => a.id != answerId);
+    answers.value = answers.value.filter((a) => a.id != answerId);
 };
 
 const addAnswer = () => {
-  answers.value.push({ title: "", content: "", id: nextId++ });
+    answers.value.push({ title: "", content: "", id: nextId++ });
 };
 </script>
 <template>
-  <input type="hidden" name="answers" v-model="answersJson" />
+    <input type="hidden" name="answers" v-model="answersJson" />
 
-  <div id="answers">
-    <div
-      v-for="answer in answers"
-      :key="answer.id"
-      class="background-card my-2"
-    >
-      <AnswerVue
-        :answer="answer"
-        @remove="removeAnswer"
-        @update="updateAnswer"
-      />
+    <div id="answers">
+        <div
+            v-for="answer in answers"
+            :key="answer.id"
+            class="background-card my-2"
+        >
+            <AnswerVue
+                :answer="answer"
+                @remove="removeAnswer"
+                @update="updateAnswer"
+            />
+        </div>
     </div>
-  </div>
 
-  <div>
-    <button type="button" class="btn btn-primary" @click.prevent="addAnswer">
-      {{ answers.length == 0 ? "Add an answer" : "Add another answer" }}
-    </button>
-  </div>
+    <div>
+        <button
+            type="button"
+            class="btn btn-primary"
+            @click.prevent="addAnswer"
+        >
+            {{ answers.length == 0 ? "Add an answer" : "Add another answer" }}
+        </button>
+    </div>
 </template>
