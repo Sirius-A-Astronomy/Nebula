@@ -6,22 +6,22 @@ from flask import Blueprint
 
 from nebula import db
 from nebula.helpers.access_levels import ACCESS_LEVELS
-from nebula.models.user import User, create_user
+from nebula.models.user import User, create_user, validate_email
 
 bp = Blueprint("cli_users", __name__, cli_group="user")
 
 
 @bp.cli.command("create")
-@click.argument("username", default="")
+@click.argument("email", default="")
 @click.argument("password", default="")
 @click.argument("access_level", default="")
 @click.argument("create_instantly", default="n")
-def cli_create_user(username="", password="", access_level="", create_instantly="n"):
+def cli_create_user(email="", password="", access_level="", create_instantly="n"):
     user = {}
-    if username == "" or not is_username_unique(username):
+    if email == "" or not validate_email(email):
         while True:
-            username = input("Username: ")
-            if not is_username_unique(username):
+            email = input("Email: ")
+            if not validate_email(email):
                 continue
             break
     if password == "":
@@ -41,23 +41,13 @@ def cli_create_user(username="", password="", access_level="", create_instantly=
             user["first_name"] = input("First Name: ")
             user["last_name"] = input("Last Name: ")
 
-        if input("Would you like to add an email? (y/[n]) ") == "y":
-            user["email"] = input("Email: ")
-
         if input("Would you like to create this user? ([y]/n) ") == "n":
             print("User creation cancelled")
             return
 
-    new_user = create_user(username, password, **user)
+    new_user = create_user(email, password, **user)
     db.session.add(new_user)
     db.session.commit()
-
-
-def is_username_unique(username: str) -> bool:
-    if User.query.filter_by(username=username).first() is not None:
-        print(f"Username {username} already exists")
-        return False
-    return True
 
 
 def validate_access_level(access_level: str) -> bool:
@@ -90,23 +80,23 @@ def get_access_level(access_level):
 
 
 @bp.cli.command("edit")
-@click.argument("username", default="")
-def cli_edit_user(username=""):
+@click.argument("email", default="")
+def cli_edit_user(email=""):
     user = None
-    if username == "":
-        username = input("Enter the username of the user you'd like to edit: ")
+    if email == "":
+        email = input("Enter the email of the user you'd like to edit: ")
     while True:
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         if user is None:
-            print(f"User {username} does not exist")
-            username = input("Username: ")
+            print(f"User with {email} does not exist")
+            email = input("Email: ")
             continue
         break
 
-    if input(f"Do you want to change the password for {username}? (y/[n]) ") == "y":
+    if input(f"Do you want to change the password for {email}? (y/[n]) ") == "y":
         user.set_password(getpass(">>> Password: "))
 
-    if input(f"Do you want to change the access level for {username}? (y/[n]) ") == "y":
+    if input(f"Do you want to change the access level for {email}? (y/[n]) ") == "y":
         while True:
             access_level = input(">>> Access level: ")
             if not validate_access_level(access_level):
@@ -114,7 +104,7 @@ def cli_edit_user(username=""):
             user.access_level = get_access_level(access_level)
             break
 
-    if input(f"Do you want to change other details for {username}? (y/[n]) ") == "y":
+    if input(f"Do you want to change other details for {email}? (y/[n]) ") == "y":
         if input(">>> Would you like to change the name? (y/[n]) ") == "y":
             user.first_name = input(">>> >>> First Name: ")
             user.last_name = input(">>> >>> Last Name: ")
@@ -123,21 +113,21 @@ def cli_edit_user(username=""):
             user.email = input(">>> >>> Email: ")
 
     # confirm if the user wants to save the changes
-    if not input(f"Do you want to save the changes for {username}? (y/[n]) ") == "y":
+    if not input(f"Do you want to save the changes for {email}? (y/[n]) ") == "y":
         print("User edit cancelled")
         return
 
     db.session.commit()
-    print(f"User {username} edited")
+    print(f"User {email} edited")
 
 
 @bp.cli.command("delete")
-@click.argument("username")
-def cli_delete_user(username):
-    user = User.query.filter_by(username=username).first()
+@click.argument("email")
+def cli_delete_user(email):
+    user = User.query.filter_by(email=email).first()
 
     if user is None:
-        print(f"User {username} does not exist")
+        print(f"User {email} does not exist")
         return
 
     db.session.delete(user)
@@ -152,19 +142,19 @@ def cli_list_users():
 
 
 @bp.cli.command("reset_password")
-@click.argument("username", default="")
-def cli_reset_password(username=""):
-    user = User.query.filter_by(username=username).first()
+@click.argument("email", default="")
+def cli_reset_password(email=""):
+    user = User.query.filter_by(email=email).first()
 
     while True:
         if user is None:
-            print(f"User {username} does not exist")
-            username = input("Username: ")
-            user = User.query.filter_by(username=username).first()
+            print(f"User {email} does not exist")
+            email = input("Username: ")
+            user = User.query.filter_by(email=email).first()
             continue
         break
 
     random_password = os.urandom(24).hex()
     user.set_password(random_password)
-    print(f"New password for {username} is {random_password}")
+    print(f"New password for {email} is {random_password}")
     db.session.commit()

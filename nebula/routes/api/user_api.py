@@ -13,8 +13,8 @@ bp = Blueprint("user_api", __name__, url_prefix="/users")
 api_bp.register_blueprint(bp)
 
 
-@login_required
 @bp.route("/", methods=["GET"])
+@login_required
 def get_users():
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -23,8 +23,8 @@ def get_users():
     return jsonify([user.expose() for user in users])
 
 
-@login_required
 @bp.route("/<uuid>", methods=["GET"])
+@login_required
 def get_user(uuid):
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -36,18 +36,9 @@ def get_user(uuid):
     return jsonify(user.expose())
 
 
-@login_required
 @bp.route("/", methods=["POST"])
 def create_user_route():
-    if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
-        return jsonify({"message": "Unauthorized"}), 401
-
     data = request.get_json(silent=True)
-
-    username = data.get("username")
-    if username is None:
-        return jsonify({"message": "Username is required"}), 400
-
     email = data.get("email")
     if email is None:
         return jsonify({"message": "Email is required"}), 400
@@ -72,27 +63,28 @@ def create_user_route():
         return jsonify({"message": "Passwords do not match"}), 400
 
     access_level = data.get("access_level")
+    if access_level is not None:
+        if access_level not in ACCESS_LEVELS["ByLevel"].keys():
+            return jsonify({"message": "Invalid access level"}), 400
+
+        if (
+            current_user.is_authenticated
+            and access_level >= current_user.access_level
+            and current_user.access_level
+            != ACCESS_LEVELS["ByName"]["maintainer"]["level"]
+        ):
+            return (
+                jsonify(
+                    {
+                        "message": "You are not allowed to create a user with this access level"
+                    }
+                ),
+                400,
+            )
     if access_level is None:
-        return jsonify({"message": "Access level is required"}), 400
-
-    if access_level not in ACCESS_LEVELS["ByLevel"].keys():
-        return jsonify({"message": "Invalid access level"}), 400
-
-    if (
-        access_level >= current_user.access_level
-        and current_user.access_level != ACCESS_LEVELS["ByName"]["maintainer"]["level"]
-    ):
-        return (
-            jsonify(
-                {
-                    "message": "You are not allowed to create a user with this access level"
-                }
-            ),
-            400,
-        )
+        access_level = ACCESS_LEVELS["ByName"]["user"]["level"]
 
     user = User(
-        username=username,
         email=email,
         first_name=first_name,
         last_name=last_name,
@@ -107,8 +99,8 @@ def create_user_route():
     return jsonify(user.expose()), 201
 
 
-@login_required
 @bp.route("/reset_password", methods=["POST"])
+@login_required
 def reset_password():
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401
@@ -132,8 +124,8 @@ def reset_password():
     return jsonify({"password": random_password}), 200
 
 
-@login_required
 @bp.route("/<uuid>", methods=["PUT"])
+@login_required
 def update_user(uuid):
     if (
         str(current_user.uuid) != uuid
@@ -153,13 +145,6 @@ def update_user(uuid):
         return jsonify({"message": "You are not allowed to update this user"}), 400
 
     data = request.get_json(silent=True)
-
-    username = data.get("username")
-    if username is not None and username != user.username:
-        (valid, message) = validate_username(username, user=user)
-        if not valid:
-            return jsonify({"message": message}), 400
-        user.username = username
 
     email = data.get("email")
     if email is not None:
@@ -209,8 +194,8 @@ def update_user(uuid):
     return jsonify(user.expose())
 
 
-@login_required
 @bp.route("/<uuid>", methods=["DELETE"])
+@login_required
 def delete_user(uuid):
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["admin"]["level"]:
         return jsonify({"message": "Unauthorized"}), 401

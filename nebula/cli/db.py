@@ -77,20 +77,20 @@ def cli_seed_db():
 
 
 @bp.cli.command("seed_dev")
-@click.argument("target", default="all")
+@click.argument("target", default="default")
 @with_appcontext
 def cli_dev_seed_db(target):
-    if target not in ["all", "users", "courses", "questions"]:
+    if target not in ["all", "users", "courses", "questions", "default"]:
         print("Target must be one of 'all', 'users', 'courses', 'questions'")
         return
 
-    if target == "all" or target == "users":
+    if target == "all" or target == "users" or target == "default":
         seed_users()
 
     if target == "all" or target == "courses":
         seed_courses()
 
-    if target == "all" or target == "questions":
+    if target == "all" or target == "questions" or target == "default":
         seed_questions()
 
 
@@ -99,7 +99,6 @@ def seed_users():
 
     for _ in range(random.randint(5, 15)):
         user = {
-            "username": fake.user_name(),
             "password": "password",
             "first_name": fake.first_name(),
             "last_name": fake.last_name(),

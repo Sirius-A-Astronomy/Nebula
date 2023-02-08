@@ -10,9 +10,7 @@ from nebula.models.user import User
 
 def test_question_model_creation(empty_app):
     with empty_app.app_context():
-        user = User(
-            username="test_user", email="test@example.com", password="password123"
-        )
+        user = User(email="test@example.com", password="password123")
         db.session.add(user)
         course_level = CourseLevel(
             name="Undergraduate", code="UGRD", study_type="Bachelor"
@@ -43,7 +41,6 @@ def test_question_model_creation(empty_app):
             question.content
             == "A linear equation has a degree of 1, while a quadratic equation has a degree of 2."
         )
-        assert question.user.username == "test_user"
         assert question.course.name == "Math 101"
         assert question.course.course_level.name == "Undergraduate"
         assert question.course.course_level.code == "UGRD"
@@ -52,9 +49,7 @@ def test_question_model_creation(empty_app):
 
 def test_question_model_query(empty_app):
     with empty_app.app_context():
-        user = User(
-            username="test_user", email="test@example.com", password="password123"
-        )
+        user = User(email="test@example.com", password="password123")
         db.session.add(user)
         course_level = CourseLevel(
             name="Undergraduate", code="UGRD", study_type="Bachelor"
@@ -85,7 +80,6 @@ def test_question_model_query(empty_app):
             question.content
             == "A linear equation has a degree of 1, while a quadratic equation has a degree of 2."
         )
-        assert question.user.username == "test_user"
         assert question.course.name == "Math 101"
         assert question.course.course_level.name == "Undergraduate"
         assert question.course.course_level.code == "UGRD"
@@ -105,7 +99,6 @@ def test_question_model_query(empty_app):
             queried_question.content
             == "A linear equation has a degree of 1, while a quadratic equation has a degree of 2."
         )
-        assert queried_question.user.username == "test_user"
         assert queried_question.course.name == "Math 101"
         assert queried_question.course.course_level.name == "Undergraduate"
         assert queried_question.course.course_level.code == "UGRD"
@@ -114,9 +107,7 @@ def test_question_model_query(empty_app):
 
 def test_question_model_expose(empty_app):
     with empty_app.app_context():
-        user = User(
-            username="test_user", email="test@example.com", password="password123"
-        )
+        user = User(email="test@example.com", password="password123")
         db.session.add(user)
         course_level = CourseLevel(
             name="Undergraduate", code="UGRD", study_type="Bachelor"
@@ -150,5 +141,4 @@ def test_question_model_expose(empty_app):
         assert exposed_data["course"]["name"] == "Math 101"
         assert exposed_data["course"]["code"] == "MATH101"
         assert exposed_data["course"]["course_level"]["name"] == "Undergraduate"
-        assert exposed_data["user"]["username"] == "test_user"
         assert exposed_data["subject_tags"][0]["name"] == "Algebra"

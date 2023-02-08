@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user, login_required
 
+from nebula import db
+from nebula.models.user import User
 from nebula.routes.api import bp
 
 
@@ -19,7 +21,13 @@ def me():
 def logout():
     from flask_login import logout_user
 
+    user = User.query.filter_by(uuid=current_user.uuid).one_or_none()
+
     logout_user()
+
+    if user.is_authenticated:
+        user.is_authenticated = False
+        db.session.commit()
 
     return jsonify({"message": "Successfully logged out."}), 200
 
@@ -30,14 +38,15 @@ def login():
 
     from nebula.models.user import User
 
-    username = request.json.get("username")
+    email = request.json.get("email")
     password = request.json.get("password")
 
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(email=email).first()
 
     if user is None or not user.check_password(password):
-        return jsonify({"message": "Invalid username or password."}), 401
+        return jsonify({"message": "Invalid email or password."}), 401
 
-    login_user(user)
+    user.is_authenticated = login_user(user)
+    db.session.commit()
 
     return jsonify({"message": "Successfully logged in.", "user": user.expose()}), 200

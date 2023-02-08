@@ -32,9 +32,9 @@ course_levels[2].courses.extend(courses[4:6])
 course_levels[3].courses.extend(courses[6:8])
 
 users = [
-    User(username="johndoe", first_name="John", last_name="Doe"),
-    User(username="sipma", first_name="Sten", last_name="Sipma"),
-    User(username="nameless"),
+    User(email="john@example.com", first_name="John", last_name="Doe"),
+    User(email="sipma@kapteyn.nl", first_name="Sten", last_name="Sipma"),
+    User(email="nameless@mail.com"),
 ]
 
 for user in users:

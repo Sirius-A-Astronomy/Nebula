@@ -16,7 +16,6 @@ def serializable_exposed_user(user):
 
 def test_get_users(client_as_admin, app):
     user = User(
-        username="test_admin",
         email="admin@example.com",
         first_name="Admin",
         last_name="User",
@@ -36,8 +35,7 @@ def test_get_users(client_as_admin, app):
 
 def test_get_user_by_id(client_as_admin, app):
     user = User(
-        username="test_admin",
-        email="admin@admin.com",
+        email="test_admin@admin.com",
         first_name="Admin",
         last_name="User",
         access_level=3,
@@ -58,7 +56,6 @@ def test_create_user(client_as_admin, app):
         "/api/users/",
         data=json.dumps(
             {
-                "username": "new_user",
                 "email": "new@user.com",
                 "first_name": "New",
                 "last_name": "User",
@@ -71,16 +68,14 @@ def test_create_user(client_as_admin, app):
     )
 
     assert response.status_code == 201
-    assert response.json["username"] == "new_user"
     assert response.json["email"] == "new@user.com"
     assert response.json["first_name"] == "New"
     assert response.json["last_name"] == "User"
     assert response.json["access_level"] == 1
 
     with app.app_context():
-        user = User.query.filter_by(username="new_user").first()
+        user = User.query.filter_by(email="new@user.com").first()
         assert user is not None
-        assert user.username == "new_user"
         assert user.email == "new@user.com"
         assert user.first_name == "New"
         assert user.last_name == "User"
@@ -89,8 +84,7 @@ def test_create_user(client_as_admin, app):
 
 def test_update_user(client_as_admin, app):
     user = User(
-        username="test_admin",
-        email="admin@admin.com",
+        email="test_admin@admin.com",
         first_name="Admin",
         last_name="User",
         access_level=3,
@@ -106,7 +100,6 @@ def test_update_user(client_as_admin, app):
         f"/api/users/{uuid}",
         data=json.dumps(
             {
-                "username": "new_user",
                 "email": "new@user.com",
                 "first_name": "New",
                 "last_name": "User",
@@ -119,16 +112,14 @@ def test_update_user(client_as_admin, app):
     )
 
     assert response.status_code == 200
-    assert response.json["username"] == "new_user"
     assert response.json["email"] == "new@user.com"
     assert response.json["first_name"] == "New"
     assert response.json["last_name"] == "User"
     assert response.json["access_level"] == 1
 
     with app.app_context():
-        user = User.query.filter_by(username="new_user").first()
+        user = User.query.filter_by(email="new@user.com").first()
         assert user is not None
-        assert user.username == "new_user"
         assert user.email == "new@user.com"
         assert user.first_name == "New"
         assert user.last_name == "User"
@@ -137,8 +128,7 @@ def test_update_user(client_as_admin, app):
 
 def test_delete_user(client_as_admin, app):
     user = User(
-        username="test_admin",
-        email="admin@admin.com",
+        email="test_admin@admin.com",
         first_name="Admin",
         last_name="User",
         access_level=3,
@@ -149,14 +139,14 @@ def test_delete_user(client_as_admin, app):
         db.session.add(user)
         db.session.commit()
 
-        assert User.query.filter_by(username="test_admin").first() is not None
+        assert User.query.filter_by(email="test_admin@admin.com").first() is not None
 
     response = client_as_admin.delete(f"/api/users/{user.uuid}")
 
     assert response.status_code == 204
 
     with app.app_context():
-        assert User.query.filter_by(username="test_admin").first() is None
+        assert User.query.filter_by(email="test_admin@admin.com").first() is None
 
 
 def test_unauthorized_get_users(client_as_user):
@@ -166,8 +156,7 @@ def test_unauthorized_get_users(client_as_user):
 
 def test_unauthorized_get_user_by_id(client_as_user, app):
     user = User(
-        username="test_admin",
-        email="admin@admin.com",
+        email="test_admin@admin.com",
         first_name="Admin",
         last_name="User",
         access_level=3,
@@ -183,12 +172,11 @@ def test_unauthorized_get_user_by_id(client_as_user, app):
     assert response.status_code == 401
 
 
-def test_unauthorized_create_user(client_as_user):
-    response = client_as_user.post(
+def test_create_user_as_anonymous(client):
+    response = client.post(
         "/api/users/",
         data=json.dumps(
             {
-                "username": "new_user",
                 "email": "new@user.com",
                 "first_name": "New",
                 "last_name": "User",
@@ -200,4 +188,4 @@ def test_unauthorized_create_user(client_as_user):
         content_type="application/json",
     )
 
-    assert response.status_code == 401
+    assert response.status_code == 201

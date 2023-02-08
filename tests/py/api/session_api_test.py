@@ -13,11 +13,11 @@ def test_me_as_admin_api(client_as_admin):
     response = client_as_admin.get("/api/me", content_type="application/json")
 
     assert response.status_code == 200
-    assert response.json["username"] == "admin"
+    assert response.json["email"] == "admin@admin.com"
 
 
 def test_me_as_user_api(client_as_user):
     response = client_as_user.get("/api/me", content_type="application/json")
 
     assert response.status_code == 200
-    assert response.json["username"] == "user"
+    assert response.json["email"] == "user@user.com"

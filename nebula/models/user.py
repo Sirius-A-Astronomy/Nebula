@@ -17,8 +17,8 @@ class User(Base):
     """
     User model for the database.
 
-    :param username: The username of the user. Must be unique. Case-insensitive.
-    :type username: str
+    :param email: The email of the user. Must be unique.
+    :type email: str
     :param password: The password of the user.
     :type password: str
     :param first_name: The first name of the user.
@@ -41,18 +41,13 @@ class User(Base):
 
     first_name = db.Column(db.String(128))
     last_name = db.Column(db.String(128))
-    username = db.Column(db.String(128), nullable=False, unique=True)
+    email = db.Column(db.String(128), nullable=False, unique=True)
     access_level = db.Column(db.Integer, nullable=False, default=0)
     password = db.Column(db.String(300), nullable=False)
-    email = db.Column(db.String(128), nullable=True)
 
     is_authenticated = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
     is_anonymous = db.Column(db.Boolean, default=False)
-
-    subscriptions = db.relationship(
-        "Subscription", secondary=subscriptions, backref=db.backref("users", lazy=True)
-    )
 
     def get_id(self):
         return self.uuid
@@ -64,33 +59,25 @@ class User(Base):
     def check_password(self, password):
         return sha256_crypt.verify(password, self.password)
 
-    @hybrid_property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
-
-    # email should just be: username@astro.rug.nl, no need to store it ?
-    # storing email anyway in case user wants to use a different email address
-
     def has_access(self, required_access_level):
         """Check if the user has the required access level."""
         return self.access_level >= required_access_level
 
     def __repr__(self):
-        return f'User("{self.username}")'
+        return f'User("{self.email}")'
 
     def expose(self):
         return {
             "id": self.uuid,
             "first_name": self.first_name,
             "last_name": self.last_name,
-            "username": self.username,
             "access_level": self.access_level,
             "email": self.email,
             "created_at": self.created_at,
         }
 
 
-def create_user(username, password, **kwargs):
+def create_user(email, password, **kwargs):
     """
     Returns the created user object.
 
@@ -101,7 +88,7 @@ def create_user(username, password, **kwargs):
     :param kwargs: The additional arguments to pass to the user object.
     """
     hashed_password = sha256_crypt.hash(password)
-    user = User(username=username, password=hashed_password, **kwargs)
+    user = User(email=email, password=hashed_password, **kwargs)
     return user
 
 
