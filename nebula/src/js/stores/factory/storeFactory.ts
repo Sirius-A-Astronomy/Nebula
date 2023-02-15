@@ -17,12 +17,6 @@ export type New<T extends { id: string }> = Omit<T, "id" | "created_at">;
 
 export type Updatable<T extends { id: string }> = DeepPartial<T>;
 
-type ApiResponse<T> = {
-    status: number;
-    data?: T;
-    message?: string;
-};
-
 export const storeModuleFactory = <T extends { id: string }>(
     moduleName: string
 ) => {
@@ -70,11 +64,9 @@ export const storeModuleFactory = <T extends { id: string }>(
     const actions = {
         getAll: async () => {
             isLoadingAll.value = true;
-            const response = (await api.get(`${moduleName}/`)) as ApiResponse<
-                T[]
-            >;
+            const response = await api.get<T[]>(`${moduleName}/`);
 
-            if (response.status === 200) {
+            if (response.ok) {
                 setters.setAll(response.data as T[]);
                 loadedAll.value = true;
                 lastLoad.value = Date.now();
@@ -86,20 +78,20 @@ export const storeModuleFactory = <T extends { id: string }>(
         },
 
         getById: async (id: string) => {
-            const response = await api.get(`${moduleName}/${id}`);
+            const response = await api.get<T>(`${moduleName}/${id}`);
 
-            if (response.status === 200) {
-                setters.setById(id, response.data as T);
+            if (response.ok) {
+                setters.setById(id, response.data);
             }
 
             return response;
         },
 
         create: async <K extends New<T>>(newItem: K) => {
-            const response = await api.post(`${moduleName}/`, newItem);
+            const response = await api.post<T>(`${moduleName}/`, newItem);
 
-            if (response.status === 201) {
-                const data = response.data as T;
+            if (response.ok) {
+                const data = response.data;
                 setters.setById(data.id, data);
             }
 
@@ -110,13 +102,13 @@ export const storeModuleFactory = <T extends { id: string }>(
             if (!updatedItem.id) {
                 throw new Error("Cannot update item without id");
             }
-            const response = await api.put(
+            const response = await api.put<T, Updatable<T>>(
                 `${moduleName}/${updatedItem.id}`,
                 updatedItem
             );
 
-            if (response.status === 200) {
-                const data = response.data as T;
+            if (response.ok) {
+                const data = response.data;
                 setters.setById(updatedItem.id, data);
             }
 
@@ -124,9 +116,9 @@ export const storeModuleFactory = <T extends { id: string }>(
         },
 
         delete: async (id: string) => {
-            const response = await api.delete(`${moduleName}/${id}`);
+            const response = await api.delete<T>(`${moduleName}/${id}`);
 
-            if (response.status === 200) {
+            if (response.ok) {
                 setters.deleteById(id);
             }
 
