@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LoginImage from "/images/login.svg";
 import RegisterImage from "/images/register.svg";
-import { watch, ref, type Ref } from "vue";
+import { watch, ref } from "vue";
 import { useRouter } from "vue-router";
 import useFlashStore from "@stores/flashStore";
 import { login, register } from "@stores/sessionStore";
@@ -19,8 +19,7 @@ import {
     validateFirstName,
     validateLastName,
 } from "@/components/user/userValidation";
-import { debounce, throttle } from "throttle-debounce";
-import type { ApiResponse } from "@/http/api";
+import { debounce } from "throttle-debounce";
 
 const props = defineProps<{
     register?: boolean;
@@ -64,20 +63,6 @@ watch(
 const loginValues = ref({
     email: "",
     password: "",
-});
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const loginErrors = ref({
-    username: "",
-    password: "",
-});
-
-const registerErrors = ref({
-    email: "",
-    first_name: "",
-    last_name: "",
-    password: "",
-    passwordConfirm: "",
 });
 
 const registerValues = ref({

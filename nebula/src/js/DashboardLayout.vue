@@ -4,12 +4,8 @@ import { isSideMenuOpen, closeSideMenu } from "@/stores/dashboardStore";
 import { vClickOutside } from "@/vue-services/directives/clickOutside";
 import { vKeydownEscape } from "@/vue-services/directives/keydownEscape";
 
-import useFlash from "@stores/flashStore";
-
 import Header from "@/components/dashboard/DashboardHeader.vue";
 import Sidemenu from "@/components/dashboard/DashboardSidemenu.vue";
-
-const flash = useFlash();
 </script>
 
 <template>
