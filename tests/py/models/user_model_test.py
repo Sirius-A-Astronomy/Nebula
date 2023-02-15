@@ -68,7 +68,7 @@ class TestValidateEmail:
         # assert
         assert result == (
             False,
-            "It looks like we already know someone with that email address, do you want to try another one?",
+            "It looks like we already know someone with that email address, do you want to login instead?",
         )
 
     def test_validate_email_valid(self, empty_app):
