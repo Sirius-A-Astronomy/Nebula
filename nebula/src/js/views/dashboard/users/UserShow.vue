@@ -252,7 +252,7 @@ onMounted(loadData);
             submitText="Update"
             @cancel="editting = false"
             :awaiting-response="awaitingResponse"
-            @submit="updateUser"
+            @submit-update-user="updateUser"
         />
     </template>
 </template>

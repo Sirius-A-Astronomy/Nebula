@@ -92,7 +92,7 @@ const submit = () => {
         return;
     }
 
-    emit("submitUpdateUser", values);
+    emit("submitUpdateUser", { ...values, id: props.user.id });
 };
 </script>
 
