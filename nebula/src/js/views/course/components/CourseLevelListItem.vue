@@ -2,7 +2,8 @@
 import type { CourseLevelWithCourses } from "@stores/courseLevelStore";
 import CourseListItem from "./CourseListItem.vue";
 import { ref } from "vue";
-import ArrowRightIcon from "vue-material-design-icons/ChevronRight.vue";
+import { faChevronDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 defineProps<{
     level: CourseLevelWithCourses;
@@ -28,10 +29,7 @@ const expanded = ref(true);
                     }"
                     class="text-sm text-primary-text hover:text-accent-focus hover:underline"
                 >
-                    <ArrowRightIcon
-                        :size="24"
-                        class="flex items-center justify-center"
-                    />
+                    <FontAwesomeIcon :icon="faArrowRight" />
                 </RouterLink>
             </div>
 
@@ -41,16 +39,13 @@ const expanded = ref(true);
                     level.study_type
                 } - ${level.name}`"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    fill="currentColor"
+                <FontAwesomeIcon
+                    :icon="faChevronDown"
                     class="transition-transform"
-                    :class="expanded ? '' : 'rotate-180'"
-                    width="24"
-                >
-                    <path d="m12 15.375-6-6 1.4-1.4 4.6 4.6 4.6-4.6 1.4 1.4Z" />
-                </svg>
+                    :class="{
+                        '-rotate-180 transform': !expanded,
+                    }"
+                />
             </button>
         </div>
         <ul class="my-2 flex flex-col gap-2" v-if="expanded && level.courses">

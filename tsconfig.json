@@ -1,10 +1,10 @@
 {
     "extends": "@vue/tsconfig/tsconfig.web.json",
     "include": [
-        "nebula/src/**/*",
-        "nebula/src/**/*.vue",
-        "nebula/src/**/*.ts",
-        "nebula/src/**/*.d.ts",
+        "nebula/src/js/**/*",
+        "nebula/src/js/**/*.vue",
+        "nebula/src/js/**/*.ts",
+        "nebula/src/js/**/*.d.ts",
         "tests/js/**/*"
     ],
     "compilerOptions": {
@@ -39,12 +39,13 @@
             ],
             "@public/*": [
                 "nebula/src/public/*"
-            ],
+            ]
         },
-        "typeRoots": [
-            "node_modules/@types",
-            "nebula/src/js/types"
-        ],
+        "rootDirs": [
+            "nebula/src/js",
+            "nebula/src/scss",
+            "nebula/src/types"
+        ]
     },
     "references": [
         {

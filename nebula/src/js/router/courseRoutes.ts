@@ -28,6 +28,7 @@ export const courseRoutes: RouteRecordRaw[] = [
             title: "Course Level",
             description: "Course level details",
         },
+        props: true,
     },
 ];
 

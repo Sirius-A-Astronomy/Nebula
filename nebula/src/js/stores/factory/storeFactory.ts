@@ -3,6 +3,15 @@ import { computed, ref } from "vue";
 import type { Ref } from "vue";
 import api from "@http/api";
 
+const createdStores: {
+    actions: {
+        invalidateAll: () => void;
+    };
+    setters: {
+        setAll: (items: any[]) => void;
+    };
+}[] = [];
+
 export type State<T extends { id: string }> = {
     [id: string]: T;
 };
@@ -22,25 +31,25 @@ export const storeModuleFactory = <T extends { id: string }>(
 ) => {
     const storeContents: Ref<State<T>> = ref({});
 
-    const lastLoad: Ref<number> = ref(0);
-    const isValid: Ref<boolean> = ref(true);
-    const loadedAll: Ref<boolean> = ref(false);
-    const isLoadingAll: Ref<boolean> = ref(false);
-
     const state = {
         storeContents,
+        isLoadingAll: ref(false),
+        loadedAll: ref(false),
+        isValid: ref(true),
+        lastLoad: ref(0),
         shouldLoadAll: () => {
             const now = Date.now();
             const should =
-                now - lastLoad.value > 1000 * 60 * 5 || !isValid.value;
-            !loadedAll.value;
+                now - state.lastLoad.value > 1000 * 60 * 5 ||
+                !state.isValid.value;
+            !state.loadedAll.value;
 
-            return should && !isLoadingAll.value;
+            return should && !state.isLoadingAll.value;
         },
     };
 
     const getters = {
-        byId: (id: string) => computed(() => storeContents.value[id]),
+        byId: (id: string) => computed(() => storeContents.value[id] ?? null),
         all: computed(() => Object.values(storeContents.value)),
     };
 
@@ -63,15 +72,15 @@ export const storeModuleFactory = <T extends { id: string }>(
 
     const actions = {
         getAll: async () => {
-            isLoadingAll.value = true;
+            state.isLoadingAll.value = true;
             const response = await api.get<T[]>(`${moduleName}/`);
 
             if (response.ok) {
                 setters.setAll(response.data as T[]);
-                loadedAll.value = true;
-                lastLoad.value = Date.now();
-                isValid.value = true;
-                isLoadingAll.value = false;
+                state.loadedAll.value = true;
+                state.lastLoad.value = Date.now();
+                state.isValid.value = true;
+                state.isLoadingAll.value = false;
             }
 
             return response;
@@ -82,6 +91,18 @@ export const storeModuleFactory = <T extends { id: string }>(
 
             if (response.ok) {
                 setters.setById(id, response.data);
+            }
+
+            return response;
+        },
+
+        getByFilter: async (filter: Record<string, string>) => {
+            const response = await api.get<T[]>(`${moduleName}/`, filter);
+
+            if (response.ok) {
+                for (const item of response.data) {
+                    setters.setById(item.id, item);
+                }
             }
 
             return response;
@@ -98,11 +119,11 @@ export const storeModuleFactory = <T extends { id: string }>(
             return response;
         },
 
-        update: async (updatedItem: Updatable<T>) => {
+        update: async <K extends { id?: string }>(updatedItem: K) => {
             if (!updatedItem.id) {
                 throw new Error("Cannot update item without id");
             }
-            const response = await api.put<T, Updatable<T>>(
+            const response = await api.put<T, K>(
                 `${moduleName}/${updatedItem.id}`,
                 updatedItem
             );
@@ -126,14 +147,28 @@ export const storeModuleFactory = <T extends { id: string }>(
         },
 
         invalidateAll: () => {
-            isValid.value = false;
+            state.isValid.value = false;
         },
     };
 
-    return {
+    const createdStore = {
         state,
         getters,
         setters,
         actions,
     };
+
+    createdStores.push(createdStore);
+
+    return createdStore;
+};
+
+export const invalidateAllStores = () => {
+    createdStores.forEach((store) => store.actions.invalidateAll());
+};
+
+export const clearAllStores = () => {
+    createdStores.forEach((store) => {
+        store.setters.setAll([]);
+    });
 };

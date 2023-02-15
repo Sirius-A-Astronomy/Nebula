@@ -123,11 +123,9 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
     display: inline-block;
 
     // trigger opening on hover
-    &:has(
-            .dropdown__trigger--hover:hover,
-            .dropdown__menu:hover,
-            .dropdown__menu--open
-        ) {
+    // .dropdown__trigger--hover:hover,
+    // .dropdown__menu:hover,
+    &:has(.dropdown__menu--open) {
         & > .dropdown__menu {
             opacity: 1;
             pointer-events: auto;

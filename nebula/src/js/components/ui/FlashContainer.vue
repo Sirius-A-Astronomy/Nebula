@@ -7,12 +7,16 @@ const flash = useFlash();
 <template>
     <Transition name="fade">
         <template v-if="flash.messages.value.length">
-            <div class="absolute top-10 right-0 z-50 m-4 flex flex-col gap-4">
-                <transition-group name="fade">
+            <div class="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+                <TransitionGroup
+                    name="fade"
+                    class="container relative flex flex-col items-end justify-end gap-4 pt-20"
+                    tag="div"
+                >
                     <div
                         v-for="flashMessage in flash.messages.value"
                         :key="flashMessage.id"
-                        class="flex flex-row items-center justify-between gap-2 rounded-md p-4 font-bold"
+                        class="pointer-events-auto left-3 right-3 top-20 flex flex-row items-center justify-between gap-2 overflow-hidden rounded-md p-4 font-bold sm:left-auto"
                         :class="{
                             'bg-alert-error text-alert-error-text':
                                 flashMessage.type === 'error',
@@ -38,7 +42,7 @@ const flash = useFlash();
                             </svg>
                         </button>
                     </div>
-                </transition-group>
+                </TransitionGroup>
             </div>
         </template>
     </Transition>

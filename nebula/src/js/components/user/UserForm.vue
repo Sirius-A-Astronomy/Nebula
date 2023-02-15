@@ -33,7 +33,6 @@ const emit = defineEmits<{
 const values = reactive({
     first_name: props.user?.first_name ?? "",
     last_name: props.user?.last_name ?? "",
-    username: props.user?.username ?? "",
     email: props.user?.email ?? "",
     access_level: props.user?.access_level ?? 0,
 });
@@ -46,7 +45,6 @@ const password = reactive({
 const errors = reactive({
     first_name: "",
     last_name: "",
-    username: "",
     email: "",
     access_level: "",
     password: "",
@@ -143,21 +141,6 @@ const submit = () => {
                     {{ errors.last_name }}
                 </p>
             </div>
-        </div>
-
-        <div class="flex flex-col gap-2">
-            <label for="username" class="text-xl font-bold">Username</label>
-            <input
-                type="text"
-                name="username"
-                id="username"
-                autocomplete="username"
-                class="rounded-md border-2 border-primary-bg bg-secondary-bg px-2 py-1 transition-colors focus:border-primary-active focus:bg-tertiary-bg focus:outline-none focus:ring-primary-active"
-                v-model="values.username"
-            />
-            <p v-if="errors.username" class="text-sm text-red-500">
-                {{ errors.username }}
-            </p>
         </div>
 
         <!-- Password and password confirmation -->

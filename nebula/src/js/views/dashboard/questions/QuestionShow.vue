@@ -146,6 +146,14 @@ onMounted(loadData);
                     >
                 </div>
 
+                <div class="flex flex-row items-baseline gap-1">
+                    <span class="font-bold">User: </span>
+                    <span
+                        >{{ question.user.first_name }}
+                        {{ question.user.last_name }}</span
+                    >
+                </div>
+
                 <div class="flex flex-col items-baseline">
                     <h3 class="text-xl font-bold">Content:</h3>
                     <Markdown :content="question.content" />

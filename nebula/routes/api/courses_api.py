@@ -13,6 +13,13 @@ api_bp.register_blueprint(bp)
 
 @bp.route("/", methods=["GET"])
 def get_courses():
+    data = request.args
+
+    if data.get("course_level"):
+        course_level = data.get("course_level")
+        courses = Course.query.filter_by(course_level_uuid=course_level).all()
+        return jsonify([course.expose() for course in courses])
+
     courses = Course.query.all()
     return jsonify([course.expose() for course in courses])
 

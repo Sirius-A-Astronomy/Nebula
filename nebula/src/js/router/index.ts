@@ -3,10 +3,11 @@ import {
     createRouter,
     createWebHistory,
     type RouteLocationNormalized,
+    type RouteLocationRaw,
 } from "vue-router";
 import { isAuthenticated, authenticatedUser } from "@stores/sessionStore";
 
-import { accessLevels } from "@stores/userStore";
+import { getAccessLevelName } from "@stores/userStore";
 
 import useFlashStore from "@stores/flashStore";
 
@@ -19,6 +20,14 @@ const flash = useFlashStore();
 
 const router = createRouter({
     history: createWebHistory(),
+    scrollBehavior: (to, from, savedPosition) => {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return { top: 0, behavior: "smooth" };
+        }
+    },
+
     routes: [
         ...baseRoutes,
         ...courseRoutes,
@@ -167,7 +176,10 @@ const protectedRoutes: string[] = [];
 // protect all routes that start with name 'dashboard'
 const protectedRoutesStartsWith: string[] = ["dashboard"];
 
-const authGuard = (to: RouteLocationNormalized): boolean => {
+const authGuard = (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized
+): boolean | RouteLocationRaw => {
     if (
         to.name &&
         (protectedRoutes.includes(to.name as string) ||
@@ -183,15 +195,19 @@ const authGuard = (to: RouteLocationNormalized): boolean => {
 
     if (to.meta.requiredAccessLevel) {
         const requiredAccessLevel = to.meta.requiredAccessLevel as number;
-        if (authenticatedUser.value.access_level < requiredAccessLevel) {
-            const requiredAccessLevelName = accessLevels.find(
-                (level) => level.value === requiredAccessLevel
-            )?.name;
+        if (!(authenticatedUser.value?.access_level >= requiredAccessLevel)) {
+            const requiredAccessLevelName =
+                getAccessLevelName(requiredAccessLevel);
 
             flash.add(
                 `You must be a ${requiredAccessLevelName} to view this page`,
-                "danger"
+                "warning"
             );
+            if (!from.name) {
+                return {
+                    name: "home",
+                };
+            }
             return false;
         }
     }

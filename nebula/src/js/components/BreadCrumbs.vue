@@ -12,17 +12,15 @@ defineProps<{
 </script>
 
 <template>
-    <div>
-        <div class="path-container">
-            <RouterLink
-                v-for="breadcrumb in breadcrumbs"
-                :key="breadcrumb.name"
-                class="path-container__link"
-                :to="breadcrumb.to"
-                active-class="path-container__link--active"
-                >{{ breadcrumb.name }}</RouterLink
-            >
-        </div>
+    <div class="path-container">
+        <RouterLink
+            v-for="breadcrumb in breadcrumbs"
+            :key="breadcrumb.name"
+            class="path-container__link"
+            :to="breadcrumb.to"
+            active-class="path-container__link--active"
+            >{{ breadcrumb.name }}</RouterLink
+        >
     </div>
 </template>
 
@@ -31,7 +29,6 @@ defineProps<{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
 
     justify-content: flex-start;
     flex-wrap: wrap;

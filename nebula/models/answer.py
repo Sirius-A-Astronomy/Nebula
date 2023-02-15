@@ -32,4 +32,8 @@ class Answer(Base):
             "sources": self.sources,
             "user": self.user.expose(),
             "question_id": self.question_uuid,
+            "meta": {
+                "created_at": self.created_at,
+                "updated_at": self.updated_at,
+            },
         }

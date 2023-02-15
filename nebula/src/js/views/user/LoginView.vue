@@ -2,12 +2,12 @@
 import LoginImage from "/images/login.svg";
 import RegisterImage from "/images/register.svg";
 import { watch, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import useFlashStore from "@stores/flashStore";
 import { login, register } from "@stores/sessionStore";
 
-import VisibilityOffIcon from "vue-material-design-icons/EyeOff.vue";
-import VisibilityIcon from "vue-material-design-icons/Eye.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import "@scss/backgrounds/stars.scss";
 import "@scss/components/forms.scss";
@@ -31,6 +31,7 @@ const flash = useFlashStore();
 const showRegister = ref(props.register ?? false);
 
 const router = useRouter();
+const route = useRoute();
 
 const animating = ref(false);
 
@@ -98,14 +99,24 @@ const registerFeedback = ref({
 
 const onLoginSubmit = async () => {
     const response = await login(loginValues.value);
-    if (response.ok) {
-        router.push({
-            name: "home",
-        });
 
-        const user = response.data.user;
-        flash.add(`Welcome back to Nebula, ${user.first_name}!`, "success");
+    if (!response.ok) {
+        flash.add(response.message, "error");
+        return;
     }
+
+    const user = response.data.user;
+    flash.add(`Welcome back to Nebula, ${user.first_name}!`, "success");
+
+    if (route.query.next) {
+        const decoded = decodeURIComponent(route.query.next as string);
+        router.push(decoded);
+        return;
+    }
+
+    router.push({
+        name: "home",
+    });
 };
 
 const onRegisterSubmit = async () => {
@@ -287,13 +298,12 @@ const validatePasswordConfirmDebounced = debounce(500, () => {
                                         showPassword.login = !showPassword.login
                                     "
                                 >
-                                    <component
-                                        :is="
+                                    <FontAwesomeIcon
+                                        :icon="
                                             showPassword.login
-                                                ? VisibilityIcon
-                                                : VisibilityOffIcon
+                                                ? faEye
+                                                : faEyeSlash
                                         "
-                                        :size="20"
                                     />
                                 </button>
                             </div>
@@ -458,13 +468,12 @@ const validatePasswordConfirmDebounced = debounce(500, () => {
                                                 !showPassword.register
                                         "
                                     >
-                                        <component
-                                            :is="
+                                        <FontAwesomeIcon
+                                            :icon="
                                                 showPassword.register
-                                                    ? VisibilityIcon
-                                                    : VisibilityOffIcon
+                                                    ? faEye
+                                                    : faEyeSlash
                                             "
-                                            :size="20"
                                         />
                                     </button>
 
@@ -521,13 +530,12 @@ const validatePasswordConfirmDebounced = debounce(500, () => {
                                                 !showPassword.registerConfirm
                                         "
                                     >
-                                        <component
-                                            :is="
+                                        <FontAwesomeIcon
+                                            :icon="
                                                 showPassword.registerConfirm
-                                                    ? VisibilityIcon
-                                                    : VisibilityOffIcon
+                                                    ? faEye
+                                                    : faEyeSlash
                                             "
-                                            :size="20"
                                         />
                                     </button>
 

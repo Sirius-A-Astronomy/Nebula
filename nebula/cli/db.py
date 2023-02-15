@@ -103,7 +103,7 @@ def seed_users():
             "first_name": fake.first_name(),
             "last_name": fake.last_name(),
             "email": fake.email(),
-            "access_level": random.randint(0, 2),
+            "access_level": random.randint(0, 4),
         }
 
         new_user = create_user(**user)
@@ -120,9 +120,9 @@ def seed_courses():
     from nebula.models.course import Course
     from nebula.models.course_level import CourseLevel
 
-    for i in range(random.randint(1, 7)):
+    for _ in range(random.randint(1, 7)):
         study_type = ["bsc", "msc"][random.randint(0, 1)]
-        name = fake.job().replace("/", "||")
+        name = (fake.job(),)
         course_level = {
             "name": name,
             "study_type": {"bsc": "Bachelor", "msc": "Master"}[study_type],
@@ -135,7 +135,7 @@ def seed_courses():
 
         for i in range(random.randint(5, 15)):
             course = {
-                "name": fake.job().replace("/", "||"),
+                "name": fake.job(),
                 "code": fake.unique.word(),
                 "description": fake.paragraph(),
                 "course_level": new_course_level,
@@ -157,7 +157,7 @@ def seed_subject_tags():
 
     for _ in range(random.randint(5, 15)):
         subject_tag = {
-            "name": fake.job().replace("/", "||"),
+            "name": fake.unique.job().lower(),
         }
 
         new_subject_tag = SubjectTag(**subject_tag)

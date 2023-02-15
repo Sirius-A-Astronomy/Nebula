@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import api from "@http/api";
 
 import type { User } from "@stores/userStore";
+import { invalidateAllStores } from "@stores/factory/storeFactory";
 
 export const authenticatedUser = ref({} as User);
 
@@ -35,6 +36,7 @@ export class FetchUserFailedError extends Error {
 export const logout = async () => {
     const response = await api.post("/logout", {});
     authenticatedUser.value = {} as User;
+    invalidateAllStores();
     return response;
 };
 

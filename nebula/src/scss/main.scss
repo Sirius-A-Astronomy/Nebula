@@ -1,23 +1,34 @@
 @use "abstracts" as *;
+@use "components" as *;
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-primary-bg;
+:root {
+    --has-hover: 0;
+}
 
-  @apply text-primary-text;
+@supports (hover: hover) {
+    :root {
+        --has-hover: 1;
+    }
+}
+
+body {
+    @apply bg-primary-bg;
+
+    @apply text-primary-text;
 }
 
 footer {
-  padding: 1em 0;
-  margin: 60px auto 0 auto;
-  /* margin-top: 60px;
+    padding: 1em 0;
+    margin: 60px auto 0 auto;
+    /* margin-top: 60px;
 	margin-bottom: 0 !important; */
-  background-color: var(--grey, #666666) !important;
-  font-size: 90%;
-  color: #fff !important;
-  text-align: center;
-  width: 100%;
+    background-color: var(--grey, #666666) !important;
+    font-size: 90%;
+    color: #fff !important;
+    text-align: center;
+    width: 100%;
 }

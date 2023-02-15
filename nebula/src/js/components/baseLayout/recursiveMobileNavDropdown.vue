@@ -22,8 +22,10 @@ const expanded = ref(false);
                 if (item.items) {
                     expanded= !expanded;
                 }
-                if (item.action)
+                if (item.action) {
                     item.action();
+                    closeSideMenu();
+                }
                 e.preventDefault();
             }
         "

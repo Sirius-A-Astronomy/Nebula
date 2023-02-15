@@ -112,7 +112,9 @@ def create_user_route():
                 jsonify(
                     {
                         "message": "You are not allowed to create a user with this access level",
-                        "errors": {"access_level": "You are not allowed to create a user with this access level"},
+                        "errors": {
+                            "access_level": "You are not allowed to create a user with this access level"
+                        },
                     }
                 ),
                 400,
@@ -123,7 +125,15 @@ def create_user_route():
     print(error_bin)
 
     if error_bin:
-        return jsonify({"message": "Some values were not entered correctly", "errors": error_bin}), 400
+        return (
+            jsonify(
+                {
+                    "message": "Some values were not entered correctly",
+                    "errors": error_bin,
+                }
+            ),
+            400,
+        )
 
     user = User(
         email=email,

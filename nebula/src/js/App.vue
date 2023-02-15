@@ -26,16 +26,14 @@ const AsyncDashboardLayout = defineAsyncComponent(
 </script>
 
 <template>
-    <div>
-        <a href="#content" id="skip-link" class="skip-link sr-only"
-            >Skip to content</a
-        >
-        <CookieNotice />
-        <ModalContainer />
-        <FlashContainer />
-        <AsyncDashboardLayout v-if="route.path.startsWith('/dashboard')" />
-        <BaseLayout v-else />
-    </div>
+    <a href="#content" id="skip-link" class="skip-link sr-only"
+        >Skip to content</a
+    >
+    <CookieNotice />
+    <ModalContainer />
+    <FlashContainer />
+    <AsyncDashboardLayout v-if="route.path.startsWith('/dashboard')" />
+    <BaseLayout v-else />
 </template>
 
 <style lang="scss" scoped>

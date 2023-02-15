@@ -54,4 +54,8 @@ class Question(Base):
             "subject_tags": [subject_tag.expose() for subject_tag in self.subject_tags],
             "answers": [answer.expose() for answer in self.answers],
             "comments": [comment.expose() for comment in self.comments],
+            "meta": {
+                "created_at": self.created_at,
+                "updated_at": self.updated_at,
+            },
         }

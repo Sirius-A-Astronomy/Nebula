@@ -23,4 +23,8 @@ class Comment(Base):
             "is_suggestion": self.is_suggestion,
             "user": self.user.expose(),
             "question_id": self.question_uuid,
+            "meta": {
+                "created_at": self.created_at,
+                "updated_at": self.updated_at,
+            },
         }

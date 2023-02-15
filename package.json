@@ -14,6 +14,10 @@
         "test:cov": "npm run test -- --coverage"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.3.0",
+        "@fortawesome/free-solid-svg-icons": "^6.3.0",
+        "@fortawesome/vue-fontawesome": "^3.0.3",
+        "dayjs": "^1.11.7",
         "dompurify": "^2.4.1",
         "epic-spinners": "^2.0.0",
         "fuzzysort": "^2.0.4",
@@ -23,7 +27,6 @@
         "throttle-debounce": "^5.0.0",
         "vitest": "^0.28.1",
         "vue": "^3.2.45",
-        "vue-material-design-icons": "^5.1.2",
         "vue-router": "^4.1.6"
     },
     "devDependencies": {

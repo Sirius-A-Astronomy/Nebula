@@ -83,11 +83,7 @@ const userNavItem = computed(() => {
             },
         });
 
-        const name =
-            authenticatedUser.value.first_name &&
-            authenticatedUser.value.last_name
-                ? `${authenticatedUser.value.first_name} ${authenticatedUser.value.last_name}`
-                : authenticatedUser.value.username;
+        const name = `${authenticatedUser.value.first_name} ${authenticatedUser.value.last_name}`;
 
         return {
             name,

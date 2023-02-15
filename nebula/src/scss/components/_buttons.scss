@@ -1,110 +1,109 @@
 .btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
 }
 
 .btn-primary {
-  opacity: 1;
-  margin-top: 0.5rem;
-  background-color: var(--color-primary);
-  color: var(--color-text-on-primary);
-  background-image: linear-gradient(
-    45deg,
-    0% var(--color-primary),
-    100% var(--color-primary-d36)
-  );
-  background-size: 200% auto;
-  border: none;
-  transition: 0.4s ease-in-out;
+    opacity: 1;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    background-image: linear-gradient(
+        45deg,
+        0% var(--color-primary),
+        100% var(--color-accent)
+    );
+    background-size: 200% auto;
+    border: none;
+    transition: 0.4s ease-in-out;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-  color: var(--color-text-on-primary);
-  background-position: right center;
-  border: none;
-  box-shadow: none;
+    color: var(--color-text-on-primary);
+    background-position: right center;
+    border: none;
+    box-shadow: none;
 }
 
 .btn-primary:disabled {
-  pointer-events: none;
-  opacity: 0.65;
-  color: var(--color-text-on-primary);
-  border: none;
+    pointer-events: none;
+    opacity: 0.65;
+    color: var(--color-text-on-primary);
+    border: none;
 }
 
 .btn-outline {
-  background-color: transparent;
-  color: var(--color-primary-active);
-  border: 1px solid var(--color-primary-active);
-  transition: 0.4s ease-in-out;
-  padding: 0.1rem 0.5rem;
-  vertical-align: initial;
-
-  &:hover,
-  &:focus {
-    color: var(--color-text-on-primary);
-    background-color: var(--color-primary-active);
+    background-color: transparent;
+    color: var(--color-primary-active);
     border: 1px solid var(--color-primary-active);
-  }
+    transition: 0.4s ease-in-out;
+    padding: 0.1rem 0.5rem;
+    vertical-align: initial;
+
+    &:hover,
+    &:focus {
+        color: var(--color-text-on-primary);
+        background-color: var(--color-primary-active);
+        border: 1px solid var(--color-primary-active);
+    }
 }
 
 .button-accent {
-  /* inline links */
-  color: var(--color-accent);
+    /* inline links */
+    color: var(--color-accent);
 
-  text-decoration: none;
-  font-family: "Roboto", sans-serif;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-weight: 500;
-  line-height: 1.25rem;
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  border-radius: 0;
-
-  &:hover,
-  &:focus {
-    color: var(--color-accent-focus);
-  }
-
-  &.on-primary {
-    color: var(--color-accent-50);
-    padding-block-end: 0.1em;
-    border-block-end: var(--color-accent-50) solid 1px;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 500;
+    line-height: 1.25rem;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
 
     &:hover,
     &:focus {
-      color: var(--color-accent-100);
+        color: var(--color-accent-focus);
     }
-  }
 
-  &.on-dark {
-    color: var(--color-accent-on-dark-background);
+    &.on-primary {
+        color: var(--color-accent-50);
+        padding-block-end: 0.1em;
+        border-block-end: var(--color-accent-50) solid 1px;
 
-    &:hover,
-    &:focus {
-      color: var(--color-accent-on-dark-background-focus);
+        &:hover,
+        &:focus {
+            color: var(--color-accent-100);
+        }
     }
-  }
+
+    &.on-dark {
+        color: var(--color-accent-on-dark-background);
+
+        &:hover,
+        &:focus {
+            color: var(--color-accent-on-dark-background-focus);
+        }
+    }
 }
 
 .button-secondary {
-  color: var(--color-text-tertiary);
-  font-weight: 500;
-  letter-spacing: 0.04rem;
-  text-decoration: none;
-  font-family: "Roboto", sans-serif;
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+    letter-spacing: 0.04rem;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
 
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
 
-  &:hover,
-  &:focus {
-    color: var(--color-text-secondary);
-  }
+    &:hover,
+    &:focus {
+        color: var(--color-text-secondary);
+    }
 }

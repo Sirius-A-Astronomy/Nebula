@@ -76,7 +76,11 @@ def create_app(config_environment="default"):
     app.context_processor(context_processor)
 
     from nebula.helpers.csrf_error_handler import csrf_error_handler
+
     app.register_error_handler(CSRFError, csrf_error_handler)
+
+    # inject the csrf token into the response headers for all requests
+    app.after_request(inject_csrf_token)
 
     login_manager.login_view = "user.login_register"
     login_manager.login_message = "Please log in to access this page."
@@ -102,6 +106,14 @@ def is_safe_url(target, request):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
+
+
+def inject_csrf_token(response):
+    """Injects the csrf token into the response headers."""
+    from flask_wtf.csrf import generate_csrf
+
+    response.headers["X-CSRF-Token"] = generate_csrf()
+    return response
 
 
 if __name__ == "__main__":

@@ -47,9 +47,6 @@ onMounted(loadData);
                         <div
                             class="flex items-baseline gap-2 text-base text-secondary-text"
                         >
-                            <span>
-                                {{ user.username }}
-                            </span>
                             <span class="text-sm">
                                 {{ user.email }}
                             </span>

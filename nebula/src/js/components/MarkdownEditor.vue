@@ -17,7 +17,7 @@ const props = defineProps<{
     title?: string;
     preset?: "docs";
     options?: {
-        defaultTab?: string;
+        defaultTab?: "source" | "rendered" | "side-by-side";
         maxRows?: number;
         renderedFirst?: boolean;
         disableMarkdown?: boolean;
@@ -96,11 +96,10 @@ const highlightContent = () => {
         return (highlightedContent.value = contentEditable.value) + " ";
     highlightedContent.value =
         DOMPurify.sanitize(
-            highlighter.codeToHtml(
-                contentEditable.value,
-                "markdown",
-                "material-palenight"
-            ),
+            highlighter.codeToHtml(contentEditable.value, {
+                lang: "markdown",
+                theme: "material-palenight",
+            }),
             { KEEP_CONTENT: true }
         ) + " ";
 };
@@ -258,6 +257,12 @@ const markdownEditorId = ref(
                     v-html="highlightedContent"
                 ></div>
             </div>
+            <span
+                class="no-content-message"
+                v-if="!contentEditable && selectedTab === 'rendered'"
+            >
+                No markdown to show! Please enter some markdown in the editor.
+            </span>
             <Markdown
                 class="markdown-preview"
                 v-show="
@@ -329,6 +334,7 @@ const markdownEditorId = ref(
         position: relative;
         display: flex;
         overflow-x: hidden;
+        overflow-y: hidden;
         padding: 0 12px;
     }
 }
@@ -344,6 +350,14 @@ const markdownEditorId = ref(
     gap: 0.5rem;
     overflow-y: hidden;
     tab-size: 4;
+
+    .no-content-message {
+        padding-inline: 12px;
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.5;
+        color: var(--color-text-secondary, var(--vp-code-tab-text-color));
+    }
 
     &.side-by-side {
         grid-template-columns: repeat(2, minmax(0, 1fr));

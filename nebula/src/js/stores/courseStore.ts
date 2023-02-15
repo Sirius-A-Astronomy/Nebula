@@ -34,6 +34,11 @@ export const courseStore = {
     },
     actions: {
         ...courseStoreBase.actions,
+        getByCourseLevelId: (id: string) => {
+            return courseStoreBase.actions.getByFilter({
+                course_level: id,
+            });
+        },
     },
     state: {
         ...courseStoreBase.state,

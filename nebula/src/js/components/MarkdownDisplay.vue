@@ -81,7 +81,11 @@ const renderMarkdown = throttle(1000, (value) => {
         return;
     }
     setTimeout(() => {
-        mathjax.typesetPromise([markdownElement.value]);
+        try {
+            mathjax.typesetPromise([markdownElement.value]);
+        } catch (e) {
+            console.error("error while typesetting", e);
+        }
     }, 0);
 });
 
@@ -119,20 +123,12 @@ onMounted(async () => {
 
     mjx-container {
         min-width: 0 !important;
-        overflow-y: hidden;
         overflow-x: auto;
-        height: 100%;
+        overflow-y: hidden;
+        min-height: min-content;
 
         &[display="true"] {
             overflow-x: auto;
-            & > mjx-math {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 4px 0;
-            }
         }
     }
 
@@ -177,7 +173,7 @@ onMounted(async () => {
     }
 
     h1 {
-        letter-spacing: -0.02em;
+        letter-spacing: 0.04em;
         line-height: 40px;
         font-size: 28px;
     }
@@ -200,7 +196,6 @@ onMounted(async () => {
 
     @media (min-width: 768px) {
         h1 {
-            letter-spacing: -0.02em;
             line-height: 40px;
             font-size: 32px;
         }
@@ -210,9 +205,14 @@ onMounted(async () => {
  * Paragraph and inline elements
  * -------------------------------------------------------------------------- */
 
-    p,
-    summary {
-        margin: 16px 0;
+    // add margin bottom if there is a next sibling
+    :is(p, summary):has(+ *) {
+        margin-bottom: 16px;
+    }
+
+    // add margin top if there is a previous sibling
+    * + :is(p, summary) {
+        margin-top: 16px;
     }
 
     p {

@@ -62,6 +62,11 @@ const sendRequest = async <T = unknown, TBody = unknown>(
     try {
         const response = await fetch(fetchUrl, fetchOptions);
 
+        const csrfHeader = response.headers.get("X-CSRF-Token");
+        if (csrfHeader) {
+            setCSRFToken(csrfHeader);
+        }
+
         try {
             const json = await response.json();
             return {

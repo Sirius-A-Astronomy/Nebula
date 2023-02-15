@@ -214,10 +214,6 @@ onMounted(loadData);
 
             <div class="flex flex-col">
                 <div class="flex flex-row items-center gap-1">
-                    <span class="font-bold">Username: </span>
-                    <span>{{ user.username }}</span>
-                </div>
-                <div class="flex flex-row items-center gap-1">
                     <span class="font-bold">Email: </span>
                     <span>{{ user.email }}</span>
                 </div>
