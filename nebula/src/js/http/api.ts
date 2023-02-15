@@ -6,7 +6,7 @@ export const setCSRFToken = (token: string): void => {
     CSRF_TOKEN = token;
 };
 
-type SendRequestResponse<T = unknown> =
+export type ApiResponse<T = unknown> =
     | {
           ok: true;
           status: number;
@@ -17,15 +17,15 @@ type SendRequestResponse<T = unknown> =
           ok: false;
           status: number;
           message: string;
-          data?: T;
+          data?: T | unknown;
       };
 
-const sendRequest = async <T, TBody = unknown>(
+const sendRequest = async <T = unknown, TBody = unknown>(
     url: string,
     method: string,
     body: TBody,
     params: Record<string, string>
-): Promise<SendRequestResponse<T>> => {
+): Promise<ApiResponse<T>> => {
     let full_url = "";
     if (url.startsWith("/")) {
         full_url = API_URL + "/api" + url;
