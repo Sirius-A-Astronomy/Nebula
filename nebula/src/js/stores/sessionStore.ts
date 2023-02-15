@@ -38,13 +38,30 @@ export const logout = async () => {
     return response;
 };
 
-export const login = async (values: { username: string; password: string }) => {
+export const login = async (values: { email: string; password: string }) => {
     const response = await api.post<{ user: User }>("/login", {
-        username: values.username,
+        email: values.email,
         password: values.password,
     });
     if (response.ok) {
         authenticatedUser.value = response.data.user;
     }
+    return response;
+};
+
+export const register = async (values: {
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+    first_name: string;
+    last_name: string;
+}) => {
+    const response = await api.post<User>("/users", {
+        email: values.email,
+        password: values.password,
+        password_confirmation: values.passwordConfirmation,
+        first_name: values.first_name,
+        last_name: values.last_name,
+    });
     return response;
 };
