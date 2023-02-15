@@ -138,7 +138,25 @@ def validate_email(email: str, user=None):
     if user_with_email is not None and user_with_email != user:
         return (
             False,
-            "It looks like we already know someone with that email address, do you want to try another one?",
+            "It looks like we already know someone with that email address, do you want to login instead?",
+        )
+
+    return True, ""
+
+
+def validate_password(password):
+    """
+    Validates the password to be at least 12 characters long.
+
+    :param form: The form to validate.
+    :type form: Form
+    :param field: The field to validate.
+    :type field: StringField
+    """
+    if len(password) < 12:
+        return (
+            False,
+            "Please enter a password with at least 12 characters",
         )
 
     return True, ""

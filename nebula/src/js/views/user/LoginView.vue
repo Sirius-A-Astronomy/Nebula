@@ -1,16 +1,30 @@
 <script setup lang="ts">
 import LoginImage from "/images/login.svg";
 import RegisterImage from "/images/register.svg";
-import { watch, ref } from "vue";
+import { watch, ref, type Ref } from "vue";
 import { useRouter } from "vue-router";
 import useFlashStore from "@stores/flashStore";
-import { login } from "@stores/sessionStore";
+import { login, register } from "@stores/sessionStore";
+
+import VisibilityOffIcon from "vue-material-design-icons/EyeOff.vue";
+import VisibilityIcon from "vue-material-design-icons/Eye.vue";
 
 import "@scss/backgrounds/stars.scss";
 import "@scss/components/forms.scss";
 
+import {
+    validatePassword,
+    validatePasswordConfirmation,
+    validateEmail,
+    validateFirstName,
+    validateLastName,
+} from "@/components/user/userValidation";
+import { debounce, throttle } from "throttle-debounce";
+import type { ApiResponse } from "@/http/api";
+
 const props = defineProps<{
     register?: boolean;
+    registration?: "success";
 }>();
 
 const flash = useFlashStore();
@@ -48,7 +62,7 @@ watch(
 );
 
 const loginValues = ref({
-    username: "",
+    email: "",
     password: "",
 });
 
@@ -58,11 +72,43 @@ const loginErrors = ref({
     password: "",
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const registerValues = ref({
-    username: "",
+const registerErrors = ref({
+    email: "",
+    first_name: "",
+    last_name: "",
     password: "",
     passwordConfirm: "",
+});
+
+const registerValues = ref({
+    email: "",
+    first_name: "",
+    last_name: "",
+    password: "",
+    passwordConfirmation: "",
+});
+
+const registerFeedback = ref({
+    email: {
+        type: "unvalidated",
+        message: "",
+    },
+    first_name: {
+        type: "unvalidated",
+        message: "",
+    },
+    last_name: {
+        type: "unvalidated",
+        message: "",
+    },
+    password: {
+        type: "unvalidated",
+        message: "",
+    },
+    password_confirmation: {
+        type: "unvalidated",
+        message: "",
+    },
 });
 
 const onLoginSubmit = async () => {
@@ -71,9 +117,119 @@ const onLoginSubmit = async () => {
         router.push({
             name: "home",
         });
-        flash.add("You have been logged in.", "success");
+
+        const user = response.data.user;
+        flash.add(`Welcome back to Nebula, ${user.first_name}!`, "success");
     }
 };
+
+const onRegisterSubmit = async () => {
+    const response = await register(registerValues.value);
+
+    if (response.ok) {
+        router.push({
+            name: "user.login",
+        });
+        flash.add(
+            "You have been registered, you can now login.",
+            "success",
+            5000
+        );
+        return;
+    }
+
+    flash.add(response.message, "error");
+
+    const data = response.data as {
+        errors?: Record<string, string>;
+    };
+
+    if (data.errors) {
+        // @ts-ignore
+        for (const [key, value] of Object.entries(data.errors)) {
+            //@ts-ignore
+            if (!registerFeedback.value[key]) continue;
+            //@ts-ignore
+            registerFeedback.value[key].message = value;
+            //@ts-ignore
+            registerFeedback.value[key].type = "error";
+        }
+    }
+};
+
+const showPassword = ref({
+    login: false,
+    register: false,
+    registerConfirm: false,
+});
+
+const validateFirstNameDebounced = debounce(500, () => {
+    registerFeedback.value.first_name.type = "validating";
+    const { valid, message } = validateFirstName(
+        registerValues.value.first_name
+    );
+
+    if (!valid) {
+        registerFeedback.value.first_name.type = "error";
+    } else {
+        registerFeedback.value.first_name.type = "success";
+    }
+    registerFeedback.value.first_name.message = message;
+});
+
+const validateLastNameDebounced = debounce(500, () => {
+    registerFeedback.value.last_name.type = "validating";
+    const { valid, message } = validateLastName(registerValues.value.last_name);
+
+    if (!valid) {
+        registerFeedback.value.last_name.type = "error";
+    } else {
+        registerFeedback.value.last_name.type = "success";
+    }
+    registerFeedback.value.last_name.message = message;
+});
+
+const validateEmailDebounced = debounce(1000, async () => {
+    registerFeedback.value.email.type = "validating";
+    const { valid, message } = await validateEmail(registerValues.value.email);
+
+    if (!valid) {
+        registerFeedback.value.email.type = "error";
+    } else {
+        registerFeedback.value.email.type = "success";
+    }
+    registerFeedback.value.email.message = message;
+});
+
+const validatePasswordDebounced = debounce(500, () => {
+    registerFeedback.value.password.type = "validating";
+    const { valid, message } = validatePassword(
+        registerValues.value.password,
+        registerValues.value.passwordConfirmation
+    );
+
+    if (!valid) {
+        registerFeedback.value.password.type = "error";
+    } else {
+        registerFeedback.value.password.type = "success";
+    }
+    registerFeedback.value.password.message = message;
+});
+
+const validatePasswordConfirmDebounced = debounce(500, () => {
+    registerFeedback.value.password_confirmation.type = "validating";
+    const { valid, message } = validatePasswordConfirmation(
+        registerValues.value.password,
+        registerValues.value.passwordConfirmation
+    );
+
+    if (!valid) {
+        registerFeedback.value.password_confirmation.type = "error";
+    } else {
+        registerFeedback.value.password_confirmation.type = "success";
+    }
+    registerFeedback.value.password_confirmation.message = message;
+});
 </script>
 
 <template>
@@ -101,19 +257,24 @@ const onLoginSubmit = async () => {
                             <h1 class="mb-2 text-4xl font-bold tracking-tight">
                                 Login
                             </h1>
+
+                            <p class="mb-2" v-if="registration === 'success'">
+                                Registration was successful, you can now login.
+                            </p>
+
                             <div class="input-field">
-                                <label for="loginUsername" class="form-label"
-                                    >Username</label
+                                <label for="loginEmail" class="form-label"
+                                    >Email</label
                                 >
                                 <input
                                     class="form-control"
                                     type="text"
-                                    name="username"
-                                    autocomplete="username"
+                                    name="loginEmail"
+                                    autocomplete="email"
                                     autocapitalize="off"
                                     autocorrect="off"
-                                    id="loginUsername"
-                                    v-model="loginValues.username"
+                                    id="loginEmail"
+                                    v-model="loginValues.email"
                                 />
                             </div>
                             <div class="input-field">
@@ -124,10 +285,32 @@ const onLoginSubmit = async () => {
                                     id="loginPassword"
                                     autocomplete="current-password"
                                     class="form-control"
-                                    type="password"
+                                    :class="
+                                        showPassword.login ? 'font-mono' : ''
+                                    "
+                                    :type="
+                                        showPassword.login ? 'text' : 'password'
+                                    "
                                     name="password"
                                     v-model="loginValues.password"
                                 />
+
+                                <button
+                                    class="password-show-button"
+                                    type="button"
+                                    @click="
+                                        showPassword.login = !showPassword.login
+                                    "
+                                >
+                                    <component
+                                        :is="
+                                            showPassword.login
+                                                ? VisibilityIcon
+                                                : VisibilityOffIcon
+                                        "
+                                        :size="20"
+                                    />
+                                </button>
                             </div>
 
                             <button class="btn btn-primary" type="submit">
@@ -145,13 +328,252 @@ const onLoginSubmit = async () => {
                         <div
                             class="m-auto flex w-full max-w-xl flex-col items-center justify-center"
                         >
-                            <div
-                                v-for="i in 50"
-                                class="my-2 box-border h-4 w-4 bg-pink-500"
-                                :key="i"
-                            >
-                                {{ i }} aaaaaaaaaa
-                            </div>
+                            <h1 class="mb-2 text-4xl font-bold tracking-tight">
+                                Register
+                            </h1>
+                            <form @submit.prevent="onRegisterSubmit">
+                                <div class="flex flex-col md:flex-row md:gap-2">
+                                    <div class="input-field">
+                                        <label
+                                            for="registerFirstName"
+                                            class="form-label"
+                                            >First Name</label
+                                        >
+                                        <input
+                                            id="registerFirstName"
+                                            autocomplete="given-name"
+                                            class="form-control"
+                                            type="text"
+                                            name="registerFirstName"
+                                            v-model="registerValues.first_name"
+                                            @input="validateFirstNameDebounced"
+                                        />
+
+                                        <div
+                                            class="input-feedback"
+                                            :class="{
+                                                'invalid-feedback':
+                                                    registerFeedback.first_name
+                                                        .type === 'error',
+                                                'valid-feedback':
+                                                    registerFeedback.first_name
+                                                        .type === 'success',
+                                                'validating-feedback':
+                                                    registerFeedback.first_name
+                                                        .type === 'validating',
+                                            }"
+                                        >
+                                            {{
+                                                registerFeedback.first_name
+                                                    .message
+                                            }}
+                                        </div>
+                                    </div>
+
+                                    <div class="input-field">
+                                        <label
+                                            for="registerLastName"
+                                            class="form-label"
+                                            >Last Name</label
+                                        >
+                                        <input
+                                            id="registerLastName"
+                                            autocomplete="family-name"
+                                            class="form-control"
+                                            type="text"
+                                            name="registerLastName"
+                                            v-model="registerValues.last_name"
+                                            @input="validateLastNameDebounced"
+                                        />
+
+                                        <div
+                                            class="input-feedback"
+                                            :class="{
+                                                'invalid-feedback':
+                                                    registerFeedback.last_name
+                                                        .type === 'error',
+                                                'valid-feedback':
+                                                    registerFeedback.last_name
+                                                        .type === 'success',
+                                                'validating-feedback':
+                                                    registerFeedback.last_name
+                                                        .type === 'validating',
+                                            }"
+                                        >
+                                            {{
+                                                registerFeedback.last_name
+                                                    .message
+                                            }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <label
+                                        for="registerEmail"
+                                        class="form-label"
+                                        >Email</label
+                                    >
+                                    <input
+                                        id="registerEmail"
+                                        autocomplete="email"
+                                        class="form-control"
+                                        type="email"
+                                        name="registerEmail"
+                                        v-model="registerValues.email"
+                                        @input="validateEmailDebounced"
+                                    />
+
+                                    <div
+                                        class="input-feedback"
+                                        :class="{
+                                            'invalid-feedback':
+                                                registerFeedback.email.type ===
+                                                'error',
+                                            'valid-feedback':
+                                                registerFeedback.email.type ===
+                                                'success',
+                                            'validating-feedback':
+                                                registerFeedback.email.type ===
+                                                'validating',
+                                        }"
+                                    >
+                                        {{ registerFeedback.email.message }}
+                                    </div>
+                                </div>
+
+                                <div class="input-field mt-4">
+                                    <label
+                                        for="registerPassword"
+                                        class="form-label"
+                                        >Password</label
+                                    >
+                                    <input
+                                        id="registerPassword"
+                                        autocomplete="new-password"
+                                        class="form-control"
+                                        :class="
+                                            showPassword.register
+                                                ? 'font-mono'
+                                                : ''
+                                        "
+                                        :type="
+                                            showPassword.register
+                                                ? 'text'
+                                                : 'password'
+                                        "
+                                        name="registerPassword"
+                                        v-model="registerValues.password"
+                                        @input="validatePasswordDebounced"
+                                    />
+
+                                    <button
+                                        class="password-show-button"
+                                        @click.prevent="
+                                            showPassword.register =
+                                                !showPassword.register
+                                        "
+                                    >
+                                        <component
+                                            :is="
+                                                showPassword.register
+                                                    ? VisibilityIcon
+                                                    : VisibilityOffIcon
+                                            "
+                                            :size="20"
+                                        />
+                                    </button>
+
+                                    <div
+                                        class="input-feedback"
+                                        :class="{
+                                            'invalid-feedback':
+                                                registerFeedback.password
+                                                    .type === 'error',
+                                            'valid-feedback':
+                                                registerFeedback.password
+                                                    .type === 'success',
+                                            'validating-feedback':
+                                                registerFeedback.password
+                                                    .type === 'validating',
+                                        }"
+                                    >
+                                        {{ registerFeedback.password.message }}
+                                    </div>
+                                </div>
+
+                                <div class="input-field">
+                                    <label
+                                        for="registerPasswordConfirm"
+                                        class="form-label"
+                                        >Confirm Password</label
+                                    >
+                                    <input
+                                        id="registerPasswordConfirm"
+                                        autocomplete="new-password"
+                                        class="form-control"
+                                        :class="
+                                            showPassword.registerConfirm
+                                                ? 'font-mono'
+                                                : ''
+                                        "
+                                        :type="
+                                            showPassword.registerConfirm
+                                                ? 'text'
+                                                : 'password'
+                                        "
+                                        name="registerPasswordConfirm"
+                                        v-model="
+                                            registerValues.passwordConfirmation
+                                        "
+                                        @input="
+                                            validatePasswordConfirmDebounced
+                                        "
+                                    />
+                                    <button
+                                        class="password-show-button"
+                                        @click.prevent="
+                                            showPassword.registerConfirm =
+                                                !showPassword.registerConfirm
+                                        "
+                                    >
+                                        <component
+                                            :is="
+                                                showPassword.registerConfirm
+                                                    ? VisibilityIcon
+                                                    : VisibilityOffIcon
+                                            "
+                                            :size="20"
+                                        />
+                                    </button>
+
+                                    <div
+                                        class="input-feedback"
+                                        :class="{
+                                            'invalid-feedback':
+                                                registerFeedback
+                                                    .password_confirmation
+                                                    .type === 'error',
+                                            'valid-feedback':
+                                                registerFeedback
+                                                    .password_confirmation
+                                                    .type === 'success',
+                                            'validating-feedback':
+                                                registerFeedback
+                                                    .password_confirmation
+                                                    .type === 'validating',
+                                        }"
+                                    >
+                                        {{
+                                            registerFeedback
+                                                .password_confirmation.message
+                                        }}
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary" type="submit">
+                                    Register
+                                </button>
+                            </form>
                         </div>
                     </form>
                 </div>
@@ -239,7 +661,7 @@ footer {
     display: grid;
     grid-template-columns: 1fr;
     z-index: 5;
-    --signin-signup-height: calc(0.6 * (100vh - 5rem));
+    --signin-signup-height: calc(0.7 * (100vh - 5rem));
     height: var(--signin-signup-height);
     overflow: hidden;
 }
@@ -301,36 +723,6 @@ h3 {
     padding-left: 1rem;
 }
 
-.social-text {
-    padding: 0.7rem 0;
-    font-size: 1rem;
-}
-
-.social-media {
-    display: flex;
-    justify-content: center;
-}
-
-.social-icon {
-    height: 46px;
-    width: 46px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 0.45rem;
-    color: #333;
-    border-radius: 50%;
-    border: 1px solid #333;
-    text-decoration: none;
-    font-size: 1.1rem;
-    transition: 0.3s;
-}
-
-.social-icon:hover {
-    color: #4481eb;
-    border-color: #4481eb;
-}
-
 .btn {
     padding: 0.5em 2em;
     background-image: linear-gradient(
@@ -349,6 +741,7 @@ h3 {
     cursor: pointer;
     transition: 0.4s ease-in-out;
     transition-property: transform background-position;
+    letter-spacing: 0.1em;
 }
 
 .btn:hover,

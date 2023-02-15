@@ -1,67 +1,5 @@
 import api from "@http/api";
 
-export const isUsernameAvailable = async (username: string) => {
-    let valid_username = true;
-
-    const response = await api.post("/api/is_username_available", {
-        username: username,
-    });
-
-    if (response.status === 200) {
-        const data = response.data as { available: boolean };
-        valid_username = data.available;
-    }
-
-    return valid_username;
-};
-
-export const validateUsername = async (
-    username: string
-): Promise<{ valid: boolean; message: string }> => {
-    if (username.length < 3) {
-        return {
-            valid: false,
-            message: "Please enter a username with at least 3 characters",
-        };
-    }
-
-    if (username.length >= 30) {
-        return {
-            valid: false,
-            message: "Please enter a username with at most 30 characters",
-        };
-    }
-
-    if (/\s/.test(username)) {
-        return {
-            valid: false,
-            message: "Please enter a username without any spaces",
-        };
-    }
-
-    const regex = /[ @()+=[\]{};':"\\|,.<>/?]/g;
-    if (regex.test(username)) {
-        return {
-            valid: false,
-            message: "Please enter a username without any special characters",
-        };
-    }
-
-    const usernameAvailable = await isUsernameAvailable(username);
-    if (!usernameAvailable) {
-        return {
-            valid: false,
-            message:
-                "It looks like we already know someone with that username, do you want to try another one?",
-        };
-    }
-
-    return {
-        valid: true,
-        message: "",
-    };
-};
-
 export const validatePassword = (
     password: string,
     passwordConfirmation: string
@@ -88,7 +26,7 @@ export const validatePassword = (
     }
     return {
         valid: true,
-        message: "",
+        message: "Looks good!",
     };
 };
 
@@ -99,10 +37,18 @@ export const validatePasswordConfirmation = (
     valid: boolean;
     message: string;
 } => {
-    if (!validatePassword(password, passwordConfirmation).valid) {
+    if (passwordConfirmation.length < 12) {
         return {
             valid: false,
-            message: "Please enter a valid password first",
+            message: "",
+        };
+    }
+
+    const { valid, message } = validatePassword(password, passwordConfirmation);
+    if (!valid) {
+        return {
+            valid: false,
+            message: message,
         };
     }
     if (password !== passwordConfirmation) {
@@ -113,16 +59,16 @@ export const validatePasswordConfirmation = (
     }
     return {
         valid: true,
-        message: "",
+        message: "Looks good!",
     };
 };
 
-export const validateEmail = (
+export const validateEmail = async (
     email: string
-): {
+): Promise<{
     valid: boolean;
     message: string;
-} => {
+}> => {
     // rfc2822 regex for emails
     const emailRegex =
         // eslint-disable-next-line no-control-regex -- this is a regex for emails from rfc2822, it contains valid control characters
@@ -134,8 +80,59 @@ export const validateEmail = (
                 "We can't recognize that as an email address quite yet, please double check it",
         };
     }
+
+    const response = await api.post<{
+        valid: boolean;
+        message: string;
+    }>("/users/validate/email", {
+        email: email,
+    });
+
+    if (response.ok && response.data.valid === false) {
+        return {
+            valid: false,
+            message: response.data.message,
+        };
+    }
+
     return {
         valid: true,
-        message: "",
+        message: "Looks good!",
+    };
+};
+
+export const validateFirstName = (
+    firstName: string
+): {
+    valid: boolean;
+    message: string;
+} => {
+    if (firstName.length < 1) {
+        return {
+            valid: false,
+            message: "Please enter your first name",
+        };
+    }
+    return {
+        valid: true,
+        message: "Looks good!",
+    };
+};
+
+export const validateLastName = (
+    lastName: string
+): {
+    valid: boolean;
+    message: string;
+} => {
+    if (lastName.length < 1) {
+        return {
+            valid: false,
+            message: "Please enter your last name",
+        };
+    }
+    return {
+        valid: true,
+        message: "Looks good!",
     };
 };

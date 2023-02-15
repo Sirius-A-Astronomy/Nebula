@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 
 from nebula import db
 from nebula.helpers.access_levels import ACCESS_LEVELS
-from nebula.models.user import User, validate_email, validate_username
+from nebula.models.user import User, validate_email, validate_password
 from nebula.routes.api import bp as api_bp
 
 bp = Blueprint("user_api", __name__, url_prefix="/users")
@@ -21,6 +21,21 @@ def get_users():
 
     users = User.query.all()
     return jsonify([user.expose() for user in users])
+
+
+@bp.route("/validate/email", methods=["POST"])
+def validate_email_route():
+    data = request.get_json(silent=True)
+    email = data.get("email")
+
+    if email is None:
+        return jsonify({"valid": False, "message": "Email is required"}), 200
+
+    valid, message = validate_email(email)
+    if not valid:
+        return jsonify({"valid": False, "message": message}), 200
+
+    return jsonify({"valid": True, "message": "Email is valid"}), 200
 
 
 @bp.route("/<uuid>", methods=["GET"])
@@ -40,32 +55,52 @@ def get_user(uuid):
 def create_user_route():
     data = request.get_json(silent=True)
     email = data.get("email")
+
+    error_bin = {}
     if email is None:
-        return jsonify({"message": "Email is required"}), 400
+        error_bin["email"] = "Email is required"
+
+    if email:
+        valid, message = validate_email(email)
+        if not valid:
+            error_bin["email"] = message
 
     first_name = data.get("first_name")
-    if first_name is None:
-        return jsonify({"message": "First name is required"}), 400
+    if not first_name:
+        error_bin["first_name"] = "First name is required"
 
     last_name = data.get("last_name")
-    if last_name is None:
-        return jsonify({"message": "Last name is required"}), 400
+    if not last_name:
+        error_bin["last_name"] = "Last name is required"
 
     password = data.get("password")
-    if password is None:
-        return jsonify({"message": "Password is required"}), 400
+    if not password:
+        error_bin["password"] = "Password is required"
+
+    if password:
+        valid, message = validate_password(email)
+        if not valid:
+            error_bin["password"] = message
 
     password_confirmation = data.get("password_confirmation")
-    if password_confirmation is None:
-        return jsonify({"message": "Password confirmation is required"}), 400
+    if not password_confirmation:
+        error_bin["password_confirmation"] = "Password confirmation is required"
 
-    if password != password_confirmation:
-        return jsonify({"message": "Passwords do not match"}), 400
+    if password and password_confirmation and password != password_confirmation:
+        error_bin["password"] = "Passwords do not match"
 
     access_level = data.get("access_level")
     if access_level is not None:
         if access_level not in ACCESS_LEVELS["ByLevel"].keys():
-            return jsonify({"message": "Invalid access level"}), 400
+            return (
+                jsonify(
+                    {
+                        "message": "Invalid access level",
+                        "errors": {"access_level": "Invalid access level"},
+                    }
+                ),
+                400,
+            )
 
         if (
             current_user.is_authenticated
@@ -76,13 +111,19 @@ def create_user_route():
             return (
                 jsonify(
                     {
-                        "message": "You are not allowed to create a user with this access level"
+                        "message": "You are not allowed to create a user with this access level",
+                        "errors": {"access_level": "You are not allowed to create a user with this access level"},
                     }
                 ),
                 400,
             )
     if access_level is None:
-        access_level = ACCESS_LEVELS["ByName"]["user"]["level"]
+        access_level = 0
+
+    print(error_bin)
+
+    if error_bin:
+        return jsonify({"message": "Some values were not entered correctly", "errors": error_bin}), 400
 
     user = User(
         email=email,
