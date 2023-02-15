@@ -76,11 +76,6 @@ def create_app(config_environment="default"):
     app.context_processor(context_processor)
 
     from nebula.helpers.csrf_error_handler import csrf_error_handler
-    from nebula.routes.web.errors import badrequest, internalerror, pagenotfound
-
-    app.register_error_handler(404, pagenotfound)
-    app.register_error_handler(500, internalerror)
-    app.register_error_handler(400, badrequest)
     app.register_error_handler(CSRFError, csrf_error_handler)
 
     login_manager.login_view = "user.login_register"
