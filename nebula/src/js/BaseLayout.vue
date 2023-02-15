@@ -198,18 +198,3 @@ onMounted(async () => {
         </div>
     </div>
 </template>
-
-<style lang="scss" scoped>
-::-webkit-scrollbar {
-    width: 8px;
-    height: 10px;
-}
-
-:deep(::-webkit-scrollbar-track) {
-    background-color: var(--color-background-secondary);
-}
-
-:deep(::-webkit-scrollbar-thumb) {
-    background-color: var(--color-accent);
-}
-</style>
