@@ -64,40 +64,6 @@ def empty_client(empty_app):
     return empty_app.test_client()
 
 
-# @pytest.fixture
-# def client_as_admin(client, app):
-#     """
-#     Returns a client with an admin user logged in.
-#     """
-#     admin_user = User(
-#         email="admin@admin.com",
-#         first_name="Admin",
-#         last_name="User",
-#         access_level=4,
-#         password=sha256_crypt.hash("password"),
-#     )
-
-#     with app.app_context():
-#         db.session.add(admin_user)
-#         db.session.commit()
-
-#     with client as scoped_client:
-#         print(scoped_client.get('/api/me').data)
-#         response = scoped_client.post(
-#             "/api/login",
-#             json={"email":"admin@admin.com", "password":"password"},
-#             follow_redirects=True,
-#         )
-#         print(response.data)
-
-#         response = scoped_client.get("/api/me")
-#         print(response.data)
-#         yield scoped_client
-
-#         response = scoped_client.post("/api/logout", follow_redirects=True)
-#         print(response.data)
-
-
 @pytest.fixture
 def client_as_admin(app):
     """
