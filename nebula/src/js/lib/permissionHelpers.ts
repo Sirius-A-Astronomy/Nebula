@@ -38,7 +38,7 @@ export const canCreateQuestion = () => {
         return true;
     }
 
-    return true;
+    return false;
 };
 
 export const canEditComment = (comment: Comment) => {
