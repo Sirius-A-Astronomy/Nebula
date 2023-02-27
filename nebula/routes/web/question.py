@@ -104,7 +104,6 @@ def question(
     user = User.query.filter_by(uuid=current_user.uuid).first()
 
     if request.method != "POST":
-
         question_edit_form.title.default = question.title
         question_edit_form.content.default = question.content
         question_edit_form.difficulty.default = question.difficulty

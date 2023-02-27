@@ -35,7 +35,6 @@ class QuestionForm(FlaskForm):
 
 @bp.route("/add_question", methods=["GET", "POST"])
 def add_question(success=False, course_code=None):
-
     # Only admins or moderators can add questions
     if not current_user.is_authenticated or current_user.access_level < 2:
         flash("Only KLC or Cosmic Web members can create questions.", "warning")

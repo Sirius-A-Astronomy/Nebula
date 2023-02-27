@@ -59,7 +59,6 @@ def create_app(config_environment="default"):
 
     # Register all the views within an app context
     with app.app_context():
-
         import nebula.models  # import models to create tables
 
         # import routes

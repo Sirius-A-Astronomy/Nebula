@@ -45,7 +45,6 @@ def get_question(uuid):
 @bp.route("/", methods=["POST"])
 @login_required
 def create_question():
-
     error_bin = ErrorBin()
 
     if not current_user.access_level >= ACCESS_LEVELS["ByName"]["moderator"]["level"]:

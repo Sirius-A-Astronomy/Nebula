@@ -213,7 +213,6 @@ def login_register(next=None, register=None):
 
     # Register Post
     elif register_form.register_submit.data == True:
-
         if not register_form.validate():
             return render_template(
                 "main/login_register.html",
