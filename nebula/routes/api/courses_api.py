@@ -45,15 +45,19 @@ def update_course(uuid):
     data = request.get_json(silent=True)
 
     name = data.get("name")
-    if name is not None:
+    if name:
         course.name = name
 
     code = data.get("code")
-    if code is not None:
+    if code:
+        existing_course = Course.query.filter_by(code=code).one_or_none()
+        if existing_course is not None and existing_course.uuid != uuid:
+            return jsonify({"message": "Course code already exists"}), 400
+
         course.code = code
 
     description = data.get("description")
-    if description is not None:
+    if description:
         course.description = description
 
     course_level_id = (
@@ -61,7 +65,7 @@ def update_course(uuid):
         if data.get("course_level") is not None
         else None
     )
-    if course_level_id is not None:
+    if course_level_id:
         if CourseLevel.query.filter_by(uuid=course_level_id).one_or_none() is None:
             return jsonify({"message": "Course level does not exist"}), 400
         course.course_level_uuid = course_level_id
