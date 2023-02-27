@@ -108,7 +108,7 @@ export const storeModuleFactory = <T extends { id: string }>(
             return response;
         },
 
-        create: async <K extends New<T>>(newItem: K) => {
+        create: async <K>(newItem: K) => {
             const response = await api.post<T>(`${moduleName}/`, newItem);
 
             if (response.ok) {
