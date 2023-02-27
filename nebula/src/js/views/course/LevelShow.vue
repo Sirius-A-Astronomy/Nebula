@@ -125,26 +125,25 @@ onMounted(() => {
         </div>
         <div v-else class="container py-2">
             <BreadCrumbs :breadcrumbs="breadcrumbs" class="pt-2 pb-4" />
-            <section
-                class="course-container rounded-md bg-secondary-bg px-4 py-2"
-            >
+            <section class="rounded-md bg-secondary-bg px-4 py-2">
                 <div>
-                    <h1 class="course-header__title text-3xl font-bold">
+                    <h1 class="text-3xl font-bold">
                         {{ courseLevel.study_type }} {{ courseLevel.name }}
                     </h1>
-                    <div
-                        class="course-header__questions-amount"
-                        id="course-question-amount"
-                    >
-                        {{ courses.length }} Questions
+                    <div class="flex flex-row">
+                        <span class="flex-[1_1_60%]">
+                            {{ courses.length }} Course{{
+                                courses.length !== 1 ? "s" : ""
+                            }}
+                        </span>
+                        <input
+                            class="search-bar input w-full flex-[1_0_20rem] rounded-md border-0 bg-tertiary-bg p-2 text-sm placeholder:font-semibold placeholder:text-secondary-text focus:bg-primary-bg focus:ring-primary-active"
+                            id="course-search-input-field"
+                            type="text"
+                            :placeholder="`Search in ${courseLevel.study_type} ${courseLevel.name}...`"
+                            v-model="courseFilter"
+                        />
                     </div>
-                    <input
-                        class="search-bar input w-full rounded-md border-0 bg-tertiary-bg p-2 text-sm placeholder:font-semibold placeholder:text-secondary-text focus:bg-primary-bg focus:ring-primary-active"
-                        id="course-search-input-field"
-                        type="text"
-                        :placeholder="`Search in ${courseLevel.study_type} ${courseLevel.name}...`"
-                        v-model="courseFilter"
-                    />
                 </div>
                 <div class="py-2">
                     <div
