@@ -20,6 +20,7 @@ import { authenticatedUser, isAuthenticated } from "./stores/sessionStore";
 import { logout } from "@stores/sessionStore";
 import useFlashStore from "@stores/flashStore";
 import { getAccessLevelValue } from "./stores/userStore";
+import { canCreateQuestion } from "./lib/permissionHelpers";
 
 const flash = useFlashStore();
 const router = useRouter();
@@ -34,7 +35,7 @@ const primaryNavItems: ComputedRef<MenuItem[]> = computed(() => {
 
     items.push(courseNavItem.value);
 
-    if (isAuthenticated.value) {
+    if (canCreateQuestion()) {
         items.push({
             name: "Add a Question",
             to: { name: "question.create" },
@@ -140,6 +141,7 @@ const courseNavItem = computed(() => {
                     .filter(
                         (course) => course.course_level.id === courseLevel.id
                     )
+                    .sort((a, b) => a.semester.localeCompare(b.semester))
                     .map((course) => {
                         return {
                             name: course.name,
