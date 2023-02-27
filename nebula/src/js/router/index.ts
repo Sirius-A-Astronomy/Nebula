@@ -2,6 +2,8 @@ import { nextTick } from "vue";
 import {
     createRouter,
     createWebHistory,
+    type NavigationGuard,
+    type NavigationGuardWithThis,
     type RouteLocationNormalized,
     type RouteLocationRaw,
 } from "vue-router";
@@ -38,7 +40,7 @@ const router = createRouter({
             redirect: "/dashboard/courses",
             name: "dashboard",
             meta: {
-                title: "Dashboard - Courses",
+                title: "Dashboard -> Courses",
                 description: "View all courses in nebula",
                 requiredAccessLevel: 3,
             },
@@ -50,7 +52,7 @@ const router = createRouter({
                 import("@/views/dashboard/courses/CourseIndex.vue"),
             name: "dashboard.course.index",
             meta: {
-                title: "Dashboard - Courses",
+                title: "Dashboard -> Courses",
                 description: "View all courses in nebula",
                 requiredAccessLevel: 3,
             },
@@ -62,7 +64,7 @@ const router = createRouter({
                 import("@/views/dashboard/courses/CourseCreate.vue"),
             name: "dashboard.course.create",
             meta: {
-                title: "Dashboard - Create Course",
+                title: "Dashboard -> Create Course",
                 description: "Create a new course in nebula",
                 requiredAccessLevel: 3,
             },
@@ -168,18 +170,17 @@ const router = createRouter({
 
 router.afterEach((to) => {
     nextTick(() => {
-        document.title = (to.meta.title as string) || "Nebula";
+        document.title = to.meta.title
+            ? (to.meta.title as string) + " | Nebula"
+            : "Nebula";
     });
 });
-const protectedRoutes: string[] = [];
+const protectedRoutes: string[] = ["user.profile"];
 
 // protect all routes that start with name 'dashboard'
 const protectedRoutesStartsWith: string[] = ["dashboard"];
 
-const authGuard = (
-    to: RouteLocationNormalized,
-    from: RouteLocationNormalized
-): boolean | RouteLocationRaw => {
+const authGuard: NavigationGuard = (to, from, next) => {
     if (
         to.name &&
         (protectedRoutes.includes(to.name as string) ||
@@ -188,9 +189,13 @@ const authGuard = (
             )) &&
         !isAuthenticated.value
     ) {
-        flash.add("You must be logged in to view this page", "danger");
-        document.location.href = "/login";
-        return false;
+        flash.add("You must be logged in to view this page", "warning");
+        return next({
+            name: "user.login",
+            query: {
+                next: encodeURIComponent(to.fullPath),
+            },
+        });
     }
 
     if (to.meta.requiredAccessLevel) {
@@ -199,20 +204,48 @@ const authGuard = (
             const requiredAccessLevelName =
                 getAccessLevelName(requiredAccessLevel);
 
+            if (!isAuthenticated.value) {
+                // user is not logged in, redirect to login page
+                flash.add(
+                    `You must be a logged in ${requiredAccessLevelName} to view this page`,
+                    "warning"
+                );
+
+                return next({
+                    name: "user.login",
+                    query: {
+                        next: encodeURIComponent(to.fullPath),
+                    },
+                });
+            }
+
+            // user is logged in but does not have the required access level
+
             flash.add(
-                `You must be a ${requiredAccessLevelName} to view this page`,
+                `You must be a ${requiredAccessLevelName} to view ${
+                    to.meta.title
+                        ? "the page '" + to.meta.title + "'"
+                        : "this page"
+                }`,
                 "warning"
             );
-            if (!from.name) {
-                return {
+
+            if (
+                !from.name ||
+                (from.name &&
+                    ["user.login", "user.register"].includes(
+                        from.name as string
+                    ))
+            ) {
+                return next({
                     name: "home",
-                };
+                });
             }
-            return false;
+            return next(false);
         }
     }
 
-    return true;
+    next();
 };
 
 router.beforeEach(authGuard);

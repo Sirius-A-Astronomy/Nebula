@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import questionStore from "@/stores/questionStore";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRouter, RouterLink } from "vue-router";
 import MarkdownDisplay from "@components/MarkdownDisplay.vue";
 import useFlashStore from "@stores/flashStore";
@@ -39,6 +39,10 @@ const loadData = async () => {
     if (!question.value) {
         await questionStore.actions.getById(props.id);
     }
+
+    nextTick(() => {
+        document.title = (question.value.title || "Question") + " | Nebula";
+    });
 
     loading.value = false;
     canEditQuestionAwaited.value = await canEditQuestion(props.id);

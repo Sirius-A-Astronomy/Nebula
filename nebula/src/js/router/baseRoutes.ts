@@ -6,7 +6,7 @@ export const baseRoutes: RouteRecordRaw[] = [
         name: "home",
         component: () => import("@/views/main/IndexView.vue"),
         meta: {
-            title: "Nebula | Home",
+            title: "Home",
             description: "Home page of nebula",
         },
     },

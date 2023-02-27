@@ -46,11 +46,13 @@ const setRegister = (val: boolean) => {
     if (val) {
         router.push({
             name: "user.register",
+            query: route.query,
         });
         return;
     }
     router.push({
         name: "user.login",
+        query: route.query,
     });
 };
 

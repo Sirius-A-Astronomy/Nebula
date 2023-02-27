@@ -1,10 +1,21 @@
 <script setup lang="ts">
 import { courseLevelStore } from "@stores/courseLevelStore";
 import { courseStore } from "@stores/courseStore";
-import { ref, computed, watch, onMounted, type ComputedRef } from "vue";
+import {
+    ref,
+    computed,
+    watch,
+    onMounted,
+    type ComputedRef,
+    nextTick,
+} from "vue";
 import BreadCrumbs, { type BreadCrumb } from "@/components/BreadCrumbs.vue";
 import CourseListItem from "@views/course/components/CourseListItem.vue";
 
+import useFlashStore from "@stores/flashStore";
+import type { ApiResponse } from "@/http/api";
+
+const flash = useFlashStore();
 const props = defineProps<{
     id: string;
 }>();
@@ -45,7 +56,7 @@ watch(props, () => {
 const loading = ref(true);
 
 const loadData = async () => {
-    const promises = [];
+    const promises: Promise<ApiResponse<any>>[] = [];
     if (!courseLevelStore.getters.byId(props.id).value) {
         promises.push(courseLevelStore.actions.getById(props.id));
     }
@@ -54,7 +65,24 @@ const loadData = async () => {
         promises.push(courseStore.actions.getByCourseLevelId(props.id));
     }
 
-    await Promise.all(promises);
+    const results = await new Promise<ApiResponse<any>[]>((resolve) => {
+        Promise.all(promises).then((res) => {
+            resolve(res);
+        });
+    });
+
+    for (const result of results) {
+        if (!result.ok) {
+            flash.add(`Error loading course level: ${result.message}`, "error");
+        }
+    }
+
+    nextTick(() => {
+        document.title = courseLevel.value.name
+            ? `${courseLevel.value.study_type} ${courseLevel.value?.name} | Nebula`
+            : "Course Level | Nebula";
+    });
+
     loading.value = false;
 };
 
@@ -125,13 +153,15 @@ onMounted(() => {
                     >
                         No courses found
                     </div>
-                    <div v-else class="flex flex-col gap-2">
-                        <CourseListItem
+                    <ul v-else class="flex flex-col gap-2">
+                        <li
                             v-for="course in courses"
+                            class="transition-colors duration-75 hover:text-accent-clr"
                             :key="course.id"
-                            :course="course"
-                        />
-                    </div>
+                        >
+                            <CourseListItem :course="course" />
+                        </li>
+                    </ul>
                 </div>
             </section>
         </div>

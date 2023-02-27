@@ -12,28 +12,34 @@ const filterCoursesInput = ref<HTMLInputElement | null>(null);
 const courseLevels = courseLevelStore.getters.all;
 
 const courseLevelsWithCourses = computed(() => {
-    return courseLevels.value.map((courseLevel) => {
-        const filter = courseFilter.value.toLowerCase();
-        let courses: Course[];
-        if (courseLevel.name.toLowerCase().includes(filter) || filter == "")
-            courses = courseStore.getters.byCourseLevelId(courseLevel.id).value;
-        else {
-            courses = courseStore.getters
-                .byCourseLevelId(courseLevel.id)
-                .value.filter((course: Course) => {
-                    if (course.name.toLowerCase().includes(filter)) return true;
+    return courseLevels.value
+        .map((courseLevel) => {
+            const filter = courseFilter.value.toLowerCase();
+            let courses: Course[];
+            if (courseLevel.name.toLowerCase().includes(filter) || filter == "")
+                courses = courseStore.getters.byCourseLevelId(
+                    courseLevel.id
+                ).value;
+            else {
+                courses = courseStore.getters
+                    .byCourseLevelId(courseLevel.id)
+                    .value.filter((course: Course) => {
+                        if (course.name.toLowerCase().includes(filter))
+                            return true;
 
-                    if (course.description.toLowerCase().includes(filter))
-                        return true;
+                        if (course.description.toLowerCase().includes(filter))
+                            return true;
 
-                    if (course.code.toLowerCase().includes(filter)) return true;
-                });
-        }
-        return {
-            ...courseLevel,
-            courses,
-        };
-    });
+                        if (course.code.toLowerCase().includes(filter))
+                            return true;
+                    });
+            }
+            return {
+                ...courseLevel,
+                courses,
+            };
+        })
+        .filter((courseLevel) => courseLevel.courses.length > 0);
 });
 
 const courseFilter = ref("");

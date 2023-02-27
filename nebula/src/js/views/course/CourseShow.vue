@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { courseStore } from "@/stores/courseStore";
-import { computed, watch, onMounted, ref } from "vue";
+import { computed, watch, onMounted, ref, nextTick } from "vue";
 import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import { questionStore } from "@/stores/questionStore";
 import QuestionListItem from "@components/question/QuestionListItem.vue";
@@ -62,10 +62,15 @@ const loadData = async () => {
         // questions are more likely to change more often, always fetch them
         loading.value = false;
     }
+
     // questions are more likely to change more often, always fetch them
     promises.push(questionStore.actions.getByCourseId(props.id));
 
     await Promise.all(promises);
+
+    nextTick(() => {
+        document.title = (course.value.name ?? "Course") + " | Nebula";
+    });
 
     loading.value = false;
 };

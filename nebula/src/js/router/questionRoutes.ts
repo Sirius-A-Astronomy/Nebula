@@ -41,6 +41,11 @@ export const questionRoutes: RouteRecordRaw[] = [
                 next({ name: "question.show", params: { id: to.params.id } });
             }
         },
+        meta: {
+            title: "Edit Question",
+            description: "Edit a question",
+            requiredAccessLevel: getAccessLevelValue("moderator"),
+        },
     },
 
     {
@@ -48,6 +53,10 @@ export const questionRoutes: RouteRecordRaw[] = [
         name: "question.show",
         component: () => import("@views/question/QuestionShow.vue"),
         props: true,
+        meta: {
+            title: "Question",
+            description: "View a question",
+        },
     },
 ];
 
