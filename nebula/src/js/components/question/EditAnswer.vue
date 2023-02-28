@@ -11,6 +11,7 @@ const modal = useModalStore();
 
 const props = defineProps<{
     answer: NewAnswer;
+    errors?: Record<string, string[]>;
 }>();
 
 const answerCopy = ref({ ...props.answer });
@@ -90,7 +91,7 @@ const expanded = ref(true);
 
         <template v-if="expanded">
             <MarkdownEditor
-                class="-mx-3 !mt-0 !bg-secondary-bg"
+                class="-mx-3 !my-0 !bg-secondary-bg"
                 v-model="answerCopy.title"
                 default-tab="source"
                 placeholder="Enter answer title here"
@@ -101,8 +102,12 @@ const expanded = ref(true);
                 }"
             />
 
+            <p v-if="errors?.title" class="text-red-500">
+                <span v-for="error in errors.title">{{ error }}</span>
+            </p>
+
             <MarkdownEditor
-                class="-mx-3 !bg-secondary-bg"
+                class="-mx-3 !my-0 !bg-secondary-bg"
                 v-model="answerCopy.content"
                 default-tab="source"
                 placeholder="Enter answer content here"
@@ -111,6 +116,10 @@ const expanded = ref(true);
                     tabToIndentToggle: true,
                 }"
             />
+
+            <p v-if="errors?.content" class="text-red-500">
+                <span v-for="error in errors.content">{{ error }}</span>
+            </p>
 
             <p class="italic">
                 Note: Answer content is hidden from the user until revealed.

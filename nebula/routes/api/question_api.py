@@ -69,6 +69,29 @@ def create_question():
         if Course.query.filter_by(uuid=course_id).one_or_none() is None:
             error_bin.add("course_id", "Course does not exist")
 
+    # answer form validation
+    answers_req = data.get("answers")
+    answers_error_bin = ErrorBin()
+    if answers_req:
+        for answer in answers_req:
+            id = answer.get("id")
+
+            answer_error_bin = ErrorBin()
+
+            answer_title = answer.get("title")
+            if not answer_title:
+                answer_error_bin.add("title", "Title is required")
+
+            answer_content = answer.get("content")
+            if not answer_content:
+                answer_error_bin.add("content", "Content is required")
+
+            if answer_error_bin.has_errors():
+                answers_error_bin.add_bin(id, answer_error_bin)
+
+    if answers_error_bin.has_errors():
+        error_bin.add_bin("answers", answers_error_bin)
+
     if error_bin.has_errors():
         return (
             jsonify({"message": "Form contains errors", "errors": error_bin.get()}),
@@ -124,6 +147,8 @@ def create_question():
 @bp.route("/<uuid>", methods=["PUT"])
 @login_required
 def update_question(uuid):
+    data = request.get_json(silent=True)
+
     question = Question.query.filter_by(uuid=uuid).one_or_none()
 
     if question is None:
@@ -136,24 +161,62 @@ def update_question(uuid):
     ):
         return jsonify({"message": "Unauthorized"}), 401
 
+    if not current_user.access_level >= ACCESS_LEVELS["ByName"]["moderator"]["level"]:
+        return jsonify({"message": "Unauthorized"}), 401
+
     data = request.get_json(silent=True)
+    error_bin = ErrorBin()
 
     title = data.get("title")
-    if title is not None:
-        question.title = title
+    if not title:
+        error_bin.add("title", "Title is required")
 
     content = data.get("content")
-    if content is not None:
-        question.content = content
+    if not content:
+        error_bin.add("content", "Content is required")
 
     course_id = data.get("course_id")
-    if course_id is not None:
+    if not course_id:
+        error_bin.add("course_id", "Selecting a course is required")
+
+    if course_id:
         from nebula.models.course import Course
 
         if Course.query.filter_by(uuid=course_id).one_or_none() is None:
-            return jsonify({"message": "Course does not exist"}), 400
+            error_bin.add("course_id", "Course does not exist")
 
-        question.course_uuid = course_id
+    # answer form validation
+    answers_req = data.get("answers")
+    answers_error_bin = ErrorBin()
+    if answers_req:
+        for answer in answers_req:
+            id = answer.get("id")
+
+            answer_error_bin = ErrorBin()
+
+            answer_title = answer.get("title")
+            if not answer_title:
+                answer_error_bin.add("title", "Title is required")
+
+            answer_content = answer.get("content")
+            if not answer_content:
+                answer_error_bin.add("content", "Content is required")
+
+            if answer_error_bin.has_errors():
+                answers_error_bin.add_bin(id, answer_error_bin)
+
+    if answers_error_bin.has_errors():
+        error_bin.add_bin("answers", answers_error_bin)
+
+    if error_bin.has_errors():
+        return (
+            jsonify({"message": "Form contains errors", "errors": error_bin.get()}),
+            400,
+        )
+
+    question.title = title
+    question.content = content
+    question.course_uuid = course_id
 
     subject_tags_req = data.get("subject_tags")
 
@@ -177,6 +240,7 @@ def update_question(uuid):
 
         question.subject_tags = subject_tags
 
+    answers_error_bin = ErrorBin()
     answers_req = data.get("answers")
     if answers_req:
         from nebula.models.answer import Answer
@@ -188,17 +252,14 @@ def update_question(uuid):
                 db.session.delete(answer)
 
         for answer in answers_req:
-            # check if the answer exists
-
+            id = answer.get("id")
             # check if the answer id is a UUID
             if re.match(
                 "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
-                answer.get("id"),
+                id,
             ):
                 # if it is check if it exists
-                existing_answer = Answer.query.filter_by(
-                    uuid=answer.get("id")
-                ).one_or_none()
+                existing_answer = Answer.query.filter_by(uuid=id).one_or_none()
             else:
                 existing_answer = None
 
@@ -328,7 +389,7 @@ def update_comment(question_uuid, comment_uuid):
 
     content = data.get("content")
     if not content:
-        error_bin.add_error("content", "Content is required")
+        error_bin.add("content", "Content is required")
 
     if error_bin.has_errors():
         return jsonify({"message": "Invalid request", "errors": error_bin.get()}), 400

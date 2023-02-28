@@ -4,7 +4,7 @@ import type {
     NewQuestion,
     UpdatedQuestion,
 } from "@stores/questionStore";
-import { reactive, computed, onMounted, watch, ref } from "vue";
+import { reactive, computed, onMounted, watch, ref, type Ref } from "vue";
 import MarkdownEditor from "@components/MarkdownEditor.vue";
 import { courseStore } from "@/stores/courseStore";
 
@@ -15,10 +15,12 @@ import SubjectTagEditor from "@components/subjectTag/SubjectTagEditor.vue";
 
 import EditAnswer from "@components/question/EditAnswer.vue";
 
+import type { ErrorBin } from "@/types";
+
 const props = defineProps<{
     courseId?: string;
     question?: Question | null;
-    errors?: Record<string, string[]>;
+    errors?: ErrorBin;
 }>();
 
 const emit = defineEmits<{
@@ -51,20 +53,24 @@ watch(
 watch(
     () => props.errors,
     () => {
-        feedback.value.title = props.errors?.title || [];
-        feedback.value.content = props.errors?.content || [];
-        feedback.value.subject_tags = props.errors?.subject_tags || [];
-        feedback.value.answers = props.errors?.answers || [];
-        feedback.value.course_id = props.errors?.course_id || [];
+        feedback.value.title = (props.errors?.title || []) as string[];
+        feedback.value.content = (props.errors?.content || []) as string[];
+        feedback.value.subject_tags = (props.errors?.subject_tags ||
+            []) as string[];
+        feedback.value.course_id = (props.errors?.course_id || []) as string[];
+
+        if (props.errors?.answers) {
+            feedback.value.answers = props.errors.answers as ErrorBin;
+        }
     }
 );
 
 const feedback = ref({
-    title: props.errors?.title || [],
-    content: props.errors?.content || [],
-    subject_tags: props.errors?.subject_tags || [],
-    answers: props.errors?.answers || [],
-    course_id: props.errors?.course_id || [],
+    title: (props.errors?.title || []) as string[],
+    content: (props.errors?.content || []) as string[],
+    subject_tags: (props.errors?.subject_tags || []) as string[],
+    answers: (props.errors?.answers || {}) as ErrorBin,
+    course_id: (props.errors?.course_id || []) as string[],
 });
 
 const values = reactive({
@@ -231,6 +237,7 @@ onMounted(async () => {
                         v-for="answer in values.answers"
                         :key="answer.id"
                         :answer="answer"
+                        :errors="((feedback.answers?.[answer.id] || {}) as Record<string, string[]>)"
                         @remove="removeAnswer(answer.id)"
                         @update="
                             (answer) =>
@@ -243,10 +250,12 @@ onMounted(async () => {
             </Transition>
         </div>
 
-        <div class="flex flex-col items-center justify-end sm:flex-row">
+        <div
+            class="flex flex-row items-end justify-between py-4 md:justify-end"
+        >
             <button
                 @click="emit('cancel')"
-                class="btn btn-secondary order-2 sm:order-1"
+                class="btn btn-secondary sm:order-1"
             >
                 Cancel
             </button>

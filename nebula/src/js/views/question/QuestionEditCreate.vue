@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useRouter, useRoute } from "vue-router";
 
 import useFlashStore from "@stores/flashStore";
+import type { ErrorBin } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
@@ -39,7 +40,7 @@ watch(
     { immediate: true }
 );
 
-const errors = ref<Record<string, string[]>>({});
+const errors = ref<ErrorBin>({});
 
 const onCreate = async (values: NewQuestion) => {
     const response = await questionStore.actions.create<NewQuestion>(values);
@@ -68,9 +69,7 @@ const onCreate = async (values: NewQuestion) => {
         return;
     }
 
-    errors.value = (
-        response.data as { errors: Record<string, string[]> }
-    ).errors;
+    errors.value = (response.data as { errors: ErrorBin }).errors;
 };
 
 const onUpdate = async (values: UpdatedQuestion) => {
@@ -94,6 +93,12 @@ const onUpdate = async (values: UpdatedQuestion) => {
         `Question '${values.title}' could not be updated: ${response.message}`,
         "error"
     );
+
+    if (!response.data) {
+        return;
+    }
+
+    errors.value = (response.data as { errors: ErrorBin }).errors;
 };
 
 const onCancel = () => {
