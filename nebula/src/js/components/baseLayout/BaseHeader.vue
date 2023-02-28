@@ -43,7 +43,7 @@ defineProps<{
                         v-for="secondaryItem in secondaryNavItems"
                         :key="secondaryItem.name"
                         :menu-item="secondaryItem"
-                        align="start"
+                        align="end"
                         direction="below"
                     />
                 </div>
