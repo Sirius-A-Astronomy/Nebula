@@ -16,6 +16,9 @@ import MarkdownEditor from "@/components/MarkdownEditor.vue";
 import { isAuthenticated } from "@/stores/sessionStore";
 import CommentShow from "@/components/question/CommentShow.vue";
 
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+
 dayjs.extend(relativeTime);
 
 const props = defineProps<{
@@ -161,17 +164,45 @@ onMounted(loadData);
                 aria-label="question card"
             >
                 <div class="flex flex-col justify-between md:flex-row">
-                    <h1 class="text-3xl md:text-4xl">
-                        <MarkdownDisplay
-                            :content="question.title"
-                            class="!font-bold"
-                            :options="{
-                                disableMarkdown: true,
-                            }"
-                        />
-                    </h1>
+                    <div class="flex flex-row items-center gap-2">
+                        <h1 class="text-3xl md:text-4xl">
+                            <MarkdownDisplay
+                                :content="question.title"
+                                class="!font-bold"
+                                :options="{
+                                    disableMarkdown: true,
+                                }"
+                            />
+                        </h1>
+                        <div
+                            class="flex flex-row gap-2"
+                            v-if="canEditQuestionAwaited"
+                        >
+                            <RouterLink
+                                :to="{
+                                    name: 'question.edit',
+                                    params: {
+                                        id: question.id,
+                                    },
+                                }"
+                                title="Edit Question"
+                                aria-label="Edit Question"
+                            >
+                                <FontAwesomeIcon :icon="faEdit" />
+                            </RouterLink>
 
-                    <div class="font-semibold text-tertiary-text md:text-end">
+                            <button
+                                @click="onDeleteClicked"
+                                title="Delete Question"
+                                aria-label="Delete Question"
+                            >
+                                <FontAwesomeIcon :icon="faTrash" />
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        class="flex flex-col items-end justify-end font-semibold text-tertiary-text md:text-end"
+                    >
                         Posted
                         {{ dayjs(question.meta.created_at).fromNow() }} by
                         {{ question.user.first_name }}
@@ -186,28 +217,8 @@ onMounted(loadData);
                         </div>
                     </div>
                 </div>
-                <div class="text-xl" v-if="canEditQuestionAwaited">
-                    <RouterLink
-                        :to="{
-                            name: 'question.edit',
-                            params: {
-                                id: question.id,
-                            },
-                        }"
-                        class="text-blue-500 hover:text-blue-700"
-                    >
-                        Edit
-                    </RouterLink>
 
-                    <button
-                        class="text-red-500 hover:text-red-700"
-                        @click="onDeleteClicked"
-                    >
-                        Delete
-                    </button>
-                </div>
-
-                <MarkdownDisplay :content="question.content" />
+                <MarkdownDisplay :content="question.content" class="mt-4" />
             </div>
 
             <div aria-label="answers">
@@ -230,7 +241,14 @@ onMounted(loadData);
             </div>
 
             <div aria-label="comments">
-                <h2 class="py-4 text-2xl md:text-3xl">Comments</h2>
+                <h2 class="py-4 text-2xl md:text-3xl">
+                    Comments
+                    {{
+                        question.comments?.length
+                            ? `(${question.comments.length})`
+                            : ""
+                    }}
+                </h2>
 
                 <div aria-label="add comment">
                     <p v-if="!isAuthenticated">
