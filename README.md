@@ -1,3 +1,5 @@
+[![Deploy](https://github.com/Dutch-Raptor/nebula/actions/workflows/deploy.yml/badge.svg)](https://github.com/Dutch-Raptor/nebula/actions/workflows/deploy.yml)
+
 # Nebula
 
 [![Continuous Integration and Deployment](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml)
