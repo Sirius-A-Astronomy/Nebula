@@ -5,11 +5,15 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import MarkdownDisplay from "@components/MarkdownDisplay.vue";
 import MarkdownEditor from "@components/MarkdownEditor.vue";
 import { ref } from "vue";
+import type { Ref } from "vue";
 import { canEditComment } from "@/lib/permissionHelpers";
 
 import useFlashStore from "@stores/flashStore";
 import useModalStore from "@stores/modalStore";
 import { questionStore } from "@stores/questionStore";
+
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const flash = useFlashStore();
 const modal = useModalStore();
@@ -23,6 +27,12 @@ const props = defineProps<{
 const editableComment = ref({ ...props.comment });
 
 const editMode = ref(false);
+
+const errors: Ref<{
+    [key: string]: string[];
+}> = ref({
+    content: [],
+});
 
 const toggleEditMode = () => {
     editMode.value = !editMode.value;
@@ -65,6 +75,11 @@ const deleteComment = async () => {
 };
 
 const updateComment = async () => {
+    if (editableComment.value.content === props.comment.content) {
+        editMode.value = false;
+        return;
+    }
+
     const response = await questionStore.actions.updateComment(
         props.comment.question_id,
         props.comment.id,
@@ -73,6 +88,10 @@ const updateComment = async () => {
 
     if (!response.ok) {
         flash.add(`Failed to update comment: ${response.message}`, "error");
+        if (response.data) {
+            const data = response.data as { errors: { content: string[] } };
+            errors.value = data.errors;
+        }
         return;
     }
 
@@ -103,19 +122,13 @@ const updateComment = async () => {
                     </span>
                 </div>
 
-                <div v-if="canEditComment(comment)" class="flex flex-row gap-1">
-                    <button
-                        class="text-blue-500 hover:text-blue-700"
-                        @click="toggleEditMode"
-                    >
-                        {{ editMode ? "Cancel" : "Edit" }}
+                <div v-if="canEditComment(comment)" class="flex flex-row gap-2">
+                    <button v-if="!editMode" @click="toggleEditMode">
+                        <FontAwesomeIcon :icon="faEdit" />
                     </button>
 
-                    <button
-                        class="text-red-500 hover:text-red-700"
-                        @click="onDeleteClicked"
-                    >
-                        Delete
+                    <button @click="onDeleteClicked">
+                        <FontAwesomeIcon :icon="faTrash" />
                     </button>
                 </div>
             </div>
@@ -124,10 +137,21 @@ const updateComment = async () => {
             <div v-if="editMode">
                 <MarkdownEditor
                     v-model="editableComment.content"
-                    class="rounded-lg !bg-secondary-bg"
+                    class="!my-0 rounded-lg !bg-secondary-bg"
                     placeholder="Enter comment here"
                 />
+                <p>
+                    <span class="text-red-500" v-if="errors.content">
+                        {{ errors.content[0] }}
+                    </span>
+                </p>
                 <div class="flex flex-row justify-end">
+                    <button
+                        @click="toggleEditMode"
+                        class="rounded-lg bg-secondary-bg px-4 py-2 text-primary-text"
+                    >
+                        Cancel
+                    </button>
                     <button
                         @click="updateComment"
                         class="rounded-lg bg-primary-bg px-4 py-2 text-primary-text"
