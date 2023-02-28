@@ -2,6 +2,12 @@
 import { RouterLink } from "vue-router";
 import type { Question } from "@stores/questionStore";
 import SubjectTag from "@components/subjectTag/SubjectTag.vue";
+
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
 defineProps<{
     question: Question;
 }>();
@@ -55,7 +61,7 @@ defineProps<{
             </div>
 
             <div class="question-list-item__body__posted-at">
-                {{ question.meta.created_at }}
+                {{ dayjs(question.meta.created_at).fromNow() }}
             </div>
         </div>
 
