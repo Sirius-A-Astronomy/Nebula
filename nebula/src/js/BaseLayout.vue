@@ -95,11 +95,25 @@ const userNavItem = computed(() => {
     if (!isAuthenticated.value) {
         items.push({
             name: "Login",
-            to: { name: "user.login" },
+            to: {
+                name: "user.login",
+                query: {
+                    next: encodeURIComponent(
+                        router.currentRoute.value.fullPath
+                    ),
+                },
+            },
         });
         items.push({
             name: "Register",
-            to: { name: "user.register" },
+            to: {
+                name: "user.register",
+                query: {
+                    next: encodeURIComponent(
+                        router.currentRoute.value.fullPath
+                    ),
+                },
+            },
         });
     }
 
