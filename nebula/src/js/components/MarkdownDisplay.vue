@@ -82,7 +82,9 @@ const renderMarkdown = throttle(1000, (value) => {
     }
     setTimeout(() => {
         try {
+            mathjax.typesetClear([markdownElement.value]);
             mathjax.typesetPromise([markdownElement.value]);
+            mathjax.texReset();
         } catch (e) {
             console.error("error while typesetting", e);
         }
