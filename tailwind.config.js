@@ -5,11 +5,9 @@ module.exports = {
         "./nebula/src/**/*.{vue,js,ts,jsx,tsx}",
     ],
     theme: {
-        FontFace: {
-            "font-family": {
-                primary: ["Poppins", "sans-serif"],
-                secondary: ["Lato", "sans-serif"],
-            },
+        fontFamily: {
+            display: ["Poppins", "sans-serif"],
+            body: ["Lato", "sans-serif"],
         },
         extend: {
             colors: {
