@@ -4,7 +4,7 @@ import type {
     NewQuestion,
     UpdatedQuestion,
 } from "@stores/questionStore";
-import { reactive, computed, onMounted, watch, ref, type Ref } from "vue";
+import { reactive, computed, onMounted, watch, ref } from "vue";
 import MarkdownEditor from "@components/MarkdownEditor.vue";
 import { courseStore } from "@/stores/courseStore";
 

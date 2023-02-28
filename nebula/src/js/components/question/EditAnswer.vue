@@ -103,7 +103,9 @@ const expanded = ref(true);
             />
 
             <p v-if="errors?.title" class="text-red-500">
-                <span v-for="error in errors.title">{{ error }}</span>
+                <span v-for="error in errors.title" :key="error">{{
+                    error
+                }}</span>
             </p>
 
             <MarkdownEditor
@@ -118,7 +120,9 @@ const expanded = ref(true);
             />
 
             <p v-if="errors?.content" class="text-red-500">
-                <span v-for="error in errors.content">{{ error }}</span>
+                <span v-for="error in errors.content" :key="error">{{
+                    error
+                }}</span>
             </p>
 
             <p class="italic">

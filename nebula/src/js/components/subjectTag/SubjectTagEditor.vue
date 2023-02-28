@@ -194,7 +194,7 @@ onMounted(() => {
 
         <div class="text-sm text-secondary-text" key="help-text">
             Start typing to search existing tags. Press
-            <kbd class="rounded-sm bg-secondary-bg px-1 font-mono">Enter</kbd>
+            <kbd class="font-mono rounded-sm bg-secondary-bg px-1">Enter</kbd>
             to add a new tag.
         </div>
     </TransitionGroup>

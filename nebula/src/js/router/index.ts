@@ -3,9 +3,6 @@ import {
     createRouter,
     createWebHistory,
     type NavigationGuard,
-    type NavigationGuardWithThis,
-    type RouteLocationNormalized,
-    type RouteLocationRaw,
 } from "vue-router";
 import { isAuthenticated, authenticatedUser } from "@stores/sessionStore";
 
