@@ -436,10 +436,6 @@ const markdownEditorId = ref(
 @media (min-width: 640px) {
     .markdown-editor {
         border-radius: 12px;
-        &.preset-docs {
-            margin-left: 0;
-            margin-right: 0;
-        }
     }
 
     .markdown-editor-header .tabs {
@@ -473,6 +469,7 @@ const markdownEditorId = ref(
     position: relative;
     display: inline-block;
     border-bottom: 1px solid transparent;
+    margin-bottom: 1px;
     line-height: 48px;
     font-size: 14px;
     font-weight: 500;
