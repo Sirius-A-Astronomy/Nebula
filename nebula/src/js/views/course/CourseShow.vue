@@ -110,25 +110,23 @@ const questionFilter = ref("");
         </div>
         <div v-else class="container py-2">
             <BreadCrumbs :breadcrumbs="breadcrumbs" class="pt-2 pb-4" />
-            <section
-                class="course-container rounded-md bg-secondary-bg px-4 py-2"
-            >
-                <div class="course-header">
-                    <h1 class="course-header__title text-3xl font-bold">
+            <section class="rounded-md bg-secondary-bg px-4 py-2">
+                <div
+                    class="mb-4 flex flex-col flex-wrap gap-2 md:flex-row md:items-baseline md:justify-between"
+                >
+                    <h1 class="text-3xl font-bold md:flex-[1_1_40%]">
                         {{ course.name }} {{ course.code }}
                     </h1>
                     <div
-                        class="course-header__questions-amount"
-                        id="course-question-amount"
+                        class="order-3 font-semibold md:order-1 md:flex-[0_1_content] md:text-end"
                     >
                         {{ questions.length }} Questions
                     </div>
-                    <div class="course-header__description">
+                    <div class="order-2 font-body md:flex-[1_1_60%]">
                         {{ course.description }}
                     </div>
                     <input
-                        class="search-bar input w-full rounded-md border-0 bg-tertiary-bg p-2 text-sm placeholder:font-semibold placeholder:text-secondary-text focus:bg-primary-bg focus:ring-primary-active"
-                        id="course-search-input-field"
+                        class="order-3 w-full rounded-md border-0 bg-tertiary-bg p-2 text-sm placeholder:font-semibold placeholder:text-secondary-text focus:bg-primary-bg focus:ring-primary-active md:flex-[1_0_20rem]"
                         type="text"
                         :placeholder="`Search in ${course.name}...`"
                         v-model="questionFilter"
@@ -139,14 +137,11 @@ const questionFilter = ref("");
                             name: 'question.create',
                             query: { courseId: course.id },
                         }"
-                        class="btn btn-outline add-question-button"
+                        class="btn btn-outline order-1 md:order-1 md:flex-[0_1_content]"
                         >Add a question</RouterLink
                     >
                 </div>
-                <div
-                    class="question-list-container"
-                    id="question-list-container"
-                >
+                <div class="flex flex-col gap-2">
                     <QuestionListItem
                         v-for="question in questions"
                         :key="question.id"
@@ -157,76 +152,3 @@ const questionFilter = ref("");
         </div>
     </main>
 </template>
-
-<style lang="scss" scoped>
-@use "@scss/abstracts/mixins" as *;
-
-/*
-    Course Page
-*/
-
-.course-header {
-    margin-bottom: 1rem;
-
-    &__questions-amount {
-        font-family: "Poppins", "Open Sans", "Arial", sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: var(--font-size-h4);
-        line-height: 30px;
-    }
-
-    &__description {
-        font-family: "Lato";
-        font-style: normal;
-        font-weight: 400;
-        font-size: var(--font-size-h3);
-        line-height: 25px;
-        color: var(--color-text-primary);
-    }
-
-    .add-question-button {
-        font-size: var(--font-size-h4);
-    }
-}
-@include mq(md) {
-    .course-header {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        justify-content: space-between;
-        // grid-template-columns: 5fr 1fr auto auto;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-
-        &__title {
-            margin-bottom: 0;
-            flex: 1 1 40%;
-        }
-
-        &__questions-amount {
-            margin-bottom: 0;
-            text-align: end;
-            flex: 0 1 content;
-        }
-
-        &__description {
-            margin-bottom: 0;
-            flex: 1 1 60%;
-            order: 2;
-        }
-
-        .search-bar {
-            margin-bottom: 0;
-            flex: 1 0 20rem;
-            order: 2;
-        }
-
-        .add-question-button {
-            margin-bottom: 0;
-            flex: 0 1 content;
-            order: 1;
-        }
-    }
-}
-</style>
