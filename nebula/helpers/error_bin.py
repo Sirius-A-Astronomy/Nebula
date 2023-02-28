@@ -24,6 +24,16 @@ class ErrorBin:
         else:
             self.errors[field].append("...")
 
+    def add_bin(self, field: str, error_bin):
+        """
+        Add a nested error bin to the error bin.
+
+        :param error_bin: The error bin to add
+        :
+        """
+        if error_bin.has_errors():
+            self.errors[field] = error_bin.get()
+
     def has_errors(self):
         """
         Check if the error bin has any errors.
