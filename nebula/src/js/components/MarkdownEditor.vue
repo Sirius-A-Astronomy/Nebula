@@ -283,7 +283,7 @@ const markdownEditorId = ref(
     margin-top: 16px;
     margin-bottom: 12px;
     padding-top: 12px;
-    background-color: var(--color-background, var(--vp-c-black-mute));
+    background-color: var(--color-background, var(--vp-code-tab-bg));
 
     &.preset-docs {
         padding-inline: 24px;
@@ -436,6 +436,11 @@ const markdownEditorId = ref(
 @media (min-width: 640px) {
     .markdown-editor {
         border-radius: 12px;
+
+        &.preset-docs {
+            margin-left: 0;
+            margin-right: 0;
+        }
     }
 
     .markdown-editor-header .tabs {
