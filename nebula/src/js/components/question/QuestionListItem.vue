@@ -37,6 +37,17 @@ defineProps<{
                     >{{ subject_tag.name }}</SubjectTag
                 >
             </div>
+        </div>
+
+        <div class="question-list-item__body">
+            <div class="question-list-item__body__title">
+                <a
+                    href="{{ url_for('web.question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}"
+                    class="question-list-item__body__title__link latex-view"
+                >
+                    {{ question.title }}
+                </a>
+            </div>
             <div class="question-list-item__header__course">
                 <RouterLink
                     :to="{
@@ -50,21 +61,6 @@ defineProps<{
             </div>
         </div>
 
-        <div class="question-list-item__body">
-            <div class="question-list-item__body__title">
-                <a
-                    href="{{ url_for('web.question.question', question_uuid=question.uuid, course_code=question.course.code, course_level_code=question.course.course_level.code) }}"
-                    class="question-list-item__body__title__link latex-view"
-                >
-                    {{ question.title }}
-                </a>
-            </div>
-
-            <div class="question-list-item__body__posted-at">
-                {{ dayjs(question.meta.created_at).fromNow() }}
-            </div>
-        </div>
-
         <div class="question-list-item__footer">
             <div class="question-list-item__footer__item">
                 {{ question.answers?.length }}
@@ -73,6 +69,9 @@ defineProps<{
             <div class="question-list-item__footer__item">
                 {{ question.comments?.length }}
                 {{ question.comments?.length == 1 ? "Comment" : "Comments" }}
+            </div>
+            <div class="question-list-item__footer__posted-at">
+                {{ dayjs(question.meta.created_at).fromNow() }}
             </div>
         </div>
     </RouterLink>
@@ -176,16 +175,6 @@ defineProps<{
                 text-decoration-color: var(--color-primary-active);
             }
         }
-
-        &__posted-at {
-            font-style: normal;
-            font-weight: 300;
-            line-height: 1.075rem;
-            font-size: 0.875rem;
-            letter-spacing: 0.095em;
-
-            flex: 0 0 max-content;
-        }
     }
 
     &__footer {
@@ -201,6 +190,17 @@ defineProps<{
             font-size: 0.875rem;
             line-height: 1.075rem;
             letter-spacing: 0.095em;
+        }
+
+        &__posted-at {
+            font-style: normal;
+            font-weight: 300;
+            line-height: 1.075rem;
+            font-size: 0.875rem;
+            letter-spacing: 0.095em;
+            margin-left: auto;
+
+            flex: 0 0 max-content;
         }
     }
 }
