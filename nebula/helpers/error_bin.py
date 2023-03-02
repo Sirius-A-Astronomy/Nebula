@@ -19,7 +19,7 @@ class ErrorBin:
         """
         if field not in self.errors:
             self.errors[field] = [error]
-        elif len(self.errors[error]) < self.max_errors:
+        elif len(self.errors[field]) < self.max_errors:
             self.errors[field].append(error)
         else:
             self.errors[field].append("...")
