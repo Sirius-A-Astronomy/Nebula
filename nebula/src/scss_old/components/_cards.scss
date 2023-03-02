@@ -1,0 +1,13 @@
+.background-card {
+	background-color: var(--color-background-secondary);
+	box-shadow: var(--box-shadow);
+	border-radius: 18px;
+	padding: 1rem;
+
+	&--secondary {
+		background-color: var(--color-background-secondary);
+		box-shadow: var(--box-shadow);
+		border-radius: 18px;
+		padding: 1rem;
+	}
+}

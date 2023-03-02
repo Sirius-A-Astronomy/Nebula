@@ -1,0 +1,24 @@
+.skeleton {
+    color: transparent;
+    display: inline;
+
+    &-primary {
+        background: linear-gradient(
+            90deg,
+            var(--color-text-primary) 0px,
+            var(--color-text-secondary) 40px,
+            var(--color-text-primary) 80px
+        );
+        background-size: 800px 104px;
+        animation: shimmer 3s infinite linear;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
