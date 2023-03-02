@@ -24,7 +24,7 @@ def get_questions():
         questions = Question.query.filter_by(course_uuid=course_id).all()
         return jsonify([question.expose() for question in questions])
 
-    user_id = args.get("user_id")
+    user_id = args.get("user")
     if user_id:
         questions = Question.query.filter_by(user_uuid=user_id).all()
         return jsonify([question.expose() for question in questions])
