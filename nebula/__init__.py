@@ -22,6 +22,7 @@ from flask import Blueprint, Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFError, CSRFProtect
+from werkzeug.exceptions import HTTPException
 
 from config import configs
 
@@ -74,9 +75,10 @@ def create_app(config_environment="default"):
 
     app.context_processor(context_processor)
 
-    from nebula.helpers.csrf_error_handler import csrf_error_handler
+    from nebula.helpers.error_handler import csrf_error_handler
 
     app.register_error_handler(CSRFError, csrf_error_handler)
+    # app.register_error_handler(Exception, generic_error_handler)
 
     # inject the csrf token into the response headers for all requests
     app.after_request(inject_csrf_token)
