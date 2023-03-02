@@ -1,0 +1,45 @@
+{% macro markdown_editor(content, title) -%}
+<div class="markdown-editor">
+    <div class="markdown-editor__toolbar--bg">
+        <div class="markdown-editor__toolbar container-lg">
+            <div class="markdown-editor__toolbar--left">
+                <div class="markdown-editor__toolbar__item">
+                    <div href="#" class="markdown-editor__toolbar__item__title">
+                        {{ title }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="markdown-editor__toolbar--right">
+                <div class="markdown-editor__toolbar__item">
+                    <a href="" class="markdown-editor__toolbar__item__link">
+                        Disable Auto-Update
+                    </a>
+                </div>
+
+                <div class="markdown-editor__toolbar__item">
+                    <a href="#" class="markdown-editor__toolbar__item__link">
+                        Help
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="markdown-editor__editor-container">
+
+        <div class="markdown-editor__split-pane">
+            <div class="markdown-editor__textarea">
+                {{ content(autofocus=true) }}
+            </div>
+
+            <div class="markdown-editor__preview markdown-view">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%- endmacro %}

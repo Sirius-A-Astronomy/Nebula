@@ -1,0 +1,185 @@
+{
+	"course_levels": [
+		{
+			"name": "First Year",
+			"study_type": "Bachelor",
+			"code": "bsc-yr1",
+			"courses": [
+				{
+					"name": "Mechanics and Relativity",
+					"code": "WBPH001-10",
+					"description": "This course addresses topics in special relativity and mechanics at varying levels of mathematical complexity.",
+					"semester": "1"
+				},
+				{
+					"name": "Calculus 1 (For Physics)",
+					"code": "WBPH057-05",
+					"description": "",
+					"semester": "1a"
+				},
+				{
+					"name": "Physics Laboratory 1",
+					"code": "WBPH-013-05",
+					"description": "",
+					"semester": "1a"
+				},
+				{
+					"name": "Calculus 2 (For Physics)",
+					"code": "WBPH-058-05",
+					"description": "",
+					"semester": "1b"
+				},
+				{
+					"name": "Introduction Astronomy",
+					"code": "WBAS007-05",
+					"description": "",
+					"semester": "1b"
+				},
+				{
+					"name": "Electricity and Magnetism",
+					"code": "WBPH033-10",
+					"description": "",
+					"semester": "2"
+				},
+				{
+					"name": "Introduction to Programming and Image Processing",
+					"code": "WBAS018-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Linear Algebra (For Physics)",
+					"code": "WBPH054-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Mathematical Physics",
+					"code": "WBPH049-05",
+					"description": "",
+					"semester": "2b"
+				},
+				{
+					"name": "Observational Astronomy",
+					"code": "WBAS015-05",
+					"description": "",
+					"semester": "2b"
+				}
+			]
+		},
+
+		{
+			"name": "Second Year",
+			"study_type": "Bachelor",
+			"code": "bsc-yr2",
+			"courses": [
+				{
+					"name": "Thermal Physics",
+					"code": "WBPH002-10",
+					"description": "",
+					"semester": "1"
+				},
+				{
+					"name": "Quantum Physics 1",
+					"code": "WBPH014-05",
+					"description": "",
+					"semester": "1a"
+				},
+				{
+					"name": "Statistics for Astronomy",
+					"code": "WBAS004-05",
+					"description": "",
+					"semester": "1a"
+				},
+				{
+					"name": "Complex Analysis (For Physics)",
+					"code": "WBPH059-05",
+					"description": "",
+					"semester": "1b"
+				},
+				{
+					"name": "Waves and Optics",
+					"code": "WBPH032-05",
+					"description": "",
+					"semester": "1b"
+				},
+				{
+					"name": "Numerical Methods",
+					"code": "WBAS014-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Physics, Astronomy & Society: Ethical & Professional Aspects",
+					"code": "WBPH053-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Structure of Matter",
+					"code": "WBPH046-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Physics of Galaxies",
+					"code": "WBAS016-05",
+					"description": "",
+					"semester": "2b"
+				},
+				{
+					"name": "Physics of Stars",
+					"code": "WBAS017-05",
+					"description": "",
+					"semester": "2b"
+				},
+				{
+					"name": "Quantum Physics 2",
+					"code": "WBPH052-05",
+					"description": "",
+					"semester": "2b"
+				}
+			]
+		},
+
+		{
+			"name": "Third Year",
+			"study_type": "Bachelor",
+			"code": "bsc-yr3",
+			"courses": [
+				{
+					"name": "Astroparticle Physics",
+					"code": "WBPH036-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Astrophysical Hydrodynamics",
+					"code": "WBAS011-05",
+					"description": "",
+					"semester": "2a"
+				},
+				{
+					"name": "Interstellar medium",
+					"code": "WBAS012-05",
+					"description": "",
+					"semester": "2a"
+				}
+			]
+		},
+
+		{
+			"name": "General",
+			"study_type": "Master",
+			"code": "msc",
+			"courses": [
+				{
+					"name": "General Relativity",
+					"code": "WMPH009-05",
+					"description": "",
+					"semester": "1a"
+				}
+			]
+		}
+	]
+}

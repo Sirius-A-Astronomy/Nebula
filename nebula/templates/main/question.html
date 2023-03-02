@@ -1,0 +1,401 @@
+{% extends "layouts/base.html" %}
+{% block title %}{{ question.title }} - {{ course.name }}- Nebula{% endblock %}
+{% block include_head %}
+{{ vite_style('scss/views/question.scss') }}
+{% endblock %}
+
+{% macro linebreaks( string ) -%}
+{% if string.split('\n')|count > 1 %}
+{% for line in string.split('\n') %}
+{{ line }}
+<br />
+{% endfor %}
+{% else %}
+{{ string }}
+{% endif %}
+{%- endmacro %}
+{% block body %}
+<main>
+
+    {% set edit_question_mode = current_user.is_anonymous == false and
+    (current_user == question.user or current_user.access_level > 2) and edit == True %}
+    <div {% if current_user.is_anonymous==false and question_edit_form.errors|length> 0 %}
+        class="container-lg edit-mode"
+        {% else %}
+        class="container-lg"
+        {% endif %}
+        >
+        <div class="info-bar">
+
+            <div class="path-container">
+                <a class="path-container__link"
+                    href="{{ url_for('web.courses.all_courses') }}">Courses</a>
+                <a class="path-container__link"
+                    href="{{ url_for('web.level.level', course_level_code=question.course.course_level.code) }}">{{
+                    question.course.course_level.name }}</a>
+                <a class="path-container__link"
+                    href="{{ url_for('web.course.course', course_code=course.code, course_level_code=course.course_level.code)}}">{{
+                    question.course.name }}</a>
+                <a class="path-container__link" href="#">{{ question.title }}</a>
+            </div>
+            {% if question.subject_tags|length > 0 %}
+            <div class="subject-tags">
+                {% for subject_tag in question.subject_tags %}
+                <a class="subject-tag"
+                    href="{{ url_for('web.search.search', query=subject_tag.name) }}">
+                    {{ subject_tag.name }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="container-question-page">
+
+
+
+            <div class="left-panel background-card">
+                {% if not edit_question_mode %}
+                <div class="container-question ">
+
+                    <div class="container-question-info">
+                        <div class="question-title">
+                            <h2>{{ question.title }}</h2>
+                        </div>
+                        <div class="question-info">
+                            <h6 class="text-tertiary poppins fw-600">
+                                Posted {{ pretty_date(question.created_at) }}
+                                by {{ question.user.first_name }} {{ question.user.last_name }}</h6>
+                        </div>
+                    </div>
+                    <div class="container-question-content">
+                        <div>
+                            <p class="small-accent">
+                                Question content:
+                            </p>
+                            <noscript>
+                                <p class="text-secondary">
+                                    Markdown and Latex rendering is not supported without
+                                    JavaScript.
+                                </p>
+                                <div class="question-content">
+                                    {{ linebreaks(question.content) }}
+                                </div>
+                            </noscript>
+                            <div class="question-content markdown-view js-only">{{ question.content
+                                }}
+                            </div>
+                        </div>
+                        {% if current_user.is_anonymous == false and
+                        (current_user == question.user or current_user.access_level > 2) %}
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ url_for('web.question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code, edit=True) }}"
+                                class="button-accent ml-auto" id="question-edit-button">Edit</a>
+                        </div>
+                        {% endif %}
+                        <div class="divider"></div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if edit_question_mode %}
+                <div class="container-question-edit">
+                    <form method="post"
+                        action="{{ url_for('web.question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
+                        <h4>Edit question:</h4>
+
+                        {{ question_edit_form.csrf_token }}
+
+                        <div class="input-field">
+                            {{ question_edit_form.title.label(class="form-label") }}
+                            {% if question_edit_form.title.errors|length > 0 %}
+                            {{ question_edit_form.title(class="form-control is-invalid",
+                            id="question-title-input-field") }}
+                            <div class="invalid-feedback">
+                                {% for error in question_edit_form.title.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ question_edit_form.title(class="form-control",
+                            id="question-title-input-field") }}
+                            {% endif %}
+                            <a href="#!" id="show-question-title-preview"
+                                class="show-preview-button button-accent">Show
+                                preview</a>
+                        </div>
+
+                        <div class="preview-form-container"
+                            data-preview-toggled-by="show-question-title-preview"
+                            data-preview-value-from="question-title-input-field">
+                            <div class="text-tertiary">
+                                Preview question content:
+                            </div>
+                            <div class="preview-content"></div>
+                        </div>
+
+                        <div class="input-field">
+                            {{ question_edit_form.content.label(class="form-label") }}
+                            {% if question_edit_form.content.errors|length > 0 %}
+                            {{ question_edit_form.content(class="form-control is-invalid
+                            auto-adjust-textarea", id="question-content-input-field")
+                            }}
+                            <div class="invalid-feedback">
+                                {% for error in question_edit_form.content.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ question_edit_form.content(class="form-control auto-adjust-textarea",
+                            id="question-content-input-field") }}
+                            {% endif %}
+                            <a href="#!" id="show-question-content-preview"
+                                class="show-preview-button button-accent">Show
+                                preview</a>
+                        </div>
+
+                        <div class="preview-form-container"
+                            data-preview-toggled-by="show-question-content-preview"
+                            data-preview-value-from="question-content-input-field">
+                            <div class="text-tertiary">
+                                Preview question content:
+                            </div>
+                            <div class="preview-content"></div>
+                        </div>
+                        <div class="input-field">
+                            {{ question_edit_form.subject_tags.label(class="form-label") }}
+                            {{ question_edit_form.subject_tags }}
+                            {% if question_edit_form.subject_tags.errors|length > 0 %}
+                            <input type="text" class="form-control is-invalid tag-input">
+                            {{ question_edit_form.subject_tags(class="form-control is-invalid
+                            tag-input") }}
+                            <div class="invalid-feedback input-feedback">
+                                {% for error in question_edit_form.subject_tags.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <input type="text" class="form-control tag-input"
+                                data-store-in="subject_tags">
+                            {% endif %}
+                            <div class="input-feedback">
+                                Press <kbd>Enter</kbd> to add a tag.
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            {{ question_edit_form.difficulty.label(class="form-label") }}
+                            {% if question_edit_form.difficulty.errors|length > 0 %}
+                            {{ question_edit_form.difficulty(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in question_edit_form.difficulty.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ question_edit_form.difficulty(class="form-select") }}
+                            {% endif %}
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{{ url_for('web.question.question', course_level_code=question.course.course_level.code, course_code=question.course.code, question_uuid=question.uuid) }}"
+                                class="btn btn-outline" id="cancel-edit-question">Cancel</a>
+                            {{ question_edit_form.question_edit_submit(class="btn btn-outline")
+                            }}
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+
+                {% if not edit_question_mode %}
+                <div class="container-question-answers">
+                    <h4>Answers</h4>
+                    {% if question.answers|count == 0 %}
+                    <p>There aren't any answers for this question yet.</p>
+                    {% else %}
+                    {% for answer in question.answers %}
+                    <div class="question-answer">
+
+                        <div class="answer-info">
+                            <h3 class="text-primary">
+                                {{ answer.user.first_name }} {{ answer.user.last_name }}
+                                <span class="h6 poppins text-tertiary">{{
+                                    pretty_date(answer.created_at)
+                                    }}</span>
+                            </h3>
+                        </div>
+                        <div class="answer-content markdown-view">
+                            {{ answer.content }}
+
+                        </div>
+                        <div class="answer-sources">
+                            {% if answer.sources|count == 1 %}
+                            <span class="text-secondary">Source:</span>
+                            {% else %}
+                            <span class="text-secondary">Sources:</span>
+                            {% endif %}
+                            {% if answer.sources|count == 0 %}
+                            <p>None</p>
+                            {% else %}
+                            {% for source in answer.sources %}
+                            <a class="button-secondary" href="{{ source }}" target="_blank">
+                                {{ source }}{% if not loop.last %}, {% endif %}
+                            </a>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if not loop.last %}
+                    <hr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% if current_user.is_anonymous == false %}
+                    <div class="d-flex justify-content-end">
+                        <a href="#!" class="btn btn-outline" id="add-answer-button">Add answer</a>
+                    </div>
+                    {% endif %}
+                    {% if current_user.is_anonymous == false %}
+                    <div class="container-question-answers-add">
+                        <form method="post"
+                            action="{{ url_for('web.question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
+                            <h4>Add answer:</h4>
+
+                            {{ add_answer_form.csrf_token }}
+                            <div class="input-field">
+
+                                {{ add_answer_form.content.label(class="form-label") }}
+                                {% if add_answer_form.content.errors|length > 0 %}
+                                {{ add_answer_form.content(class="form-control is-invalid
+                                auto-adjust-textarea", id="answer-content-input-field") }}
+                                <div class="invalid-feedback input-feedback">
+                                    {% for error in add_answer_form.content.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ add_answer_form.content(class="form-control
+                                auto-adjust-textarea",
+                                id="answer-content-input-field") }}
+                                {% endif %}
+                                <a href="#!" id="show-answer-preview"
+                                    class="show-preview-button button-accent">Show
+                                    preview</a>
+                            </div>
+                            <div class="preview-form-container"
+                                data-preview-toggled-by="show-answer-preview"
+                                data-preview-value-from="answer-content-input-field">
+                                <div class="text-tertiary">
+                                    Preview answer content:
+                                </div>
+                                <div class="preview-content"></div>
+                            </div>
+
+                            <div class="input-field">
+                                {{ add_answer_form.sources.label(class="form-label") }}
+                                {% if add_answer_form.sources.errors|length > 0 %}
+                                {{ add_answer_form.sources(class="form-control is-invalid
+                                auto-adjust-textarea") }}
+                                <div class="invalid-feedback input-feedback">
+                                    {% for error in add_answer_form.sources.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ add_answer_form.sources(class="form-control") }}
+                                {% endif %}
+                                <div class="input-feedback">
+                                    Please use a semicolon to separate sources.
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-end">
+                                {{ add_answer_form.add_answer_submit(class="btn btn-primary") }}
+                            </div>
+
+                        </form>
+                    </div>
+                    {% endif %}
+
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="right-panel background-card">
+
+                <div class="container-question-comments">
+                    <div class="question-comments-title">
+                        <h2>{{ question.comments|length }} Comments</h2>
+                    </div>
+                    <div class="add-comment-container">
+                        {% if current_user.is_anonymous %}
+                        <p>
+                            You need to be logged in to add a comment. <a class="button-accent"
+                                href="{{ url_for('web.user.login_register', next=request.path)}}">Login</a>
+                        </p>
+                        {% else %}
+                        <form method="POST"
+                            action="{{ url_for('web.question.question', course_code = course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code)}}"
+                            id="add-comment-form">
+                            {{ comment_form.csrf_token }}
+                            {{ comment_form.content.label(class="form-label, visually-hidden")}}
+                            {{comment_form.is_suggestion(class="form-checkbox
+                            hidden-form-field-element",
+                            data_hidden_by="comment-content")}}
+                            {{ comment_form.is_suggestion.label(class="form-label
+                            hidden-form-field-element",
+                            data_hidden_by="comment-content") }}
+                            <div class="input-field">
+
+                                {{comment_form.content(class="form-control hidden-form-field-control
+                                auto-adjust-textarea",
+                                placeholder="Add a comment...", id="comment-content")}}
+                            </div>
+                            {{comment_form.comment_submit(class="btn btn-outline
+                            hidden-form-field-element
+                            mt-2",
+                            id="comment-submit-button",
+                            data_hidden_by="comment-content")}}
+                        </form>
+                        {% endif %}
+
+                    </div>
+                    <div class="question-comments-content">
+                        {% for comment in question.comments|sort(attribute='created_at',
+                        reverse=true)
+                        %}
+                        <div {% if new_comment_uuid==comment.uuid|string %}
+                            class="question-comment question-new-comment" {% else %}
+                            class="question-comment" {% endif %}>
+                            <div class="question-comment-info">
+                                <p>
+                                    {% if comment.user.first_name != None or comment.user.last_name
+                                    !=
+                                    None %}
+                                    <span class="text-secondary">{{ comment.user.first_name }} {{
+                                        comment.user.last_name }}</span>
+                                    {% endif %}
+                                    {% if comment.is_suggestion %}<span class="text-tertiary">-
+                                        Suggestion
+                                        -</span>{% endif %}
+                                    <span class="text-tertiary">{{ pretty_date(time =
+                                        comment.created_at)}}</span>
+                                </p>
+                            </div>
+                            <div class="question-comment-content text-primary markdown-view">
+                                {{ comment.content }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock body %}
+
+{% block include_js %}
+<script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
+<script src="{{ vite_public_asset('js/tag_input.js') }}"></script>
+{% endblock include_js %}

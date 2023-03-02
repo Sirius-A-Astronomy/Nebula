@@ -1,0 +1,55 @@
+.subject-tag {
+	display: inline-block;
+	padding: 0.2rem 0.5rem;
+	border-radius: 0.3rem;
+	font-size: 0.75rem;
+	color: var(--color-text-on-accent);
+	background-color: var(--color-accent);
+
+	font-style: normal;
+	font-weight: 400;
+	line-height: 0.875rem;
+	text-align: center;
+	letter-spacing: 0.095em;
+	text-transform: lowercase;
+
+	max-width: 200px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+
+	&:hover {
+		background-color: var(--color-accent-focus);
+		color: var(--color-text-on-accent);
+	}
+}
+
+.suggestions-container {
+	max-height: 120px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background-color: var(--color-background-tertiary);
+	color-scheme: var(--color-scheme);
+}
+
+.suggestion {
+	cursor: pointer;
+	transition: 0.1s ease-out;
+
+	&:hover {
+		text-decoration: underline;
+	}
+	span {
+		font-weight: 700;
+	}
+
+	&.selected {
+		color: var(--color-primary-active);
+		font-size: 1.2rem;
+
+		&:hover {
+			color: var(-color-primary-active);
+			text-decoration: underline;
+		}
+	}
+}
