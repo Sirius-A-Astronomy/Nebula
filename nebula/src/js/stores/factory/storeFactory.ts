@@ -31,6 +31,8 @@ export const storeModuleFactory = <T extends { id: string }>(
 ) => {
     const storeContents: Ref<State<T>> = ref({});
 
+    const lastLoadTimeById: Ref<Record<string, number>> = ref({});
+
     const state = {
         storeContents,
         isLoadingAll: ref(false),
@@ -46,6 +48,14 @@ export const storeModuleFactory = <T extends { id: string }>(
 
             return should && !state.isLoadingAll.value;
         },
+        shouldLoadById: (id: string) => {
+            const now = Date.now();
+            const should =
+                now - lastLoadTimeById.value[id] > 1000 * 60 * 5 ||
+                !state.isValid.value;
+
+            return should;
+        },
     };
 
     const getters = {
@@ -56,6 +66,7 @@ export const storeModuleFactory = <T extends { id: string }>(
     const setters = {
         setById: (id: string, item: T) => {
             storeContents.value[id] = item;
+            lastLoadTimeById.value[id] = Date.now();
         },
 
         setAll: (items: T[]) => {
