@@ -13,7 +13,9 @@ def csrf_error_handler(e):
         return jsonify({"message": "CSRF error"}), 419
     """Redirects to the login page if the user is not logged in."""
     flash("Session expired. Please try again.", "warning")
-    return redirect(request.referrer if request.referrer else url_for("nebula.web.main.index"))
+    return redirect(
+        request.referrer if request.referrer else url_for("nebula.web.main.index")
+    )
 
 
 def generic_error_handler(e):
