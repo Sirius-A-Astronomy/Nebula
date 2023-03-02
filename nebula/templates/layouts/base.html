@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<!--  UNFINISHED -->
 <html lang="en" class="dark-mode">
+{% from "utilities/vite.html" import vite_script, vite_style, vite_asset, vite_public_asset with
+context %}
 
 <head>
     <title>
@@ -9,14 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content=" This is the Nebula Database by the Kapteyn Learning Community. It is a repository of user-submitted practice questions. ">
-    <link rel="icon" type="image/png"
-        href="{{ url_for('static', filename='images/siriuswebheader.png') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ vite_public_asset('images/mark.svg') }}" />
 
     <!-- Load darkmode script first so it loads the fastest -->
-    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+    <script src="{{ vite_public_asset('js/darkmode.js') }}"></script>
 
-    <!-- Show loading animation while everything gets loaded -->
-    <!-- <script src="{{ url_for('static', filename='js/pageloadanim.js') }}"></script> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
@@ -25,27 +24,26 @@
     <!-- Google Fonts Includes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" type="text/css"
-        href="{{ url_for('static', filename='css/fonts/fonts.css') }}" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+        rel="stylesheet">
     <!-- Google Material Icon Font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <!-- GSAP ANIMATIONS-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
 
 
     <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script src="{{ url_for('static', filename='js/mathjax-config.js') }}" defer></script>
+    <script src="{{ vite_public_asset('js/mathjax-config.js') }}" defer></script>
     <script id="MathJax-script"
         src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-mml-chtml.js" defer></script>
 
     <!-- Markdown -->
-    <script src="{{ url_for('static', filename='js/markdown-it.min.js') }}"></script>
+    <script src="{{ vite_public_asset('js/markdown-it.min.js') }}"></script>
 
     <!-- jquery -->
 
@@ -53,6 +51,11 @@
     {% if development %}
     <script type="module" src="http://localhost:5173/@vite/client"></script>
     {% endif %}
+
+    {{ vite_style('scss/main.scss') }}
+    {{ vite_script('js/app.ts') }}
+
+
 
     {% block include_head %}{% endblock %}
 
@@ -62,7 +65,7 @@
 <li>
     <a {% if course.code in request.path %} class="dropdown-item active" {% else %}
         class="dropdown-item" {% endif %}
-        href="{{ url_for('course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{
+        href="{{ url_for('web.course.course', course_code=course.code, course_level_code = course.course_level.code)}}">{{
         course.name }}</a>
 </li>
 {%- endmacro %}
@@ -70,7 +73,7 @@
 <li class="caret-hover">
     <a {% if course_level.code in request.path %} class="dropdown-item dropdown-toggle active" {%
         else %} class="dropdown-item dropdown-toggle" {% endif %}
-        href="{{ url_for('level.level', course_level_code=course_level.code)}}">{{
+        href="{{ url_for('web.level.level', course_level_code=course_level.code)}}">{{
         course_level.name }}</a>
     <ul class="dropdown-submenu">
         {% for course in course_level.courses %}{{ nav_course_list_item(course) }}{% endfor %}
@@ -79,6 +82,7 @@
 {%- endmacro %}
 
 <body>
+    <div id="app"></div>
     {% if get_flashed_messages() %}
     <div class="alerts-container">
 
@@ -153,7 +157,11 @@
         <div class="nebula-nav">
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <div class="container-lg">
-                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                    <a class="navbar-brand" href="{{ url_for('web.main.index') }}">
+                        <div class="logo">
+
+                        </div>
+
                         <div>
                             <span class="site-name">Nebula</span>
                         </div>
@@ -235,13 +243,13 @@
                                     <a {% if ('login' in request.path and request.args['register']
                                         !='True' ) %} class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
-                                        href="{{ url_for('user.login_register', next=request.path) }}">Login</a>
+                                        href="{{ url_for('web.user.login_register', next=request.path) }}">Login</a>
                                 </li>
                                 <li>
                                     <a {% if request.args['register']=='True' or '/register' in
                                         request.path %} class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
-                                        href="{{ url_for('user.login_register', register=true, next=request.path) }}">Register</a>
+                                        href="{{ url_for('web.user.login_register', register=true, next=request.path) }}">Register</a>
                                 </li>
 
 
@@ -250,14 +258,14 @@
                                     <a {% if 'profile' in request.path %}
                                         class="dropdown-item active" {% else %}
                                         class="dropdown-item" {% endif %}
-                                        href="{{ url_for('user.profile') }}">Profile</a>
+                                        href="{{ url_for('web.user.profile') }}">Profile</a>
                                     {% if current_user.access_level >= 2 %}
                                     <a class="dropdown-item"
-                                        href="{{ url_for('dashboard.index') }}">Dashboard</a>
+                                        href="{{ url_for('web.dashboard.index') }}">Dashboard</a>
                                     {% endif %}
                                 </li>
                                 <li>
-                                    <form action="{{ url_for('user.logout') }}" method="post">
+                                    <form action="{{ url_for('web.user.logout') }}" method="post">
                                         <input type="hidden" name="csrf_token"
                                             value="{{ csrf_token() }}" />
                                         <button class="dropdown-item" type="submit">Logout</button>
@@ -281,9 +289,9 @@
                     <div class="collapse navbar-collapse justify-content-start" id="navbarText">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a {% if request.path==url_for('main.index') %}
+                                <a {% if request.path==url_for('web.main.index') %}
                                     class="nav-link active" {% else %} class="nav-link" {% endif %}
-                                    href="{{ url_for('main.index') }}">Home</a>
+                                    href="{{ url_for('web.main.index') }}">Home</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -308,9 +316,9 @@
                             {% if not current_user.is_anonymous and current_user.access_level >= 2
                             %}
                             <li class="nav-item">
-                                <a {% if request.path==url_for('add_question.add_question') %}
+                                <a {% if request.path==url_for('web.add_question.add_question') %}
                                     class="nav-link active" {% else %} class="nav-link" {% endif %}
-                                    href="{{ url_for('add_question.add_question')}}">Submit a
+                                    href="{{ url_for('web.add_question.add_question')}}">Submit a
                                     question</a>
                             </li>
                             {% endif %}
@@ -345,17 +353,15 @@
         crossorigin="anonymous">
         </script>
     <!--- Scripts -->
-    <script src="{{ url_for('static', filename='js/navbar_submenu.js') }}"></script>
-    <script type="text/javascript"
-        src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
-    <script type="module" src="{{url_for('static', filename='js/notifications.js')}}"></script>
-    <script defer type="module" src="{{url_for('static', filename='js/views.js')}}"></script>
+    <script src="{{ vite_public_asset('js/navbar_submenu.js') }}"></script>
+    <script type="text/javascript" src="{{ vite_public_asset('js/purify.min.js') }}"></script>
+    <script type="module" src="{{vite_public_asset('js/notifications.js')}}"></script>
+    <script defer type="module" src="{{vite_public_asset('js/views.js')}}"></script>
 
 
     {% block include_js %}
     {% endblock include_js %}
 
 </body>
-<!-- <script src="{{ url_for('static', filename='js/stoppageloadanim.js') }}" defer></script> -->
 
 </html>

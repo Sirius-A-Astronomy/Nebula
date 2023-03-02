@@ -16,19 +16,21 @@
 
     The app is returned.
 """
-import subprocess
 from urllib.parse import urljoin, urlparse
 
-from flask import Flask, redirect, request, url_for
+from flask import Blueprint, Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFError, CSRFProtect
+from werkzeug.exceptions import HTTPException
 
 from config import configs
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+
+bp = Blueprint("nebula", __name__)
 
 
 def create_app(config_environment="default"):
@@ -38,6 +40,7 @@ def create_app(config_environment="default"):
     :param config_environment: The environment to use for the app.
     :type config_environment: str
     """
+
     app = Flask(__name__)
 
     # Create the configuration based on the environment
@@ -57,61 +60,36 @@ def create_app(config_environment="default"):
 
     # Register all the views within an app context
     with app.app_context():
-        from nebula.api import api
-        from nebula.views import (
-            add_question,
-            all_courses,
-            course,
-            dashboard,
-            documentation,
-            level,
-            main,
-            question,
-            search,
-            user,
-        )
+        import nebula.models  # import models to create tables
 
-        from nebula.cli import (
-            user as user_cli,
-            db as db_cli,
-        )
+        # import routes
+        from nebula.cli import db as db_cli
+        from nebula.cli import user as user_cli
+        from nebula.routes import api, web
 
-        blueprints = [
-            main.bp, level.bp, course.bp, all_courses.bp, question.bp,
-            add_question.bp, user.bp, search.bp, api.apibp, dashboard.bp,
-            documentation.bp, user_cli.bp, db_cli.bp
-        ]
+        app.register_blueprint(bp)
+        app.register_blueprint(db_cli.bp)
+        app.register_blueprint(user_cli.bp)
 
-        for blueprint in blueprints:
-            app.register_blueprint(blueprint)
-
-    from nebula.context_functions import context_processor
+    from nebula.helpers.global_functions import context_processor
 
     app.context_processor(context_processor)
 
-    from nebula.views.errors import badrequest, internalerror, pagenotfound
+    from nebula.helpers.error_handler import csrf_error_handler
 
-    app.register_error_handler(404, pagenotfound)
-    app.register_error_handler(500, internalerror)
-    app.register_error_handler(400, badrequest)
-    app.register_error_handler(CSRFError, lambda e: (e.description, 400))
+    app.register_error_handler(CSRFError, csrf_error_handler)
+    # app.register_error_handler(Exception, generic_error_handler)
 
-    # from nebula.utilities import before_request
-    # app.before_request(before_request)
+    # inject the csrf token into the response headers for all requests
+    app.after_request(inject_csrf_token)
 
     login_manager.login_view = "user.login_register"
     login_manager.login_message = "Please log in to access this page."
     login_manager.login_message_category = "warning"
 
-    from nebula.utilities import unauthorized_handler
+    from nebula.helpers.unauthorized_handler import unauthorized_handler
 
     login_manager.unauthorized_handler(unauthorized_handler)
-
-    # Compile the sass files, TODO find another way to compile sass outside of the app
-    from os import environ
-
-    if app.env == "development" or app.env == "testing":
-        compile_sass()
 
     return app
 
@@ -119,9 +97,8 @@ def create_app(config_environment="default"):
 @login_manager.user_loader
 def load_user(user_uuid):
     """Returns the user object to flask-login. So it can be used in templates with current_user."""
-    from nebula.models import User
+    from nebula.models.user import User
 
-    print(f"Flask login got user {user_uuid}")
     return User.query.filter_by(uuid=user_uuid).one_or_none()
 
 
@@ -132,16 +109,12 @@ def is_safe_url(target, request):
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
 
 
-def compile_sass():
-    """Compiles the sass files."""
-    print(" * Compiling sass files...")
-    try:
-        subprocess.run(["npx", "sass", "./nebula/static/scss/:./nebula/static/css"])
-    except Exception as e:
-        print(" * Error compiling sass files. Did you run 'npm install'?")
-        print(e)
-        return
-    print(" * Sass files compiled.")
+def inject_csrf_token(response):
+    """Injects the csrf token into the response headers."""
+    from flask_wtf.csrf import generate_csrf
+
+    response.headers["X-CSRF-Token"] = generate_csrf()
+    return response
 
 
 if __name__ == "__main__":

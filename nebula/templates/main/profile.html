@@ -1,14 +1,14 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Profile - Nebula{% endblock %}
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/profile.css') }}">
+{{ vite_style('scss/views/profile.scss') }}
 {% endblock %}
 
 {% from 'utilities/macros.html' import question_view with context %}
 {% macro answer_view(answer) -%}
 <div class="question-list-item">
     <a
-        href="{{ url_for('question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid, course_level_code=answer.question.course.course_level.code) }}">
+        href="{{ url_for('web.question.question', course_code=answer.question.course.code, question_uuid=answer.question.uuid, course_level_code=answer.question.course.course_level.code) }}">
         <div class="text-primary question-title">{{ answer.question.title }}
         </div>
     </a>
@@ -19,7 +19,7 @@
             <!-- by <a href=" url_for('user.user', user_uuid=question.user.uuid) "> -->
         </a>
         in <a class="text-secondary"
-            href="{{ url_for('course.course', course_level_code=answer.question.course.course_level.code, course_code=answer.question.course.code) }}">
+            href="{{ url_for('web.course.course', course_level_code=answer.question.course.course_level.code, course_code=answer.question.course.code) }}">
             {{ answer.question.course.name }}
         </a>
     </div>
@@ -65,10 +65,10 @@
                     <div class="d-flex justify-content-between">
                         <a class="button-accent on-primary" href="#">Edit Info</a>
                         <a class="button-accent on-primary"
-                            href="{{ url_for('user.logout') }}">Logout</a>
+                            href="{{ url_for('web.user.logout') }}">Logout</a>
                     </div>
 
-                    <form action="{{ url_for('user.profile') }}" method="post">
+                    <form action="{{ url_for('web.user.profile') }}" method="post">
                         {{ change_password_form.csrf_token }}
                         <div class="form-group">
                             <div class="input-field">

@@ -5,9 +5,10 @@
 <main>
     <div class="container-lg">
         <div class="path-container">
-            <a class="path-container__link" href="{{ url_for('courses.all_courses') }}">Courses</a>
             <a class="path-container__link"
-                href="{{ url_for('level.level', course_level_code=course_level.code) }}">{{
+                href="{{ url_for('web.courses.all_courses') }}">Courses</a>
+            <a class="path-container__link"
+                href="{{ url_for('web.level.level', course_level_code=course_level.code) }}">{{
                 course_level.name }}</a>
         </div>
 

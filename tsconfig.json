@@ -1,18 +1,51 @@
 {
     "extends": "@vue/tsconfig/tsconfig.web.json",
     "include": [
-        "env.d.ts",
-        "src/**/*",
-        "src/**/*.vue"
+        "nebula/src/js/**/*",
+        "nebula/src/js/**/*.vue",
+        "nebula/src/js/**/*.ts",
+        "nebula/src/js/**/*.d.ts",
+        "tests/js/**/*"
     ],
     "compilerOptions": {
         "baseUrl": ".",
         "module": "esnext",
+        "target": "esnext",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
         "paths": {
             "@/*": [
-                "nebula/src/*"
+                "nebula/src/js/*"
+            ],
+            "@scss/*": [
+                "nebula/src/scss/*"
+            ],
+            "@views/*": [
+                "nebula/src/js/views/*"
+            ],
+            "@components/*": [
+                "nebula/src/js/components/*"
+            ],
+            "@stores/*": [
+                "nebula/src/js/stores/*"
+            ],
+            "types/*": [
+                "nebula/src/js/types/*"
+            ],
+            "@http/*": [
+                "nebula/src/js/http/*"
+            ],
+            "@public/*": [
+                "nebula/src/public/*"
             ]
-        }
+        },
+        "rootDirs": [
+            "nebula/src/js",
+            "nebula/src/scss",
+            "nebula/src/types"
+        ]
     },
     "references": [
         {

@@ -1,16 +1,17 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ course.name }}- Nebula{% endblock %}
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/course.css') }}">
+{{ vite_style('scss/views/course.scss') }}
 {% endblock %}
 {% from "utilities/macros.html" import question_view with context %}
 {% block body %}
 <main>
     <div class="container-lg">
         <div class="path-container">
-            <a class="path-container__link" href="{{ url_for('courses.all_courses') }}">Courses</a>
             <a class="path-container__link"
-                href="{{ url_for('level.level', course_level_code=course.course_level.code) }}">{{
+                href="{{ url_for('web.courses.all_courses') }}">Courses</a>
+            <a class="path-container__link"
+                href="{{ url_for('web.level.level', course_level_code=course.course_level.code) }}">{{
                 course.course_level.name }}</a>
             <a class="path-container__link" href="#">{{ course.name }}</a>
         </div>
@@ -39,7 +40,7 @@
                     </svg>
                 </div>
                 {% if not current_user.is_anonymous and current_user.access_level >= 2 %}
-                <a href="{{ url_for('add_question.add_question', course_code=course.code)}}"
+                <a href="{{ url_for('web.add_question.add_question', course_code=course.code)}}"
                     class="btn btn-outline add-question-button">Add a
                     question</a>
                 {% endif %}
@@ -57,5 +58,5 @@
 {% endblock body %}
 {% block include_js %}
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
-<script src="{{ url_for('static', filename='js/search_through_course.js') }}" defer></script>
+<script src="{{ vite_public_asset('js/search_through_course.js') }}" defer></script>
 {% endblock include_js %}

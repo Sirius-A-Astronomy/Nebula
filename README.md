@@ -1,39 +1,43 @@
+[![Deploy](https://github.com/Dutch-Raptor/nebula/actions/workflows/deploy.yml/badge.svg)](https://github.com/Dutch-Raptor/nebula/actions/workflows/deploy.yml)
+
 # Nebula
+
+[![Continuous Integration and Deployment](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Sirius-A-Astronomy/Nebula/actions/workflows/ci-cd.yml)
 
 This is the Nebula Database by the Kapteyn Learning Community.
 It is a repository of user-submitted practice questions.
 
-## Table of Contents
-[[_TOC_]]
+TODO: Add a screenshot of the website
 
-_Other documentation:_
-- [CLI Documentation](docs/cli/index.md)
-- [How does Nebula work?](docs/how-does-nebula-work.md)
+TODO: replace docs link to nebula docs once they are up
 
-## Installation & Setup
+**To check out the full documentation, go to [nebula.pieterhuizenga.com](https://nebula.pieterhuizenga.com)**
 
-_Note: This guide assumes you're using linux or [wsl.](https://docs.microsoft.com/en-us/windows/wsl/install)_
+# Getting Started
 
-Setting up the project should be possible via the following: (all from the project root directory).
+This guide will help you get Nebula up and running on your local machine.
 
-<details> 
-<summary>1. Clone or pull the project (expand for more info)</summary>
+
+> This guide assumes you're using linux or [wsl](https://docs.microsoft.com/en-us/windows/wsl/install)
+
+## Step 1. Clone or pull the project
 
 ```bash
 git clone https://gitlab.astro.rug.nl/sirius-a/nebula.git
 ```
 
-</details>
-<details><summary>2. Git checkout to the correct branch</summary>
 
-_Note: in this guide the branch 'dev' was used as it was the most recently used._
+
+> To learn more about contributing to Nebula, see [Contributing](docs/developer/contributing.md)
+
+Checkout to the `branch` you want to work on. For example, if you want to work on the `dev` branch:
 
 ```bash
 git checkout dev
 ```
 
-</details>
-<details><summary>3. Create a virtual environment for the project inside the project directory. </summary>
+## Step 2. Create a virtual environment
+
 This makes sure you do not 'contaminate' your global Python dependencies with the dependencies for Nebula and vice versa.
 
 -   Go to the nebula directory
@@ -42,119 +46,75 @@ This makes sure you do not 'contaminate' your global Python dependencies with th
 cd nebula
 ```
 
--   Create the directory for the virtual environment
-
-```bash
-mkdir venv
-```
-
 -   Create the python virtual environment
 
 ```bash
 python3 -m venv venv
 ```
 
-</details>
-<details><summary>4. Activate your virtual environment</summary>
+
+> In this command the second `venv` is the name of the virtual environment. You can name it whatever you want, but it is recommended to keep it as `venv` for consistency.
+
+- Activate your virtual environment
 
 ```bash
 . venv/bin/activate
 ```
 
-_Note: to deactivate the virtual environment symply run `deactivate`_
 
-</details>
+> To deactivate the virtual environment, run `deactivate`
 
-<details><summary>5. Install dependencies</summary>
 
--   While in the virtual environment run:
+## Step 3. Install dependencies
 
 ```bash
-python3 -m pip install -r requirements.txt
+make deps-dev
 ```
 
--   You will also need to install nodejs and sass to be able to compile the scss files to valid css
--   [installing nodejs](https://nodejs.org/en/download/package-manager/)
+## Step 4. Database creation and seeding
 
--   Now nodejs is installed, you can install sass with:
+Initialize the database and seed it with some data.
 
 ```bash
-npm install
+export FLASK_APP=nebula
+
+flask db init
+
+flask db seed
 ```
 
-_Note: omit the -g flag if you don't wish to install sass globally_
+> For more information on the database CLI commands, see [here](docs/developer/cli/database-cli.md)
 
-</details>
+## Step 5. Run the development servers
 
-<details><summary>6. Create the nebula database</summary>
-- The following command will create the database and seed it with test data
+Run both the `flask` and `Vite` development servers in separate terminals.
 
-```bash
-make db-migrate-fresh-seed
-```
-
-</details>
-
-7. It should be possible to run Nebula via the following command:
-
+To run the `flask` development server:
 ```bash
 make dev-server
 ```
 
-_Note: to close the flask local webserver: ctrl+c_
+This will run the flask development server on [localhost:5000](localhost:5000) which will serve the web pages and the API.
 
-8. It should be available at [localhost:5000](localhost:5000/) in your browser, or via a link in the command prompt.
+---
 
-Now you should be good to go!
-
-
-
-
-## Testing
-
-If you want to run tests, you first need to install Nebula as a package. Again in a virtual environment, run in the root directory:
-
+To run the `Vite` development server:
 ```bash
-pip install -e .
+npm run dev
 ```
 
-Then, simply run:
+This will run the Vite development server on [localhost:5173](localhost:5173) which will serve the frontend assets.
+
+> To close either of the webservers: ctrl+c
+
+The development server should now be running on [localhost:5000](localhost:5000)
+
+## Building for production
 
 ```bash
-pytest
+make build
 ```
 
-or for coverage:
+This will build all the assets and put them in the `nebula/static` directory and build the documentation.
 
-```bash
-coverage run -m pytest
-```
 
-### Testing with cypress
-
-0. [If you haven't yet, install nodejs and npm (still all in the virtual environment)](https://nodejs.org/en/download/package-manager/)
-1. [Install cypress](https://docs.cypress.io/guides/getting-started/installing-cypress)
-
-2. [Install cypress real events](https://github.com/dmtrKovalenko/cypress-real-events#installation)
-
-3. With the webserver running, start cypress
-
-    ```bash
-    ./node_modules/.bin/cypress open
-    ```
-
-    or
-
-    ```bash
-    npx cypress start
-    ```
-
-    To run all of the tests without a GUI run:
-
-    ```bash
-    npx cypress run
-    ```
-
-4. In the UI click on one of the tests to start it.
-
-To learn more check out: [Writing your first test](https://docs.cypress.io/guides/getting-started/writing-your-first-test)

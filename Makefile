@@ -3,7 +3,7 @@ APP_NAME=nebula
 STATIC_SOURCE=$(APP_NAME)/static
 
 # Arguments to external tools
-PY_FILES=$(shell find $(APP_NAME) database-setup tests -name '*.py' | xargs echo) *.py
+PY_FILES=$(shell find $(APP_NAME) tests -name '*.py' | xargs echo) *.py
 BLACK_ARGS=
 ISORT_ARGS=--multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses
 FLAKE_ARGS=
@@ -13,23 +13,22 @@ FLASK_APP=$(APP_NAME)
 FLASK_ENV_DEV=development
 DEV_ENV=FLASK_DEBUG=1 FLASK_APP=$(FLASK_APP) FLASK_ENV=$(FLASK_ENV_DEV)
 
-# List all scss files in the nebula/static/scss directory & create a : separated list from them
-SCSS_FILES=$(shell find ./nebula/static/scss -name '*.scss' | xargs echo | sed 's/ /:/g')
-
-
 default: help
 
 
 ## Running and Installing
 dev-server:  ## Start the development version of the website
-	FLASK_RUN_EXTRA_FILES="$(SCSS_FILES)" $(DEV_ENV) flask run
+	$(DEV_ENV) flask run
+
+prod-server:  ## Start the production version of the website
+	FLASK_APP=$(FLASK_APP) flask run
 
 install: check-in-venv ## Installs the flask app (siriusaweb) in the environment
 	python3 setup.py sdist bdist_wheel
 	pip install dist/$(APP_NAME)-*.tar.gz
 
 build:
-	npx sass --update $(STATIC_SOURCE)/scss:$(STATIC_SOURCE)/css
+	npm run docs:build
 	npm run build
 
 ## Formatting and linting
@@ -47,13 +46,20 @@ lint:  ## Run the linter (flake8)
 
 
 ## Testing
-# TODO: Cypress tests do not work atm, since the dev-server needs to be running
-test: test-py  ## Run all tests for the package
+test: test-py test-js  ## Run all tests for the package
 
 test-py:
 	pytest
 test-js:
-	npx cypress run
+	npm run test
+
+test-cov: test-py-cov test-js-cov  ## Run all tests for the package with coverage
+
+test-py-cov:
+	pytest --cov=$(APP_NAME) tests/
+
+test-js-cov:
+	npm run test:cov
 
 ## Dependencies
 deps-dev: deps-pkg  ## Install development dependencies

@@ -12,11 +12,11 @@
             {{ question_view(question) }}
         </div>
         <div class="d-flex justify-content-between mt-3">
-            <a href="{{ url_for('add_question.add_question', course_code=question.course.code)}}"
+            <a href="{{ url_for('web.add_question.add_question', course_code=question.course.code)}}"
                 class="button-accent">
                 Add another question
             </a>
-            <a href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
+            <a href="{{ url_for('web.course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
                 class="button-accent">
                 {% if course_code is not none %}
                 Back

@@ -26,7 +26,7 @@
                     question or add subject tags to your question.
                 </p>
             </noscript>
-            <form method='POST' action="{{ url_for('add_question.add_question')}}"
+            <form method='POST' action="{{ url_for('web.add_question.add_question')}}"
                 id="add-question-form">
                 {{ question_form.csrf_token }}
                 <div class="input-field">
@@ -45,10 +45,8 @@
                     {% endif %}
                 </div>
                 <div>
-                    <a href="#!" class="button-accent" id="toggle-latex-instructions-button">Want to
-                        learn
-                        how to use LaTex in
-                        your question?</a>
+                    <a href="/docs/user/writing/markdown" class="button-accent">Learn how to
+                        use Markdown and Latex on Nebula</a>
                 </div>
                 <div class="latex-instructions-container text-secondary">
                     If you want to add Latex to your question, please use the following format:
@@ -176,7 +174,7 @@
                     {{ question_form.submit(class="btn btn-primary",
                     value="Submit as %s %s" % (current_user.first_name, current_user.last_name)) }}
                     {% if course is not none %}
-                    <a href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
+                    <a href="{{ url_for('web.course.course', course_code=course.code, course_level_code=course.course_level.code)}}"
                         class="btn btn-primary">
                         Back to {{ course.name }}
                     </a>
@@ -192,10 +190,8 @@
 {% block include_js %}
 
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
-<script src="{{ url_for('static', filename='js/tag_input.js') }}"></script>
+<script src="{{ vite_public_asset('js/tag_input.js') }}"></script>
 
-{% from "utilities/vite.html" import vite_script with context %}
-
-{{ vite_script('nebula/src/add_question/add_question.ts') }}
+{{ vite_script('js/add_question/add_question.ts') }}
 
 {% endblock %}

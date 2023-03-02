@@ -1,0 +1,159 @@
+/*
+Color Palette
+*/
+
+/*
+    Global colors
+    */
+$colors: (
+	primary: (
+		50: #e3f2fe,
+		100: #bcddfc,
+		200: #92c9fb,
+		300: #67b4f9,
+		400: #48a3f8,
+		500: #2f94f6,
+		600: #2e86e8,
+		700: #2a74d4,
+		//
+		800: #2762c2,
+		900: #2144a3,
+	),
+	secondary: (
+		50: #f0f4f8,
+		100: #d9e2ec,
+		200: #bcccdc,
+		300: #9fb3c8,
+		400: #829ab1,
+		500: #627d98,
+		//
+		600: #486581,
+		700: #334e68,
+		800: #243b53,
+		900: #102a43,
+	),
+	accent: (
+		50: #fae5f0,
+		100: #f5beda,
+		200: #f094c1,
+		300: #ed6aa8,
+		400: #eb4a93,
+		500: #eb2c7f,
+		600: #d92a7a,
+		700: #c22872,
+		800: #ac266c,
+		900: #852161,
+	),
+	neutral: (
+		50: #ecf0f5,
+		100: #d0dae2,
+		200: #b4c1ce,
+		300: #97a8b8,
+		400: #8195a7,
+		500: #6b8297,
+		600: #5d7386,
+		700: #4d5f6f,
+		800: #3e4c59,
+		900: #2c3741,
+	),
+);
+
+:root {
+	/*
+    Nebula uses a dark and light color palette. The pallete is automatically set to the user's personal preference via javascript.
+    When setting a color use var(--color-name) to set the color.
+
+    To change the color palette, change the '--color-name-[dark or light]' color variables below.
+
+    To add a color variable:
+    Add the color to the light color to the light color palette, and the dark color to the dark color palette in the &.dark-mode section.
+    */
+
+	// Create all the color variables from the colors defined above.
+	@each $color, $shades in $colors {
+		@each $shade, $value in $shades {
+			--color-#{$color}-#{$shade}: #{$value};
+		}
+	}
+
+	/*
+    Light Theme color-scheme (Change colors for the light theme here)
+    */
+
+	--color-scheme: light;
+
+	--color-background: var(--color-neutral-50);
+	--color-background-secondary: var(--color-neutral-100);
+	--color-background-tertiary: var(--color-secondary-200);
+	--color-text-primary: var(--color-neutral-900);
+	--color-text-secondary: var(--color-neutral-800);
+	--color-text-tertiary: var(--color-neutral-700);
+	--color-text-on-primary: var(--color-secondary-50);
+	--color-text-on-primary-focus: var(--color-secondary-100);
+	--color-text-on-accent: var(--color-neutral-50);
+	--color-primary: var(--color-primary-800);
+	--color-secondary: var(--color-primary-600);
+	--color-tertiary: var(--color-primary-500);
+	--color-accent: var(--color-accent-600);
+	--color-accent-focus: var(--color-accent-700);
+	--color-accent-on-dark-background: var(--color-accent-200);
+	--color-accent-on-dark-background-focus: var(--color-accent-300);
+	--color-form-is-valid: var(--color-primary-600);
+	--color-form-is-invalid: var(--color-accent-800);
+
+	/* Navbar */
+
+	--color-navbar-background: var(--color-neutral-50);
+	--color-primary-active: var(--color-primary-800);
+
+	--box-shadow: 4px 4px 30px rgba(44, 55, 65, 0.1),
+		2px 2px 20px rgba(44, 55, 65, 0.04);
+
+	/* Alerts */
+
+	--color-alert-error: #bd3838;
+	--color-alert-error-text: var(--color-neutral-50);
+	--color-alert-success: var(--color-primary-800);
+	--color-alert-success-text: var(--color-neutral-50);
+	--color-alert-warning: rgb(255, 210, 125);
+	--color-alert-warning-text: var(--color-neutral-900);
+	--color-alert-info: var(--color-neutral-900);
+	--color-alert-info-text: var(--color-neutral-50);
+
+	--color-code-bg: #333;
+	--color-code-bg-muted: #444;
+	--color-code-text: #f1f1f1;
+
+	&.dark-mode,
+	&:has(.dark-mode) {
+		--color-scheme: dark;
+
+		--color-background: var(--color-neutral-900);
+		--color-background-secondary: var(--color-neutral-800);
+		--color-background-tertiary: var(--color-secondary-900);
+		--color-text-primary: var(--color-neutral-50);
+		--color-text-secondary: var(--color-neutral-100);
+		--color-text-tertiary: var(--color-neutral-200);
+		--color-text-on-primary: var(--color-neutral-50);
+		--color-text-on-accent: var(--color-neutral-900);
+		--color-primary: var(--color-primary-800);
+		--color-secondary: var(--color-primary-600);
+		--color-tertiary: var(--color-primary-500);
+		--color-accent: var(--color-accent-100);
+		--color-accent-focus: var(--color-accent-200);
+		--color-form-is-valid: var(--color-primary-400);
+		--color-form-is-invalid: var(--color-accent-200);
+
+		/* Navbar */
+
+		--color-navbar-background: var(--color-neutral-900);
+		--color-primary-active: var(--color-primary-400);
+
+		--box-shadow: 6px 6px 40px rgba(44, 55, 65, 0.2),
+			4px 4px 30px rgba(0, 0, 0, 0.25);
+
+		--color-code-bg: #333;
+		--color-code-bg-muted: #444;
+		--color-code-text: #f1f1f1;
+	}
+}

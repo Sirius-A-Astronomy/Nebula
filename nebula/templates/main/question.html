@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block title %}{{ question.title }} - {{ course.name }}- Nebula{% endblock %}
 {% block include_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/views/question.css') }}">
+{{ vite_style('scss/views/question.scss') }}
 {% endblock %}
 
 {% macro linebreaks( string ) -%}
@@ -29,12 +29,12 @@
 
             <div class="path-container">
                 <a class="path-container__link"
-                    href="{{ url_for('courses.all_courses') }}">Courses</a>
+                    href="{{ url_for('web.courses.all_courses') }}">Courses</a>
                 <a class="path-container__link"
-                    href="{{ url_for('level.level', course_level_code=question.course.course_level.code) }}">{{
+                    href="{{ url_for('web.level.level', course_level_code=question.course.course_level.code) }}">{{
                     question.course.course_level.name }}</a>
                 <a class="path-container__link"
-                    href="{{ url_for('course.course', course_code=course.code, course_level_code=course.course_level.code)}}">{{
+                    href="{{ url_for('web.course.course', course_code=course.code, course_level_code=course.course_level.code)}}">{{
                     question.course.name }}</a>
                 <a class="path-container__link" href="#">{{ question.title }}</a>
             </div>
@@ -42,7 +42,7 @@
             <div class="subject-tags">
                 {% for subject_tag in question.subject_tags %}
                 <a class="subject-tag"
-                    href="{{ url_for('search.search', query=subject_tag.name) }}">
+                    href="{{ url_for('web.search.search', query=subject_tag.name) }}">
                     {{ subject_tag.name }}
                 </a>
                 {% endfor %}
@@ -89,7 +89,7 @@
                         {% if current_user.is_anonymous == false and
                         (current_user == question.user or current_user.access_level > 2) %}
                         <div class="d-flex justify-content-end">
-                            <a href="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code, edit=True) }}"
+                            <a href="{{ url_for('web.question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code, edit=True) }}"
                                 class="button-accent ml-auto" id="question-edit-button">Edit</a>
                         </div>
                         {% endif %}
@@ -101,7 +101,7 @@
                 {% if edit_question_mode %}
                 <div class="container-question-edit">
                     <form method="post"
-                        action="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
+                        action="{{ url_for('web.question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
                         <h4>Edit question:</h4>
 
                         {{ question_edit_form.csrf_token }}
@@ -196,7 +196,7 @@
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-end gap-2">
-                            <a href="{{ url_for('question.question', course_level_code=question.course.course_level.code, course_code=question.course.code, question_uuid=question.uuid) }}"
+                            <a href="{{ url_for('web.question.question', course_level_code=question.course.course_level.code, course_code=question.course.code, question_uuid=question.uuid) }}"
                                 class="btn btn-outline" id="cancel-edit-question">Cancel</a>
                             {{ question_edit_form.question_edit_submit(class="btn btn-outline")
                             }}
@@ -257,7 +257,7 @@
                     {% if current_user.is_anonymous == false %}
                     <div class="container-question-answers-add">
                         <form method="post"
-                            action="{{ url_for('question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
+                            action="{{ url_for('web.question.question', course_code=question.course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code) }}">
                             <h4>Add answer:</h4>
 
                             {{ add_answer_form.csrf_token }}
@@ -331,11 +331,11 @@
                         {% if current_user.is_anonymous %}
                         <p>
                             You need to be logged in to add a comment. <a class="button-accent"
-                                href="{{ url_for('user.login_register', next=request.path)}}">Login</a>
+                                href="{{ url_for('web.user.login_register', next=request.path)}}">Login</a>
                         </p>
                         {% else %}
                         <form method="POST"
-                            action="{{ url_for('question.question', course_code = course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code)}}"
+                            action="{{ url_for('web.question.question', course_code = course.code, question_uuid=question.uuid, course_level_code=question.course.course_level.code)}}"
                             id="add-comment-form">
                             {{ comment_form.csrf_token }}
                             {{ comment_form.content.label(class="form-label, visually-hidden")}}
@@ -397,5 +397,5 @@
 
 {% block include_js %}
 <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
-<script src="{{ url_for('static', filename='js/tag_input.js') }}"></script>
+<script src="{{ vite_public_asset('js/tag_input.js') }}"></script>
 {% endblock include_js %}
