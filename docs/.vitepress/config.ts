@@ -13,6 +13,8 @@ const config = defineConfig({
     head: [["link", { rel: "icon", href: "/assets/mark.svg" }]],
     lang: "en-US",
 
+    base: "/Nebula/",
+
     themeConfig: {
         logo: {
             src: "/assets/mark.svg",
@@ -21,7 +23,7 @@ const config = defineConfig({
 
         editLink: {
             pattern:
-                "https://github.com/Sirius-A-Astronomy/Nebula/edit/master/docs/:path",
+                "https://github.com/Sirius-A-Astronomy/Nebula/edit/development/docs/:path",
         },
 
         siteTitle: "Nebula Documentation",
@@ -31,7 +33,7 @@ const config = defineConfig({
         socialLinks: [
             {
                 icon: "github",
-                link: "https://gitlab.astro.rug.nl/sirius-a/nebula",
+                link: "https://github.com/Sirius-A-Astronomy/Nebula",
             },
         ],
 
