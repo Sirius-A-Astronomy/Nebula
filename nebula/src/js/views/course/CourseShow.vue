@@ -110,7 +110,7 @@ const questionFilter = ref("");
         </div>
         <div v-else class="container py-2">
             <BreadCrumbs :breadcrumbs="breadcrumbs" class="pt-2 pb-4" />
-            <section class="rounded-md bg-secondary-bg px-4 py-2">
+            <section class="rounded-md bg-secondary-bg px-4 py-2 shadow-md">
                 <div
                     class="mb-4 flex flex-col flex-wrap gap-2 md:flex-row md:items-baseline md:justify-between"
                 >
