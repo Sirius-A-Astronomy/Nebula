@@ -39,8 +39,14 @@ watch(props, () => {
 const loading = ref(true);
 
 const loadData = async () => {
-    if (!question.value) {
-        await questionStore.actions.getById(props.id);
+    if (!question.value || questionStore.state.shouldLoadById(props.id)) {
+        const response = await questionStore.actions.getById(props.id);
+
+        if (!response.ok) {
+            flash.add(`Failed to load question: ${response.message}`, "error");
+            router.push({ name: "course.index" });
+            return;
+        }
     }
 
     nextTick(() => {
