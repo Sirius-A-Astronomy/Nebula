@@ -13,7 +13,7 @@ const config = defineConfig({
     head: [["link", { rel: "icon", href: "/assets/mark.svg" }]],
     lang: "en-US",
 
-    base: "/nebula/",
+    base: "/Nebula/",
 
     themeConfig: {
         logo: {
