@@ -50,7 +50,10 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
 <template>
     <div class="dropdown" :id="`dropdown-${dropdownId}`">
         <div
-            :class="{ 'dropdown__trigger--hover': !openOnHover }"
+            :class="{
+                'dropdown__trigger--hover': !openOnHover,
+                'dropdown__menu--open': isOpen,
+            }"
             class="dropdown__trigger"
         >
             <slot
@@ -89,29 +92,28 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
                     </svg>
                 </button>
             </slot>
-        </div>
-
-        <div
-            class="dropdown__menu"
-            :class="`
+            <div
+                class="dropdown__menu"
+                :class="`
         dropdown__menu--${direction ?? 'below'} dropdown__menu--${
-                align ?? 'start'
-            }
+                    align ?? 'start'
+                }
       ${forceCloseRef ? 'dropdown__menu--force-close' : ''}
         ${isOpen ? 'dropdown__menu--open' : ''}
         `"
-        >
-            <div
-                class="dropdown-menu__content z-10 rounded-md bg-secondary-bg px-2 text-secondary-text"
             >
-                <slot
-                    name="dropdown-content"
-                    :toggle="toggle"
-                    :close="close"
-                    :closeParent="closeParent"
-                    :isOpen="isOpen"
+                <div
+                    class="dropdown-menu__content z-10 rounded-md bg-secondary-bg px-2 text-secondary-text"
                 >
-                </slot>
+                    <slot
+                        name="dropdown-content"
+                        :toggle="toggle"
+                        :close="close"
+                        :closeParent="closeParent"
+                        :isOpen="isOpen"
+                    >
+                    </slot>
+                </div>
             </div>
         </div>
     </div>
@@ -123,9 +125,9 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
     display: inline-block;
 
     // trigger opening on hover
-    // .dropdown__trigger--hover:hover,
-    // .dropdown__menu:hover,
-    &:has(.dropdown__menu--open) {
+    .dropdown__menu--open,
+    .dropdown__trigger--hover:hover,
+    .dropdown__menu:hover {
         & > .dropdown__menu {
             opacity: 1;
             pointer-events: auto;
@@ -143,7 +145,7 @@ const dropdownId = ref(Math.random().toString(36).slice(8));
             }
         }
 
-        & > .dropdown__trigger > .dropdown__button {
+        & > .dropdown__button {
             .icon {
                 &--below {
                     transform: rotate(0deg);
