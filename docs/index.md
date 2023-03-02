@@ -12,9 +12,9 @@ hero:
         - text: Get started
           theme: brand
           link: /user/getting-started
-        - text: View on Gitlab
+        - text: View on Github
           theme: alt
-          link: https://gitlab.astro.rug.nl/sirius-a/nebula
+          link: https://github.com/Sirius-A-Astronomy/Nebula
 
 features:
     -   title: For students
