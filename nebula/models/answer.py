@@ -12,7 +12,9 @@ class Answer(Base):
 
     # relation one-to-many: one: user, many: answers
     user_uuid = db.Column(GUID(), db.ForeignKey("user.uuid"), nullable=False)
-    user = db.relationship("User", backref=db.backref("answers", lazy=True))
+    user = db.relationship(
+        "User", backref=db.backref("answers", lazy=True, cascade="all, delete-orphan")
+    )
 
     # relation one-to-many: one: question, many: answers
     question_uuid = db.Column(GUID(), db.ForeignKey("question.uuid"), nullable=False)
