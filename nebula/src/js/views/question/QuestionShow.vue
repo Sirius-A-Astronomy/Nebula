@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import questionStore from "@/stores/questionStore";
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch, type Ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
 import MarkdownDisplay from "@components/MarkdownDisplay.vue";
 import useFlashStore from "@stores/flashStore";
@@ -126,6 +126,7 @@ const deleteQuestion = async () => {
 };
 
 const commentContent = ref("");
+const commentErrors: Ref<Record<string, string[]>> = ref({});
 
 const onCommentSubmit = async () => {
     const response = await questionStore.actions.addComment(
@@ -135,6 +136,8 @@ const onCommentSubmit = async () => {
 
     if (!response.ok) {
         flash.add(`Failed to add comment: ${response.message}`, "error");
+        const data = response.data as { errors: Record<string, string[]> };
+        commentErrors.value = data.errors;
         return;
     }
 
@@ -275,8 +278,21 @@ onMounted(loadData);
                         <MarkdownEditor
                             v-model="commentContent"
                             placeholder="Enter your comment here..."
-                            class="!mt-0 !bg-secondary-bg"
+                            class="!my-0 !bg-secondary-bg"
                         />
+
+                        <ul
+                            v-if="commentErrors.content"
+                            class="text-sm text-red-500"
+                        >
+                            <li
+                                v-for="error in commentErrors.content"
+                                :key="error"
+                            >
+                                {{ error }}
+                            </li>
+                        </ul>
+
                         <div class="flex flex-row justify-end">
                             <button
                                 class="rounded-lg bg-primary-bg px-4 py-2 text-primary-text"
