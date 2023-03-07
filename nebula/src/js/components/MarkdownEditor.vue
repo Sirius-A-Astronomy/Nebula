@@ -249,8 +249,14 @@ const markdownEditorId = ref(
                     @keydown="keyDownHandler"
                     ref="markdownEditElement"
                     :id="markdownEditorId"
-                    @input="emit('update:modelValue', contentEditable)"
-                    v-model="contentEditable"
+                    @input="
+                        (e) => {
+                            // @ts-ignore
+                            contentEditable = e.target.value;
+                            emit('update:modelValue', contentEditable);
+                        }
+                    "
+                    :value="contentEditable"
                 />
                 <div
                     class="syntax-highlighted"
