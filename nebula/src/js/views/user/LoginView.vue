@@ -252,7 +252,9 @@ const validatePasswordConfirmDebounced = debounce(500, () => {
                                 invisible: showRegister && !animating,
                             }"
                         >
-                            <h1 class="mb-2 text-4xl font-bold tracking-tight">
+                            <h1
+                                class="mb-2 text-4xl font-bold tracking-tight text-white"
+                            >
                                 Login
                             </h1>
 
@@ -325,7 +327,9 @@ const validatePasswordConfirmDebounced = debounce(500, () => {
                         <div
                             class="m-auto flex w-full max-w-xl flex-col items-center justify-center"
                         >
-                            <h1 class="mb-2 text-4xl font-bold tracking-tight">
+                            <h1
+                                class="mb-2 text-4xl font-bold tracking-tight text-white"
+                            >
                                 Register
                             </h1>
                             <form @submit.prevent="onRegisterSubmit">

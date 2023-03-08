@@ -2,6 +2,7 @@
 import NavDropdown from "./NavDropdown.vue";
 import { isSideMenuOpen, toggleSideMenu } from "@/stores/appState";
 import type { MenuItem } from "@/BaseLayout.vue";
+import TheDarkModeToggle from "@components/TheDarkModeToggle.vue";
 
 defineProps<{
     primaryNavItems?: MenuItem[];
@@ -37,8 +38,9 @@ defineProps<{
                 </div>
 
                 <div
-                    class="text-secontertiary-text flex flex-row items-center gap-2 text-lg"
+                    class="justify-baseline flex flex-row items-center gap-2 text-lg text-secondary-text"
                 >
+                    <TheDarkModeToggle key="darkModeToggle" />
                     <NavDropdown
                         v-for="secondaryItem in secondaryNavItems"
                         :key="secondaryItem.name"
