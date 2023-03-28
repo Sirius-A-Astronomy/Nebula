@@ -12,9 +12,9 @@ click==8.1.3
     # via
     #   -c requirements.txt
     #   black
-coverage[toml]==7.2.1
+coverage[toml]==7.2.2
     # via pytest-cov
-exceptiongroup==1.1.0
+exceptiongroup==1.1.1
     # via pytest
 flake8==6.0.0
     # via -r requirements.dev.in
@@ -30,9 +30,9 @@ packaging==23.0
     # via
     #   black
     #   pytest
-pathspec==0.11.0
+pathspec==0.11.1
     # via black
-platformdirs==3.0.0
+platformdirs==3.2.0
     # via black
 pluggy==1.0.0
     # via pytest
@@ -40,7 +40,7 @@ pycodestyle==2.10.0
     # via flake8
 pyflakes==3.0.1
     # via flake8
-pytest==7.2.1
+pytest==7.2.2
     # via
     #   -r requirements.dev.in
     #   pytest-cov

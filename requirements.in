@@ -5,5 +5,7 @@ flask-login
 WTForms
 passlib
 faker
+Flask-Migrate
+python-dotenv
 
 gunicorn

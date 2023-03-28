@@ -23,10 +23,12 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from werkzeug.exceptions import HTTPException
+from flask_migrate import Migrate
 
 from config import configs
 
 db = SQLAlchemy()
+migrate = Migrate()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 
@@ -55,6 +57,7 @@ def create_app(config_environment="default"):
     # Initialize the database for this app (this does not create tables)
     #  this is required when multiple app 'contexts' are used
     db.init_app(app)
+    migrate.init_app(app, db, command='migrate', compare_type=True)
     login_manager.init_app(app)
     csrf.init_app(app)
 
