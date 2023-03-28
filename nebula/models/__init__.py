@@ -49,7 +49,7 @@ class Base(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(GUID(), primary_key=False, default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(GUID(), primary_key=False, default=lambda: str(uuid.uuid4(), nullable=False))
 
     # Database uses utc time
     created_at = db.Column(DateTime(timezone=True), server_default=func.now())
