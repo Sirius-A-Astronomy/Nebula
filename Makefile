@@ -49,7 +49,7 @@ lint:  ## Run the linter (flake8)
 test: test-py test-js  ## Run all tests for the package
 
 test-py:
-	pytest
+	python -m pytest
 test-js:
 	npm run test
 
