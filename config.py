@@ -5,16 +5,20 @@
 from datetime import timedelta
 from os import environ
 
+from dotenv import load_dotenv
+
 
 class Config:
     """Config to be used by the app."""
+
+    load_dotenv()
 
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # TODO: create proper key and place it somewhere else
     SECRET_KEY = "SECRET KEY"
-    SQLALCHEMY_DATABASE_URI = "sqlite:///site.db"  # '///' means relative path
+    SQLALCHEMY_DATABASE_URI = environ['DATABASE_CONNECTION'] # "sqlite:///site.db"  # '///' means relative path
     PERMAMENT_SESSION_LIFETIME = timedelta(hours=2)
 
 

@@ -16,6 +16,7 @@ cypress/videos/
 htmlcov/
 yarn.lock
 settings.json
+.env
 
 nebula/static/
 

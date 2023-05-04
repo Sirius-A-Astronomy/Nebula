@@ -7,5 +7,6 @@ passlib
 faker
 Flask-Migrate
 python-dotenv
+PyMySQL
 
 gunicorn
