@@ -1,5 +1,4 @@
 import { defineConfig } from "vitepress";
-
 const config = defineConfig({
     title: "Nebula",
     description: "Nebula Documentation",
@@ -155,10 +154,6 @@ function useDeveloperGuideSidebar() {
                     text: "Importing Assets",
                     link: "/developer/frontend/importing-assets",
                 },
-                {
-                    text: "Vue",
-                    link: "/developer/frontend/vue",
-                },
             ],
         },
         {
@@ -198,10 +193,6 @@ function useDeveloperGuideSidebar() {
                 {
                     text: "Unit Testing",
                     link: "/developer/testing/unit-testing",
-                },
-                {
-                    text: "Integration Testing",
-                    link: "/developer/testing/integration-testing",
                 },
             ],
         },
