@@ -11,7 +11,7 @@ from nebula.models.user import User
 def app():
     """
     Creates an app which includes a database with example data. This is
-    usefull to test the front end of the website, without having to specify
+    useful to test the front end of the website, without having to specify
     data in each test.
     """
     app = create_app(config_environment="testing")
@@ -37,9 +37,9 @@ def app():
 @pytest.fixture
 def empty_app():
     """
-    Similar to app, but does not insert any data. Usefull to test parts of the
+    Similar to app, but does not insert any data. Useful to test parts of the
     database in isolation.
-    TODO: there is probably some refactoring oppertunity for app/empty_app, as
+    TODO: there is probably some refactoring opportunity for app/empty_app, as
           they have a lot of similar/overlapping steps.
     """
     app = create_app(config_environment="testing")

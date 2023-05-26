@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { authenticatedUser } from "@/stores/sessionStore";
-import { computed, onMounted, ref, watch, type Ref } from "vue";
+import { computed, onMounted, ref, type Ref } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {
@@ -25,7 +25,6 @@ const modal = useModalStore();
 const router = useRouter();
 
 const user = authenticatedUser;
-
 
 const userComments: Ref<Comment[]> = ref([]);
 const userQuestions: Ref<Question[]> = ref([]);
@@ -194,12 +193,12 @@ onMounted(() => {
 <template>
     <main id="content" class="container py-4">
         <div class="grid grid-cols-1 gap-2 md:grid-cols-[1fr_2fr]">
-            <div class="rounded-md bg-secondary-bg p-4 shadow-md">
+            <div class="p-4 rounded-md shadow-md bg-secondary-bg">
                 <h1 class="text-4xl font-semibold">
                     {{ user.first_name }} {{ user.last_name }}
                 </h1>
 
-                <div class="mt-4 flex flex-col gap-2">
+                <div class="flex flex-col gap-2 mt-4">
                     <div class="flex flex-col gap-2">
                         <h2 class="text-2xl font-semibold">About</h2>
                         <p>Email: {{ user.email }}</p>
@@ -219,9 +218,9 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <div class="mt-4 flex flex-row gap-2">
+                <div class="flex flex-row gap-2 mt-4">
                     <RouterLink
-                        class="rounded-lg bg-primary-bg px-4 py-2 text-primary-text"
+                        class="py-2 px-4 rounded-lg bg-primary-bg text-primary-text"
                         :to="{
                             name: 'user.profile.edit',
                         }"
@@ -230,16 +229,16 @@ onMounted(() => {
                     </RouterLink>
 
                     <button
-                        class="rounded-lg bg-alert-error px-4 py-2 text-alert-error-text"
+                        class="py-2 px-4 rounded-lg bg-alert-error text-alert-error-text"
                         @click="onDeleteClicked"
                     >
                         Delete Account
                     </button>
                 </div>
             </div>
-            <div class="rounded-md bg-secondary-bg p-4 shadow-md">
+            <div class="p-4 rounded-md shadow-md bg-secondary-bg">
                 <h2 class="text-2xl font-semibold">Questions</h2>
-                <div class="mt-4 flex flex-col gap-2">
+                <div class="flex flex-col gap-2 mt-4">
                     <question-list-item
                         v-for="question in limitedUserQuestions"
                         :key="question.id"
@@ -249,7 +248,7 @@ onMounted(() => {
                 </div>
 
                 <div
-                    class="mt-4 flex flex-row justify-center"
+                    class="flex flex-row justify-center mt-4"
                     v-if="userQuestions.length > 3"
                 >
                     <button
@@ -261,7 +260,7 @@ onMounted(() => {
                 </div>
 
                 <h2 class="mt-4 text-2xl font-semibold">Answers</h2>
-                <div class="mt-4 flex flex-col gap-2">
+                <div class="flex flex-col gap-2 mt-4">
                     <RouterLink
                         v-for="answer in limitedUserAnswers"
                         :key="answer.id"
@@ -271,7 +270,7 @@ onMounted(() => {
                                 id: answer.question_id,
                             },
                         }"
-                        class="-mx-2 px-2 transition-colors duration-75 hover:bg-primary-bg"
+                        class="px-2 -mx-2 transition-colors duration-75 hover:bg-primary-bg"
                     >
                         <div class="flex flex-row justify-between">
                             <div class="flex flex-col">
@@ -304,8 +303,8 @@ onMounted(() => {
                                     </span>
                                 </p>
                             </div>
-                            <div class="flex flex-col items-end justify-start">
-                                <p class="text-end font-semibold">
+                            <div class="flex flex-col justify-start items-end">
+                                <p class="font-semibold text-end">
                                     {{
                                         questionStore.getters.byId(
                                             answer.question_id
@@ -322,7 +321,7 @@ onMounted(() => {
                     </RouterLink>
                 </div>
                 <div
-                    class="mt-4 flex flex-row justify-center"
+                    class="flex flex-row justify-center mt-4"
                     v-if="userAnswers.length > 3"
                 >
                     <button
@@ -334,7 +333,7 @@ onMounted(() => {
                 </div>
 
                 <h2 class="mt-4 text-2xl font-semibold">Comments</h2>
-                <div class="mt-4 flex flex-col gap-2">
+                <div class="flex flex-col gap-2 mt-4">
                     <RouterLink
                         v-for="comment in limitedUserComments"
                         :key="comment.id"
@@ -344,7 +343,7 @@ onMounted(() => {
                                 id: comment.question_id,
                             },
                         }"
-                        class="-mx-2 px-2 transition-colors duration-75 hover:bg-primary-bg"
+                        class="px-2 -mx-2 transition-colors duration-75 hover:bg-primary-bg"
                     >
                         <div class="flex flex-row justify-between">
                             <div class="flex flex-col">
@@ -382,8 +381,8 @@ onMounted(() => {
                                     </span>
                                 </p>
                             </div>
-                            <div class="flex flex-col items-end justify-start">
-                                <p class="text-end font-semibold">
+                            <div class="flex flex-col justify-start items-end">
+                                <p class="font-semibold text-end">
                                     {{
                                         questionStore.getters.byId(
                                             comment.question_id
@@ -401,7 +400,7 @@ onMounted(() => {
                 </div>
 
                 <div
-                    class="mt-4 flex flex-row justify-center"
+                    class="flex flex-row justify-center mt-4"
                     v-if="userComments.length > 3"
                 >
                     <button

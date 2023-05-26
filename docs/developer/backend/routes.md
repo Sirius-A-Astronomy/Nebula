@@ -6,15 +6,14 @@ The `web` and `api` directories contain a `__init__.py` file. The `__init__.py` 
 
 The `__init__.py` file handles registering the blueprint with the Flask application.
 
-
 ```
 📂nebula
- ┣ 📂routes // [!code focus:7]
+ ┣ 📂routes
  ┃ ┣ 📂api
  ┃ ┃ ┣ 📜__init__.py
  ┃ ┃ ┣ 📜api_route.py
  ┃ ┗ 📂web
- ┃ ┃ ┣ 📜__init__.py 
+ ┃ ┃ ┣ 📜__init__.py
  ┃ ┃ ┣ 📜web_route.py
  ┣ 📂src
 ```
@@ -24,7 +23,6 @@ The `__init__.py` file handles registering the blueprint with the Flask applicat
 The `web` and `api` blueprints can be imported and used directly or extended with another blueprint. Extending the `web` and `api` blueprints is useful for creating routes that are specific to a module. For example, the `user` module has a `user` blueprint that extends the `web` blueprint. This allows the `user` module to have its own routes that are prefixed with `/user`.
 
 The API Blueprint automatically prefixes all routes with `/api`
-
 
 ### Using a blueprint directly
 
